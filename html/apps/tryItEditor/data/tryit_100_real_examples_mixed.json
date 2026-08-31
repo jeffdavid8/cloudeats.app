@@ -1,0 +1,1520 @@
+[
+  {
+    "id": "example-001",
+    "title": "Animated Button Click: Update Text",
+    "description": "Click a button to update a message on the page.",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "dom",
+      "events",
+      "colors"
+    ],
+    "html": "<button id='btn'>Click me</button>\n<p id='msg'></p>",
+    "css": "button{padding:8px 14px;border:none;background:#667eea;color:#fff;border-radius:6px;cursor:pointer}\n#msg{margin-top:10px;font-size:18px}",
+    "js": "btn.onclick = ()=> msg.textContent = 'Button clicked at ' + new Date().toLocaleTimeString();"
+  },
+  {
+    "id": "example-002",
+    "title": "Accessible Light / Dark Theme Toggle",
+    "description": "Toggle page theme; preference saved to localStorage.",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "html",
+      "css",
+      "forms"
+    ],
+    "html": "<button id='toggle'>Toggle Theme</button>\n<p>Theme persists across reloads.</p>",
+    "css": "body{transition:background 0.2s,color 0.2s}\nbody.light{background:#fff;color:#000}\nbody.dark{background:#111;color:#fff}\nbutton{padding:8px 12px;margin-top:12px}",
+    "js": "const state = localStorage.getItem('theme')||'light';document.body.classList.add(state);\ntoggle.onclick=()=>{document.body.classList.toggle('dark');document.body.classList.toggle('light');localStorage.setItem('theme',document.body.classList.contains('dark')?'dark':'light')};"
+  },
+  {
+    "id": "live-counter",
+    "category": "dom",
+    "title": "Live Counter",
+    "description": "Number increases every second.",
+    "html": "<div id='counter' class='counter'>0</div>",
+    "css": ".counter { font-size: 48px; text-align: center; font-weight: bold; padding: 20px; }",
+    "js": "let i = 0; setInterval(() => { document.getElementById('counter').textContent = ++i; }, 1000);"
+  },
+  {
+    "id": "css-bounce",
+    "category": "animation",
+    "title": "CSS Bouncing Ball",
+    "description": "Simple bouncing animation using CSS keyframes.",
+    "html": "<div class='ball'></div>",
+    "css": ".ball { width: 40px; height: 40px; background: orange; border-radius: 50%; animation: bounce 1s infinite alternate; }\n@keyframes bounce { from { transform: translateY(0); } to { transform: translateY(150px); } }",
+    "js": ""
+  },
+  {
+    "id": "example-003",
+    "title": "Clean Simple Modal Window",
+    "description": "Open and close a centered modal overlay.",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "widgets",
+      "effects",
+      "api"
+    ],
+    "html": "<button id='open'>Open Modal</button>\n<div id='modal' class='modal'><div class='m'><button id='close'>\u2715</button><p>This is a modal.</p></div></div>",
+    "css": ".modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);align-items:center;justify-content:center}\n.modal .m{background:#fff;padding:20px;border-radius:8px;min-width:200px}\n#close{float:right;border:none;background:transparent;font-size:18px;cursor:pointer}",
+    "js": "open.onclick=()=> modal.style.display='flex'; close.onclick=()=> modal.style.display='none'; modal.onclick=e=>{if(e.target===modal)modal.style.display='none'};"
+  },
+  {
+    "id": "example-004",
+    "title": "Practical Accordion Toggle Panels",
+    "description": "Expand or collapse panels.",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "events",
+      "api",
+      "effects"
+    ],
+    "html": "<div class='acc'><button class='h'>Section 1</button><div class='p'>Content 1</div></div>\n<div class='acc'><button class='h'>Section 2</button><div class='p'>Content 2</div></div>",
+    "css": ".acc .p{max-height:0;overflow:hidden;transition:max-height .25s;padding:0 10px}\n.h{display:block;width:100%;padding:8px;border:none;background:#f1f1f1;text-align:left;cursor:pointer}",
+    "js": "document.querySelectorAll('.h').forEach(b=>b.onclick=()=>{const p=b.nextElementSibling; p.style.maxHeight = p.style.maxHeight? '': p.scrollHeight+'px'});"
+  },
+  {
+    "id": "example-005",
+    "title": "Minimal Incrementing Counter",
+    "description": "Counter that you can increase or reset.",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "fun",
+      "layout",
+      "effects"
+    ],
+    "html": "<div><button id='inc'>+1</button><button id='reset'>Reset</button></div><div id='n'>0</div>",
+    "css": "#n{font-size:40px;margin-top:10px}\nbutton{margin-right:6px;padding:6px 10px}",
+    "js": "let n=0;inc.onclick=()=>n++ , nEl.textContent=n; reset.onclick=()=> n=0 , nEl.textContent=n; const nEl=document.getElementById('n');"
+  },
+  {
+    "id": "example-006",
+    "title": "Modern Live Input Mirror",
+    "description": "Mirror what the user types into an input.",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "fun",
+      "widgets",
+      "js"
+    ],
+    "html": "<input id='i' placeholder='Type here'><p id='out'></p>",
+    "css": "input{padding:8px;width:70%} p{margin-top:8px;font-size:18px}",
+    "js": "i.addEventListener('input',e=>out.textContent=e.target.value);"
+  },
+  {
+    "id": "example-007",
+    "title": "Colorful Random Background Color",
+    "description": "Click to change the document background to a random color.",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "layout",
+      "forms",
+      "fun"
+    ],
+    "html": "<button id='c'>Random Color</button>",
+    "css": "button{padding:8px 12px}",
+    "js": "c.onclick=()=>document.body.style.background = '#'+Math.floor(Math.random()*16777215).toString(16);"
+  },
+  {
+    "id": "example-008",
+    "title": "Dynamic Card Hover Zoom",
+    "description": "Simple transform scale on hover for a card.",
+    "category": "animation",
+    "difficulty": "easy",
+    "tags": [
+      "fun",
+      "events",
+      "effects"
+    ],
+    "html": "<div class='card'>Hover me</div>",
+    "css": ".card{width:200px;height:120px;background:#eee;display:flex;align-items:center;justify-content:center;border-radius:8px;transition:transform .25s}\n.card:hover{transform:scale(1.06)}",
+    "js": ""
+  },
+  {
+    "id": "example-009",
+    "title": "Dynamic Responsive Grid Boxes",
+    "description": "CSS Grid that adapts to the viewport.",
+    "category": "responsive",
+    "difficulty": "easy",
+    "tags": [
+      "api",
+      "dom",
+      "widgets"
+    ],
+    "html": "<div class='g'><div>1</div><div>2</div><div>3</div><div>4</div></div>",
+    "css": ".g{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}.g div{background:#ddd;padding:16px;border-radius:6px;text-align:center}",
+    "js": ""
+  },
+  {
+    "id": "example-010",
+    "title": "Animated CSS Bouncing Ball",
+    "description": "Pure CSS keyframe bouncing animation.",
+    "category": "animation",
+    "difficulty": "easy",
+    "tags": [
+      "js",
+      "responsive",
+      "animation"
+    ],
+    "html": "<div class='ball'></div>",
+    "css": ".ball{width:40px;height:40px;background:#ff6a00;border-radius:50%;animation:b 1s infinite alternate;margin:20px}\n@keyframes b{to{transform:translateY(140px)}}",
+    "js": ""
+  },
+  {
+    "id": "example-011",
+    "title": "Beginner-Friendly Typewriter Effect",
+    "description": "Simple typewriter loop effect.",
+    "category": "animation",
+    "difficulty": "easy",
+    "tags": [
+      "css",
+      "js",
+      "responsive"
+    ],
+    "html": "<div id='t'></div>",
+    "css": "#t{font-family:monospace;font-size:20px;border-right:2px solid #000;white-space:nowrap;overflow:hidden}",
+    "js": "const txt='Typewriter demo. ';let i=0;setInterval(()=>{t.textContent=txt.slice(0,i++% (txt.length+1));},120);"
+  },
+  {
+    "id": "example-012",
+    "title": "Practical Canvas Draw Dots",
+    "description": "Click the canvas to draw small dots.",
+    "category": "canvas",
+    "difficulty": "medium",
+    "tags": [
+      "events",
+      "canvas",
+      "effects"
+    ],
+    "html": "<canvas id='cv' width='480' height='240' style='border:1px solid #ccc'></canvas>",
+    "css": "",
+    "js": "const cv=document.getElementById('cv'),ctx=cv.getContext('2d');cv.addEventListener('click',e=>{const r=cv.getBoundingClientRect();ctx.fillStyle='#000';ctx.fillRect(e.clientX-r.left-2,e.clientY-r.top-2,4,4);});"
+  },
+  {
+    "id": "example-013",
+    "title": "Classic Canvas Bouncing Ball",
+    "description": "A ball bounces within the canvas boundaries.",
+    "category": "canvas",
+    "difficulty": "medium",
+    "tags": [
+      "widgets",
+      "api",
+      "fun"
+    ],
+    "html": "<canvas id='c2' width='480' height='240' style='border:1px solid #ccc'></canvas>",
+    "css": "",
+    "js": "const c=document.getElementById('c2'),ct=c.getContext('2d');let x=50,y=50,dx=3,dy=2;function loop(){ct.clearRect(0,0,c.width,c.height);ct.beginPath();ct.arc(x,y,16,0,2*Math.PI);ct.fill();if(x<16||x>c.width-16)dx*=-1;if(y<16||y>c.height-16)dy*=-1;x+=dx;y+=dy;requestAnimationFrame(loop);}loop();"
+  },
+  {
+    "id": "example-014",
+    "title": "Classic Canvas Particle Burst (Medium)",
+    "description": "Particles radiate from click position.",
+    "category": "canvas",
+    "difficulty": "hard",
+    "tags": [
+      "responsive",
+      "events",
+      "colors"
+    ],
+    "html": "<canvas id='p' width='480' height='240' style='border:1px solid #ccc'></canvas>",
+    "css": "",
+    "js": "const p=document.getElementById('p'),g=p.getContext('2d');let parts=[];\np.onclick=e=>{const r=p.getBoundingClientRect();const cx=e.clientX-r.left,cy=e.clientY-r.top;for(let i=0;i<60;i++){parts.push({x:cx,y:cy,dx:(Math.random()-0.5)*6,dy:(Math.random()-0.5)*6,life:60});}};\nfunction frame(){g.clearRect(0,0,p.width,p.height);parts=parts.filter(z=>z.life>0);parts.forEach(z=>{g.fillStyle='rgba(0,120,200,'+(z.life/60)+')';g.fillRect(z.x,z.y,3,3);z.x+=z.dx;z.y+=z.dy;z.dy+=0.08;z.life--;});requestAnimationFrame(frame);}frame();\n"
+  },
+  {
+    "id": "example-015",
+    "title": "Classic Masonry-like Gallery (Responsive)",
+    "description": "Simple responsive masonry using CSS columns.",
+    "category": "responsive",
+    "difficulty": "easy",
+    "tags": [
+      "forms",
+      "colors",
+      "animation"
+    ],
+    "html": "<div class='masonry'><div class='item' style='height:120px'></div><div class='item' style='height:80px'></div><div class='item' style='height:200px'></div><div class='item' style='height:140px'></div></div>",
+    "css": ".masonry{columns:3;column-gap:12px}.masonry .item{break-inside:avoid;margin-bottom:12px;background:#ddd;border-radius:6px} @media(max-width:700px){.masonry{columns:2}}",
+    "js": ""
+  },
+  {
+    "id": "example-016",
+    "title": "Simple Image Lightbox",
+    "description": "Click thumbnail to open lightbox with larger image.",
+    "category": "dom",
+    "difficulty": "medium",
+    "tags": [
+      "html",
+      "events",
+      "colors"
+    ],
+    "html": "<div class='thumbs'><img src='https://via.placeholder.com/120' class='t'/></div><div id='lb' class='lb'><img id='big'/></div>",
+    "css": ".thumbs img{cursor:pointer;border-radius:6px}.lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);align-items:center;justify-content:center}.lb img{max-width:90%;max-height:90%}",
+    "js": "document.querySelector('.t').onclick=e=>{big.src=e.target.src.replace('/120','/600');lb.style.display='flex'};lb.onclick=()=>lb.style.display='none';"
+  },
+  {
+    "id": "example-017",
+    "title": "Interactive Simple Todo (LocalStorage)",
+    "description": "Add items, persist in localStorage, remove items.",
+    "category": "advanced",
+    "difficulty": "medium",
+    "tags": [
+      "fun",
+      "events",
+      "responsive"
+    ],
+    "html": "<input id='task' placeholder='Task'><button id='add'>Add</button><ul id='list'></ul>",
+    "css": "input{padding:6px} li{margin:6px 0}",
+    "js": "const list=JSON.parse(localStorage.getItem('t'))||[];\nconst render=()=>{ul.innerHTML='';list.forEach((t,i)=>{const li=document.createElement('li');li.textContent=t;li.onclick=()=>{list.splice(i,1);localStorage.setItem('t',JSON.stringify(list));render()};ul.appendChild(li)} )};\nadd.onclick=()=>{if(task.value.trim()){list.push(task.value.trim());localStorage.setItem('t',JSON.stringify(list));task.value='';render()}};render();\n"
+  },
+  {
+    "id": "example-018",
+    "title": "Useful Range Slider Preview",
+    "description": "Adjust range to change sample box size.",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "events",
+      "canvas",
+      "dom"
+    ],
+    "html": "<input type='range' id='r' min='10' max='200'><div id='box'>Box</div>",
+    "css": "#box{background:#ddd;margin-top:12px;display:inline-flex;align-items:center;justify-content:center}",
+    "js": "r.oninput=()=>box.style.width=r.value+'px', box.style.height=r.value+'px';"
+  },
+  {
+    "id": "example-019",
+    "title": "Beginner-Friendly Tabs Component",
+    "description": "Switch between tabs without frameworks.",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "dom",
+      "events",
+      "widgets"
+    ],
+    "html": "<div><button data-target='a' class='t'>A</button><button data-target='b' class='t'>B</button></div><div id='a'>Content A</div><div id='b' style='display:none'>Content B</div>",
+    "css": "button{margin-right:6px}",
+    "js": "document.querySelectorAll('.t').forEach(b=>b.onclick=()=>{document.querySelectorAll('#a,#b').forEach(x=>x.style.display='none');document.getElementById(b.dataset.target).style.display='block'});"
+  },
+  {
+    "id": "example-020",
+    "title": "Modern Draggable Box",
+    "description": "Drag the box around the viewport.",
+    "category": "dom",
+    "difficulty": "hard",
+    "tags": [
+      "responsive",
+      "js",
+      "forms"
+    ],
+    "html": "<div id='drag' style='width:120px;height:80px;background:#5a9;position:absolute;left:20px;top:20px;display:flex;align-items:center;justify-content:center;cursor:grab'>Drag</div>",
+    "css": "",
+    "js": "let ok=false;drag.onmousedown=e=>{ok=true;drag.style.cursor='grabbing'};document.onmouseup=()=>ok=false;document.onmousemove=e=>{if(!ok)return;drag.style.left=e.pageX-60+'px';drag.style.top=e.pageY-40+'px'};"
+  },
+  {
+    "id": "example-021",
+    "title": "Dynamic Animated Progress Bar",
+    "description": "Simulate progress when clicking Start.",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "dom",
+      "html",
+      "fun"
+    ],
+    "html": "<button id='go'>Start</button><div class='bar'><div id='f'></div></div>",
+    "css": ".bar{width:100%;max-width:300px;height:16px;background:#eee;border-radius:8px;margin-top:10px}.bar #f{height:100%;width:0;border-radius:8px;background:#4caf50;transition:width .2s}",
+    "js": "go.onclick=()=>{let w=0;const i=setInterval(()=>{w+=10;f.style.width=w+'%';if(w>=100)clearInterval(i)},250)};"
+  },
+  {
+    "id": "example-022",
+    "title": "Practical Debounced Search Filter",
+    "description": "Type to filter a list; input is debounced.",
+    "category": "advanced",
+    "difficulty": "easy",
+    "tags": [
+      "fun",
+      "events",
+      "js"
+    ],
+    "html": "<input id='q' placeholder='Filter'><ul id='ul'></ul>",
+    "css": "li{margin:4px 0}",
+    "js": "const items=['apple','banana','orange','grape','kiwi','mango'];function render(arr){ul.innerHTML='';arr.forEach(i=>{const li=document.createElement('li');li.textContent=i;ul.appendChild(li)})}render(items);\nlet t; q.oninput=e=>{clearTimeout(t);t=setTimeout(()=>{render(items.filter(x=>x.includes(q.value.toLowerCase())))},300)};\n"
+  },
+  {
+    "id": "example-023",
+    "title": "Simple Form Validator (Simple)",
+    "description": "Validate required fields and show errors.",
+    "category": "advanced",
+    "difficulty": "easy",
+    "tags": [
+      "canvas",
+      "responsive",
+      "animation"
+    ],
+    "html": "<form id='f'><input id='name' placeholder='Name'><input id='email' placeholder='Email'><button>Submit</button></form><div id='err'></div>",
+    "css": "input{display:block;margin:6px 0;padding:6px} .err{color:red}",
+    "js": "f.onsubmit=e=>{e.preventDefault();err.textContent='';if(!name.value.trim()||!email.value.includes('@'))err.textContent='Please enter a valid name and email';else err.textContent='Form OK'};"
+  },
+  {
+    "id": "example-024",
+    "title": "Clean Password Strength Checker",
+    "description": "Shows strength based on length and char types.",
+    "category": "advanced",
+    "difficulty": "easy",
+    "tags": [
+      "events",
+      "forms",
+      "css"
+    ],
+    "html": "<input id='pw' placeholder='Password'><div id='s'></div>",
+    "css": "input{padding:6px} #s{margin-top:8px}",
+    "js": "pw.oninput=()=>{let v=pw.value,score=0; if(v.length>7)score++; if(/[A-Z]/.test(v))score++; if(/\\d/.test(v))score++; s.textContent=['Too weak','Weak','Okay','Strong'][score];}"
+  },
+  {
+    "id": "example-025",
+    "title": "Minimal SVG Line Drawing Animation",
+    "description": "Animate SVG stroke-dashoffset to draw a line.",
+    "category": "animation",
+    "difficulty": "hard",
+    "tags": [
+      "effects",
+      "animation",
+      "forms"
+    ],
+    "html": "<svg width='300' height='60'><path id='p' d='M10 30 L290 30' stroke='#111' stroke-width='4' fill='none' stroke-linecap='round'></path></svg>",
+    "css": "path{stroke-dasharray:300;stroke-dashoffset:300;animation:draw 2s forwards}@keyframes draw{to{stroke-dashoffset:0}}",
+    "js": ""
+  },
+  {
+    "id": "example-026",
+    "title": "Dynamic Sticky Header Example",
+    "description": "Header becomes sticky at top when scrolling.",
+    "category": "responsive",
+    "difficulty": "medium",
+    "tags": [
+      "forms",
+      "responsive",
+      "api"
+    ],
+    "html": "<div class='hdr'>Header</div><div style='height:1000px;padding-top:20px'>Scroll</div>",
+    "css": ".hdr{position:sticky;top:0;background:#fff;padding:12px;border-bottom:1px solid #ddd}",
+    "js": ""
+  },
+  {
+    "id": "example-027",
+    "title": "Classic LocalStorage Notes (Mini)",
+    "description": "Type note and save to localStorage.",
+    "category": "advanced",
+    "difficulty": "easy",
+    "tags": [
+      "api",
+      "events",
+      "widgets"
+    ],
+    "html": "<textarea id='note' placeholder='Note'></textarea><button id='save'>Save</button><pre id='out'></pre>",
+    "css": "textarea{width:100%;height:80px} pre{background:#f7f7f7;padding:8px}",
+    "js": "save.onclick=()=>{localStorage.setItem('note',note.value);out.textContent=localStorage.getItem('note')} ; out.textContent=localStorage.getItem('note')||'';"
+  },
+  {
+    "id": "example-028",
+    "title": "Advanced Lazy Image Loader (IntersectionObserver)",
+    "description": "Images load when scrolled into view.",
+    "category": "advanced",
+    "difficulty": "easy",
+    "tags": [
+      "js",
+      "fun",
+      "widgets"
+    ],
+    "html": "<img data-src='https://via.placeholder.com/400x180' class='lazy' style='width:100%;max-width:400px'>",
+    "css": ".lazy{background:#eee}",
+    "js": "const io=new IntersectionObserver((e)=>{e.forEach(x=>{if(x.isIntersecting){x.target.src=x.target.dataset.src;io.unobserve(x.target)}})});document.querySelectorAll('.lazy').forEach(i=>io.observe(i));"
+  },
+  {
+    "id": "example-029",
+    "title": "Dynamic SVG Icon Morph (Simple)",
+    "description": "Toggle between two simple SVG paths.",
+    "category": "animation",
+    "difficulty": "medium",
+    "tags": [
+      "canvas",
+      "api",
+      "layout"
+    ],
+    "html": "<svg id='sv' width='120' height='120' viewBox='0 0 24 24'><path id='pp' d='M3 12h18'/></svg><button id='t'>Toggle</button>",
+    "css": "svg{border:1px solid #eee;border-radius:6px}",
+    "js": "t.onclick=()=>pp.setAttribute('d', pp.getAttribute('d')==='M3 12h18' ? 'M12 3v18' : 'M3 12h18');"
+  },
+  {
+    "id": "example-030",
+    "title": "Simple Search & Highlight",
+    "description": "Find text in content and highlight matches.",
+    "category": "advanced",
+    "difficulty": "medium",
+    "tags": [
+      "responsive",
+      "html",
+      "fun"
+    ],
+    "html": "<input id='q' placeholder='Search'><div id='text'>This is sample text to search through. Try 'sample' or 'text'.</div>",
+    "css": "mark{background:yellow}",
+    "js": "q.oninput=()=>{const s=q.value; text.innerHTML = text.textContent.replace(new RegExp('('+s+')','gi'),'<mark>$1</mark>')};"
+  },
+  {
+    "id": "example-031",
+    "title": "Classic CSV Exporter (Client-side)",
+    "description": "Exports a small table to CSV and downloads it.",
+    "category": "advanced",
+    "difficulty": "hard",
+    "tags": [
+      "dom",
+      "events",
+      "animation"
+    ],
+    "html": "<button id='exp'>Export CSV</button>",
+    "css": "button{padding:8px}",
+    "js": "exp.onclick=()=>{const rows=[['Name','Age'],['Alice',30],['Bob',25]];const csv=rows.map(r=>r.join(',')) .join('\\n');const b=new Blob([csv],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='data.csv';a.click();}"
+  },
+  {
+    "id": "example-032",
+    "title": "Minimal Editable Table Cell (inline)",
+    "description": "Click to edit table cells inline.",
+    "category": "advanced",
+    "difficulty": "hard",
+    "tags": [
+      "api",
+      "colors",
+      "canvas"
+    ],
+    "html": "<table border='1'><tr><td class='e'>Click to edit</td><td>Static</td></tr></table>",
+    "css": "td{padding:8px}",
+    "js": "document.querySelectorAll('.e').forEach(td=>td.onclick=()=>{const v=prompt('Edit',td.textContent);if(v!==null)td.textContent=v});"
+  },
+  {
+    "id": "example-033",
+    "title": "Useful Infinite Scroll List (Append)",
+    "description": "Scroll to bottom to append more items.",
+    "category": "advanced",
+    "difficulty": "medium",
+    "tags": [
+      "fun",
+      "animation",
+      "layout"
+    ],
+    "html": "<div id='list' style='height:200px;overflow:auto;border:1px solid #ccc;padding:6px'></div>",
+    "css": "",
+    "js": "let i=0;const list=document.getElementById('list');function add(n=20){for(let k=0;k<n;k++){const d=document.createElement('div');d.textContent='Item '+(++i);d.style.padding='6px 0';list.appendChild(d)}};list.onscroll=()=>{if(list.scrollTop+list.clientHeight>=list.scrollHeight-2)add(10)};add(30);"
+  },
+  {
+    "id": "example-034",
+    "title": "Accessible Toast Notification",
+    "description": "Show temporary toast messages.",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "fun",
+      "layout",
+      "animation"
+    ],
+    "html": "<button id='tbtn'>Show Toast</button><div id='toasts' style='position:fixed;top:10px;right:10px'></div>",
+    "css": ".toast{background:#333;color:#fff;padding:8px 12px;border-radius:6px;margin-top:8px;opacity:0.95}",
+    "js": "tbtn.onclick=()=>{const d=document.createElement('div');d.className='toast';d.textContent='Hello!';toasts.appendChild(d);setTimeout(()=>d.remove(),2500)};"
+  },
+  {
+    "id": "example-035",
+    "title": "Practical Pie Chart (Canvas)",
+    "description": "Draw a simple pie chart on canvas.",
+    "category": "canvas",
+    "difficulty": "medium",
+    "tags": [
+      "colors",
+      "fun",
+      "forms"
+    ],
+    "html": "<canvas id='pie' width='320' height='160'></canvas>",
+    "css": "",
+    "js": "const pc=document.getElementById('pie'),pctx=pc.getContext('2d');const data=[30,50,20];let start=0;const cols=['#4caf50','#2196f3','#ff9800'];data.forEach((v,i)=>{pctx.fillStyle=cols[i];pctx.beginPath();pctx.moveTo(80,80);pctx.arc(80,80,60,start,start+2*Math.PI*(v/100));pctx.closePath();pctx.fill();start+=2*Math.PI*(v/100)});"
+  },
+  {
+    "id": "example-036",
+    "title": "Classic Bar Graph (Canvas)",
+    "description": "Simple bar chart drawn with canvas rectangles.",
+    "category": "canvas",
+    "difficulty": "medium",
+    "tags": [
+      "js",
+      "html",
+      "api"
+    ],
+    "html": "<canvas id='bar' width='320' height='160'></canvas>",
+    "css": "",
+    "js": "const bc=document.getElementById('bar'),bctx=bc.getContext('2d');const vals=[40,70,30,90];vals.forEach((v,i)=>{bctx.fillStyle='#667eea';bctx.fillRect(30+i*60,160-(v),40,v)})"
+  },
+  {
+    "id": "example-037",
+    "title": "Interactive Live Search Filter (List)",
+    "description": "Filter list items as you type.",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "js",
+      "animation",
+      "layout"
+    ],
+    "html": "<input id='s' placeholder='Filter'><ul id='L'></ul>",
+    "css": "li{padding:4px 0}",
+    "js": "const data=['Apple','Banana','Cherry','Date','Fig','Grape'];function r(a){L.innerHTML='';a.forEach(x=>{const li=document.createElement('li');li.textContent=x;L.appendChild(li)})}r(data);s.oninput=()=>r(data.filter(x=>x.toLowerCase().includes(s.value.toLowerCase())));"
+  },
+  {
+    "id": "example-038",
+    "title": "Responsive Tooltip on Hover (CSS + JS)",
+    "description": "Hover an element to show a tooltip.",
+    "category": "css",
+    "difficulty": "easy",
+    "tags": [
+      "responsive",
+      "fun",
+      "events"
+    ],
+    "html": "<button id='h' data-tip='Helpful tip'>Hover me</button>",
+    "css": "#h{position:relative} #h::after{content:attr(data-tip);position:absolute;left:0;top:110%;background:#333;color:#fff;padding:6px;border-radius:4px;white-space:nowrap;display:none} #h:hover::after{display:block}",
+    "js": ""
+  },
+  {
+    "id": "example-039",
+    "title": "Animated Keyboard Shortcuts Demo",
+    "description": "Press 'g' to show a greeting.",
+    "category": "advanced",
+    "difficulty": "medium",
+    "tags": [
+      "html",
+      "colors",
+      "events"
+    ],
+    "html": "<div>Press 'g' to show greeting below:</div><div id='out'></div>",
+    "css": "#out{margin-top:10px}",
+    "js": "document.addEventListener('keydown',e=>{if(e.key==='g')out.textContent='Hello, shortcut!'});"
+  },
+  {
+    "id": "example-040",
+    "title": "Simple Web Worker Example (Simple)",
+    "description": "Run computation in a worker to avoid blocking.",
+    "category": "advanced",
+    "difficulty": "hard",
+    "tags": [
+      "html",
+      "colors",
+      "events"
+    ],
+    "html": "<button id='spawn'>Compute</button><pre id='r'></pre>",
+    "css": "pre{background:#f7f7f7;padding:8px}",
+    "js": "spawn.onclick=()=>{const blob=new Blob(['onmessage=e=>{let s=0;for(let i=0;i<3e7;i++)s+=i;postMessage(s)}'],{type:'text/javascript'});const w=new Worker(URL.createObjectURL(blob));w.onmessage=m=>r.textContent='Done';w.postMessage('go')}"
+  },
+  {
+    "id": "example-041",
+    "title": "Animated SVG Icon Styling Demo",
+    "description": "Change SVG color with CSS variables.",
+    "category": "css",
+    "difficulty": "medium",
+    "tags": [
+      "effects",
+      "events",
+      "canvas"
+    ],
+    "html": "<svg width='48' height='48' viewBox='0 0 24 24' style='--c:#007bff'><path d='M12 2l4 8H8l4-8zM4 20h16v2H4z' fill='var(--c)'></path></svg>",
+    "css": "",
+    "js": ""
+  },
+  {
+    "id": "example-042",
+    "title": "Simple Keyboard Navigation (Tabs)",
+    "description": "Use arrow keys to move focus across buttons.",
+    "category": "advanced",
+    "difficulty": "hard",
+    "tags": [
+      "responsive",
+      "forms",
+      "canvas"
+    ],
+    "html": "<div role='tablist'><button class='t'>One</button><button class='t'>Two</button><button class='t'>Three</button></div>",
+    "css": "button{margin-right:6px}",
+    "js": "const btns=document.querySelectorAll('.t');let idx=0;btns[0].focus();document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')idx=(idx+1)%btns.length; if(e.key==='ArrowLeft')idx=(idx-1+btns.length)%btns.length; btns[idx].focus()});"
+  },
+  {
+    "id": "example-043",
+    "title": "Colorful Star Rating Widget",
+    "description": "Click stars to set rating.",
+    "category": "widgets",
+    "difficulty": "easy",
+    "tags": [
+      "js",
+      "dom",
+      "responsive"
+    ],
+    "html": "<div id='stars'>\u2606 \u2606 \u2606 \u2606 \u2606</div>",
+    "css": "#stars{font-size:28px;cursor:pointer;user-select:none}",
+    "js": "stars.onclick=e=>{const idx=Math.round((e.offsetX/stars.clientWidth)*5);stars.textContent='\u2605'.repeat(idx)+'\u2606'.repeat(5-idx)}"
+  },
+  {
+    "id": "example-044",
+    "title": "Minimal Button Click: Update Text",
+    "description": "Click a button to update a message on the page.",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "api",
+      "css",
+      "fun"
+    ],
+    "html": "<button id='btn'>Click me</button>\n<p id='msg'></p>",
+    "css": "button{padding:8px 14px;border:none;background:#667eea;color:#fff;border-radius:6px;cursor:pointer}\n#msg{margin-top:10px;font-size:18px}",
+    "js": "btn.onclick = ()=> msg.textContent = 'Button clicked at ' + new Date().toLocaleTimeString();"
+  },
+  {
+    "id": "example-045",
+    "title": "Advanced Light / Dark Theme Toggle",
+    "description": "Toggle page theme; preference saved to localStorage.",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "js",
+      "widgets",
+      "canvas"
+    ],
+    "html": "<button id='toggle'>Toggle Theme</button>\n<p>Theme persists across reloads.</p>",
+    "css": "body{transition:background 0.2s,color 0.2s}\nbody.light{background:#fff;color:#000}\nbody.dark{background:#111;color:#fff}\nbutton{padding:8px 12px;margin-top:12px}",
+    "js": "const state = localStorage.getItem('theme')||'light';document.body.classList.add(state);\ntoggle.onclick=()=>{document.body.classList.toggle('dark');document.body.classList.toggle('light');localStorage.setItem('theme',document.body.classList.contains('dark')?'dark':'light')};"
+  },
+  {
+    "id": "example-046",
+    "title": "Colorful Simple Modal Window",
+    "description": "Open and close a centered modal overlay.",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "layout",
+      "css",
+      "html"
+    ],
+    "html": "<button id='open'>Open Modal</button>\n<div id='modal' class='modal'><div class='m'><button id='close'>\u2715</button><p>This is a modal.</p></div></div>",
+    "css": ".modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);align-items:center;justify-content:center}\n.modal .m{background:#fff;padding:20px;border-radius:8px;min-width:200px}\n#close{float:right;border:none;background:transparent;font-size:18px;cursor:pointer}",
+    "js": "open.onclick=()=> modal.style.display='flex'; close.onclick=()=> modal.style.display='none'; modal.onclick=e=>{if(e.target===modal)modal.style.display='none'};"
+  },
+  {
+    "id": "example-047",
+    "title": "Dynamic Accordion Toggle Panels",
+    "description": "Expand or collapse panels.",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "effects",
+      "animation",
+      "forms"
+    ],
+    "html": "<div class='acc'><button class='h'>Section 1</button><div class='p'>Content 1</div></div>\n<div class='acc'><button class='h'>Section 2</button><div class='p'>Content 2</div></div>",
+    "css": ".acc .p{max-height:0;overflow:hidden;transition:max-height .25s;padding:0 10px}\n.h{display:block;width:100%;padding:8px;border:none;background:#f1f1f1;text-align:left;cursor:pointer}",
+    "js": "document.querySelectorAll('.h').forEach(b=>b.onclick=()=>{const p=b.nextElementSibling; p.style.maxHeight = p.style.maxHeight? '': p.scrollHeight+'px'});"
+  },
+  {
+    "id": "example-048",
+    "title": "Simple Incrementing Counter",
+    "description": "Counter that you can increase or reset.",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "events",
+      "js",
+      "dom"
+    ],
+    "html": "<div><button id='inc'>+1</button><button id='reset'>Reset</button></div><div id='n'>0</div>",
+    "css": "#n{font-size:40px;margin-top:10px}\nbutton{margin-right:6px;padding:6px 10px}",
+    "js": "let n=0;inc.onclick=()=>n++ , nEl.textContent=n; reset.onclick=()=> n=0 , nEl.textContent=n; const nEl=document.getElementById('n');"
+  },
+  {
+    "id": "example-049",
+    "title": "Interactive Live Input Mirror",
+    "description": "Mirror what the user types into an input.",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "js",
+      "dom",
+      "layout"
+    ],
+    "html": "<input id='i' placeholder='Type here'><p id='out'></p>",
+    "css": "input{padding:8px;width:70%} p{margin-top:8px;font-size:18px}",
+    "js": "i.addEventListener('input',e=>out.textContent=e.target.value);"
+  },
+  {
+    "id": "example-050",
+    "title": "Dynamic Random Background Color",
+    "description": "Click to change the document background to a random color.",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "fun",
+      "widgets",
+      "responsive"
+    ],
+    "html": "<button id='c'>Random Color</button>",
+    "css": "button{padding:8px 12px}",
+    "js": "c.onclick=()=>document.body.style.background = '#'+Math.floor(Math.random()*16777215).toString(16);"
+  },
+  {
+    "id": "example-051",
+    "title": "Advanced Card Hover Zoom",
+    "description": "Simple transform scale on hover for a card.",
+    "category": "animation",
+    "difficulty": "easy",
+    "tags": [
+      "layout",
+      "effects",
+      "forms"
+    ],
+    "html": "<div class='card'>Hover me</div>",
+    "css": ".card{width:200px;height:120px;background:#eee;display:flex;align-items:center;justify-content:center;border-radius:8px;transition:transform .25s}\n.card:hover{transform:scale(1.06)}",
+    "js": ""
+  },
+  {
+    "id": "example-052",
+    "title": "Beginner-Friendly Responsive Grid Boxes",
+    "description": "CSS Grid that adapts to the viewport.",
+    "category": "responsive",
+    "difficulty": "easy",
+    "tags": [
+      "api",
+      "fun",
+      "effects"
+    ],
+    "html": "<div class='g'><div>1</div><div>2</div><div>3</div><div>4</div></div>",
+    "css": ".g{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}.g div{background:#ddd;padding:16px;border-radius:6px;text-align:center}",
+    "js": ""
+  },
+  {
+    "id": "example-053",
+    "title": "Responsive CSS Bouncing Ball",
+    "description": "Pure CSS keyframe bouncing animation.",
+    "category": "animation",
+    "difficulty": "easy",
+    "tags": [
+      "colors",
+      "forms",
+      "responsive"
+    ],
+    "html": "<div class='ball'></div>",
+    "css": ".ball{width:40px;height:40px;background:#ff6a00;border-radius:50%;animation:b 1s infinite alternate;margin:20px}\n@keyframes b{to{transform:translateY(140px)}}",
+    "js": ""
+  },
+  {
+    "id": "example-054",
+    "title": "Simple Typewriter Effect",
+    "description": "Simple typewriter loop effect.",
+    "category": "animation",
+    "difficulty": "easy",
+    "tags": [
+      "js",
+      "canvas",
+      "html"
+    ],
+    "html": "<div id='t'></div>",
+    "css": "#t{font-family:monospace;font-size:20px;border-right:2px solid #000;white-space:nowrap;overflow:hidden}",
+    "js": "const txt='Typewriter demo. ';let i=0;setInterval(()=>{t.textContent=txt.slice(0,i++% (txt.length+1));},120);"
+  },
+  {
+    "id": "example-055",
+    "title": "Classic Canvas Draw Dots",
+    "description": "Click the canvas to draw small dots.",
+    "category": "canvas",
+    "difficulty": "medium",
+    "tags": [
+      "responsive",
+      "api",
+      "events"
+    ],
+    "html": "<canvas id='cv' width='480' height='240' style='border:1px solid #ccc'></canvas>",
+    "css": "",
+    "js": "const cv=document.getElementById('cv'),ctx=cv.getContext('2d');cv.addEventListener('click',e=>{const r=cv.getBoundingClientRect();ctx.fillStyle='#000';ctx.fillRect(e.clientX-r.left-2,e.clientY-r.top-2,4,4);});"
+  },
+  {
+    "id": "example-056",
+    "title": "Animated Canvas Bouncing Ball",
+    "description": "A ball bounces within the canvas boundaries.",
+    "category": "canvas",
+    "difficulty": "medium",
+    "tags": [
+      "layout",
+      "forms",
+      "effects"
+    ],
+    "html": "<canvas id='c2' width='480' height='240' style='border:1px solid #ccc'></canvas>",
+    "css": "",
+    "js": "const c=document.getElementById('c2'),ct=c.getContext('2d');let x=50,y=50,dx=3,dy=2;function loop(){ct.clearRect(0,0,c.width,c.height);ct.beginPath();ct.arc(x,y,16,0,2*Math.PI);ct.fill();if(x<16||x>c.width-16)dx*=-1;if(y<16||y>c.height-16)dy*=-1;x+=dx;y+=dy;requestAnimationFrame(loop);}loop();"
+  },
+  {
+    "id": "example-057",
+    "title": "Simple Canvas Particle Burst (Medium)",
+    "description": "Particles radiate from click position.",
+    "category": "canvas",
+    "difficulty": "hard",
+    "tags": [
+      "js",
+      "colors",
+      "effects"
+    ],
+    "html": "<canvas id='p' width='480' height='240' style='border:1px solid #ccc'></canvas>",
+    "css": "",
+    "js": "const p=document.getElementById('p'),g=p.getContext('2d');let parts=[];\np.onclick=e=>{const r=p.getBoundingClientRect();const cx=e.clientX-r.left,cy=e.clientY-r.top;for(let i=0;i<60;i++){parts.push({x:cx,y:cy,dx:(Math.random()-0.5)*6,dy:(Math.random()-0.5)*6,life:60});}};\nfunction frame(){g.clearRect(0,0,p.width,p.height);parts=parts.filter(z=>z.life>0);parts.forEach(z=>{g.fillStyle='rgba(0,120,200,'+(z.life/60)+')';g.fillRect(z.x,z.y,3,3);z.x+=z.dx;z.y+=z.dy;z.dy+=0.08;z.life--;});requestAnimationFrame(frame);}frame();\n"
+  },
+  {
+    "id": "example-058",
+    "title": "Simple Masonry-like Gallery (Responsive)",
+    "description": "Simple responsive masonry using CSS columns.",
+    "category": "responsive",
+    "difficulty": "easy",
+    "tags": [
+      "colors",
+      "dom",
+      "effects"
+    ],
+    "html": "<div class='masonry'><div class='item' style='height:120px'></div><div class='item' style='height:80px'></div><div class='item' style='height:200px'></div><div class='item' style='height:140px'></div></div>",
+    "css": ".masonry{columns:3;column-gap:12px}.masonry .item{break-inside:avoid;margin-bottom:12px;background:#ddd;border-radius:6px} @media(max-width:700px){.masonry{columns:2}}",
+    "js": ""
+  },
+  {
+    "id": "example-059",
+    "title": "Dynamic Image Lightbox",
+    "description": "Click thumbnail to open lightbox with larger image.",
+    "category": "dom",
+    "difficulty": "medium",
+    "tags": [
+      "forms",
+      "fun",
+      "responsive"
+    ],
+    "html": "<div class='thumbs'><img src='https://via.placeholder.com/120' class='t'/></div><div id='lb' class='lb'><img id='big'/></div>",
+    "css": ".thumbs img{cursor:pointer;border-radius:6px}.lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);align-items:center;justify-content:center}.lb img{max-width:90%;max-height:90%}",
+    "js": "document.querySelector('.t').onclick=e=>{big.src=e.target.src.replace('/120','/600');lb.style.display='flex'};lb.onclick=()=>lb.style.display='none';"
+  },
+  {
+    "id": "example-060",
+    "title": "High-Performance Simple Todo (LocalStorage)",
+    "description": "Add items, persist in localStorage, remove items.",
+    "category": "advanced",
+    "difficulty": "medium",
+    "tags": [
+      "canvas",
+      "responsive",
+      "css"
+    ],
+    "html": "<input id='task' placeholder='Task'><button id='add'>Add</button><ul id='list'></ul>",
+    "css": "input{padding:6px} li{margin:6px 0}",
+    "js": "const list=JSON.parse(localStorage.getItem('t'))||[];\nconst render=()=>{ul.innerHTML='';list.forEach((t,i)=>{const li=document.createElement('li');li.textContent=t;li.onclick=()=>{list.splice(i,1);localStorage.setItem('t',JSON.stringify(list));render()};ul.appendChild(li)} )};\nadd.onclick=()=>{if(task.value.trim()){list.push(task.value.trim());localStorage.setItem('t',JSON.stringify(list));task.value='';render()}};render();\n"
+  },
+  {
+    "id": "example-061",
+    "title": "Classic Range Slider Preview",
+    "description": "Adjust range to change sample box size.",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "dom",
+      "animation",
+      "events"
+    ],
+    "html": "<input type='range' id='r' min='10' max='200'><div id='box'>Box</div>",
+    "css": "#box{background:#ddd;margin-top:12px;display:inline-flex;align-items:center;justify-content:center}",
+    "js": "r.oninput=()=>box.style.width=r.value+'px', box.style.height=r.value+'px';"
+  },
+  {
+    "id": "example-062",
+    "title": "Classic Tabs Component",
+    "description": "Switch between tabs without frameworks.",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "effects",
+      "canvas",
+      "forms"
+    ],
+    "html": "<div><button data-target='a' class='t'>A</button><button data-target='b' class='t'>B</button></div><div id='a'>Content A</div><div id='b' style='display:none'>Content B</div>",
+    "css": "button{margin-right:6px}",
+    "js": "document.querySelectorAll('.t').forEach(b=>b.onclick=()=>{document.querySelectorAll('#a,#b').forEach(x=>x.style.display='none');document.getElementById(b.dataset.target).style.display='block'});"
+  },
+  {
+    "id": "example-063",
+    "title": "Colorful Draggable Box",
+    "description": "Drag the box around the viewport.",
+    "category": "dom",
+    "difficulty": "medium",
+    "tags": [
+      "js",
+      "api",
+      "responsive"
+    ],
+    "html": "<div id='drag' style='width:120px;height:80px;background:#5a9;position:absolute;left:20px;top:20px;display:flex;align-items:center;justify-content:center;cursor:grab'>Drag</div>",
+    "css": "",
+    "js": "let ok=false;drag.onmousedown=e=>{ok=true;drag.style.cursor='grabbing'};document.onmouseup=()=>ok=false;document.onmousemove=e=>{if(!ok)return;drag.style.left=e.pageX-60+'px';drag.style.top=e.pageY-40+'px'};"
+  },
+  {
+    "id": "example-064",
+    "title": "Clean Animated Progress Bar",
+    "description": "Simulate progress when clicking Start.",
+    "category": "dom",
+    "difficulty": "medium",
+    "tags": [
+      "responsive",
+      "layout",
+      "html"
+    ],
+    "html": "<button id='go'>Start</button><div class='bar'><div id='f'></div></div>",
+    "css": ".bar{width:100%;max-width:300px;height:16px;background:#eee;border-radius:8px;margin-top:10px}.bar #f{height:100%;width:0;border-radius:8px;background:#4caf50;transition:width .2s}",
+    "js": "go.onclick=()=>{let w=0;const i=setInterval(()=>{w+=10;f.style.width=w+'%';if(w>=100)clearInterval(i)},250)};"
+  },
+  {
+    "id": "example-065",
+    "title": "Useful Debounced Search Filter",
+    "description": "Type to filter a list; input is debounced.",
+    "category": "advanced",
+    "difficulty": "easy",
+    "tags": [
+      "fun",
+      "css",
+      "html"
+    ],
+    "html": "<input id='q' placeholder='Filter'><ul id='ul'></ul>",
+    "css": "li{margin:4px 0}",
+    "js": "const items=['apple','banana','orange','grape','kiwi','mango'];function render(arr){ul.innerHTML='';arr.forEach(i=>{const li=document.createElement('li');li.textContent=i;ul.appendChild(li)})}render(items);\nlet t; q.oninput=e=>{clearTimeout(t);t=setTimeout(()=>{render(items.filter(x=>x.includes(q.value.toLowerCase())))},300)};\n"
+  },
+  {
+    "id": "example-066",
+    "title": "Colorful Form Validator (Simple)",
+    "description": "Validate required fields and show errors.",
+    "category": "advanced",
+    "difficulty": "hard",
+    "tags": [
+      "colors",
+      "widgets",
+      "html"
+    ],
+    "html": "<form id='f'><input id='name' placeholder='Name'><input id='email' placeholder='Email'><button>Submit</button></form><div id='err'></div>",
+    "css": "input{display:block;margin:6px 0;padding:6px} .err{color:red}",
+    "js": "f.onsubmit=e=>{e.preventDefault();err.textContent='';if(!name.value.trim()||!email.value.includes('@'))err.textContent='Please enter a valid name and email';else err.textContent='Form OK'};"
+  },
+  {
+    "id": "example-067",
+    "title": "Accessible Password Strength Checker",
+    "description": "Shows strength based on length and char types.",
+    "category": "advanced",
+    "difficulty": "easy",
+    "tags": [
+      "fun",
+      "dom",
+      "effects"
+    ],
+    "html": "<input id='pw' placeholder='Password'><div id='s'></div>",
+    "css": "input{padding:6px} #s{margin-top:8px}",
+    "js": "pw.oninput=()=>{let v=pw.value,score=0; if(v.length>7)score++; if(/[A-Z]/.test(v))score++; if(/\\d/.test(v))score++; s.textContent=['Too weak','Weak','Okay','Strong'][score];}"
+  },
+  {
+    "id": "example-068",
+    "title": "Animated SVG Line Drawing Animation",
+    "description": "Animate SVG stroke-dashoffset to draw a line.",
+    "category": "animation",
+    "difficulty": "medium",
+    "tags": [
+      "effects",
+      "events",
+      "html"
+    ],
+    "html": "<svg width='300' height='60'><path id='p' d='M10 30 L290 30' stroke='#111' stroke-width='4' fill='none' stroke-linecap='round'></path></svg>",
+    "css": "path{stroke-dasharray:300;stroke-dashoffset:300;animation:draw 2s forwards}@keyframes draw{to{stroke-dashoffset:0}}",
+    "js": ""
+  },
+  {
+    "id": "example-069",
+    "title": "Modern Sticky Header Example",
+    "description": "Header becomes sticky at top when scrolling.",
+    "category": "responsive",
+    "difficulty": "medium",
+    "tags": [
+      "responsive",
+      "api",
+      "effects"
+    ],
+    "html": "<div class='hdr'>Header</div><div style='height:1000px;padding-top:20px'>Scroll</div>",
+    "css": ".hdr{position:sticky;top:0;background:#fff;padding:12px;border-bottom:1px solid #ddd}",
+    "js": ""
+  },
+  {
+    "id": "example-070",
+    "title": "Minimal LocalStorage Notes (Mini)",
+    "description": "Type note and save to localStorage.",
+    "category": "advanced",
+    "difficulty": "easy",
+    "tags": [
+      "effects",
+      "forms",
+      "widgets"
+    ],
+    "html": "<textarea id='note' placeholder='Note'></textarea><button id='save'>Save</button><pre id='out'></pre>",
+    "css": "textarea{width:100%;height:80px} pre{background:#f7f7f7;padding:8px}",
+    "js": "save.onclick=()=>{localStorage.setItem('note',note.value);out.textContent=localStorage.getItem('note')} ; out.textContent=localStorage.getItem('note')||'';"
+  },
+  {
+    "id": "example-071",
+    "title": "Classic Lazy Image Loader (IntersectionObserver)",
+    "description": "Images load when scrolled into view.",
+    "category": "advanced",
+    "difficulty": "easy",
+    "tags": [
+      "colors",
+      "animation",
+      "css"
+    ],
+    "html": "<img data-src='https://via.placeholder.com/400x180' class='lazy' style='width:100%;max-width:400px'>",
+    "css": ".lazy{background:#eee}",
+    "js": "const io=new IntersectionObserver((e)=>{e.forEach(x=>{if(x.isIntersecting){x.target.src=x.target.dataset.src;io.unobserve(x.target)}})});document.querySelectorAll('.lazy').forEach(i=>io.observe(i));"
+  },
+  {
+    "id": "example-072",
+    "title": "Simple SVG Icon Morph (Simple)",
+    "description": "Toggle between two simple SVG paths.",
+    "category": "animation",
+    "difficulty": "easy",
+    "tags": [
+      "colors",
+      "effects",
+      "canvas"
+    ],
+    "html": "<svg id='sv' width='120' height='120' viewBox='0 0 24 24'><path id='pp' d='M3 12h18'/></svg><button id='t'>Toggle</button>",
+    "css": "svg{border:1px solid #eee;border-radius:6px}",
+    "js": "t.onclick=()=>pp.setAttribute('d', pp.getAttribute('d')==='M3 12h18' ? 'M12 3v18' : 'M3 12h18');"
+  },
+  {
+    "id": "example-073",
+    "title": "Clean Search & Highlight",
+    "description": "Find text in content and highlight matches.",
+    "category": "advanced",
+    "difficulty": "hard",
+    "tags": [
+      "forms",
+      "responsive",
+      "css"
+    ],
+    "html": "<input id='q' placeholder='Search'><div id='text'>This is sample text to search through. Try 'sample' or 'text'.</div>",
+    "css": "mark{background:yellow}",
+    "js": "q.oninput=()=>{const s=q.value; text.innerHTML = text.textContent.replace(new RegExp('('+s+')','gi'),'<mark>$1</mark>')};"
+  },
+  {
+    "id": "example-074",
+    "title": "High-Performance CSV Exporter (Client-side)",
+    "description": "Exports a small table to CSV and downloads it.",
+    "category": "advanced",
+    "difficulty": "medium",
+    "tags": [
+      "events",
+      "layout",
+      "canvas"
+    ],
+    "html": "<button id='exp'>Export CSV</button>",
+    "css": "button{padding:8px}",
+    "js": "exp.onclick=()=>{const rows=[['Name','Age'],['Alice',30],['Bob',25]];const csv=rows.map(r=>r.join(',')) .join('\\n');const b=new Blob([csv],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='data.csv';a.click();}"
+  },
+  {
+    "id": "example-075",
+    "title": "Beginner-Friendly Editable Table Cell (inline)",
+    "description": "Click to edit table cells inline.",
+    "category": "advanced",
+    "difficulty": "hard",
+    "tags": [
+      "responsive",
+      "fun",
+      "css"
+    ],
+    "html": "<table border='1'><tr><td class='e'>Click to edit</td><td>Static</td></tr></table>",
+    "css": "td{padding:8px}",
+    "js": "document.querySelectorAll('.e').forEach(td=>td.onclick=()=>{const v=prompt('Edit',td.textContent);if(v!==null)td.textContent=v});"
+  },
+  {
+    "id": "example-076",
+    "title": "Advanced Infinite Scroll List (Append)",
+    "description": "Scroll to bottom to append more items.",
+    "category": "advanced",
+    "difficulty": "hard",
+    "tags": [
+      "fun",
+      "responsive",
+      "js"
+    ],
+    "html": "<div id='list' style='height:200px;overflow:auto;border:1px solid #ccc;padding:6px'></div>",
+    "css": "",
+    "js": "let i=0;const list=document.getElementById('list');function add(n=20){for(let k=0;k<n;k++){const d=document.createElement('div');d.textContent='Item '+(++i);d.style.padding='6px 0';list.appendChild(d)}};list.onscroll=()=>{if(list.scrollTop+list.clientHeight>=list.scrollHeight-2)add(10)};add(30);"
+  },
+  {
+    "id": "example-077",
+    "title": "High-Performance Toast Notification",
+    "description": "Show temporary toast messages.",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "layout",
+      "dom",
+      "canvas"
+    ],
+    "html": "<button id='tbtn'>Show Toast</button><div id='toasts' style='position:fixed;top:10px;right:10px'></div>",
+    "css": ".toast{background:#333;color:#fff;padding:8px 12px;border-radius:6px;margin-top:8px;opacity:0.95}",
+    "js": "tbtn.onclick=()=>{const d=document.createElement('div');d.className='toast';d.textContent='Hello!';toasts.appendChild(d);setTimeout(()=>d.remove(),2500)};"
+  },
+  {
+    "id": "example-078",
+    "title": "Beginner-Friendly Pie Chart (Canvas)",
+    "description": "Draw a simple pie chart on canvas.",
+    "category": "canvas",
+    "difficulty": "medium",
+    "tags": [
+      "js",
+      "fun",
+      "colors"
+    ],
+    "html": "<canvas id='pie' width='320' height='160'></canvas>",
+    "css": "",
+    "js": "const pc=document.getElementById('pie'),pctx=pc.getContext('2d');const data=[30,50,20];let start=0;const cols=['#4caf50','#2196f3','#ff9800'];data.forEach((v,i)=>{pctx.fillStyle=cols[i];pctx.beginPath();pctx.moveTo(80,80);pctx.arc(80,80,60,start,start+2*Math.PI*(v/100));pctx.closePath();pctx.fill();start+=2*Math.PI*(v/100)});"
+  },
+  {
+    "id": "example-079",
+    "title": "Animated Bar Graph (Canvas)",
+    "description": "Simple bar chart drawn with canvas rectangles.",
+    "category": "canvas",
+    "difficulty": "medium",
+    "tags": [
+      "html",
+      "animation",
+      "events"
+    ],
+    "html": "<canvas id='bar' width='320' height='160'></canvas>",
+    "css": "",
+    "js": "const bc=document.getElementById('bar'),bctx=bc.getContext('2d');const vals=[40,70,30,90];vals.forEach((v,i)=>{bctx.fillStyle='#667eea';bctx.fillRect(30+i*60,160-(v),40,v)})"
+  },
+  {
+    "id": "example-080",
+    "title": "Modern Live Search Filter (List)",
+    "description": "Filter list items as you type.",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "events",
+      "api",
+      "effects"
+    ],
+    "html": "<input id='s' placeholder='Filter'><ul id='L'></ul>",
+    "css": "li{padding:4px 0}",
+    "js": "const data=['Apple','Banana','Cherry','Date','Fig','Grape'];function r(a){L.innerHTML='';a.forEach(x=>{const li=document.createElement('li');li.textContent=x;L.appendChild(li)})}r(data);s.oninput=()=>r(data.filter(x=>x.toLowerCase().includes(s.value.toLowerCase())));"
+  },
+  {
+    "id": "example-081",
+    "title": "Dynamic Tooltip on Hover (CSS + JS)",
+    "description": "Hover an element to show a tooltip.",
+    "category": "css",
+    "difficulty": "easy",
+    "tags": [
+      "css",
+      "html",
+      "layout"
+    ],
+    "html": "<button id='h' data-tip='Helpful tip'>Hover me</button>",
+    "css": "#h{position:relative} #h::after{content:attr(data-tip);position:absolute;left:0;top:110%;background:#333;color:#fff;padding:6px;border-radius:4px;white-space:nowrap;display:none} #h:hover::after{display:block}",
+    "js": ""
+  },
+  {
+    "id": "example-082",
+    "title": "High-Performance Keyboard Shortcuts Demo",
+    "description": "Press 'g' to show a greeting.",
+    "category": "advanced",
+    "difficulty": "medium",
+    "tags": [
+      "html",
+      "dom",
+      "events"
+    ],
+    "html": "<div>Press 'g' to show greeting below:</div><div id='out'></div>",
+    "css": "#out{margin-top:10px}",
+    "js": "document.addEventListener('keydown',e=>{if(e.key==='g')out.textContent='Hello, shortcut!'});"
+  },
+  {
+    "id": "example-083",
+    "title": "Responsive Web Worker Example (Simple)",
+    "description": "Run computation in a worker to avoid blocking.",
+    "category": "advanced",
+    "difficulty": "hard",
+    "tags": [
+      "fun",
+      "api",
+      "forms"
+    ],
+    "html": "<button id='spawn'>Compute</button><pre id='r'></pre>",
+    "css": "pre{background:#f7f7f7;padding:8px}",
+    "js": "spawn.onclick=()=>{const blob=new Blob(['onmessage=e=>{let s=0;for(let i=0;i<3e7;i++)s+=i;postMessage(s)}'],{type:'text/javascript'});const w=new Worker(URL.createObjectURL(blob));w.onmessage=m=>r.textContent='Done';w.postMessage('go')}"
+  },
+  {
+    "id": "example-084",
+    "title": "Useful SVG Icon Styling Demo",
+    "description": "Change SVG color with CSS variables.",
+    "category": "css",
+    "difficulty": "hard",
+    "tags": [
+      "colors",
+      "widgets",
+      "responsive"
+    ],
+    "html": "<svg width='48' height='48' viewBox='0 0 24 24' style='--c:#007bff'><path d='M12 2l4 8H8l4-8zM4 20h16v2H4z' fill='var(--c)'></path></svg>",
+    "css": "",
+    "js": ""
+  },
+  {
+    "id": "example-085",
+    "title": "Clean Keyboard Navigation (Tabs)",
+    "description": "Use arrow keys to move focus across buttons.",
+    "category": "advanced",
+    "difficulty": "easy",
+    "tags": [
+      "dom",
+      "forms",
+      "responsive"
+    ],
+    "html": "<div role='tablist'><button class='t'>One</button><button class='t'>Two</button><button class='t'>Three</button></div>",
+    "css": "button{margin-right:6px}",
+    "js": "const btns=document.querySelectorAll('.t');let idx=0;btns[0].focus();document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')idx=(idx+1)%btns.length; if(e.key==='ArrowLeft')idx=(idx-1+btns.length)%btns.length; btns[idx].focus()});"
+  },
+  {
+    "id": "example-086",
+    "title": "Simple Star Rating Widget",
+    "description": "Click stars to set rating.",
+    "category": "widgets",
+    "difficulty": "medium",
+    "tags": [
+      "forms",
+      "colors",
+      "responsive"
+    ],
+    "html": "<div id='stars'>\u2606 \u2606 \u2606 \u2606 \u2606</div>",
+    "css": "#stars{font-size:28px;cursor:pointer;user-select:none}",
+    "js": "stars.onclick=e=>{const idx=Math.round((e.offsetX/stars.clientWidth)*5);stars.textContent='\u2605'.repeat(idx)+'\u2606'.repeat(5-idx)}"
+  },
+  {
+    "id": "example-087",
+    "title": "Beginner-Friendly Button Click: Update Text",
+    "description": "Click a button to update a message on the page.",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "canvas",
+      "effects",
+      "events"
+    ],
+    "html": "<button id='btn'>Click me</button>\n<p id='msg'></p>",
+    "css": "button{padding:8px 14px;border:none;background:#667eea;color:#fff;border-radius:6px;cursor:pointer}\n#msg{margin-top:10px;font-size:18px}",
+    "js": "btn.onclick = ()=> msg.textContent = 'Button clicked at ' + new Date().toLocaleTimeString();"
+  },
+  {
+    "id": "example-088",
+    "title": "Beginner-Friendly Light / Dark Theme Toggle",
+    "description": "Toggle page theme; preference saved to localStorage.",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "forms",
+      "canvas",
+      "responsive"
+    ],
+    "html": "<button id='toggle'>Toggle Theme</button>\n<p>Theme persists across reloads.</p>",
+    "css": "body{transition:background 0.2s,color 0.2s}\nbody.light{background:#fff;color:#000}\nbody.dark{background:#111;color:#fff}\nbutton{padding:8px 12px;margin-top:12px}",
+    "js": "const state = localStorage.getItem('theme')||'light';document.body.classList.add(state);\ntoggle.onclick=()=>{document.body.classList.toggle('dark');document.body.classList.toggle('light');localStorage.setItem('theme',document.body.classList.contains('dark')?'dark':'light')};"
+  },
+  {
+    "id": "example-089",
+    "title": "Colorful Simple Modal Window",
+    "description": "Open and close a centered modal overlay.",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "animation",
+      "canvas",
+      "fun"
+    ],
+    "html": "<button id='open'>Open Modal</button>\n<div id='modal' class='modal'><div class='m'><button id='close'>\u2715</button><p>This is a modal.</p></div></div>",
+    "css": ".modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);align-items:center;justify-content:center}\n.modal .m{background:#fff;padding:20px;border-radius:8px;min-width:200px}\n#close{float:right;border:none;background:transparent;font-size:18px;cursor:pointer}",
+    "js": "open.onclick=()=> modal.style.display='flex'; close.onclick=()=> modal.style.display='none'; modal.onclick=e=>{if(e.target===modal)modal.style.display='none'};"
+  },
+  {
+    "id": "example-090",
+    "title": "Animated Accordion Toggle Panels",
+    "description": "Expand or collapse panels.",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "events",
+      "layout",
+      "dom"
+    ],
+    "html": "<div class='acc'><button class='h'>Section 1</button><div class='p'>Content 1</div></div>\n<div class='acc'><button class='h'>Section 2</button><div class='p'>Content 2</div></div>",
+    "css": ".acc .p{max-height:0;overflow:hidden;transition:max-height .25s;padding:0 10px}\n.h{display:block;width:100%;padding:8px;border:none;background:#f1f1f1;text-align:left;cursor:pointer}",
+    "js": "document.querySelectorAll('.h').forEach(b=>b.onclick=()=>{const p=b.nextElementSibling; p.style.maxHeight = p.style.maxHeight? '': p.scrollHeight+'px'});"
+  },
+  {
+    "id": "example-091",
+    "title": "Practical Incrementing Counter",
+    "description": "Counter that you can increase or reset.",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "forms",
+      "dom",
+      "widgets"
+    ],
+    "html": "<div><button id='inc'>+1</button><button id='reset'>Reset</button></div><div id='n'>0</div>",
+    "css": "#n{font-size:40px;margin-top:10px}\nbutton{margin-right:6px;padding:6px 10px}",
+    "js": "let n=0;inc.onclick=()=>n++ , nEl.textContent=n; reset.onclick=()=> n=0 , nEl.textContent=n; const nEl=document.getElementById('n');"
+  },
+  {
+    "id": "example-092",
+    "title": "Modern Live Input Mirror",
+    "description": "Mirror what the user types into an input.",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "events",
+      "css",
+      "dom"
+    ],
+    "html": "<input id='i' placeholder='Type here'><p id='out'></p>",
+    "css": "input{padding:8px;width:70%} p{margin-top:8px;font-size:18px}",
+    "js": "i.addEventListener('input',e=>out.textContent=e.target.value);"
+  },
+  {
+    "id": "example-093",
+    "title": "Dynamic Random Background Color",
+    "description": "Click to change the document background to a random color.",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "responsive",
+      "effects",
+      "html"
+    ],
+    "html": "<button id='c'>Random Color</button>",
+    "css": "button{padding:8px 12px}",
+    "js": "c.onclick=()=>document.body.style.background = '#'+Math.floor(Math.random()*16777215).toString(16);"
+  },
+  {
+    "id": "example-094",
+    "title": "Accessible Card Hover Zoom",
+    "description": "Simple transform scale on hover for a card.",
+    "category": "animation",
+    "difficulty": "easy",
+    "tags": [
+      "js",
+      "layout",
+      "responsive"
+    ],
+    "html": "<div class='card'>Hover me</div>",
+    "css": ".card{width:200px;height:120px;background:#eee;display:flex;align-items:center;justify-content:center;border-radius:8px;transition:transform .25s}\n.card:hover{transform:scale(1.06)}",
+    "js": ""
+  },
+  {
+    "id": "example-095",
+    "title": "Accessible Responsive Grid Boxes",
+    "description": "CSS Grid that adapts to the viewport.",
+    "category": "responsive",
+    "difficulty": "easy",
+    "tags": [
+      "css",
+      "js",
+      "fun"
+    ],
+    "html": "<div class='g'><div>1</div><div>2</div><div>3</div><div>4</div></div>",
+    "css": ".g{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}.g div{background:#ddd;padding:16px;border-radius:6px;text-align:center}",
+    "js": ""
+  },
+  {
+    "id": "example-096",
+    "title": "Useful CSS Bouncing Ball",
+    "description": "Pure CSS keyframe bouncing animation.",
+    "category": "animation",
+    "difficulty": "easy",
+    "tags": [
+      "fun",
+      "js",
+      "responsive"
+    ],
+    "html": "<div class='ball'></div>",
+    "css": ".ball{width:40px;height:40px;background:#ff6a00;border-radius:50%;animation:b 1s infinite alternate;margin:20px}\n@keyframes b{to{transform:translateY(140px)}}",
+    "js": ""
+  },
+  {
+    "id": "example-097",
+    "title": "Dynamic Typewriter Effect",
+    "description": "Simple typewriter loop effect.",
+    "category": "animation",
+    "difficulty": "easy",
+    "tags": [
+      "fun",
+      "dom",
+      "js"
+    ],
+    "html": "<div id='t'></div>",
+    "css": "#t{font-family:monospace;font-size:20px;border-right:2px solid #000;white-space:nowrap;overflow:hidden}",
+    "js": "const txt='Typewriter demo. ';let i=0;setInterval(()=>{t.textContent=txt.slice(0,i++% (txt.length+1));},120);"
+  },
+  {
+    "id": "example-098",
+    "title": "Responsive Canvas Draw Dots",
+    "description": "Click the canvas to draw small dots.",
+    "category": "canvas",
+    "difficulty": "medium",
+    "tags": [
+      "responsive",
+      "canvas",
+      "js"
+    ],
+    "html": "<canvas id='cv' width='480' height='240' style='border:1px solid #ccc'></canvas>",
+    "css": "",
+    "js": "const cv=document.getElementById('cv'),ctx=cv.getContext('2d');cv.addEventListener('click',e=>{const r=cv.getBoundingClientRect();ctx.fillStyle='#000';ctx.fillRect(e.clientX-r.left-2,e.clientY-r.top-2,4,4);});"
+  },
+  {
+    "id": "example-099",
+    "title": "Practical Canvas Bouncing Ball",
+    "description": "A ball bounces within the canvas boundaries.",
+    "category": "canvas",
+    "difficulty": "medium",
+    "tags": [
+      "html",
+      "api",
+      "effects"
+    ],
+    "html": "<canvas id='c2' width='480' height='240' style='border:1px solid #ccc'></canvas>",
+    "css": "",
+    "js": "const c=document.getElementById('c2'),ct=c.getContext('2d');let x=50,y=50,dx=3,dy=2;function loop(){ct.clearRect(0,0,c.width,c.height);ct.beginPath();ct.arc(x,y,16,0,2*Math.PI);ct.fill();if(x<16||x>c.width-16)dx*=-1;if(y<16||y>c.height-16)dy*=-1;x+=dx;y+=dy;requestAnimationFrame(loop);}loop();"
+  },
+  {
+    "id": "example-100",
+    "title": "Useful Canvas Particle Burst (Medium)",
+    "description": "Particles radiate from click position.",
+    "category": "canvas",
+    "difficulty": "hard",
+    "tags": [
+      "effects",
+      "widgets",
+      "forms"
+    ],
+    "html": "<canvas id='p' width='480' height='240' style='border:1px solid #ccc'></canvas>",
+    "css": "",
+    "js": "const p=document.getElementById('p'),g=p.getContext('2d');let parts=[];\np.onclick=e=>{const r=p.getBoundingClientRect();const cx=e.clientX-r.left,cy=e.clientY-r.top;for(let i=0;i<60;i++){parts.push({x:cx,y:cy,dx:(Math.random()-0.5)*6,dy:(Math.random()-0.5)*6,life:60});}};\nfunction frame(){g.clearRect(0,0,p.width,p.height);parts=parts.filter(z=>z.life>0);parts.forEach(z=>{g.fillStyle='rgba(0,120,200,'+(z.life/60)+')';g.fillRect(z.x,z.y,3,3);z.x+=z.dx;z.y+=z.dy;z.dy+=0.08;z.life--;});requestAnimationFrame(frame);}frame();\n"
+  }
+]

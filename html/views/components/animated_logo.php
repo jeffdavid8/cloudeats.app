@@ -1,0 +1,130 @@
+<style>
+.animated-logo-container {
+  position: absolute;
+  bottom: 25%;
+  width: 100%;
+  text-align: center;
+}
+.animated-logo {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  display: inline-block;
+  margin: auto;
+}
+</style>
+    <svg width="100%" height="100%" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <!-- glowing stroke filter -->
+        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="2" result="blur"/>
+          <feMerge>
+            <feMergeNode in="blur"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
+        <style><![CDATA[
+          .conn {
+            stroke: rgba(30,30,30,0.18);
+            stroke-width: 2;
+            stroke-linecap: round;
+          }
+          .signal {
+            stroke: #0fb5c6;
+            stroke-width: 2.6;
+            stroke-linecap: round;
+            stroke-dasharray: 12 80;
+            animation: travel 2.4s linear infinite;
+            filter: url(#glow);
+          }
+          .signal.slow {
+            stroke: #1e90ff;
+            stroke-width: 2.2;
+            stroke-dasharray: 8 60;
+            animation-duration: 4s;
+          }
+          .node {
+            fill: #0a3c6e;
+            stroke: white;
+            stroke-width: 1.4;
+            animation: pulse 3s ease-in-out infinite;
+          }
+          .node.small {
+            r: 1.8;
+            animation-duration: 2.2s;
+          }
+          .node.large {
+            r: 3;
+            animation-duration: 3s;
+          }
+          @keyframes travel {
+            from { stroke-dashoffset: 0; }
+            to   { stroke-dashoffset: -240; }
+          }
+          @keyframes pulse {
+            0%   { transform: scale(1); }
+            50%  { transform: scale(1.12); }
+            100% { transform: scale(1); }
+          }
+        ]]></style>
+      </defs>
+
+      <!-- Mediabrain core: brain outline + play button -->
+      <g>
+        <!-- stylized brain outline -->
+        <path d="M50 10
+                C65 10, 85 25, 85 45
+                C85 65, 65 90, 50 90
+                C35 90, 15 65, 15 45
+                C15 25, 35 10, 50 10Z"
+              stroke="#1e90ff" stroke-width="4" fill="none" filter="url(#glow)"/>
+        <!-- play button -->
+        <polygon points="44,35 66,50 44,65"
+                fill="#0fb5c6" filter="url(#glow)"/>
+      </g>
+
+      <!-- Static connections -->
+      <g id="connections">
+        <path class="conn" d="M18,70 L38,56 L56,68" />
+        <path class="conn" d="M18,30 L34,44 L53,34" />
+        <path class="conn" d="M62,44 L78,30" />
+        <path class="conn" d="M62,66 L78,74" />
+        <path class="conn" d="M36,18 L50,28 L72,22" />
+      </g>
+
+      <!-- Animated signals -->
+      <g id="signals">
+        <path class="signal" d="M18,70 L38,56 L56,68">
+          <animate attributeName="stroke-dashoffset" from="0" to="-240" dur="2.4s" repeatCount="indefinite"/>
+        </path>
+        <path class="signal slow" d="M18,30 L34,44 L53,34">
+          <animate attributeName="stroke-dashoffset" from="0" to="-240" dur="4s" repeatCount="indefinite"/>
+        </path>
+        <path class="signal" d="M36,18 L50,28 L72,22">
+          <animate attributeName="stroke-dashoffset" from="0" to="-240" dur="2.4s" repeatCount="indefinite"/>
+        </path>
+        <path class="signal slow" d="M62,44 L78,30">
+          <animate attributeName="stroke-dashoffset" from="0" to="-240" dur="4s" repeatCount="indefinite"/>
+        </path>
+        <path class="signal" d="M62,66 L78,74">
+          <animate attributeName="stroke-dashoffset" from="0" to="-240" dur="2.4s" repeatCount="indefinite"/>
+        </path>
+      </g>
+
+      <!-- Nodes -->
+      <g id="nodes">
+        <circle class="node large" cx="18" cy="70" r="3"/>
+        <circle class="node large" cx="38" cy="56" r="3"/>
+        <circle class="node large" cx="56" cy="68" r="3"/>
+        <circle class="node large" cx="18" cy="30" r="2.6"/>
+        <circle class="node large" cx="34" cy="44" r="3"/>
+        <circle class="node large" cx="53" cy="34" r="2.6"/>
+        <circle class="node small" cx="36" cy="18" r="1.8"/>
+        <circle class="node large" cx="50" cy="28" r="3"/>
+        <circle class="node large" cx="72" cy="22" r="2.6"/>
+        <circle class="node small" cx="62" cy="44" r="2.2"/>
+        <circle class="node small" cx="78" cy="30" r="2"/>
+        <circle class="node large" cx="62" cy="66" r="3"/>
+        <circle class="node large" cx="78" cy="74" r="3"/>
+      </g>
+    </svg>

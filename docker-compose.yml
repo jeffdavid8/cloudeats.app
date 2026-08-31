@@ -1,0 +1,25 @@
+services:
+  web:
+    build:
+      context: .
+      target: production_build  # Use the production stage
+    ports:
+      - "8080:80"
+    environment:
+      - PORT=80
+      - DB_HOST=db_mediabrain
+      - DB_PORT=3306
+      - DB_NAME=cloudeats-app
+      - DB_USER=cloudeats_user
+      - DB_PASS=peir_WWoops5692ls
+      - STRIPE_PUBLISHABLE_KEY=${STRIPE_PUBLISHABLE_KEY}
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - STRIPE_FEE_PERCENT=${STRIPE_FEE_PERCENT}
+      - STRIPE_FEE_FLAT=${STRIPE_FEE_FLAT}
+    networks:
+      - default
+      - docker-dev_webnet
+
+networks:
+  docker-dev_webnet:
+    external: true

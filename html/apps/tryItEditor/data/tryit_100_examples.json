@@ -1,0 +1,1502 @@
+[
+  {
+    "id": "example-1",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "events",
+      "css",
+      "canvas"
+    ],
+    "title": "Demo Example 1",
+    "description": "A sample dom demo number 1.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-2",
+    "category": "animation",
+    "difficulty": "hard",
+    "tags": [
+      "layout",
+      "fun",
+      "html"
+    ],
+    "title": "Demo Example 2",
+    "description": "A sample animation demo number 2.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-3",
+    "category": "responsive",
+    "difficulty": "medium",
+    "tags": [
+      "widgets",
+      "js",
+      "fun"
+    ],
+    "title": "Demo Example 3",
+    "description": "A sample responsive demo number 3.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-4",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "html",
+      "effects",
+      "api"
+    ],
+    "title": "Demo Example 4",
+    "description": "A sample dom demo number 4.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-5",
+    "category": "canvas",
+    "difficulty": "hard",
+    "tags": [
+      "css",
+      "js",
+      "effects"
+    ],
+    "title": "Demo Example 5",
+    "description": "A sample canvas demo number 5.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-6",
+    "category": "beginner",
+    "difficulty": "medium",
+    "tags": [
+      "effects",
+      "html",
+      "dom"
+    ],
+    "title": "Demo Example 6",
+    "description": "A sample beginner demo number 6.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-7",
+    "category": "animation",
+    "difficulty": "hard",
+    "tags": [
+      "html",
+      "canvas",
+      "js"
+    ],
+    "title": "Demo Example 7",
+    "description": "A sample animation demo number 7.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-8",
+    "category": "beginner",
+    "difficulty": "easy",
+    "tags": [
+      "api",
+      "css",
+      "html"
+    ],
+    "title": "Demo Example 8",
+    "description": "A sample beginner demo number 8.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-9",
+    "category": "dom",
+    "difficulty": "hard",
+    "tags": [
+      "html",
+      "widgets",
+      "forms"
+    ],
+    "title": "Demo Example 9",
+    "description": "A sample dom demo number 9.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-10",
+    "category": "css",
+    "difficulty": "easy",
+    "tags": [
+      "effects",
+      "colors",
+      "animation"
+    ],
+    "title": "Demo Example 10",
+    "description": "A sample css demo number 10.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-11",
+    "category": "animation",
+    "difficulty": "medium",
+    "tags": [
+      "api",
+      "colors",
+      "responsive"
+    ],
+    "title": "Demo Example 11",
+    "description": "A sample animation demo number 11.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-12",
+    "category": "canvas",
+    "difficulty": "hard",
+    "tags": [
+      "responsive",
+      "layout",
+      "html"
+    ],
+    "title": "Demo Example 12",
+    "description": "A sample canvas demo number 12.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-13",
+    "category": "canvas",
+    "difficulty": "medium",
+    "tags": [
+      "js",
+      "fun",
+      "html"
+    ],
+    "title": "Demo Example 13",
+    "description": "A sample canvas demo number 13.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-14",
+    "category": "dom",
+    "difficulty": "medium",
+    "tags": [
+      "events",
+      "canvas",
+      "responsive"
+    ],
+    "title": "Demo Example 14",
+    "description": "A sample dom demo number 14.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-15",
+    "category": "dom",
+    "difficulty": "medium",
+    "tags": [
+      "js",
+      "canvas",
+      "events"
+    ],
+    "title": "Demo Example 15",
+    "description": "A sample dom demo number 15.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-16",
+    "category": "dom",
+    "difficulty": "medium",
+    "tags": [
+      "forms",
+      "js",
+      "responsive"
+    ],
+    "title": "Demo Example 16",
+    "description": "A sample dom demo number 16.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-17",
+    "category": "dom",
+    "difficulty": "medium",
+    "tags": [
+      "forms",
+      "layout",
+      "events"
+    ],
+    "title": "Demo Example 17",
+    "description": "A sample dom demo number 17.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-18",
+    "category": "advanced",
+    "difficulty": "medium",
+    "tags": [
+      "responsive",
+      "html",
+      "layout"
+    ],
+    "title": "Demo Example 18",
+    "description": "A sample advanced demo number 18.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-19",
+    "category": "animation",
+    "difficulty": "easy",
+    "tags": [
+      "effects",
+      "css",
+      "fun"
+    ],
+    "title": "Demo Example 19",
+    "description": "A sample animation demo number 19.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-20",
+    "category": "advanced",
+    "difficulty": "medium",
+    "tags": [
+      "forms",
+      "canvas",
+      "effects"
+    ],
+    "title": "Demo Example 20",
+    "description": "A sample advanced demo number 20.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-21",
+    "category": "canvas",
+    "difficulty": "medium",
+    "tags": [
+      "widgets",
+      "responsive",
+      "colors"
+    ],
+    "title": "Demo Example 21",
+    "description": "A sample canvas demo number 21.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-22",
+    "category": "responsive",
+    "difficulty": "easy",
+    "tags": [
+      "events",
+      "html",
+      "forms"
+    ],
+    "title": "Demo Example 22",
+    "description": "A sample responsive demo number 22.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-23",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "fun",
+      "api",
+      "canvas"
+    ],
+    "title": "Demo Example 23",
+    "description": "A sample dom demo number 23.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-24",
+    "category": "dom",
+    "difficulty": "medium",
+    "tags": [
+      "responsive",
+      "animation",
+      "js"
+    ],
+    "title": "Demo Example 24",
+    "description": "A sample dom demo number 24.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-25",
+    "category": "responsive",
+    "difficulty": "medium",
+    "tags": [
+      "events",
+      "forms",
+      "api"
+    ],
+    "title": "Demo Example 25",
+    "description": "A sample responsive demo number 25.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-26",
+    "category": "responsive",
+    "difficulty": "easy",
+    "tags": [
+      "responsive",
+      "animation",
+      "fun"
+    ],
+    "title": "Demo Example 26",
+    "description": "A sample responsive demo number 26.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-27",
+    "category": "advanced",
+    "difficulty": "hard",
+    "tags": [
+      "widgets",
+      "js",
+      "animation"
+    ],
+    "title": "Demo Example 27",
+    "description": "A sample advanced demo number 27.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-28",
+    "category": "responsive",
+    "difficulty": "hard",
+    "tags": [
+      "effects",
+      "colors",
+      "api"
+    ],
+    "title": "Demo Example 28",
+    "description": "A sample responsive demo number 28.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-29",
+    "category": "responsive",
+    "difficulty": "hard",
+    "tags": [
+      "api",
+      "html",
+      "effects"
+    ],
+    "title": "Demo Example 29",
+    "description": "A sample responsive demo number 29.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-30",
+    "category": "dom",
+    "difficulty": "medium",
+    "tags": [
+      "widgets",
+      "api",
+      "fun"
+    ],
+    "title": "Demo Example 30",
+    "description": "A sample dom demo number 30.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-31",
+    "category": "advanced",
+    "difficulty": "easy",
+    "tags": [
+      "widgets",
+      "api",
+      "js"
+    ],
+    "title": "Demo Example 31",
+    "description": "A sample advanced demo number 31.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-32",
+    "category": "animation",
+    "difficulty": "easy",
+    "tags": [
+      "canvas",
+      "colors",
+      "effects"
+    ],
+    "title": "Demo Example 32",
+    "description": "A sample animation demo number 32.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-33",
+    "category": "advanced",
+    "difficulty": "easy",
+    "tags": [
+      "widgets",
+      "canvas",
+      "responsive"
+    ],
+    "title": "Demo Example 33",
+    "description": "A sample advanced demo number 33.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-34",
+    "category": "advanced",
+    "difficulty": "easy",
+    "tags": [
+      "html",
+      "css",
+      "colors"
+    ],
+    "title": "Demo Example 34",
+    "description": "A sample advanced demo number 34.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-35",
+    "category": "beginner",
+    "difficulty": "medium",
+    "tags": [
+      "widgets",
+      "html",
+      "js"
+    ],
+    "title": "Demo Example 35",
+    "description": "A sample beginner demo number 35.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-36",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "js",
+      "effects",
+      "html"
+    ],
+    "title": "Demo Example 36",
+    "description": "A sample dom demo number 36.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-37",
+    "category": "beginner",
+    "difficulty": "hard",
+    "tags": [
+      "fun",
+      "forms",
+      "api"
+    ],
+    "title": "Demo Example 37",
+    "description": "A sample beginner demo number 37.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-38",
+    "category": "advanced",
+    "difficulty": "easy",
+    "tags": [
+      "colors",
+      "forms",
+      "layout"
+    ],
+    "title": "Demo Example 38",
+    "description": "A sample advanced demo number 38.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-39",
+    "category": "responsive",
+    "difficulty": "easy",
+    "tags": [
+      "fun",
+      "colors",
+      "css"
+    ],
+    "title": "Demo Example 39",
+    "description": "A sample responsive demo number 39.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-40",
+    "category": "css",
+    "difficulty": "easy",
+    "tags": [
+      "forms",
+      "fun",
+      "css"
+    ],
+    "title": "Demo Example 40",
+    "description": "A sample css demo number 40.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-41",
+    "category": "dom",
+    "difficulty": "hard",
+    "tags": [
+      "api",
+      "colors",
+      "animation"
+    ],
+    "title": "Demo Example 41",
+    "description": "A sample dom demo number 41.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-42",
+    "category": "css",
+    "difficulty": "easy",
+    "tags": [
+      "canvas",
+      "dom",
+      "js"
+    ],
+    "title": "Demo Example 42",
+    "description": "A sample css demo number 42.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-43",
+    "category": "responsive",
+    "difficulty": "easy",
+    "tags": [
+      "events",
+      "animation",
+      "layout"
+    ],
+    "title": "Demo Example 43",
+    "description": "A sample responsive demo number 43.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-44",
+    "category": "beginner",
+    "difficulty": "hard",
+    "tags": [
+      "fun",
+      "widgets",
+      "animation"
+    ],
+    "title": "Demo Example 44",
+    "description": "A sample beginner demo number 44.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-45",
+    "category": "canvas",
+    "difficulty": "medium",
+    "tags": [
+      "js",
+      "canvas",
+      "animation"
+    ],
+    "title": "Demo Example 45",
+    "description": "A sample canvas demo number 45.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-46",
+    "category": "responsive",
+    "difficulty": "hard",
+    "tags": [
+      "canvas",
+      "layout",
+      "responsive"
+    ],
+    "title": "Demo Example 46",
+    "description": "A sample responsive demo number 46.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-47",
+    "category": "animation",
+    "difficulty": "hard",
+    "tags": [
+      "colors",
+      "dom",
+      "css"
+    ],
+    "title": "Demo Example 47",
+    "description": "A sample animation demo number 47.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-48",
+    "category": "css",
+    "difficulty": "hard",
+    "tags": [
+      "layout",
+      "html",
+      "animation"
+    ],
+    "title": "Demo Example 48",
+    "description": "A sample css demo number 48.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-49",
+    "category": "responsive",
+    "difficulty": "hard",
+    "tags": [
+      "fun",
+      "forms",
+      "responsive"
+    ],
+    "title": "Demo Example 49",
+    "description": "A sample responsive demo number 49.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-50",
+    "category": "dom",
+    "difficulty": "medium",
+    "tags": [
+      "fun",
+      "api",
+      "events"
+    ],
+    "title": "Demo Example 50",
+    "description": "A sample dom demo number 50.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-51",
+    "category": "advanced",
+    "difficulty": "medium",
+    "tags": [
+      "js",
+      "forms",
+      "html"
+    ],
+    "title": "Demo Example 51",
+    "description": "A sample advanced demo number 51.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-52",
+    "category": "advanced",
+    "difficulty": "easy",
+    "tags": [
+      "html",
+      "fun",
+      "canvas"
+    ],
+    "title": "Demo Example 52",
+    "description": "A sample advanced demo number 52.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-53",
+    "category": "canvas",
+    "difficulty": "easy",
+    "tags": [
+      "canvas",
+      "css",
+      "dom"
+    ],
+    "title": "Demo Example 53",
+    "description": "A sample canvas demo number 53.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-54",
+    "category": "responsive",
+    "difficulty": "easy",
+    "tags": [
+      "js",
+      "css",
+      "effects"
+    ],
+    "title": "Demo Example 54",
+    "description": "A sample responsive demo number 54.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-55",
+    "category": "css",
+    "difficulty": "easy",
+    "tags": [
+      "colors",
+      "js",
+      "css"
+    ],
+    "title": "Demo Example 55",
+    "description": "A sample css demo number 55.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-56",
+    "category": "css",
+    "difficulty": "medium",
+    "tags": [
+      "dom",
+      "layout",
+      "css"
+    ],
+    "title": "Demo Example 56",
+    "description": "A sample css demo number 56.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-57",
+    "category": "advanced",
+    "difficulty": "easy",
+    "tags": [
+      "layout",
+      "responsive",
+      "html"
+    ],
+    "title": "Demo Example 57",
+    "description": "A sample advanced demo number 57.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-58",
+    "category": "canvas",
+    "difficulty": "medium",
+    "tags": [
+      "canvas",
+      "effects",
+      "api"
+    ],
+    "title": "Demo Example 58",
+    "description": "A sample canvas demo number 58.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-59",
+    "category": "css",
+    "difficulty": "easy",
+    "tags": [
+      "layout",
+      "effects",
+      "fun"
+    ],
+    "title": "Demo Example 59",
+    "description": "A sample css demo number 59.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-60",
+    "category": "dom",
+    "difficulty": "hard",
+    "tags": [
+      "widgets",
+      "responsive",
+      "forms"
+    ],
+    "title": "Demo Example 60",
+    "description": "A sample dom demo number 60.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-61",
+    "category": "beginner",
+    "difficulty": "hard",
+    "tags": [
+      "forms",
+      "layout",
+      "css"
+    ],
+    "title": "Demo Example 61",
+    "description": "A sample beginner demo number 61.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-62",
+    "category": "animation",
+    "difficulty": "hard",
+    "tags": [
+      "animation",
+      "canvas",
+      "widgets"
+    ],
+    "title": "Demo Example 62",
+    "description": "A sample animation demo number 62.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-63",
+    "category": "dom",
+    "difficulty": "hard",
+    "tags": [
+      "animation",
+      "layout",
+      "css"
+    ],
+    "title": "Demo Example 63",
+    "description": "A sample dom demo number 63.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-64",
+    "category": "responsive",
+    "difficulty": "medium",
+    "tags": [
+      "animation",
+      "canvas",
+      "forms"
+    ],
+    "title": "Demo Example 64",
+    "description": "A sample responsive demo number 64.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-65",
+    "category": "css",
+    "difficulty": "medium",
+    "tags": [
+      "effects",
+      "forms",
+      "animation"
+    ],
+    "title": "Demo Example 65",
+    "description": "A sample css demo number 65.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-66",
+    "category": "dom",
+    "difficulty": "hard",
+    "tags": [
+      "canvas",
+      "widgets",
+      "html"
+    ],
+    "title": "Demo Example 66",
+    "description": "A sample dom demo number 66.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-67",
+    "category": "css",
+    "difficulty": "hard",
+    "tags": [
+      "css",
+      "effects",
+      "events"
+    ],
+    "title": "Demo Example 67",
+    "description": "A sample css demo number 67.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-68",
+    "category": "css",
+    "difficulty": "easy",
+    "tags": [
+      "html",
+      "canvas",
+      "effects"
+    ],
+    "title": "Demo Example 68",
+    "description": "A sample css demo number 68.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-69",
+    "category": "canvas",
+    "difficulty": "medium",
+    "tags": [
+      "dom",
+      "css",
+      "api"
+    ],
+    "title": "Demo Example 69",
+    "description": "A sample canvas demo number 69.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-70",
+    "category": "canvas",
+    "difficulty": "easy",
+    "tags": [
+      "colors",
+      "responsive",
+      "canvas"
+    ],
+    "title": "Demo Example 70",
+    "description": "A sample canvas demo number 70.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-71",
+    "category": "dom",
+    "difficulty": "hard",
+    "tags": [
+      "effects",
+      "canvas",
+      "forms"
+    ],
+    "title": "Demo Example 71",
+    "description": "A sample dom demo number 71.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-72",
+    "category": "advanced",
+    "difficulty": "hard",
+    "tags": [
+      "events",
+      "fun",
+      "html"
+    ],
+    "title": "Demo Example 72",
+    "description": "A sample advanced demo number 72.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-73",
+    "category": "animation",
+    "difficulty": "hard",
+    "tags": [
+      "fun",
+      "effects",
+      "forms"
+    ],
+    "title": "Demo Example 73",
+    "description": "A sample animation demo number 73.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-74",
+    "category": "responsive",
+    "difficulty": "medium",
+    "tags": [
+      "api",
+      "dom",
+      "animation"
+    ],
+    "title": "Demo Example 74",
+    "description": "A sample responsive demo number 74.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-75",
+    "category": "css",
+    "difficulty": "easy",
+    "tags": [
+      "colors",
+      "dom",
+      "effects"
+    ],
+    "title": "Demo Example 75",
+    "description": "A sample css demo number 75.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-76",
+    "category": "canvas",
+    "difficulty": "medium",
+    "tags": [
+      "layout",
+      "css",
+      "js"
+    ],
+    "title": "Demo Example 76",
+    "description": "A sample canvas demo number 76.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-77",
+    "category": "responsive",
+    "difficulty": "hard",
+    "tags": [
+      "widgets",
+      "css",
+      "colors"
+    ],
+    "title": "Demo Example 77",
+    "description": "A sample responsive demo number 77.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-78",
+    "category": "dom",
+    "difficulty": "hard",
+    "tags": [
+      "events",
+      "canvas",
+      "layout"
+    ],
+    "title": "Demo Example 78",
+    "description": "A sample dom demo number 78.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-79",
+    "category": "dom",
+    "difficulty": "medium",
+    "tags": [
+      "fun",
+      "forms",
+      "events"
+    ],
+    "title": "Demo Example 79",
+    "description": "A sample dom demo number 79.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-80",
+    "category": "dom",
+    "difficulty": "medium",
+    "tags": [
+      "forms",
+      "animation",
+      "api"
+    ],
+    "title": "Demo Example 80",
+    "description": "A sample dom demo number 80.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-81",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "fun",
+      "canvas",
+      "animation"
+    ],
+    "title": "Demo Example 81",
+    "description": "A sample dom demo number 81.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-82",
+    "category": "advanced",
+    "difficulty": "medium",
+    "tags": [
+      "js",
+      "effects",
+      "fun"
+    ],
+    "title": "Demo Example 82",
+    "description": "A sample advanced demo number 82.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-83",
+    "category": "advanced",
+    "difficulty": "easy",
+    "tags": [
+      "responsive",
+      "html",
+      "js"
+    ],
+    "title": "Demo Example 83",
+    "description": "A sample advanced demo number 83.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-84",
+    "category": "animation",
+    "difficulty": "easy",
+    "tags": [
+      "js",
+      "layout",
+      "forms"
+    ],
+    "title": "Demo Example 84",
+    "description": "A sample animation demo number 84.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-85",
+    "category": "dom",
+    "difficulty": "medium",
+    "tags": [
+      "events",
+      "forms",
+      "js"
+    ],
+    "title": "Demo Example 85",
+    "description": "A sample dom demo number 85.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-86",
+    "category": "beginner",
+    "difficulty": "easy",
+    "tags": [
+      "widgets",
+      "animation",
+      "css"
+    ],
+    "title": "Demo Example 86",
+    "description": "A sample beginner demo number 86.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-87",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "fun",
+      "widgets",
+      "colors"
+    ],
+    "title": "Demo Example 87",
+    "description": "A sample dom demo number 87.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-88",
+    "category": "responsive",
+    "difficulty": "easy",
+    "tags": [
+      "effects",
+      "js",
+      "responsive"
+    ],
+    "title": "Demo Example 88",
+    "description": "A sample responsive demo number 88.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-89",
+    "category": "animation",
+    "difficulty": "medium",
+    "tags": [
+      "fun",
+      "html",
+      "dom"
+    ],
+    "title": "Demo Example 89",
+    "description": "A sample animation demo number 89.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-90",
+    "category": "css",
+    "difficulty": "hard",
+    "tags": [
+      "widgets",
+      "events",
+      "layout"
+    ],
+    "title": "Demo Example 90",
+    "description": "A sample css demo number 90.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-91",
+    "category": "responsive",
+    "difficulty": "medium",
+    "tags": [
+      "fun",
+      "layout",
+      "animation"
+    ],
+    "title": "Demo Example 91",
+    "description": "A sample responsive demo number 91.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-92",
+    "category": "canvas",
+    "difficulty": "medium",
+    "tags": [
+      "dom",
+      "colors",
+      "layout"
+    ],
+    "title": "Demo Example 92",
+    "description": "A sample canvas demo number 92.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-93",
+    "category": "advanced",
+    "difficulty": "medium",
+    "tags": [
+      "canvas",
+      "fun",
+      "effects"
+    ],
+    "title": "Demo Example 93",
+    "description": "A sample advanced demo number 93.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-94",
+    "category": "advanced",
+    "difficulty": "hard",
+    "tags": [
+      "responsive",
+      "colors",
+      "js"
+    ],
+    "title": "Demo Example 94",
+    "description": "A sample advanced demo number 94.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-95",
+    "category": "canvas",
+    "difficulty": "easy",
+    "tags": [
+      "widgets",
+      "layout",
+      "effects"
+    ],
+    "title": "Demo Example 95",
+    "description": "A sample canvas demo number 95.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-96",
+    "category": "dom",
+    "difficulty": "hard",
+    "tags": [
+      "dom",
+      "layout",
+      "forms"
+    ],
+    "title": "Demo Example 96",
+    "description": "A sample dom demo number 96.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-97",
+    "category": "css",
+    "difficulty": "easy",
+    "tags": [
+      "responsive",
+      "dom",
+      "api"
+    ],
+    "title": "Demo Example 97",
+    "description": "A sample css demo number 97.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-98",
+    "category": "advanced",
+    "difficulty": "medium",
+    "tags": [
+      "widgets",
+      "effects",
+      "css"
+    ],
+    "title": "Demo Example 98",
+    "description": "A sample advanced demo number 98.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-99",
+    "category": "canvas",
+    "difficulty": "medium",
+    "tags": [
+      "events",
+      "html",
+      "colors"
+    ],
+    "title": "Demo Example 99",
+    "description": "A sample canvas demo number 99.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-100",
+    "category": "beginner",
+    "difficulty": "hard",
+    "tags": [
+      "effects",
+      "css",
+      "animation"
+    ],
+    "title": "Demo Example 100",
+    "description": "A sample beginner demo number 100.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  }
+]

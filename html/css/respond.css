@@ -1,0 +1,218 @@
+/* ------------------------------------------------------------------- 
+ * responsive:
+ * about
+ *
+ /* --- Default: Mobile Styles (Extra Small Devices) --- */
+/* Everything here applies to all devices, optimized for phones (< 576px) */
+
+/* --- Small Devices (Tablets/Phones in Landscape, 576px and up) --- */
+@media (min-width: 576px) {
+  /* Styles for small screens */
+}
+
+/* --- Medium Devices (Tablets/Small Laptops, 768px and up) --- */
+@media (min-width: 768px) {
+  /* Styles for tablets/small laptops */
+}
+
+/* --- Large Devices (Laptops/Desktops, 992px and up) --- */
+@media (min-width: 992px) {
+  /* Styles for desktops */
+}
+
+/* --- Extra Large Devices (Large Desktops, 1200px and up) --- */
+@media (min-width: 1200px) {
+  /* Styles for large screens */
+}
+
+/* Common Media Features & Scenarios */
+/* --- Extra Extra Large Devices (Huge Desktops, 1400px and up) --- */
+@media (min-width: 1400px) {
+  /* Styles for extra large screens */
+}
+
+/* --- Orientation (Landscape or Portrait) --- */
+@media (orientation: landscape) {
+  /* Specific styling for when device is held horizontally */
+}
+
+/* --- High-Density Displays (Retina Screens) --- */
+@media (min-resolution: 2dppx) {
+  /* Styles for high-resolution screens (e.g., higher quality images) */
+}
+
+/* --- Dark Mode Support --- */
+@media (prefers-color-scheme: dark) {
+  /* Colors for dark mode */
+}
+
+/* --- Reduced Motion Accessiblity --- */
+@media (prefers-reduced-motion: reduce) {
+  /* Turn off animations/transitions for accessibility */
+}
+
+/* --- Hover Capabilities (Detects mouse vs. touch) --- */
+@media (hover: hover) {
+  /* Apply hover effects only for mouse users */
+}
+
+/* ------------------------------------------------------------------- */
+@media only screen and (max-width: 400px) {
+  .home .results {
+    padding: 0 1rem;
+  }
+  #index-banner {
+    padding-top: 0;
+  }
+  #index-banner h1 {
+    font-size: 2.5rem;
+  }
+  .primary-search-field {
+    max-width: 95%;
+    margin: 1rem auto 1rem;
+    padding: 7px 2rem 1rem;
+    height: 4rem;
+    border-radius: 2rem;
+    -webkit-transition: all 0.7s;
+    transition: all 0.7s;
+  }
+  .primary-search-field input[type="text"] {
+    font-size: 1.5em;
+  }
+  .primary-search-field.focus input[type="text"] {
+    font-size: 1.5em;
+  }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (max-width: 600px) {
+  body.home .promo.panel {
+    font-size: 1em;
+  }
+
+  body.home .promo.panel i {
+    font-size: 1.8em;
+  }
+  #index-banner {
+    padding-top: 2rem;
+  }
+  .primary-search-field {
+    margin: 1rem auto 0.25rem;
+  }
+  .results .keyword.result .collapsible-body {
+    max-height: 20rem;
+  }
+  .keyword.result .carousel .indicators {
+    display: none;
+  }
+}
+@media only screen and (min-width: 601px) {
+}
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+  .phpVersionNumber {
+    font-size: 14px;
+  }
+  body.mb-home .col.item {
+    height: 145px;
+    font-size: 1.1em;
+  }
+  #index-banner {
+    padding-top: 2rem;
+  }
+  h3.section-header {
+    margin: 1em 0;
+  }
+  .home .results {
+    padding: 0 2rem;
+    font-size: 1.1em;
+  }
+  .results .keyword.result {
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+  .primary-search-field {
+    max-width: 50%;
+  }
+  .primary-search-field.focus {
+    max-width: 60%;
+  }
+  .primary-search-field input[type="text"] {
+    font-size: 2em;
+  }
+  .primary-search-field input[type="text"]:focus {
+    font-size: 2.2em;
+  }
+  .keyword.result .carousel .indicators {
+    display: initial;
+  }
+  .results .keyword.result .collapsible-body {
+    max-height: 30rem;
+  }
+  nav ul a {
+    margin: 0 8px;
+  }
+  /*
+   footer.page-footer {
+      text-align: left;
+   }
+   */
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+  html,
+  body {
+    font-size: 18px;
+  }
+  body.mb-home .col.item {
+    height: 180px;
+  }
+  .home .results {
+    margin: 1rem auto 7rem;
+    width: 80%;
+    font-size: 1.2em;
+  }
+  .results .keyword.result .collapsible-body {
+    max-height: 40rem;
+  }
+  .header nav ul li a, .header nav ul li a i, .facet_container nav ul li a, .facet_container nav ul li a i, body .tts_player_menu_container {
+    line-height: 55px;
+  }
+
+  h1 {
+    font-size: 4em;
+    margin: 0.67em 0;
+  }
+  h2 {
+    font-size: 3.5em;
+    margin: 0.75em 0;
+  }
+  h3 {
+    font-size: 2em;
+    margin: 0.83em 0;
+  }
+  h4 {
+    font-size: 2.75em;
+    margin: 1.12em 0;
+  }
+  h5 {
+    font-size: 1.7em;
+    margin: 1.5em 0;
+  }
+  h6 {
+    font-size: 1.5em;
+    margin: 1.67em 0;
+  }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+  .home .results {
+    /* margin-left: 17%;
+      width: 70%; */
+    font-size: 1.3em;
+  }
+}

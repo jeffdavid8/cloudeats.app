@@ -1,0 +1,1502 @@
+[
+  {
+    "id": "example-1",
+    "category": "css",
+    "difficulty": "easy",
+    "tags": [
+      "widgets",
+      "fun",
+      "api"
+    ],
+    "title": "Practical Progress Bar",
+    "description": "Practical Progress Bar demonstrating css concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-2",
+    "category": "css",
+    "difficulty": "hard",
+    "tags": [
+      "layout",
+      "colors",
+      "canvas"
+    ],
+    "title": "Minimal Shadow Effects",
+    "description": "Minimal Shadow Effects demonstrating css concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-3",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "responsive",
+      "widgets",
+      "colors"
+    ],
+    "title": "Accessible Pie Chart Canvas",
+    "description": "Accessible Pie Chart Canvas demonstrating dom concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-4",
+    "category": "dom",
+    "difficulty": "medium",
+    "tags": [
+      "responsive",
+      "forms",
+      "animation"
+    ],
+    "title": "Responsive Dark Mode Switch",
+    "description": "Responsive Dark Mode Switch demonstrating dom concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-5",
+    "category": "advanced",
+    "difficulty": "medium",
+    "tags": [
+      "responsive",
+      "animation",
+      "widgets"
+    ],
+    "title": "Beginner-Friendly Neumorphism Card",
+    "description": "Beginner-Friendly Neumorphism Card demonstrating advanced concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-6",
+    "category": "responsive",
+    "difficulty": "medium",
+    "tags": [
+      "api",
+      "forms",
+      "responsive"
+    ],
+    "title": "Clean Bar Graph Canvas",
+    "description": "Clean Bar Graph Canvas demonstrating responsive concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-7",
+    "category": "beginner",
+    "difficulty": "hard",
+    "tags": [
+      "dom",
+      "api",
+      "events"
+    ],
+    "title": "Clean Canvas Drawing Tool",
+    "description": "Clean Canvas Drawing Tool demonstrating beginner concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-8",
+    "category": "advanced",
+    "difficulty": "easy",
+    "tags": [
+      "forms",
+      "widgets",
+      "html"
+    ],
+    "title": "Accessible Typewriter Heading",
+    "description": "Accessible Typewriter Heading demonstrating advanced concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-9",
+    "category": "css",
+    "difficulty": "easy",
+    "tags": [
+      "fun",
+      "events",
+      "forms"
+    ],
+    "title": "Clean Neumorphism Card",
+    "description": "Clean Neumorphism Card demonstrating css concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-10",
+    "category": "dom",
+    "difficulty": "hard",
+    "tags": [
+      "dom",
+      "canvas",
+      "events"
+    ],
+    "title": "Minimal Live Search Filter",
+    "description": "Minimal Live Search Filter demonstrating dom concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-11",
+    "category": "beginner",
+    "difficulty": "easy",
+    "tags": [
+      "css",
+      "canvas",
+      "html"
+    ],
+    "title": "Accessible Input Mirror",
+    "description": "Accessible Input Mirror demonstrating beginner concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-12",
+    "category": "beginner",
+    "difficulty": "medium",
+    "tags": [
+      "dom",
+      "animation",
+      "fun"
+    ],
+    "title": "Advanced Form Handler",
+    "description": "Advanced Form Handler demonstrating beginner concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-13",
+    "category": "advanced",
+    "difficulty": "medium",
+    "tags": [
+      "forms",
+      "api",
+      "fun"
+    ],
+    "title": "Beginner-Friendly Slider Control",
+    "description": "Beginner-Friendly Slider Control demonstrating advanced concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-14",
+    "category": "animation",
+    "difficulty": "medium",
+    "tags": [
+      "events",
+      "canvas",
+      "api"
+    ],
+    "title": "Minimal Flexbox Layout",
+    "description": "Minimal Flexbox Layout demonstrating animation concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-15",
+    "category": "advanced",
+    "difficulty": "medium",
+    "tags": [
+      "layout",
+      "dom",
+      "events"
+    ],
+    "title": "Classic Flexbox Layout",
+    "description": "Classic Flexbox Layout demonstrating advanced concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-16",
+    "category": "canvas",
+    "difficulty": "hard",
+    "tags": [
+      "layout",
+      "dom",
+      "forms"
+    ],
+    "title": "Interactive Star Rating Widget",
+    "description": "Interactive Star Rating Widget demonstrating canvas concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-17",
+    "category": "advanced",
+    "difficulty": "medium",
+    "tags": [
+      "canvas",
+      "animation",
+      "api"
+    ],
+    "title": "Useful Typewriter Heading",
+    "description": "Useful Typewriter Heading demonstrating advanced concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-18",
+    "category": "beginner",
+    "difficulty": "easy",
+    "tags": [
+      "layout",
+      "animation",
+      "dom"
+    ],
+    "title": "Dynamic Digital Clock",
+    "description": "Dynamic Digital Clock demonstrating beginner concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-19",
+    "category": "css",
+    "difficulty": "hard",
+    "tags": [
+      "forms",
+      "canvas",
+      "events"
+    ],
+    "title": "Responsive Mouse Trail Effect",
+    "description": "Responsive Mouse Trail Effect demonstrating css concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-20",
+    "category": "canvas",
+    "difficulty": "hard",
+    "tags": [
+      "responsive",
+      "dom",
+      "css"
+    ],
+    "title": "Responsive Resizable Panel",
+    "description": "Responsive Resizable Panel demonstrating canvas concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-21",
+    "category": "css",
+    "difficulty": "medium",
+    "tags": [
+      "events",
+      "canvas",
+      "css"
+    ],
+    "title": "Modern Digital Clock",
+    "description": "Modern Digital Clock demonstrating css concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-22",
+    "category": "css",
+    "difficulty": "hard",
+    "tags": [
+      "css",
+      "animation",
+      "widgets"
+    ],
+    "title": "Simple Card Hover Zoom",
+    "description": "Simple Card Hover Zoom demonstrating css concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-23",
+    "category": "advanced",
+    "difficulty": "easy",
+    "tags": [
+      "layout",
+      "events",
+      "effects"
+    ],
+    "title": "Interactive Resizable Panel",
+    "description": "Interactive Resizable Panel demonstrating advanced concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-24",
+    "category": "beginner",
+    "difficulty": "hard",
+    "tags": [
+      "api",
+      "responsive",
+      "forms"
+    ],
+    "title": "Beginner-Friendly Navigation Bar",
+    "description": "Beginner-Friendly Navigation Bar demonstrating beginner concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-25",
+    "category": "advanced",
+    "difficulty": "medium",
+    "tags": [
+      "dom",
+      "api",
+      "colors"
+    ],
+    "title": "Simple Drag and Drop Box",
+    "description": "Simple Drag and Drop Box demonstrating advanced concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-26",
+    "category": "advanced",
+    "difficulty": "medium",
+    "tags": [
+      "canvas",
+      "colors",
+      "css"
+    ],
+    "title": "High-Performance CSS Variables Demo",
+    "description": "High-Performance CSS Variables Demo demonstrating advanced concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-27",
+    "category": "advanced",
+    "difficulty": "hard",
+    "tags": [
+      "css",
+      "fun",
+      "js"
+    ],
+    "title": "High-Performance Drag and Drop Box",
+    "description": "High-Performance Drag and Drop Box demonstrating advanced concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-28",
+    "category": "animation",
+    "difficulty": "easy",
+    "tags": [
+      "js",
+      "canvas",
+      "events"
+    ],
+    "title": "Minimal Form Handler",
+    "description": "Minimal Form Handler demonstrating animation concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-29",
+    "category": "dom",
+    "difficulty": "medium",
+    "tags": [
+      "events",
+      "canvas",
+      "html"
+    ],
+    "title": "Clean Card Hover Zoom",
+    "description": "Clean Card Hover Zoom demonstrating dom concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-30",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "css",
+      "effects",
+      "events"
+    ],
+    "title": "Advanced Digital Clock",
+    "description": "Advanced Digital Clock demonstrating dom concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-31",
+    "category": "beginner",
+    "difficulty": "medium",
+    "tags": [
+      "css",
+      "fun",
+      "animation"
+    ],
+    "title": "Practical Pie Chart Canvas",
+    "description": "Practical Pie Chart Canvas demonstrating beginner concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-32",
+    "category": "animation",
+    "difficulty": "easy",
+    "tags": [
+      "html",
+      "responsive",
+      "api"
+    ],
+    "title": "Classic Neumorphism Card",
+    "description": "Classic Neumorphism Card demonstrating animation concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-33",
+    "category": "advanced",
+    "difficulty": "easy",
+    "tags": [
+      "api",
+      "canvas",
+      "events"
+    ],
+    "title": "Advanced CSS Variables Demo",
+    "description": "Advanced CSS Variables Demo demonstrating advanced concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-34",
+    "category": "advanced",
+    "difficulty": "hard",
+    "tags": [
+      "layout",
+      "events",
+      "canvas"
+    ],
+    "title": "Interactive Flexbox Layout",
+    "description": "Interactive Flexbox Layout demonstrating advanced concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-35",
+    "category": "canvas",
+    "difficulty": "easy",
+    "tags": [
+      "fun",
+      "html",
+      "widgets"
+    ],
+    "title": "Simple Bouncing Ball",
+    "description": "Simple Bouncing Ball demonstrating canvas concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-36",
+    "category": "advanced",
+    "difficulty": "easy",
+    "tags": [
+      "fun",
+      "canvas",
+      "layout"
+    ],
+    "title": "Simple Star Rating Widget",
+    "description": "Simple Star Rating Widget demonstrating advanced concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-37",
+    "category": "canvas",
+    "difficulty": "hard",
+    "tags": [
+      "fun",
+      "css",
+      "events"
+    ],
+    "title": "High-Performance Alert Box",
+    "description": "High-Performance Alert Box demonstrating canvas concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-38",
+    "category": "dom",
+    "difficulty": "hard",
+    "tags": [
+      "layout",
+      "widgets",
+      "effects"
+    ],
+    "title": "Minimal Bouncing Ball",
+    "description": "Minimal Bouncing Ball demonstrating dom concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-39",
+    "category": "animation",
+    "difficulty": "medium",
+    "tags": [
+      "events",
+      "html",
+      "forms"
+    ],
+    "title": "Animated Bar Graph Canvas",
+    "description": "Animated Bar Graph Canvas demonstrating animation concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-40",
+    "category": "animation",
+    "difficulty": "hard",
+    "tags": [
+      "forms",
+      "events",
+      "api"
+    ],
+    "title": "Accessible Smooth Scroll Demo",
+    "description": "Accessible Smooth Scroll Demo demonstrating animation concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-41",
+    "category": "css",
+    "difficulty": "hard",
+    "tags": [
+      "api",
+      "js",
+      "animation"
+    ],
+    "title": "Practical Star Rating Widget",
+    "description": "Practical Star Rating Widget demonstrating css concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-42",
+    "category": "dom",
+    "difficulty": "hard",
+    "tags": [
+      "js",
+      "effects",
+      "css"
+    ],
+    "title": "Dynamic Form Handler",
+    "description": "Dynamic Form Handler demonstrating dom concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-43",
+    "category": "dom",
+    "difficulty": "hard",
+    "tags": [
+      "api",
+      "css",
+      "dom"
+    ],
+    "title": "Responsive Form Handler",
+    "description": "Responsive Form Handler demonstrating dom concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-44",
+    "category": "advanced",
+    "difficulty": "easy",
+    "tags": [
+      "api",
+      "fun",
+      "css"
+    ],
+    "title": "Animated Color Picker Widget",
+    "description": "Animated Color Picker Widget demonstrating advanced concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-45",
+    "category": "canvas",
+    "difficulty": "medium",
+    "tags": [
+      "api",
+      "forms",
+      "html"
+    ],
+    "title": "Classic Tabs Component",
+    "description": "Classic Tabs Component demonstrating canvas concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-46",
+    "category": "responsive",
+    "difficulty": "easy",
+    "tags": [
+      "api",
+      "events",
+      "canvas"
+    ],
+    "title": "Beginner-Friendly Flexbox Layout",
+    "description": "Beginner-Friendly Flexbox Layout demonstrating responsive concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-47",
+    "category": "canvas",
+    "difficulty": "easy",
+    "tags": [
+      "animation",
+      "effects",
+      "forms"
+    ],
+    "title": "Classic Grid Layout",
+    "description": "Classic Grid Layout demonstrating canvas concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-48",
+    "category": "canvas",
+    "difficulty": "easy",
+    "tags": [
+      "js",
+      "html",
+      "effects"
+    ],
+    "title": "Colorful Progress Bar",
+    "description": "Colorful Progress Bar demonstrating canvas concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-49",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "animation",
+      "colors",
+      "forms"
+    ],
+    "title": "High-Performance Flexbox Layout",
+    "description": "High-Performance Flexbox Layout demonstrating dom concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-50",
+    "category": "css",
+    "difficulty": "hard",
+    "tags": [
+      "forms",
+      "animation",
+      "responsive"
+    ],
+    "title": "Practical Neumorphism Card",
+    "description": "Practical Neumorphism Card demonstrating css concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-51",
+    "category": "advanced",
+    "difficulty": "medium",
+    "tags": [
+      "colors",
+      "html",
+      "api"
+    ],
+    "title": "Dynamic Hover Animation",
+    "description": "Dynamic Hover Animation demonstrating advanced concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-52",
+    "category": "canvas",
+    "difficulty": "hard",
+    "tags": [
+      "forms",
+      "canvas",
+      "widgets"
+    ],
+    "title": "Classic Mouse Trail Effect",
+    "description": "Classic Mouse Trail Effect demonstrating canvas concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-53",
+    "category": "canvas",
+    "difficulty": "hard",
+    "tags": [
+      "html",
+      "colors",
+      "forms"
+    ],
+    "title": "Accessible Floating Action Button",
+    "description": "Accessible Floating Action Button demonstrating canvas concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-54",
+    "category": "dom",
+    "difficulty": "medium",
+    "tags": [
+      "effects",
+      "colors",
+      "events"
+    ],
+    "title": "Interactive Typewriter Heading",
+    "description": "Interactive Typewriter Heading demonstrating dom concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-55",
+    "category": "advanced",
+    "difficulty": "medium",
+    "tags": [
+      "dom",
+      "css",
+      "colors"
+    ],
+    "title": "Classic CSS Variables Demo",
+    "description": "Classic CSS Variables Demo demonstrating advanced concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-56",
+    "category": "beginner",
+    "difficulty": "easy",
+    "tags": [
+      "responsive",
+      "js",
+      "animation"
+    ],
+    "title": "Interactive Tooltip Effect",
+    "description": "Interactive Tooltip Effect demonstrating beginner concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-57",
+    "category": "beginner",
+    "difficulty": "medium",
+    "tags": [
+      "colors",
+      "css",
+      "responsive"
+    ],
+    "title": "Modern Wave Animation",
+    "description": "Modern Wave Animation demonstrating beginner concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-58",
+    "category": "beginner",
+    "difficulty": "hard",
+    "tags": [
+      "api",
+      "colors",
+      "css"
+    ],
+    "title": "Beginner-Friendly Glassmorphism Panel",
+    "description": "Beginner-Friendly Glassmorphism Panel demonstrating beginner concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-59",
+    "category": "advanced",
+    "difficulty": "hard",
+    "tags": [
+      "js",
+      "colors",
+      "canvas"
+    ],
+    "title": "Interactive Canvas Drawing Tool",
+    "description": "Interactive Canvas Drawing Tool demonstrating advanced concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-60",
+    "category": "advanced",
+    "difficulty": "hard",
+    "tags": [
+      "animation",
+      "events",
+      "effects"
+    ],
+    "title": "Animated Border Styles Showcase",
+    "description": "Animated Border Styles Showcase demonstrating advanced concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-61",
+    "category": "advanced",
+    "difficulty": "hard",
+    "tags": [
+      "responsive",
+      "js",
+      "css"
+    ],
+    "title": "Accessible Shadow Effects",
+    "description": "Accessible Shadow Effects demonstrating advanced concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-62",
+    "category": "dom",
+    "difficulty": "medium",
+    "tags": [
+      "forms",
+      "widgets",
+      "fun"
+    ],
+    "title": "Clean Tooltip Effect",
+    "description": "Clean Tooltip Effect demonstrating dom concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-63",
+    "category": "animation",
+    "difficulty": "medium",
+    "tags": [
+      "js",
+      "animation",
+      "html"
+    ],
+    "title": "Clean Toast Notification",
+    "description": "Clean Toast Notification demonstrating animation concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-64",
+    "category": "beginner",
+    "difficulty": "medium",
+    "tags": [
+      "animation",
+      "canvas",
+      "html"
+    ],
+    "title": "Advanced Smooth Scroll Demo",
+    "description": "Advanced Smooth Scroll Demo demonstrating beginner concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-65",
+    "category": "canvas",
+    "difficulty": "medium",
+    "tags": [
+      "widgets",
+      "colors",
+      "fun"
+    ],
+    "title": "Dynamic Theme Toggle",
+    "description": "Dynamic Theme Toggle demonstrating canvas concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-66",
+    "category": "animation",
+    "difficulty": "medium",
+    "tags": [
+      "api",
+      "css",
+      "forms"
+    ],
+    "title": "Clean Tabs Component",
+    "description": "Clean Tabs Component demonstrating animation concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-67",
+    "category": "responsive",
+    "difficulty": "easy",
+    "tags": [
+      "animation",
+      "forms",
+      "events"
+    ],
+    "title": "Animated Password Strength Checker",
+    "description": "Animated Password Strength Checker demonstrating responsive concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-68",
+    "category": "responsive",
+    "difficulty": "easy",
+    "tags": [
+      "dom",
+      "html",
+      "widgets"
+    ],
+    "title": "Useful Dark Mode Switch",
+    "description": "Useful Dark Mode Switch demonstrating responsive concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-69",
+    "category": "canvas",
+    "difficulty": "easy",
+    "tags": [
+      "widgets",
+      "responsive",
+      "layout"
+    ],
+    "title": "Useful Progress Bar",
+    "description": "Useful Progress Bar demonstrating canvas concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-70",
+    "category": "beginner",
+    "difficulty": "medium",
+    "tags": [
+      "js",
+      "dom",
+      "animation"
+    ],
+    "title": "Accessible Toast Notification",
+    "description": "Accessible Toast Notification demonstrating beginner concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-71",
+    "category": "animation",
+    "difficulty": "easy",
+    "tags": [
+      "css",
+      "api",
+      "fun"
+    ],
+    "title": "Simple Digital Clock",
+    "description": "Simple Digital Clock demonstrating animation concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-72",
+    "category": "advanced",
+    "difficulty": "hard",
+    "tags": [
+      "js",
+      "events",
+      "canvas"
+    ],
+    "title": "Accessible Card Hover Zoom",
+    "description": "Accessible Card Hover Zoom demonstrating advanced concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-73",
+    "category": "dom",
+    "difficulty": "medium",
+    "tags": [
+      "layout",
+      "events",
+      "colors"
+    ],
+    "title": "Practical Stepper UI",
+    "description": "Practical Stepper UI demonstrating dom concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-74",
+    "category": "canvas",
+    "difficulty": "easy",
+    "tags": [
+      "forms",
+      "animation",
+      "canvas"
+    ],
+    "title": "Clean Toast Notification",
+    "description": "Clean Toast Notification demonstrating canvas concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-75",
+    "category": "dom",
+    "difficulty": "medium",
+    "tags": [
+      "css",
+      "api",
+      "events"
+    ],
+    "title": "Interactive Stepper UI",
+    "description": "Interactive Stepper UI demonstrating dom concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-76",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "dom",
+      "canvas",
+      "animation"
+    ],
+    "title": "Dynamic Glassmorphism Panel",
+    "description": "Dynamic Glassmorphism Panel demonstrating dom concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-77",
+    "category": "css",
+    "difficulty": "hard",
+    "tags": [
+      "fun",
+      "css",
+      "forms"
+    ],
+    "title": "Animated Physics Ball Simulation",
+    "description": "Animated Physics Ball Simulation demonstrating css concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-78",
+    "category": "canvas",
+    "difficulty": "hard",
+    "tags": [
+      "fun",
+      "events",
+      "responsive"
+    ],
+    "title": "Animated Border Styles Showcase",
+    "description": "Animated Border Styles Showcase demonstrating canvas concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-79",
+    "category": "canvas",
+    "difficulty": "medium",
+    "tags": [
+      "html",
+      "colors",
+      "dom"
+    ],
+    "title": "Beginner-Friendly Color Picker Widget",
+    "description": "Beginner-Friendly Color Picker Widget demonstrating canvas concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-80",
+    "category": "css",
+    "difficulty": "hard",
+    "tags": [
+      "effects",
+      "layout",
+      "responsive"
+    ],
+    "title": "Advanced Button Click Demo",
+    "description": "Advanced Button Click Demo demonstrating css concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-81",
+    "category": "beginner",
+    "difficulty": "hard",
+    "tags": [
+      "dom",
+      "js",
+      "responsive"
+    ],
+    "title": "Colorful Random Color Generator",
+    "description": "Colorful Random Color Generator demonstrating beginner concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-82",
+    "category": "responsive",
+    "difficulty": "easy",
+    "tags": [
+      "responsive",
+      "css",
+      "api"
+    ],
+    "title": "Responsive Border Styles Showcase",
+    "description": "Responsive Border Styles Showcase demonstrating responsive concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-83",
+    "category": "animation",
+    "difficulty": "hard",
+    "tags": [
+      "css",
+      "js",
+      "api"
+    ],
+    "title": "Minimal Password Strength Checker",
+    "description": "Minimal Password Strength Checker demonstrating animation concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-84",
+    "category": "dom",
+    "difficulty": "hard",
+    "tags": [
+      "widgets",
+      "dom",
+      "events"
+    ],
+    "title": "Advanced Resizable Panel",
+    "description": "Advanced Resizable Panel demonstrating dom concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-85",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "widgets",
+      "js",
+      "forms"
+    ],
+    "title": "Advanced Canvas Drawing Tool",
+    "description": "Advanced Canvas Drawing Tool demonstrating dom concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-86",
+    "category": "advanced",
+    "difficulty": "easy",
+    "tags": [
+      "animation",
+      "colors",
+      "api"
+    ],
+    "title": "Colorful Form Validator",
+    "description": "Colorful Form Validator demonstrating advanced concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-87",
+    "category": "canvas",
+    "difficulty": "easy",
+    "tags": [
+      "widgets",
+      "js",
+      "effects"
+    ],
+    "title": "Clean Mouse Trail Effect",
+    "description": "Clean Mouse Trail Effect demonstrating canvas concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-88",
+    "category": "advanced",
+    "difficulty": "medium",
+    "tags": [
+      "html",
+      "widgets",
+      "dom"
+    ],
+    "title": "Classic Stepper UI",
+    "description": "Classic Stepper UI demonstrating advanced concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-89",
+    "category": "responsive",
+    "difficulty": "medium",
+    "tags": [
+      "effects",
+      "events",
+      "canvas"
+    ],
+    "title": "Minimal Form Handler",
+    "description": "Minimal Form Handler demonstrating responsive concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-90",
+    "category": "canvas",
+    "difficulty": "easy",
+    "tags": [
+      "dom",
+      "animation",
+      "layout"
+    ],
+    "title": "High-Performance Drag and Drop Box",
+    "description": "High-Performance Drag and Drop Box demonstrating canvas concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-91",
+    "category": "css",
+    "difficulty": "medium",
+    "tags": [
+      "html",
+      "js",
+      "responsive"
+    ],
+    "title": "Practical Wave Animation",
+    "description": "Practical Wave Animation demonstrating css concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-92",
+    "category": "animation",
+    "difficulty": "medium",
+    "tags": [
+      "js",
+      "html",
+      "animation"
+    ],
+    "title": "Practical Canvas Particle Effect",
+    "description": "Practical Canvas Particle Effect demonstrating animation concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-93",
+    "category": "beginner",
+    "difficulty": "hard",
+    "tags": [
+      "widgets",
+      "forms",
+      "js"
+    ],
+    "title": "Clean Card Hover Zoom",
+    "description": "Clean Card Hover Zoom demonstrating beginner concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-94",
+    "category": "css",
+    "difficulty": "easy",
+    "tags": [
+      "js",
+      "fun",
+      "events"
+    ],
+    "title": "Interactive Password Strength Checker",
+    "description": "Interactive Password Strength Checker demonstrating css concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-95",
+    "category": "dom",
+    "difficulty": "easy",
+    "tags": [
+      "css",
+      "html",
+      "canvas"
+    ],
+    "title": "Interactive Bar Graph Canvas",
+    "description": "Interactive Bar Graph Canvas demonstrating dom concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-96",
+    "category": "advanced",
+    "difficulty": "hard",
+    "tags": [
+      "canvas",
+      "widgets",
+      "forms"
+    ],
+    "title": "Minimal Mouse Trail Effect",
+    "description": "Minimal Mouse Trail Effect demonstrating advanced concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-97",
+    "category": "canvas",
+    "difficulty": "medium",
+    "tags": [
+      "fun",
+      "canvas",
+      "responsive"
+    ],
+    "title": "Beginner-Friendly Input Mirror",
+    "description": "Beginner-Friendly Input Mirror demonstrating canvas concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-98",
+    "category": "canvas",
+    "difficulty": "medium",
+    "tags": [
+      "css",
+      "colors",
+      "js"
+    ],
+    "title": "Advanced Mouse Trail Effect",
+    "description": "Advanced Mouse Trail Effect demonstrating canvas concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-99",
+    "category": "canvas",
+    "difficulty": "medium",
+    "tags": [
+      "responsive",
+      "layout",
+      "dom"
+    ],
+    "title": "Responsive Stopwatch",
+    "description": "Responsive Stopwatch demonstrating canvas concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  },
+  {
+    "id": "example-100",
+    "category": "animation",
+    "difficulty": "hard",
+    "tags": [
+      "layout",
+      "canvas",
+      "api"
+    ],
+    "title": "Animated Tooltip Effect",
+    "description": "Animated Tooltip Effect demonstrating animation concepts.",
+    "html": "<div>Example</div>",
+    "css": "div { padding:10px; }",
+    "js": "console.log('Example');"
+  }
+]

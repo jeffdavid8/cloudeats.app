@@ -1,0 +1,582 @@
+[
+  {
+    "id": "cracker-barrel-white-gravy",
+    "title": "Cracker Barrel White Gravy",
+    "description": "Rich, creamy country-style white gravy perfect for biscuits, chicken fried steak, or mashed potatoes. This copycat recipe captures the authentic Cracker Barrel flavor.",
+    "category": "side",
+    "subcategory": "comfort food",
+    "prepTime": "5",
+    "cookTime": "10",
+    "servings": "6",
+    "ingredients": [
+      "1/4 cup bacon grease or vegetable oil",
+      "1/4 cup all-purpose flour",
+      "2 cups whole milk",
+      "1/2 teaspoon salt",
+      "1/2 teaspoon black pepper (freshly ground)",
+      "1/4 teaspoon garlic powder",
+      "1/8 teaspoon cayenne pepper (optional)",
+      "1/2 pound breakfast sausage, cooked and crumbled (optional)"
+    ],
+    "steps": [
+      "In a large skillet or heavy-bottomed pan, heat the bacon grease or oil over medium heat.",
+      "Gradually whisk in the flour, stirring constantly to create a roux. Cook for 2-3 minutes until the mixture is golden and bubbling, but not brown.",
+      "Slowly pour in the milk while whisking continuously to prevent lumps from forming. Start with about 1/2 cup and whisk until smooth before adding more.",
+      "Add salt, black pepper, garlic powder, and cayenne pepper. Continue whisking and cooking until the gravy thickens, about 5-7 minutes.",
+      "If using sausage, stir in the cooked and crumbled breakfast sausage during the last 2 minutes of cooking.",
+      "Taste and adjust seasoning as needed. The gravy should coat the back of a spoon when ready.",
+      "Serve immediately over warm biscuits, chicken fried steak, or mashed potatoes."
+    ],
+    "notes": "For extra richness, use bacon grease instead of oil. If gravy becomes too thick, thin with additional milk. If too thin, cook a bit longer or whisk in a small amount of flour mixed with cold milk. Gravy will continue to thicken as it cools.",
+    "created": "2025-10-22T22:30:00+00:00",
+    "modified": "2025-10-23T02:13:40+00:00",
+    "imageUrl": "https://storage.googleapis.com/run-sources-mediabrain-us-central1/recipes/cracker-barrel-white-gravy.jpg",
+    "tags": ["comfort food", "southern", "savory", "copycat", "family favorite"]
+  },
+  {
+    "id": "mediterranean-quinoa-salad-001",
+    "title": "Mediterranean Quinoa Salad",
+    "description": "A protein-packed, refreshing salad with Mediterranean flavors.",
+    "category": "salad",
+    "subcategory": "Mediterranean",
+    "prepTime": "10",
+    "cookTime": "15",
+    "servings": "4",
+    "ingredients": [
+      "1 cup quinoa",
+      "2 cups water",
+      "1 cup cherry tomatoes, halved",
+      "1 cucumber, diced",
+      "1/2 cup kalamata olives, sliced",
+      "1/4 cup red onion, finely chopped",
+      "1/2 cup feta cheese, crumbled",
+      "2 tbsp olive oil",
+      "2 tbsp lemon juice",
+      "1 tsp dried oregano",
+      "Salt and pepper to taste"
+    ],
+    "steps": [
+      "Rinse quinoa and cook with water according to package instructions. Let cool.",
+      "In a large bowl, combine quinoa, tomatoes, cucumber, olives, onion, and feta.",
+      "Whisk together olive oil, lemon juice, oregano, salt, and pepper.",
+      "Pour dressing over salad, toss, and serve chilled."
+    ],
+    "imageUrl": "https://storage.googleapis.com/run-sources-mediabrain-us-central1/recipes/mediterranean-quinoa-salad-001.jpg",
+    "tags": ["vegetarian", "Mediterranean", "high-protein", "salad", "healthy"]
+  },
+  {
+    "id": "thai-chickpea-curry-002",
+    "title": "Thai-Inspired Chickpea Curry",
+    "description": "A creamy, plant-based curry with a hint of coconut and spice.",
+    "category": "main",
+    "subcategory": "Asian",
+    "prepTime": "10",
+    "cookTime": "20",
+    "servings": "4",
+    "ingredients": [
+      "1 tbsp coconut oil",
+      "1 onion, diced",
+      "2 garlic cloves, minced",
+      "1 tbsp ginger, grated",
+      "1 red bell pepper, sliced",
+      "1 can chickpeas, drained",
+      "1 can coconut milk",
+      "2 tbsp red curry paste",
+      "1 tbsp soy sauce",
+      "2 cups spinach",
+      "Juice of 1 lime",
+      "Fresh cilantro for garnish"
+    ],
+    "steps": [
+      "Heat coconut oil in a pan. Sauté onion, garlic, and ginger until fragrant.",
+      "Add bell pepper and cook for 2 minutes.",
+      "Stir in chickpeas, coconut milk, curry paste, and soy sauce. Simmer 10 minutes.",
+      "Add spinach and lime juice, cook until wilted.",
+      "Serve with rice, topped with cilantro."
+    ],
+    "imageUrl": "https://storage.googleapis.com/run-sources-mediabrain-us-central1/recipes/thai-chickpea-curry-002.jpg",
+    "tags": ["vegetarian", "vegan", "Asian", "curry", "spicy", "healthy"]
+  },
+  {
+    "id": "lemon-herb-salmon-003",
+    "title": "Lemon Herb Grilled Salmon",
+    "description": "Simple, zesty salmon fillets grilled to perfection.",
+    "category": "main",
+    "subcategory": "seafood",
+    "prepTime": "10",
+    "cookTime": "15",
+    "servings": "4",
+    "ingredients": [
+      "4 salmon fillets",
+      "2 tbsp olive oil",
+      "Juice and zest of 1 lemon",
+      "2 garlic cloves, minced",
+      "1 tbsp fresh dill, chopped",
+      "1 tbsp fresh parsley, chopped",
+      "Salt and pepper to taste"
+    ],
+    "steps": [
+      "Mix olive oil, lemon juice/zest, garlic, dill, parsley, salt, and pepper.",
+      "Marinate salmon in mixture for 15 minutes.",
+      "Grill salmon over medium heat, 4-5 minutes per side.",
+      "Serve with extra lemon wedges."
+    ],
+    "imageUrl": "https://storage.googleapis.com/run-sources-mediabrain-us-central1/recipes/lemon-herb-salmon-003.jpg",
+    "tags": ["pescatarian", "high-protein", "grilled", "healthy", "seafood"]
+  },
+  {
+    "id": "sweet-potato-tacos-004",
+    "title": "Sweet Potato & Black Bean Tacos",
+    "description": "Flavorful vegetarian tacos with roasted sweet potatoes and black beans.",
+    "category": "main",
+    "subcategory": "Mexican",
+    "prepTime": "10",
+    "cookTime": "25",
+    "servings": "4",
+    "ingredients": [
+      "2 medium sweet potatoes, peeled and diced",
+      "1 can black beans, drained",
+      "1 tbsp olive oil",
+      "1 tsp cumin",
+      "1 tsp smoked paprika",
+      "1/2 tsp chili powder",
+      "Salt and pepper to taste",
+      "Corn tortillas",
+      "Toppings: avocado, salsa, cilantro, lime"
+    ],
+    "steps": [
+      "Toss sweet potatoes with oil and spices. Roast at 425°F (220°C) for 25 minutes.",
+      "Warm black beans in a pan.",
+      "Fill tortillas with sweet potatoes, beans, and toppings."
+    ],
+    "imageUrl": "https://storage.googleapis.com/run-sources-mediabrain-us-central1/recipes/sweet-potato-tacos-004.jpg",
+    "tags": ["vegetarian", "Mexican", "main", "tacos", "healthy"]
+  },
+  {
+    "id": "berry-chia-pudding-005",
+    "title": "Berry Chia Pudding",
+    "description": "A healthy, make-ahead breakfast or snack.",
+    "category": "breakfast",
+    "subcategory": "global",
+    "prepTime": "5",
+    "cookTime": "0",
+    "servings": "2",
+    "ingredients": [
+      "1/4 cup chia seeds",
+      "1 cup almond milk",
+      "1 tbsp maple syrup",
+      "1/2 tsp vanilla extract",
+      "1 cup mixed berries"
+    ],
+    "steps": [
+      "Mix chia seeds, almond milk, maple syrup, and vanilla in a jar.",
+      "Refrigerate overnight.",
+      "Top with berries before serving."
+    ],
+    "imageUrl": "https://storage.googleapis.com/run-sources-mediabrain-us-central1/recipes/berry-chia-pudding-005.jpg",
+    "tags": ["vegetarian", "vegan", "breakfast", "healthy", "make-ahead"]
+  },
+  {
+    "id": "hungarian-goulash-001",
+    "title": "Hungarian Goulash",
+    "description": "A hearty, comforting stew with tender beef, paprika, and vegetables. Perfect for a cozy dinner.",
+    "category": "main",
+    "subcategory": "Hungarian",
+    "prepTime": "20",
+    "cookTime": "120",
+    "servings": "6",
+    "ingredients": [
+      "2 lbs beef chuck, cut into 1-inch cubes",
+      "2 tbsp olive oil",
+      "2 large onions, chopped",
+      "3 cloves garlic, minced",
+      "2 tbsp sweet Hungarian paprika",
+      "1 tsp caraway seeds",
+      "1/2 tsp black pepper",
+      "1 tsp salt",
+      "2 tbsp tomato paste",
+      "4 cups beef broth",
+      "2 large carrots, sliced",
+      "2 bell peppers, chopped",
+      "2 medium potatoes, peeled and cubed",
+      "1 bay leaf",
+      "Fresh parsley for garnish"
+    ],
+    "steps": [
+      "Heat olive oil in a large pot over medium heat. Add onions and cook until soft.",
+      "Add garlic and cook for 1 minute. Stir in paprika and caraway seeds.",
+      "Add beef cubes and brown on all sides.",
+      "Stir in tomato paste, salt, and pepper.",
+      "Pour in beef broth, add bay leaf, and bring to a simmer.",
+      "Cover and cook on low heat for 1 hour.",
+      "Add carrots, bell peppers, and potatoes. Simmer uncovered for another 45-60 minutes, until beef and vegetables are tender.",
+      "Remove bay leaf. Adjust seasoning if needed.",
+      "Serve hot, garnished with fresh parsley."
+    ],
+    "imageUrl": "https://storage.googleapis.com/run-sources-mediabrain-us-central1/recipes/hungarian-goulash-001.jpg",
+    "tags": ["beef", "stew", "comfort food", "Hungarian", "main"]
+  },
+  {
+    "id": "vegetarian-goulash-001",
+    "title": "Vegetarian Goulash",
+    "description": "A plant-based twist on the classic Hungarian stew, loaded with hearty vegetables and smoky paprika.",
+    "category": "main",
+    "subcategory": "Hungarian",
+    "prepTime": "20",
+    "cookTime": "60",
+    "servings": "6",
+    "ingredients": [
+      "2 tbsp olive oil",
+      "2 large onions, chopped",
+      "3 cloves garlic, minced",
+      "2 tbsp sweet Hungarian paprika",
+      "1 tsp caraway seeds",
+      "1/2 tsp black pepper",
+      "1 tsp salt",
+      "2 tbsp tomato paste",
+      "4 cups vegetable broth",
+      "2 large carrots, sliced",
+      "2 bell peppers, chopped",
+      "2 medium potatoes, peeled and cubed",
+      "1 zucchini, chopped",
+      "1 can (15 oz) kidney beans, drained",
+      "1 bay leaf",
+      "Fresh parsley for garnish"
+    ],
+    "steps": [
+      "Heat olive oil in a large pot over medium heat. Add onions and cook until soft.",
+      "Add garlic and cook for 1 minute. Stir in paprika and caraway seeds.",
+      "Stir in tomato paste, salt, and pepper.",
+      "Pour in vegetable broth, add bay leaf, and bring to a simmer.",
+      "Add carrots, bell peppers, potatoes, and zucchini. Simmer uncovered for 30-40 minutes, until vegetables are tender.",
+      "Add kidney beans and cook for 10 more minutes.",
+      "Remove bay leaf. Adjust seasoning if needed.",
+      "Serve hot, garnished with fresh parsley."
+    ],
+    "imageUrl": "https://storage.googleapis.com/run-sources-mediabrain-us-central1/recipes/vegetarian-goulash-001.jpg",
+    "tags": ["vegetarian", "vegan", "stew", "comfort food", "Hungarian", "main"]
+  }
+  ,
+  {
+    "id": "american-goulash-001",
+    "title": "American Goulash",
+    "description": "A classic American comfort food made with ground beef, elbow macaroni, tomatoes, and plenty of savory seasonings. Hearty, easy, and perfect for family dinners.",
+    "category": "main",
+    "subcategory": "American",
+    "prepTime": "10",
+    "cookTime": "35",
+    "servings": "6",
+    "ingredients": [
+      "1 lb ground beef",
+      "1 large onion, chopped",
+      "3 cloves garlic, minced",
+      "1 green bell pepper, chopped",
+      "2 cups elbow macaroni (uncooked)",
+      "1 can (28 oz) crushed tomatoes",
+      "1 can (15 oz) tomato sauce",
+      "2 cups beef broth",
+      "1 tbsp Worcestershire sauce",
+      "2 tsp Italian seasoning",
+      "1 tsp paprika",
+      "1/2 tsp salt",
+      "1/2 tsp black pepper",
+      "1 cup shredded cheddar cheese (optional)"
+    ],
+    "steps": [
+      "In a large pot, cook ground beef over medium heat until browned. Drain excess fat.",
+      "Add onion, garlic, and bell pepper. Cook until softened, about 5 minutes.",
+      "Stir in crushed tomatoes, tomato sauce, beef broth, Worcestershire sauce, Italian seasoning, paprika, salt, and pepper. Bring to a simmer.",
+      "Add uncooked macaroni. Cover and simmer for 15-20 minutes, stirring occasionally, until pasta is tender.",
+      "Remove from heat. Stir in cheddar cheese if using. Let sit 5 minutes before serving."
+    ],
+    "imageUrl": "https://storage.googleapis.com/run-sources-mediabrain-us-central1/recipes/american-goulash-001.png",
+    "tags": ["beef", "pasta", "comfort food", "American", "main"]
+  }
+  ,
+  {
+    "id": "italian-meatballs-001",
+    "title": "Classic Italian Meatballs",
+    "description": "Tender, juicy Italian meatballs simmered in a rich tomato sauce. Perfect for serving over spaghetti or as a hearty appetizer.",
+    "category": "main",
+    "subcategory": "Italian",
+    "prepTime": "20",
+    "cookTime": "40",
+    "servings": "6",
+    "ingredients": [
+      "1 lb ground beef",
+      "1/2 lb ground pork",
+      "1 cup fresh breadcrumbs",
+      "1/2 cup whole milk",
+      "2 large eggs",
+      "1/2 cup grated Parmesan cheese",
+      "1/4 cup chopped fresh parsley",
+      "3 cloves garlic, minced",
+      "1 tsp salt",
+      "1/2 tsp black pepper",
+      "1 tsp dried oregano",
+      "1/2 tsp crushed red pepper flakes (optional)",
+      "2 cups marinara sauce (homemade or store-bought)",
+      "Olive oil for frying"
+    ],
+    "steps": [
+      "In a bowl, combine breadcrumbs and milk. Let sit 5 minutes to soak.",
+      "Add ground beef, ground pork, eggs, Parmesan, parsley, garlic, salt, pepper, oregano, and red pepper flakes to the breadcrumb mixture. Mix gently until just combined.",
+      "Form mixture into 1.5-inch meatballs (about 18-20).",
+      "Heat olive oil in a large skillet over medium heat. Brown meatballs in batches, turning to brown all sides (about 5-7 minutes).",
+      "Transfer browned meatballs to a plate. Pour off excess oil from skillet.",
+      "Add marinara sauce to skillet and bring to a simmer. Return meatballs to sauce, cover, and simmer for 20-25 minutes until cooked through.",
+      "Serve hot over spaghetti, with extra Parmesan and parsley if desired."
+    ],
+    "imageUrl": "https://storage.googleapis.com/run-sources-mediabrain-us-central1/recipes/italian-meatballs-001.jpg",
+    "tags": ["beef", "pork", "Italian", "main", "meatballs", "comfort food"]
+  }
+  ,
+  {
+    "id": "chicken-enchiladas-001",
+    "title": "Chicken Enchiladas",
+    "description": "Classic Mexican enchiladas filled with tender chicken, smothered in a rich red sauce and melted cheese.",
+    "category": "main",
+    "subcategory": "Mexican",
+    "prepTime": "20",
+    "cookTime": "35",
+    "servings": "6",
+    "ingredients": [
+      "2 cups cooked shredded chicken",
+      "2 cups red enchilada sauce",
+      "1 1/2 cups shredded Monterey Jack cheese",
+      "1/2 cup chopped onion",
+      "8 corn tortillas",
+      "1/2 cup sour cream (for serving)",
+      "1/4 cup chopped fresh cilantro",
+      "Salt and pepper to taste"
+    ],
+    "steps": [
+      "Preheat oven to 375°F (190°C).",
+      "In a bowl, mix chicken, 1/2 cup enchilada sauce, 1/2 cup cheese, onion, salt, and pepper.",
+      "Warm tortillas until pliable. Fill each with chicken mixture, roll up, and place seam-side down in a baking dish.",
+      "Pour remaining enchilada sauce over tortillas and sprinkle with remaining cheese.",
+      "Bake 20-25 minutes until cheese is melted and bubbly.",
+      "Garnish with sour cream and cilantro before serving."
+    ],
+    "imageUrl": "https://storage.googleapis.com/run-sources-mediabrain-us-central1/recipes/chicken-enchiladas-001.jpg",
+    "tags": ["chicken", "enchiladas", "Mexican", "main", "comfort food"]
+  }
+  ,
+  {
+    "id": "carne-asada-tacos-001",
+    "title": "Carne Asada Tacos",
+    "description": "Juicy grilled steak, sliced thin and served in warm corn tortillas with fresh toppings. A street taco favorite!",
+    "category": "main",
+    "subcategory": "Mexican",
+    "prepTime": "15",
+    "cookTime": "20",
+    "servings": "4",
+    "ingredients": [
+      "1 1/2 lbs flank or skirt steak",
+      "1/4 cup orange juice",
+      "1/4 cup lime juice",
+      "2 tbsp olive oil",
+      "3 cloves garlic, minced",
+      "1 jalapeño, minced",
+      "1/4 cup chopped cilantro",
+      "1 tsp cumin",
+      "1 tsp chili powder",
+      "1 tsp salt",
+      "1/2 tsp black pepper",
+      "8-10 corn tortillas",
+      "Toppings: diced onion, cilantro, salsa, lime wedges"
+    ],
+    "steps": [
+      "In a bowl, whisk together orange juice, lime juice, olive oil, garlic, jalapeño, cilantro, cumin, chili powder, salt, and pepper.",
+      "Marinate steak in mixture for at least 1 hour (up to overnight).",
+      "Preheat grill to high. Grill steak 4-5 minutes per side for medium-rare.",
+      "Rest steak 5 minutes, then slice thinly against the grain.",
+      "Warm tortillas and fill with steak and desired toppings."
+    ],
+    "imageUrl": "https://storage.googleapis.com/run-sources-mediabrain-us-central1/recipes/carne-asada-tacos-001.jpg",
+    "tags": ["beef", "tacos", "Mexican", "main", "grilled"]
+  }
+  ,
+  {
+    "id": "chiles-rellenos-001",
+    "title": "Chiles Rellenos",
+    "description": "Poblano peppers stuffed with cheese, dipped in egg batter, fried until golden, and served with a savory tomato sauce.",
+    "category": "main",
+    "subcategory": "Mexican",
+    "prepTime": "30",
+    "cookTime": "40",
+    "servings": "4",
+    "ingredients": [
+      "4 large poblano peppers",
+      "8 oz queso fresco or Monterey Jack cheese, cut into strips",
+      "4 large eggs, separated",
+      "1/4 cup all-purpose flour",
+      "Vegetable oil for frying",
+      "2 cups tomato sauce",
+      "1/2 onion, chopped",
+      "2 cloves garlic, minced",
+      "Salt and pepper to taste"
+    ],
+    "steps": [
+      "Roast poblanos over open flame or under broiler until skin is charred. Place in a covered bowl to steam, then peel off skins.",
+      "Make a slit in each pepper and remove seeds. Stuff with cheese and close gently.",
+      "Beat egg whites to stiff peaks, then fold in yolks.",
+      "Dust stuffed peppers with flour, then dip in egg batter.",
+      "Fry in hot oil until golden on all sides. Drain on paper towels.",
+      "For sauce: sauté onion and garlic, add tomato sauce, salt, and pepper. Simmer 10 minutes.",
+      "Serve chiles topped with warm tomato sauce."
+    ],
+    "imageUrl": "https://storage.googleapis.com/run-sources-mediabrain-us-central1/recipes/chiles-rellenos-001.jpg",
+    "tags": ["vegetarian", "Mexican", "main", "peppers", "cheese"]
+  }
+  ,
+  {
+    "id": "pozole-rojo-001",
+    "title": "Pozole Rojo",
+    "description": "A traditional Mexican stew made with pork, hominy, and a rich red chile broth. Served with fresh toppings for a festive meal.",
+    "category": "main",
+    "subcategory": "Mexican",
+    "prepTime": "30",
+    "cookTime": "150",
+    "servings": "8",
+    "ingredients": [
+      "2 lbs pork shoulder, cut into chunks",
+      "1 large onion, quartered",
+      "4 cloves garlic",
+      "10 cups water",
+      "2 tsp salt",
+      "2 bay leaves",
+      "3 dried guajillo chiles, stemmed and seeded",
+      "3 dried ancho chiles, stemmed and seeded",
+      "2 cans (15 oz each) hominy, drained",
+      "Toppings: shredded cabbage, radishes, onion, lime, oregano, tostadas"
+    ],
+    "steps": [
+      "In a large pot, combine pork, onion, garlic, water, salt, and bay leaves. Bring to a boil, then simmer 1.5 hours, skimming foam.",
+      "Meanwhile, toast chiles in a dry pan until fragrant. Soak in hot water 20 minutes, then blend with some soaking liquid until smooth.",
+      "Remove pork, shred, and return to pot. Discard onion, garlic, and bay leaves.",
+      "Stir in chile puree and hominy. Simmer 30 minutes.",
+      "Serve pozole hot with toppings on the side."
+    ],
+    "imageUrl": "https://storage.googleapis.com/run-sources-mediabrain-us-central1/recipes/pozole-rojo-001.jpg",
+    "tags": ["pork", "Mexican", "main", "stew", "hominy", "comfort food"]
+  }
+  ,
+  {
+    "id": "tres-leches-cake-001",
+    "title": "Classic Tres Leches Cake",
+    "description": "A light sponge cake soaked in three kinds of milk and topped with whipped cream. A beloved Latin American dessert.",
+    "category": "dessert",
+    "subcategory": "Mexican",
+    "prepTime": "25",
+    "cookTime": "35",
+    "servings": "12",
+    "ingredients": [
+      "1 cup all-purpose flour",
+      "1 1/2 tsp baking powder",
+      "1/4 tsp salt",
+      "5 large eggs, separated",
+      "1 cup sugar, divided",
+      "1/3 cup whole milk",
+      "1 tsp vanilla extract",
+      "1 can (12 oz) evaporated milk",
+      "1 can (14 oz) sweetened condensed milk",
+      "1/4 cup heavy cream",
+      "1 1/2 cups heavy cream (for topping)",
+      "1/4 cup powdered sugar (for topping)",
+      "Fresh berries (optional)"
+    ],
+    "steps": [
+      "Preheat oven to 350°F (175°C). Grease a 9x13-inch baking dish.",
+      "Whisk flour, baking powder, and salt. In a large bowl, beat egg yolks with 3/4 cup sugar until pale. Stir in milk and vanilla.",
+      "Gently fold in flour mixture. In another bowl, beat egg whites to soft peaks, then add remaining sugar and beat to stiff peaks. Fold into batter.",
+      "Pour into dish and bake 25-30 minutes. Cool slightly.",
+      "Whisk together evaporated milk, condensed milk, and 1/4 cup cream. Poke cake all over and slowly pour milk mixture over cake. Chill 3+ hours.",
+      "Whip 1 1/2 cups cream with powdered sugar. Spread over cake. Top with berries if desired."
+    ],
+    "imageUrl": "https://storage.googleapis.com/run-sources-mediabrain-us-central1/recipes/tres-leches-cake-001.jpg",
+    "tags": ["dessert", "cake", "Mexican", "tres leches", "sweet"]
+  }
+  ,
+  {
+    "id": "mexican-chocolate-mousse-001",
+    "title": "Mexican Chocolate Mousse",
+    "description": "A rich, creamy mousse with cinnamon and a hint of chili, inspired by Mexican chocolate.",
+    "category": "dessert",
+    "subcategory": "Mexican",
+    "prepTime": "20",
+    "cookTime": "10",
+    "servings": "6",
+    "ingredients": [
+      "6 oz bittersweet chocolate, chopped",
+      "3 large eggs, separated",
+      "1/4 cup sugar",
+      "1 cup heavy cream",
+      "1/2 tsp ground cinnamon",
+      "1/8 tsp cayenne pepper (optional)",
+      "1/2 tsp vanilla extract",
+      "Pinch of salt"
+    ],
+    "steps": [
+      "Melt chocolate in a heatproof bowl over simmering water. Cool slightly.",
+      "Whisk in egg yolks, cinnamon, cayenne, and vanilla.",
+      "Beat egg whites with salt to soft peaks, then add sugar and beat to stiff peaks.",
+      "Whip cream to soft peaks.",
+      "Fold egg whites into chocolate, then fold in whipped cream.",
+      "Spoon into cups and chill at least 2 hours before serving."
+    ],
+    "imageUrl": "https://storage.googleapis.com/run-sources-mediabrain-us-central1/recipes/mexican-chocolate-mousse-001.jpg",
+    "tags": ["dessert", "chocolate", "Mexican", "mousse", "sweet"]
+  }
+  ,
+  {
+    "id": "green-protein-smoothie-001",
+    "title": "Green Protein Smoothie",
+    "description": "A healthy, energizing shake packed with greens, fruit, and protein for a nutritious breakfast or snack.",
+    "category": "shake",
+    "subcategory": "healthy",
+    "prepTime": "5",
+    "cookTime": "0",
+    "servings": "2",
+    "ingredients": [
+      "1 cup unsweetened almond milk",
+      "1 cup baby spinach",
+      "1/2 frozen banana",
+      "1/2 cup frozen mango",
+      "1 scoop vanilla protein powder",
+      "1 tbsp chia seeds",
+      "1 tbsp almond butter"
+    ],
+    "steps": [
+      "Combine all ingredients in a blender and blend until smooth.",
+      "Pour into glasses and enjoy immediately."
+    ],
+    "imageUrl": "https://storage.googleapis.com/run-sources-mediabrain-us-central1/recipes/green-protein-smoothie-001.jpg",
+    "tags": ["shake", "healthy", "smoothie", "breakfast", "protein"]
+  }
+  ,
+  {
+    "id": "berry-oat-shake-001",
+    "title": "Berry Oat Breakfast Shake",
+    "description": "A filling, antioxidant-rich shake with berries, oats, and yogurt. Perfect for a quick, healthy breakfast.",
+    "category": "shake",
+    "subcategory": "healthy",
+    "prepTime": "5",
+    "cookTime": "0",
+    "servings": "2",
+    "ingredients": [
+      "1 cup unsweetened almond milk",
+      "1/2 cup frozen mixed berries",
+      "1/4 cup rolled oats",
+      "1/2 cup Greek yogurt",
+      "1 tbsp honey",
+      "1 tbsp flaxseed meal (optional)"
+    ],
+    "steps": [
+      "Combine all ingredients in a blender and blend until smooth.",
+      "Pour into glasses and enjoy immediately."
+    ],
+    "imageUrl": "https://storage.googleapis.com/run-sources-mediabrain-us-central1/recipes/berry-oat-shake-001.jpg",
+    "tags": ["shake", "healthy", "smoothie", "breakfast", "berries", "oats"]
+  }
+]

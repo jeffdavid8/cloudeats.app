@@ -1,0 +1,209 @@
+[
+  {
+    "id": "hello-world",
+    "category": "beginner",
+    "title": "Hello World",
+    "description": "Basic HTML displaying a styled message.",
+    "html": "<div class='box'>Hello World!</div>",
+    "css": ".box { padding: 20px; background: #eef; font-size: 24px; border-radius: 8px; text-align: center; }",
+    "js": ""
+  },
+  {
+    "id": "button-click",
+    "category": "dom",
+    "title": "Button Click Message",
+    "description": "Click the button to change message text.",
+    "html": "<button id='btn'>Click Me</button><p id='msg'></p>",
+    "css": "button { padding: 10px 18px; background: #667eea; color: #fff; border-radius: 6px; border: none; cursor: pointer; }",
+    "js": "document.getElementById('btn').onclick = () => { document.getElementById('msg').textContent = 'Button clicked!'; };"
+  },
+  {
+    "id": "live-counter",
+    "category": "dom",
+    "title": "Live Counter",
+    "description": "Number increases every second.",
+    "html": "<div id='counter' class='counter'>0</div>",
+    "css": ".counter { font-size: 48px; text-align: center; font-weight: bold; padding: 20px; }",
+    "js": "let i = 0; setInterval(() => { document.getElementById('counter').textContent = ++i; }, 1000);"
+  },
+  {
+    "id": "css-bounce",
+    "category": "animation",
+    "title": "CSS Bouncing Ball",
+    "description": "Simple bouncing animation using CSS keyframes.",
+    "html": "<div class='ball'></div>",
+    "css": ".ball { width: 40px; height: 40px; background: orange; border-radius: 50%; animation: bounce 1s infinite alternate; }\n@keyframes bounce { from { transform: translateY(0); } to { transform: translateY(150px); } }",
+    "js": ""
+  },
+  {
+    "id": "input-mirror",
+    "category": "dom",
+    "title": "Live Input Mirror",
+    "description": "Input text appears instantly below.",
+    "html": "<input id='textInput' placeholder='Type...'><p id='output'></p>",
+    "css": "input { padding: 10px; width: 250px; } p { font-size: 22px; color: #333; }",
+    "js": "document.getElementById('textInput').addEventListener('input', e => document.getElementById('output').textContent = e.target.value);"
+  },
+  {
+    "id": "theme-toggle",
+    "category": "dom",
+    "title": "Light/Dark Theme Toggle",
+    "description": "Simple theme toggle using CSS classes.",
+    "html": "<button id='toggle'>Toggle Theme</button><div class='content'>Theme Demo</div>",
+    "css": "body { transition: background 0.3s; }\nbody.light { background: white; color: black; }\nbody.dark { background: black; color: white; }\nbutton { padding: 10px; }\n.content { margin-top: 15px; font-size: 24px; }",
+    "js": "document.body.classList.add('light'); document.getElementById('toggle').onclick = () => { document.body.classList.toggle('dark'); document.body.classList.toggle('light'); };"
+  },
+  {
+    "id": "responsive-grid",
+    "category": "responsive",
+    "title": "Responsive Grid Layout",
+    "description": "Auto-fit CSS grid that adapts to screen size.",
+    "html": "<div class='grid'><div>1</div><div>2</div><div>3</div><div>4</div></div>",
+    "css": ".grid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }\n.grid div { background:#ddd; padding:20px; font-size:20px; text-align:center; border-radius:6px; }",
+    "js": ""
+  },
+  {
+    "id": "fade-in",
+    "category": "animation",
+    "title": "Fade-In Animation",
+    "description": "Element fades in smoothly.",
+    "html": "<div class='fade'>Hello!</div>",
+    "css": ".fade { opacity: 0; animation: fadeIn 2s forwards; font-size: 32px; }\n@keyframes fadeIn { to { opacity: 1; } }",
+    "js": ""
+  },
+  {
+    "id": "accordion",
+    "category": "dom",
+    "title": "Accordion Toggle",
+    "description": "Expandable accordion panel.",
+    "html": "<button class='acc'>Open</button><div class='panel'>Hidden text...</div>",
+    "css": ".panel { max-height: 0; overflow: hidden; transition: max-height 0.3s; background:#eee; padding:0 10px; } .acc { padding:10px; cursor:pointer; }",
+    "js": "document.querySelector('.acc').onclick = () => { const p = document.querySelector('.panel'); p.style.maxHeight = p.style.maxHeight ? '' : '100px'; };"
+  },
+  {
+    "id": "random-color",
+    "category": "js",
+    "title": "Random Background Color",
+    "description": "Click to change page color randomly.",
+    "html": "<button id='btn'>Random Color</button>",
+    "css": "button { padding:12px; cursor:pointer; }",
+    "js": "document.getElementById('btn').onclick = () => { document.body.style.background = '#' + Math.floor(Math.random()*16777215).toString(16); };"
+  },
+  {
+    "id": "clock",
+    "category": "js",
+    "title": "Digital Clock",
+    "description": "Live-updating digital clock.",
+    "html": "<div id='clock' class='clock'></div>",
+    "css": ".clock { font-size:40px; text-align:center; margin-top:20px; }",
+    "js": "setInterval(() => { document.getElementById('clock').textContent = new Date().toLocaleTimeString(); }, 1000);"
+  },
+  {
+    "id": "typing-effect",
+    "category": "animation",
+    "title": "Typing Text Effect",
+    "description": "Simulated typewriter animation.",
+    "html": "<div id='type'></div>",
+    "css": "#type { font-size: 28px; border-right: 2px solid black; width: fit-content; white-space: nowrap; overflow: hidden; }",
+    "js": "const text = 'Typing animation effect'; let i=0; setInterval(()=>{ document.getElementById('type').textContent = text.slice(0,i++); }, 100);"
+  },
+  {
+    "id": "canvas-dots",
+    "category": "canvas",
+    "title": "Canvas Draw Dots",
+    "description": "Click to draw dots on canvas.",
+    "html": "<canvas id='c' width='400' height='300' style='border:1px solid #ccc'></canvas>",
+    "css": "",
+    "js": "const c=document.getElementById('c');const ctx=c.getContext('2d');c.onclick=e=>{const r=c.getBoundingClientRect();const x=e.clientX-r.left,y=e.clientY-r.top;ctx.fillRect(x-2,y-2,4,4);};"
+  },
+  {
+    "id": "mousemove-circle",
+    "category": "dom",
+    "title": "Follow Mouse Circle",
+    "description": "Circle follows the mouse smoothly.",
+    "html": "<div id='circle'></div>",
+    "css": "#circle { width:20px; height:20px; background:red; border-radius:50%; position:fixed; pointer-events:none; transition:transform 0.1s; }",
+    "js": "document.onmousemove=e=>{circle.style.transform=`translate(${e.clientX}px,${e.clientY}px)`;};"
+  },
+  {
+    "id": "modal",
+    "category": "dom",
+    "title": "Simple Modal Window",
+    "description": "Click to open a modal.",
+    "html": "<button id='open'>Open Modal</button><div id='modal' class='modal'><div class='content'>Hello!</div></div>",
+    "css": ".modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); justify-content:center; align-items:center; }\n.modal .content { background:white; padding:20px; border-radius:8px; font-size:22px; }",
+    "js": "open.onclick=()=>modal.style.display='flex'; modal.onclick=()=>modal.style.display='none';"
+  },
+  {
+    "id": "hover-zoom",
+    "category": "animation",
+    "title": "Hover Zoom Card",
+    "description": "Scaled zoom effect on hover.",
+    "html": "<div class='card'>Hover me</div>",
+    "css": ".card { width:200px; height:120px; background:#ddd; display:flex; justify-content:center; align-items:center; transition:transform 0.3s; }\n.card:hover { transform:scale(1.1); }",
+    "js": ""
+  },
+  {
+    "id": "tabs",
+    "category": "dom",
+    "title": "Tab Switcher",
+    "description": "Simple tab UI.",
+    "html": "<div><button class='t' data-id='a'>A</button><button class='t' data-id='b'>B</button></div><div id='a'>Content A</div><div id='b' style='display:none'>Content B</div>",
+    "css": "button { margin-right:5px; }",
+    "js": "document.querySelectorAll('.t').forEach(b=>b.onclick=()=>{document.getElementById('a').style.display=b.dataset.id==='a'?'block':'none';document.getElementById('b').style.display=b.dataset.id==='b'?'block':'none';});"
+  },
+  {
+    "id": "draggable",
+    "category": "dom",
+    "title": "Draggable Box",
+    "description": "Drag a box around the screen.",
+    "html": "<div id='box'>Drag</div>",
+    "css": "#box { width:100px; height:100px; background:#88e; color:white; display:flex; align-items:center; justify-content:center; cursor:grab; position:absolute; }",
+    "js": "let drag=false;box.onmousedown=()=>drag=true;document.onmouseup=()=>drag=false;document.onmousemove=e=>{if(drag){box.style.left=e.pageX+'px';box.style.top=e.pageY+'px';}};"
+  },
+  {
+    "id": "slider",
+    "category": "dom",
+    "title": "Input Slider Preview",
+    "description": "Slider controls text size.",
+    "html": "<input type='range' id='s' min='10' max='50'><p id='p'>Resize me</p>",
+    "css": "p { transition: font-size 0.2s; }",
+    "js": "s.oninput=()=>p.style.fontSize=s.value+'px';"
+  },
+  {
+    "id": "rainbow-text",
+    "category": "animation",
+    "title": "Animated Rainbow Text",
+    "description": "Text cycles through colors.",
+    "html": "<h1 id='r'>Rainbow!</h1>",
+    "css": "h1 { transition: color 0.4s; font-size:48px; }",
+    "js": "setInterval(()=>{r.style.color='#'+Math.floor(Math.random()*16777215).toString(16);},400);"
+  },
+  {
+    "id": "progress-bar",
+    "category": "dom",
+    "title": "Animated Progress Bar",
+    "description": "Button fills a progress bar.",
+    "html": "<button id='go'>Start</button><div class='bar'><div id='fill'></div></div>",
+    "css": ".bar { width:100%; max-width:300px; height:20px; background:#ccc; } #fill { height:100%; width:0; background:#4c8; transition:width 0.2s; }",
+    "js": "let w=0;go.onclick=()=>{w=0;const i=setInterval(()=>{w+=5;if(w>100)return clearInterval(i);fill.style.width=w+'%';},100);};"
+  },
+  {
+    "id": "css-grid-gallery",
+    "category": "responsive",
+    "title": "Photo Gallery Layout",
+    "description": "Responsive masonry-style gallery.",
+    "html": "<div class='gallery'><div></div><div></div><div></div><div></div></div>",
+    "css": ".gallery { display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:8px; }\n.gallery div { background:#ddd; height:120px; border-radius:6px; }",
+    "js": ""
+  },
+  {
+    "id": "canvas-bounce-ball",
+    "category": "canvas",
+    "title": "Canvas Bouncing Ball",
+    "description": "Ball moves and bounces around.",
+    "html": "<canvas id='c' width='400' height='300' style='border:1px solid #ccc'></canvas>",
+    "css": "",
+    "js": "const ctx=c.getContext('2d');let x=50,y=50,dx=2,dy=2;function loop(){ctx.clearRect(0,0,c.width,c.height);ctx.beginPath();ctx.arc(x,y,20,0,2*Math.PI);ctx.fill();if(x<20||x>380)dx*=-1;if(y<20||y>280)dy*=-1;x+=dx;y+=dy;requestAnimationFrame(loop);}loop();"
+  }
+]

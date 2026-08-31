@@ -1,0 +1,16 @@
+{
+  "default_provider": "local",
+  "providers": {
+    "local": {
+      "base_path": "/var/www/mediabrain.app.local/storage",
+      "public_url_base": "/api/file.php?f="
+    },
+    "google_cloud": {
+      "project_id": "mediabrain",
+      "key_file": "/var/www/cloudeats.app.local/secrets/service-account-key.json",
+      "bucket_prefix": "mediabrain-",
+      "bucket_name": "mediabrain-system-data",
+      "default_location": "US"
+    }
+  }
+}

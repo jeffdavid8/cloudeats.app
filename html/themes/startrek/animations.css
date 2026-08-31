@@ -1,0 +1,317 @@
+/* Star Trek LCARS Theme - Animations */
+
+/* LCARS Scanning Animation */
+@keyframes lcarsScanning {
+    0% {
+        opacity: 0.3;
+        background: linear-gradient(90deg, 
+            transparent 0%, 
+            var(--lcars-orange) 20%, 
+            var(--lcars-blue) 40%, 
+            var(--lcars-red) 60%, 
+            var(--lcars-orange) 80%, 
+            transparent 100%);
+    }
+    50% {
+        opacity: 1;
+        background: linear-gradient(90deg, 
+            transparent 0%, 
+            var(--lcars-blue) 20%, 
+            var(--lcars-purple) 40%, 
+            var(--lcars-cyan) 60%, 
+            var(--lcars-blue) 80%, 
+            transparent 100%);
+    }
+    100% {
+        opacity: 0.3;
+        background: linear-gradient(90deg, 
+            transparent 0%, 
+            var(--lcars-orange) 20%, 
+            var(--lcars-blue) 40%, 
+            var(--lcars-red) 60%, 
+            var(--lcars-orange) 80%, 
+            transparent 100%);
+    }
+}
+
+/* LCARS Panel Pulse Animation */
+@keyframes lcarsPulse {
+    0% {
+        box-shadow: var(--glow-intensity) var(--lcars-orange);
+    }
+    50% {
+        box-shadow: 0 0 20px var(--lcars-orange), 0 0 30px var(--lcars-orange);
+    }
+    100% {
+        box-shadow: var(--glow-intensity) var(--lcars-orange);
+    }
+}
+
+/* LCARS Data Stream Animation */
+@keyframes lcarsDataStream {
+    0% {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+/* LCARS Button Press Animation */
+@keyframes lcarsButtonPress {
+    0% {
+        transform: scale(1);
+        box-shadow: var(--glow-intensity) var(--lcars-orange);
+    }
+    50% {
+        transform: scale(0.95);
+        box-shadow: 0 0 20px var(--lcars-orange), inset 0 0 10px rgba(255, 153, 0, 0.3);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: var(--glow-intensity) var(--lcars-orange);
+    }
+}
+
+/* LCARS Text Flicker */
+@keyframes lcarsFlicker {
+    0%, 100% {
+        opacity: 1;
+        text-shadow: var(--glow-intensity) currentColor;
+    }
+    50% {
+        opacity: 0.8;
+        text-shadow: 0 0 5px currentColor;
+    }
+}
+
+/* LCARS Startup Animation */
+@keyframes lcarsStartup {
+    0% {
+        transform: scaleY(0);
+        opacity: 0;
+    }
+    25% {
+        transform: scaleY(0.3);
+        opacity: 0.3;
+    }
+    50% {
+        transform: scaleY(0.6);
+        opacity: 0.6;
+    }
+    75% {
+        transform: scaleY(0.8);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scaleY(1);
+        opacity: 1;
+    }
+}
+
+/* LCARS Fade In */
+@keyframes lcarsfadeIn {
+    from {
+        opacity: 0;
+        transform: translateZ(0) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateZ(0) scale(1);
+    }
+}
+
+/* LCARS Slide Up */
+@keyframes lcarsSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px) translateZ(0);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) translateZ(0);
+    }
+}
+
+/* LCARS Matrix Effect */
+@keyframes lcarsMatrix {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* LCARS Alert Flash */
+@keyframes lcarsAlertFlash {
+    0%, 100% {
+        background: var(--lcars-red);
+        box-shadow: var(--glow-intensity) var(--lcars-red);
+    }
+    50% {
+        background: var(--lcars-yellow);
+        box-shadow: var(--glow-intensity) var(--lcars-yellow);
+    }
+}
+
+/* LCARS Hologram Effect */
+@keyframes lcarsHologram {
+    0%, 100% {
+        opacity: 0.7;
+        text-shadow: 
+            0 0 5px currentColor,
+            0 0 10px currentColor,
+            0 0 15px currentColor;
+    }
+    50% {
+        opacity: 1;
+        text-shadow: 
+            0 0 2px currentColor,
+            0 0 5px currentColor,
+            0 0 8px currentColor;
+    }
+}
+
+/* LCARS Loading Spinner */
+@keyframes lcarsLoadingSpin {
+    0% {
+        transform: rotate(0deg);
+        border-color: var(--lcars-orange) transparent transparent transparent;
+    }
+    25% {
+        border-color: var(--lcars-blue) var(--lcars-orange) transparent transparent;
+    }
+    50% {
+        border-color: var(--lcars-red) var(--lcars-blue) var(--lcars-orange) transparent;
+    }
+    75% {
+        border-color: transparent var(--lcars-red) var(--lcars-blue) var(--lcars-orange);
+    }
+    100% {
+        transform: rotate(360deg);
+        border-color: var(--lcars-orange) transparent transparent transparent;
+    }
+}
+
+/* Animation Classes */
+.lcars-pulse {
+    animation: lcarsPulse 2s ease-in-out infinite;
+}
+
+.lcars-flicker {
+    animation: lcarsFlicker 3s ease-in-out infinite;
+}
+
+.lcars-startup {
+    animation: lcarsStartup 0.8s ease-out;
+}
+
+.lcars-matrix {
+    background: linear-gradient(-45deg, 
+        var(--lcars-orange), 
+        var(--lcars-blue), 
+        var(--lcars-red), 
+        var(--lcars-purple));
+    background-size: 400% 400%;
+    animation: lcarsMatrix 3s ease infinite;
+}
+
+.lcars-alert {
+    animation: lcarsAlertFlash 1s ease-in-out infinite;
+}
+
+.lcars-hologram {
+    animation: lcarsHologram 2s ease-in-out infinite;
+}
+
+.lcars-loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid transparent;
+    border-radius: 50%;
+    animation: lcarsLoadingSpin 1s linear infinite;
+    display: inline-block;
+    margin: 10px;
+}
+
+/* Interactive Animation Classes */
+.lcars-button-press {
+    animation: lcarsButtonPress 0.3s ease-out;
+}
+
+.lcars-data-stream::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        var(--lcars-cyan) 50%, 
+        transparent 100%);
+    animation: lcarsDataStream 2s ease-in-out infinite;
+}
+
+/* Hover Animation Effects */
+.lcars-panel:hover {
+    animation: lcarsPulse 1s ease-in-out;
+}
+
+.lcars-text-glow:hover {
+    animation: lcarsFlicker 0.5s ease-in-out;
+}
+
+/* Page Transition Animations */
+.lcars-page-enter {
+    animation: lcarsfadeIn 0.6s ease-out;
+}
+
+.lcars-page-exit {
+    animation: lcarsfadeIn 0.4s ease-in reverse;
+}
+
+/* Responsive Animation Adjustments */
+@media (max-width: 768px) {
+    .lcars-startup {
+        animation-duration: 0.5s;
+    }
+    
+    .lcars-pulse {
+        animation-duration: 1.5s;
+    }
+    
+    .lcars-matrix {
+        animation-duration: 2s;
+    }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+    .lcars-pulse,
+    .lcars-flicker,
+    .lcars-matrix,
+    .lcars-hologram {
+        animation: none;
+    }
+    
+    .lcars-startup {
+        animation: lcarsfadeIn 0.3s ease-out;
+    }
+    
+    .lcars-loading-spinner {
+        animation: lcarsLoadingSpin 2s linear infinite;
+    }
+}

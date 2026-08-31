@@ -1,0 +1,51 @@
+{
+    "virtualimmortal": {
+        "username": "virtualimmortal",
+        "password": "$2y$12$ujzAWrhW1zvgrSqW3hiUCeWAY1ouW8lbOICzZqluSrhJX17MyTDWa",
+        "email": "virtualimmortal@gmail.com",
+        "role": "admin",
+        "is_admin": true,
+        "created": "2025-10-25T18:06:33+00:00",
+        "last_login": "2025-10-27T07:01:35+00:00",
+        "active": true,
+        "profilePicture": "",
+        "profileImageFilename": "",
+        "modified": "2026-02-02T13:13:50+00:00"
+    },
+    "user": {
+        "username": "user",
+        "password": "$2y$12$g.2unDSLWKXypj8FfxhzxuLJZi2lm2AEIyPIL7sawS7mfgktfnu4q",
+        "email": "user@demo.com",
+        "role": "user",
+        "is_admin": false,
+        "profilePicture": "",
+        "created": "2025-10-25T18:06:36+00:00",
+        "modified": "2025-10-25T18:06:36+00:00",
+        "last_login": null,
+        "active": true
+    },
+    "demo": {
+        "username": "demo",
+        "password": "$2y$12$wKsZFHVdTImPo.w7t1qGDOzZKGIgBkVKkvNSqbTPMgaTW8w.QKH2m",
+        "email": "demo@demo.com",
+        "role": "user",
+        "is_admin": false,
+        "profilePicture": "",
+        "created": "2025-10-25T18:06:36+00:00",
+        "modified": "2025-10-25T18:06:36+00:00",
+        "last_login": null,
+        "active": true
+    },
+    "guest": {
+        "username": "guest",
+        "password": "$2y$12$1a2pTqyw65NI10o5XwhCOOB06EBgBeJyI6xUrR6p\/4gxZFcdFIWDK",
+        "email": "guest@demo.com",
+        "role": "user",
+        "is_admin": false,
+        "profilePicture": "",
+        "created": "2025-10-25T18:06:36+00:00",
+        "modified": "2025-10-27T04:18:44+00:00",
+        "last_login": null,
+        "active": "1"
+    }
+}

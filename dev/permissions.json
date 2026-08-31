@@ -1,0 +1,235 @@
+{
+    "apps": {
+        "admin": {
+            "name": "Admin Panel",
+            "description": "Administrative interface for user and system management",
+            "features": {
+                "dashboard": [
+                    "view"
+                ],
+                "users": [
+                    "view",
+                    "create",
+                    "update",
+                    "delete"
+                ],
+                "settings": [
+                    "view",
+                    "update"
+                ],
+                "logs": [
+                    "view"
+                ]
+            }
+        },
+        "recipes": {
+            "name": "Recipe Manager",
+            "description": "Voice-guided cooking and recipe management",
+            "features": {
+                "recipes": [
+                    "view",
+                    "create",
+                    "update",
+                    "delete"
+                ],
+                "voice_control": [
+                    "use"
+                ],
+                "images": [
+                    "upload",
+                    "view"
+                ],
+                "sharing": [
+                    "create",
+                    "view"
+                ]
+            }
+        },
+        "weather": {
+            "name": "Weather App",
+            "description": "Weather information and forecasts",
+            "features": {
+                "current_weather": [
+                    "view"
+                ],
+                "forecasts": [
+                    "view"
+                ],
+                "locations": [
+                    "add",
+                    "remove"
+                ]
+            }
+        },
+        "bibleBot": {
+            "name": "Bible Bot",
+            "description": "Biblical text search and reference",
+            "features": {
+                "search": [
+                    "use"
+                ],
+                "bookmarks": [
+                    "create",
+                    "view",
+                    "delete"
+                ],
+                "notes": [
+                    "create",
+                    "view",
+                    "update",
+                    "delete"
+                ]
+            }
+        },
+        "ancestry": {
+            "name": "Ancestry Research",
+            "description": "Family tree and genealogy research",
+            "features": {
+                "family_tree": [
+                    "view",
+                    "edit"
+                ],
+                "research": [
+                    "create",
+                    "view"
+                ],
+                "documents": [
+                    "upload",
+                    "view",
+                    "organize"
+                ]
+            }
+        }
+    },
+    "roles": {
+        "guest": {
+            "name": "Guest User",
+            "description": "Limited access for temporary users",
+            "permissions": {
+                "apps.weather.features.current_weather": [
+                    "view"
+                ],
+                "apps.recipes.features.recipes": [
+                    "view"
+                ]
+            }
+        },
+        "user": {
+            "name": "Regular User",
+            "description": "Standard user with basic access",
+            "permissions": {
+                "apps.weather": [
+                    "access"
+                ],
+                "apps.weather.features.current_weather": [
+                    "view"
+                ],
+                "apps.weather.features.forecasts": [
+                    "view"
+                ],
+                "apps.weather.features.locations": [
+                    "add",
+                    "remove"
+                ],
+                "apps.recipes": [
+                    "access"
+                ],
+                "apps.recipes.features.recipes": [
+                    "view",
+                    "create",
+                    "update"
+                ],
+                "apps.recipes.features.voice_control": [
+                    "use"
+                ],
+                "apps.recipes.features.images": [
+                    "upload",
+                    "view"
+                ],
+                "apps.bibleBot": [
+                    "access"
+                ],
+                "apps.bibleBot.features.search": [
+                    "use"
+                ],
+                "apps.bibleBot.features.bookmarks": [
+                    "create",
+                    "view",
+                    "delete"
+                ]
+            }
+        },
+        "editor": {
+            "name": "Content Editor",
+            "description": "User with content creation and editing privileges",
+            "permissions": {
+                "inherit": [
+                    "user"
+                ],
+                "apps.recipes.features.recipes": [
+                    "view",
+                    "create",
+                    "update",
+                    "delete"
+                ],
+                "apps.recipes.features.sharing": [
+                    "create",
+                    "view"
+                ],
+                "apps.bibleBot.features.notes": [
+                    "create",
+                    "view",
+                    "update",
+                    "delete"
+                ],
+                "apps.ancestry": [
+                    "access"
+                ],
+                "apps.ancestry.features.family_tree": [
+                    "view",
+                    "edit"
+                ],
+                "apps.ancestry.features.research": [
+                    "create",
+                    "view"
+                ]
+            }
+        },
+        "admin": {
+            "name": "Administrator",
+            "description": "Full system access and user management",
+            "permissions": {
+                "inherit": [
+                    "editor"
+                ],
+                "apps.admin": [
+                    "access"
+                ],
+                "apps.admin.features.dashboard": [
+                    "view"
+                ],
+                "apps.admin.features.users": [
+                    "view",
+                    "create",
+                    "update",
+                    "delete"
+                ],
+                "apps.admin.features.settings": [
+                    "view",
+                    "update"
+                ],
+                "apps.admin.features.logs": [
+                    "view"
+                ],
+                "apps.ancestry.features.documents": [
+                    "upload",
+                    "view",
+                    "organize"
+                ],
+                "system.permissions": [
+                    "manage"
+                ]
+            }
+        }
+    }
+}

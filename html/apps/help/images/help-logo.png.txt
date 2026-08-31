@@ -1,0 +1,7 @@
+# MediaBrain Help Logo
+# This is a placeholder for the help app logo
+# Recommended size: 200x200 pixels
+# Format: PNG with transparency
+# 
+# You can replace this file with an actual logo image
+# The image should represent help, documentation, or support

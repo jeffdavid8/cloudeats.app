@@ -1,0 +1,46 @@
+{
+    "admin": {
+        "username": "admin",
+        "password": "$2y$12$OE2ozaR\/FoFksBaFE94kLeRc8ToNMSKXVMHVj3ozInx3G.V9IZ7NK",
+        "email": "admin@mediabrain.app",
+        "role": "admin",
+        "is_admin": true,
+        "created": "2025-10-23T02:38:51+00:00",
+        "last_login": "2025-10-23T20:22:02+00:00",
+        "active": true,
+        "modified": "2025-10-23T20:21:46+00:00"
+    },
+    "user": {
+        "username": "user",
+        "password": "$2y$12$FMxvVR5E\/Np74bIfnewIcu6vXzY9p8UU5nIcu7TiAqtv4IZnst8P2",
+        "email": "user@demo.com",
+        "role": "user",
+        "is_admin": false,
+        "created": "2025-10-23T04:30:42+00:00",
+        "modified": "2025-10-23T04:30:42+00:00",
+        "last_login": null,
+        "active": true
+    },
+    "demo": {
+        "username": "demo",
+        "password": "$2y$12$OCJKiBWpt77fOx7qxjZT4OSfT19D3eXtQlIluA4KjDfjgJwYaFMKG",
+        "email": "demo@demo.com",
+        "role": "user",
+        "is_admin": false,
+        "created": "2025-10-23T04:30:43+00:00",
+        "modified": "2025-10-23T04:30:43+00:00",
+        "last_login": null,
+        "active": true
+    },
+    "guest": {
+        "username": "guest",
+        "password": "$2y$12$ZnGiE9o6sIyzk.pSIrrLuewea3g273M8s16arrHh6q3.2teWQXzIu",
+        "email": "guest@demo.com",
+        "role": "user",
+        "is_admin": false,
+        "created": "2025-10-23T04:30:43+00:00",
+        "modified": "2025-10-23T04:30:43+00:00",
+        "last_login": null,
+        "active": true
+    }
+}

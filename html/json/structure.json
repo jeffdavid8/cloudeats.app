@@ -1,0 +1,188 @@
+{
+  "apps": [
+    {
+      "machine-name": "neighborhub",
+      "title": "Neighborhub",
+      "announcement-title": "Neighborhub",
+      "icon": "<i class=\"fas fa-map-marked-alt\"></i>",
+      "app_icon": "🏠",
+      "index-logo": "apps/neighborhub/images/neighborhub-app-index-logo-lg.png",
+      "href": "?app=neighborhub&view=public&p=public.splash",
+      "description": "Local food, local products, local services, local businesses, local people."
+    },
+    {
+      "machine-name": "ledger",
+      "title": "Ledger",
+      "icon": "<i class=\"fas fa-book-reader\"></i>",
+      "app_icon": "📖",
+      "index-logo": "apps/ledger/images/ledger-app-index-logo-lg.png",
+      "href": "?app=ledger",
+      "description": "Track income, expenses, bills, and financial accounts with the Ledger app—simple, secure, and powerful financial management for individuals and small businesses"
+    },
+    {
+      "machine-name": "bibleBot",
+      "title": "BibleBot",
+      "icon": "<i class=\"fa fa-robot\"></i>",
+      "app_icon": "📚",
+      "index-logo": "apps/bibleBot/images/BibleBot-app-index-logo-lg.png",
+      "href": "?app=bibleBot",
+      "description": "Search, share, bookmark, import, export, save, and study scripture references"
+    },
+    {
+      "machine-name": "researcher",
+      "title": "AI Research Assistant",
+      "icon": "<i class=\"fas fa-flask\"></i>",
+      "app_icon": "🔬",
+      "index-logo": "apps/researcher/images/researcher-app-index-logo-lg.png",
+      "href": "?app=researcher",
+      "description": "An AI Research Assistant 🙂"
+    },
+    {
+      "machine-name": "stitch",
+      "title": "Stitch",
+      "icon": "<i class=\"material-icons\">add</i>",
+      "app_icon": "🪡",
+      "index-logo": "apps/researcher/images/researcher-app-index-logo-lg.png",
+      "href": "?app=stitch",
+      "description": "A geo-temporal narrative engine designed to weave disparate historical data points into high-fidelity observations. Using specialized Sentinel protocols, Stitch synchronizes human records with synthetic intelligence to bridge the gaps in the collective timeline.",
+      "announcement-title": "Stitch Manager"
+    },
+    {
+      "machine-name": "tryItEditor",
+      "title": "Try-it Editor",
+      "icon": "<i class=\"fas fa-code\"></i>",
+      "app_icon": "📝",
+      "index-logo": "apps/tryItEditor/images/tryItEditor-app-index-logo-lg.png",
+      "href": "?app=tryItEditor",
+      "description": "Online code editor and playground"
+    },
+    {
+      "machine-name": "grapesJsEditor",
+      "title": "GrapesJS Editor",
+      "icon": "<i class=\"fas fa-paint-brush\"></i>",
+      "app_icon": "🖌️",
+      "index-logo": "apps/grapesJsEditor/images/grapesJsEditor-app-index-logo-lg.png",
+      "href": "?app=grapesJsEditor",
+      "description": "Visual website builder and code editor"
+    },
+    {
+      "machine-name": "ancestry",
+      "title": "Ancestry",
+      "icon": "<i class=\"fas fa-tree\"></i>",
+      "app_icon": "🌳",
+      "index-logo": "apps/ancestry/images/ancestry-logo.png",
+      "href": "?app=ancestry",
+      "description": "Family tree, map and timeline"
+    },
+    {
+      "machine-name": "recipes",
+      "title": "Recipes",
+      "icon": "<i class=\"fas fa-utensils\"></i>",
+      "app_icon": "🍳",
+      "index-logo": "apps/recipes/images/recipes-logo.png",
+      "href": "?app=recipes",
+      "description": "Recipe manager with voice-guided cooking"
+    },
+    {
+      "machine-name": "weather",
+      "title": "Weather",
+      "icon": "<i class=\"fas fa-cloud-sun\"></i>",
+      "app_icon": "🌦️",
+      "index-logo": "apps/weather/images/Weather-app-index-logo-lg.png",
+      "href": "?app=weather",
+      "description": "Here is a look at the weather in your area"
+    },
+    {
+      "machine-name": "vault",
+      "title": "Vault",
+      "icon": "<i class=\"fas fa-piggy-bank\"></i>",
+      "app_icon": "🔐",
+      "index-logo": "apps/vault/images/vault-app-index-logo-lg.png",
+      "href": "?app=vault",
+      "description": "Secure storage and management of memory anchors, nexus links, and personal architectural data"
+    },
+    {
+      "machine-name": "audioLibrary",
+      "title": "Audio Library",
+      "icon": "<i class=\"fas fa-file-audio\"></i>",
+      "app_icon": "🎵",
+      "index-logo": "apps/audioLibrary/images/audioLibrary-app-index-logo-lg.png",
+      "href": "?app=audioLibrary",
+      "description": "Browse and sample audio files."
+    },
+    {
+      "machine-name": "admin",
+      "title": "Admin",
+      "icon": "<i class=\"fas fa-users-cog\"></i>",
+      "app_icon": "⚙️",
+      "index-logo": "apps/admin/images/admin-logo.png",
+      "href": "?app=admin",
+      "description": "User management and system administration"
+    },
+    {
+      "machine-name": "help",
+      "title": "Help",
+      "icon": "<i class=\"fas fa-question-circle\"></i>",
+      "app_icon": "❓",
+      "index-logo": "apps/help/images/help-logo.png",
+      "href": "?app=help",
+      "description": "Comprehensive help and documentation"
+    }
+  ],
+  "commands": [
+    {
+      "title": "Say Hello",
+      "command": "say hello",
+      "icon": "<i class=\"fas fa-book-reader\"></i>",
+      "href": "",
+      "keywords": "say",
+      "description": ""
+    },
+    {
+      "title": "Play Star Trek - No Facility Access",
+      "command": "play audio/star trek sounds/youarenotauthorisedtoaccessthisfacility_clean.mp3",
+      "icon": "<i class=\"fas fa-file-audio\"></i>",
+      "href": "",
+      "keywords": "say",
+      "description": ""
+    },
+    {
+      "title": "Play Star Trek - Please Specify",
+      "command": "play audio/star trek sounds/pleasespecifyhowyouwouldliketoproceed_ep.mp3",
+      "icon": "<i class=\"fas fa-file-audio\"></i>",
+      "href": "",
+      "keywords": "play",
+      "description": ""
+    },
+    {
+      "title": "Play Star Trek - Regeneration Cycle Complete",
+      "command": "play audio/star trek sounds/regeneration_cycle_complete.mp3",
+      "icon": "<i class=\"fas fa-file-audio\"></i>",
+      "href": "",
+      "keywords": "play",
+      "description": ""
+    },
+    {
+      "title": "Process Sample Data",
+      "command": "process {sampleData:true,processor:'SampleDataProcessor6840d'}",
+      "icon": "<i class=\"fas fa-book-reader\"></i>",
+      "href": "",
+      "keywords": "process",
+      "description": ""
+    }
+  ],
+  "documentation": [
+    {
+      "title": "Source - Github",
+      "icon": "<i class=\"fab fa-font-awesome-flag\"></i>",
+      "href": "https://github.com/jeffdavid8/mediabrain.app",
+      "description": ""
+    },
+    {
+      "title": "Font-Awesome V5 Icons",
+      "icon": "<i class=\"fab fa-font-awesome-flag\"></i>",
+      "href": "https://fontawesome.com/v5/search?o=r",
+      "description": ""
+    }
+  ]
+}

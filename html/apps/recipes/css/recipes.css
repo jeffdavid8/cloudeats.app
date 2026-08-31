@@ -1,0 +1,390 @@
+/* Recipe Manager Styles */
+.card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px 0;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    height: 
+}
+#recipe-grid .card .card-content {
+  height: 10rem;
+  overflow-y: scroll;
+}
+.recipe-card h3 {
+    margin-top: 0;
+    color: #2196F3;
+}
+
+.recipe-meta {
+    color: #666;
+    font-size: 0.9em;
+    margin: 8px 0;
+}
+
+.recipe-ingredients {
+    background: #f5f5f5;
+    padding: 12px;
+    border-radius: 4px;
+    margin: 12px 0;
+}
+
+.recipe-steps {
+    counter-reset: step-counter;
+}
+
+.recipe-step {
+    counter-increment: step-counter;
+    margin: 12px 0;
+    padding: 12px;
+    background: #fff3e0;
+    border-left: 4px solid #ff9800;
+    position: relative;
+}
+
+.recipe-step::before {
+    content: counter(step-counter);
+    position: absolute;
+    left: -12px;
+    top: 12px;
+    background: #ff9800;
+    color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.8em;
+}
+
+.cook-mode {
+    font-size: 1.2em;
+    line-height: 1.6;
+}
+
+.cook-mode .recipe-step {
+    font-size: 1.4em;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.tts-controls {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.search-filters {
+    background: #f5f5f5;
+    padding: 16px;
+    border-radius: 8px;
+    margin: 16px 0;
+}
+
+.recipe-form .input-field {
+    margin: 16px 0;
+}
+
+.ingredient-list, .step-list {
+    margin: 16px 0;
+}
+
+.ingredient-item, .step-item {
+    display: flex;
+    align-items: center;
+    margin: 8px 0;
+    padding: 8px;
+    background: #f9f9f9;
+    border-radius: 4px;
+}
+
+.ingredient-item input, .step-item textarea {
+    flex: 1;
+    margin-right: 8px;
+}
+
+.btn-remove {
+    background: #f44336;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.category-tag {
+    background: #2196F3;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    margin-right: 8px;
+}
+
+/* Night Mode Styles */
+
+/* Night Mode Card Backgrounds */
+.nightMode .card,
+.nightMode .card-panel {
+    background-color: #424242 !important;
+    color: #ffffff !important;
+}
+
+/* Night Mode Card Content Text */
+.nightMode .card .card-content,
+.nightMode .card-panel {
+    color: #ffffff !important;
+}
+
+/* Night Mode Recipe Cards */
+.nightMode .recipe-card {
+    background: #424242 !important;
+    color: #ffffff !important;
+    border-color: #616161 !important;
+}
+
+.nightMode .recipe-card h3 {
+    color: #64b5f6 !important;
+}
+
+/* Night Mode Input Fields */
+.nightMode input[type="text"],
+.nightMode input[type="number"],
+.nightMode textarea,
+.nightMode select {
+    background-color: #201f1f !important;
+    border-bottom-color: #9e9e9e !important;
+    color: #ffffff !important;
+}
+
+/* Night Mode Input Labels */
+.nightMode .input-field label,
+.input-field .helper-text {
+    color: #bdbdbd !important;
+}
+
+.nightMode .input-field label.active {
+    color: #ff9800 !important;
+}
+
+/* Night Mode Select Dropdown */
+.nightMode .dropdown-content {
+    background-color: #424242 !important;
+}
+
+.nightMode .dropdown-content li > a,
+.nightMode .dropdown-content li > span {
+    color: #ffffff !important;
+}
+
+.nightMode .dropdown-content li:hover {
+    background-color: #616161 !important;
+}
+
+/* Night Mode Collection Items (for ingredient checkboxes) */
+.nightMode .collection .collection-item {
+    background-color: #616161 !important;
+    border-bottom: 1px solid #757575 !important;
+    color: #ffffff !important;
+}
+
+/* Night Mode Recipe Meta Information */
+.nightMode .recipe-meta {
+    color: #e0e0e0 !important;
+}
+
+.nightMode .category-tag {
+    background: #ff9800 !important;
+    color: #000000 !important;
+}
+
+/* Night Mode Recipe Ingredients */
+.nightMode .recipe-ingredients {
+    background: #616161 !important;
+    color: #ffffff !important;
+}
+
+/* Night Mode Recipe Steps */
+.nightMode .recipe-step {
+    background: #616161 !important;
+    color: #ffffff !important;
+    border-left-color: #ff9800 !important;
+}
+
+.nightMode .recipe-step::before {
+    background: #ff9800 !important;
+    color: #000000 !important;
+}
+
+/* Night Mode Search Filters */
+.nightMode .search-filters {
+    background: #616161 !important;
+    color: #ffffff !important;
+}
+
+/* Night Mode Form Elements */
+.nightMode .ingredient-item,
+.nightMode .step-item {
+    background: #616161 !important;
+    color: #ffffff !important;
+}
+
+.nightMode .ingredient-item input,
+.nightMode .step-item textarea {
+    background-color: #757575 !important;
+    color: #ffffff !important;
+    border-bottom: 1px solid #9e9e9e !important;
+}
+
+.nightMode .ingredient-item input::placeholder,
+.nightMode .step-item textarea::placeholder {
+    color: #bdbdbd !important;
+}
+
+/* Night Mode Orange Highlights for Cook Mode */
+.nightMode .card-panel.orange.lighten-5 {
+    background-color: #c84a23  !important;
+}
+
+.nightMode .orange-text.text-darken-2 {
+    color: #fddcab  !important;
+}
+
+.nightMode .orange-text.text-darken-1 {
+    color: #ffb74d !important;
+}
+
+/* Breadcrumb Navigation Styles */
+.breadcrumb-nav {
+    margin-bottom: 20px;
+}
+
+.breadcrumb-nav .nav-wrapper {
+    padding: 0 20px;
+    border-radius: 4px;
+}
+
+.breadcrumb {
+    font-size: 14px;
+    color: #666 !important;
+    text-decoration: none;
+}
+
+.breadcrumb:hover {
+    color: #ff9800 !important;
+    text-decoration: underline;
+}
+
+.breadcrumb:last-child {
+    color: #ff9800 !important;
+    font-weight: 500;
+}
+
+/* Night Mode Breadcrumb Styles */
+.nightMode .breadcrumb-nav .nav-wrapper {
+    background-color: #616161 !important;
+}
+
+.nightMode .breadcrumb {
+    color: #bdbdbd !important;
+}
+
+.nightMode .breadcrumb:hover {
+    color: #ff9800 !important;
+}
+
+.nightMode .breadcrumb:last-child {
+    color: #ff9800 !important;
+}
+
+/* Recipe Image Styles */
+.recipe-image img {
+    transition: transform 0.3s ease;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* or 'contain' or 'fill' */
+    object-position: center; /* Adjust as needed */
+}
+.recipe-image img:hover {
+    transform: scale(1.02);
+}
+
+.card-image img {
+    width: 100%;
+    transition: transform 0.3s ease;
+}
+
+.card-image .card-title {
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+}
+
+.image-preview {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.image-preview img {
+    border: 2px solid #e0e0e0;
+    transition: border-color 0.3s ease;
+}
+
+.image-preview img:hover {
+    border-color: #ff9800;
+}
+
+/* Night Mode Image Styles */
+.nightMode .image-preview img {
+    border-color: #616161;
+}
+
+.nightMode .image-preview img:hover {
+    border-color: #ff9800;
+}
+
+/* Responsive Recipe Cards with Images */
+@media (max-width: 600px) {
+    .card-image img {
+        height: 150px !important;
+    }
+    
+    .recipe-image img {
+        max-height: 200px !important;
+    }
+}
+
+/* Admin Authentication Messages */
+.admin-message {
+    margin: 20px 0;
+    padding: 15px;
+    border-radius: 4px;
+}
+
+.admin-message.warning {
+    background-color: #fff3e0;
+    border-left: 4px solid #ff9800;
+    color: #bf360c;
+}
+
+.admin-message.error {
+    background-color: #ffebee;
+    border-left: 4px solid #f44336;
+    color: #c62828;
+}
+
+/* Night Mode Admin Messages */
+.nightMode .admin-message.warning {
+    background-color: #5d4037;
+    color: #ffcc02;
+}
+
+.nightMode .admin-message.error {
+    background-color: #4a2c2a;
+    color: #ff8a80;
+}
+
+.nightMode .card-panel.red.lighten-4 {
+    background-color: #4a2c2a !important;
+    color: #ff8a80 !important;
+}

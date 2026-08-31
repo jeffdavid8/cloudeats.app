@@ -1,0 +1,242 @@
+/* Star Trek LCARS Theme - Base Styles */
+
+/* Import LCARS-inspired font */
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&display=swap");
+
+/* LCARS Color Palette */
+:root {
+  /* Primary LCARS Colors */
+  --lcars-orange: #ff9900;
+  --lcars-blue: #9999ff;
+  --lcars-red: #ff6600;
+  --lcars-purple: #cc99cc;
+  --lcars-yellow: #ffcc00;
+  --lcars-green: #00ff00;
+  --lcars-cyan: #00ffff;
+
+  /* Background Colors */
+  --space-black: #000000;
+  --panel-dark: #0a0a0a;
+  --panel-medium: #1a1a1a;
+  --panel-light: #2a2a2a;
+  --panel-day: #dbd8d8;
+
+  /* Text Colors */
+  --text-primary: #ffffff;
+  --text-secondary: #cccccc;
+  --text-dim: #999999;
+  --text-dark: #383737;
+
+  /* Effects */
+  --glow-intensity: 0 0 10px;
+  --border-radius-lcars: 20px;
+  --transition-speed: 0.4s;
+}
+
+/* Base Body Styling */
+body {
+  background: var(--space-black);
+  color: var(--text-primary);
+  font-family: "Exo 2", sans-serif;
+  font-weight: 300;
+  line-height: 1.6;
+  background-image:
+    radial-gradient(
+      circle at 20% 80%,
+      rgba(120, 119, 198, 0.3) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(255, 153, 0, 0.2) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 40% 40%,
+      rgba(153, 153, 255, 0.1) 0%,
+      transparent 50%
+    );
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+/* LCARS Typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Orbitron", monospace;
+  font-weight: 500;
+  color: var(--text-dark);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: none;
+}
+.nightMode h1,
+.nightMode h2,
+.nightMode h3,
+.nightMode h4,
+.nightMode h5,
+.nightMode h6 {
+  color: var(--lcars-orange);
+  text-shadow: var(--glow-intensity) var(--lcars-orange);
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+h2 {
+  font-size: 2rem;
+  font-weight: 600;
+}
+h3 {
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+h4 {
+  font-size: 1.25rem;
+}
+h5 {
+  font-size: 1.1rem;
+}
+h6 {
+  font-size: 1rem;
+}
+
+/* LCARS Panel System */
+.lcars-panel {
+  background: linear-gradient(
+    135deg,
+    var(--panel-medium) 0%,
+    var(--panel-dark) 100%
+  );
+  border: 2px solid var(--lcars-orange);
+  border-radius: var(--border-radius-lcars);
+  box-shadow:
+    var(--glow-intensity) var(--lcars-orange),
+    inset 0 0 20px rgba(255, 153, 0, 0.1);
+  transition: all var(--transition-speed) ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.lcars-panel::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--lcars-orange) 20%,
+    var(--lcars-blue) 40%,
+    var(--lcars-red) 60%,
+    var(--lcars-orange) 80%,
+    transparent 100%
+  );
+  animation: lcarsScanning 3s ease-in-out infinite;
+}
+
+.lcars-panel:hover {
+  border-color: var(--lcars-blue);
+  box-shadow:
+    var(--glow-intensity) var(--lcars-blue),
+    inset 0 0 20px rgba(153, 153, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+/* LCARS Button System */
+.lcars-button {
+  background: linear-gradient(
+    45deg,
+    var(--lcars-orange) 0%,
+    var(--lcars-red) 100%
+  );
+  border: none;
+  border-radius: var(--border-radius-lcars);
+  color: var(--space-black);
+  font-family: "Orbitron", monospace;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: all var(--transition-speed) ease;
+  box-shadow: var(--glow-intensity) var(--lcars-orange);
+  position: relative;
+  overflow: hidden;
+}
+
+.lcars-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: left 0.6s ease;
+}
+
+.lcars-button:hover {
+  background: linear-gradient(
+    45deg,
+    var(--lcars-blue) 0%,
+    var(--lcars-purple) 100%
+  );
+  box-shadow: var(--glow-intensity) var(--lcars-blue);
+  transform: scale(1.05);
+}
+
+.lcars-button:hover::before {
+  left: 100%;
+}
+
+.lcars-button:active {
+  transform: scale(0.98);
+}
+
+/* LCARS Navigation */
+.lcars-nav {
+  background: var(--panel-dark);
+  border-bottom: 3px solid var(--lcars-orange);
+  box-shadow: 0 2px 20px rgba(255, 153, 0, 0.3);
+}
+
+.lcars-nav .nav-wrapper {
+  background: transparent;
+  box-shadow: none;
+}
+
+.lcars-nav .brand-logo {
+  font-family: "Orbitron", monospace;
+  font-weight: 700;
+  color: var(--lcars-orange);
+  text-shadow: var(--glow-intensity) var(--lcars-orange);
+}
+
+/* Container Adaptations */
+.container {
+  max-width: 1400px;
+  padding: 0 20px;
+}
+
+.row {
+  margin-bottom: 0;
+}
+
+.col {
+  padding: 10px;
+}
+

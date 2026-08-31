@@ -1,0 +1,434 @@
+/* MediaBrain Theme Utilities Framework
+ * Similar to Materialize CSS - consistent utility classes that work across all themes
+ * Use these classes in your HTML for theme-aware styling
+ */
+
+/* ==========================================================================
+   THEME-AWARE COMPONENT UTILITIES
+   ========================================================================== */
+
+/* Cards & Panels */
+.mb-card {
+    /* Base card styling - themes provide the visual treatment */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin: 10px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.mb-card-stat {
+    /* Dashboard statistics card */
+    padding: 20px;
+}
+
+.mb-card-content {
+    /* Standard card content area */
+    padding: 20px;
+}
+
+.mb-card-title {
+    /* Card title styling */
+    margin: 0 0 15px 0;
+    font-weight: 500;
+}
+
+.mb-card-action {
+    /* Card action area */
+    padding: 10px 20px;
+    border-top: 1px solid rgba(128, 128, 128, 0.1);
+}
+
+/* Buttons */
+.mb-btn {
+    /* Base button styling */
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.mb-btn-primary {
+    /* Primary action button */
+}
+
+.mb-btn-secondary {
+    /* Secondary action button */
+}
+
+.mb-btn-accent {
+    /* Accent/highlight button */
+}
+
+.mb-btn-large {
+    /* Large button */
+    padding: 12px 24px;
+    font-size: 16px;
+}
+
+.mb-btn-small {
+    /* Small button */
+    padding: 4px 8px;
+    font-size: 12px;
+}
+
+.mb-btn-flat {
+    /* Flat/text button */
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.mb-btn-floating {
+    /* Floating action button */
+    width: 56px;
+    height: 56px;
+    padding: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Navigation */
+.mb-nav {
+    /* Navigation container */
+}
+
+.mb-nav-item {
+    /* Navigation item */
+    display: inline-block;
+    position: relative;
+}
+
+.mb-nav-link {
+    /* Navigation link */
+    display: block;
+    padding: 12px 16px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.mb-nav-active {
+    /* Active navigation state */
+}
+
+/* Forms */
+.mb-input {
+    /* Text input styling */
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid rgba(128, 128, 128, 0.3);
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.mb-input:focus {
+    outline: none;
+    border-color: var(--primary-color, #2196F3);
+}
+
+.mb-select {
+    /* Select dropdown styling */
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid rgba(128, 128, 128, 0.3);
+    border-radius: 4px;
+    font-size: 14px;
+    background: transparent;
+}
+
+.mb-checkbox {
+    /* Checkbox styling */
+    margin-right: 8px;
+}
+
+.mb-radio {
+    /* Radio button styling */
+    margin-right: 8px;
+}
+
+/* Panels & Containers */
+.mb-panel {
+    /* General purpose panel */
+    padding: 20px;
+    margin: 10px 0;
+    border-radius: 4px;
+}
+
+.mb-panel-primary {
+    /* Primary themed panel */
+}
+
+.mb-panel-secondary {
+    /* Secondary themed panel */
+}
+
+.mb-panel-accent {
+    /* Accent themed panel */
+}
+
+.mb-panel-dark {
+    /* Dark themed panel */
+}
+
+.mb-panel-light {
+    /* Light themed panel */
+}
+
+/* Alerts & Messages */
+.mb-alert {
+    /* Base alert styling */
+    padding: 12px 16px;
+    margin: 10px 0;
+    border-radius: 4px;
+    position: relative;
+}
+
+.mb-alert-info {
+    /* Information alert */
+}
+
+.mb-alert-success {
+    /* Success alert */
+}
+
+.mb-alert-warning {
+    /* Warning alert */
+}
+
+.mb-alert-error {
+    /* Error alert */
+}
+
+/* Typography */
+.mb-heading {
+    /* Base heading styling */
+    font-weight: 500;
+    margin: 0 0 15px 0;
+}
+
+.mb-heading-1 {
+    /* Large heading */
+    font-size: 2.5em;
+}
+
+.mb-heading-2 {
+    /* Medium heading */
+    font-size: 2em;
+}
+
+.mb-heading-3 {
+    /* Small heading */
+    font-size: 1.5em;
+}
+
+.mb-text {
+    /* Body text */
+    line-height: 1.6;
+}
+
+.mb-text-muted {
+    /* Muted/secondary text */
+    opacity: 0.7;
+}
+
+.mb-text-small {
+    /* Small text */
+    font-size: 0.8em;
+}
+
+.mb-text-large {
+    /* Large text */
+    font-size: 1.2em;
+}
+
+/* Layout Utilities */
+.mb-container {
+    /* Main content container */
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.mb-row {
+    /* Flexbox row */
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -10px;
+}
+
+.mb-col {
+    /* Flexible column */
+    flex: 1;
+    padding: 0 10px;
+}
+
+.mb-col-1 { flex: 0 0 8.333333%; }
+.mb-col-2 { flex: 0 0 16.666667%; }
+.mb-col-3 { flex: 0 0 25%; }
+.mb-col-4 { flex: 0 0 33.333333%; }
+.mb-col-6 { flex: 0 0 50%; }
+.mb-col-8 { flex: 0 0 66.666667%; }
+.mb-col-9 { flex: 0 0 75%; }
+.mb-col-12 { flex: 0 0 100%; }
+
+/* Spacing Utilities */
+.mb-m-0 { margin: 0; }
+.mb-m-1 { margin: 8px; }
+.mb-m-2 { margin: 16px; }
+.mb-m-3 { margin: 24px; }
+.mb-m-4 { margin: 32px; }
+
+.mb-p-0 { padding: 0; }
+.mb-p-1 { padding: 8px; }
+.mb-p-2 { padding: 16px; }
+.mb-p-3 { padding: 24px; }
+.mb-p-4 { padding: 32px; }
+
+/* Display Utilities */
+.mb-hide { display: none !important; }
+.mb-show { display: block !important; }
+.mb-flex { display: flex !important; }
+.mb-inline { display: inline !important; }
+.mb-inline-block { display: inline-block !important; }
+
+/* Text Alignment */
+.mb-text-left { text-align: left; }
+.mb-text-center { text-align: center; }
+.mb-text-right { text-align: right; }
+
+/* Hover Effects */
+.mb-hover-lift {
+    /* Lift effect on hover */
+    transition: transform 0.3s ease;
+}
+
+.mb-hover-lift:hover {
+    transform: translateY(-2px);
+}
+
+.mb-hover-glow {
+    /* Glow effect on hover - themes provide the glow styling */
+    transition: all 0.3s ease;
+}
+
+.mb-hover-scale {
+    /* Scale effect on hover */
+    transition: transform 0.3s ease;
+}
+
+.mb-hover-scale:hover {
+    transform: scale(1.05);
+}
+
+/* Theme-Specific Utilities */
+.mb-theme-border {
+    /* Theme-appropriate border */
+    border: 1px solid var(--border-color, rgba(128, 128, 128, 0.3));
+}
+
+.mb-theme-shadow {
+    /* Theme-appropriate shadow */
+    box-shadow: var(--card-shadow, 0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.mb-theme-background {
+    /* Theme-appropriate background */
+    background: var(--background-color, #ffffff);
+}
+
+.mb-theme-surface {
+    /* Theme-appropriate surface color */
+    background: var(--surface-color, #f5f5f5);
+}
+
+.mb-theme-text {
+    /* Theme-appropriate text color */
+    color: var(--text-color, #333333);
+}
+
+.mb-theme-primary {
+    /* Primary theme color */
+    color: var(--primary-color, #2196F3);
+}
+
+.mb-theme-accent {
+    /* Accent theme color */
+    color: var(--accent-color, #ff4081);
+}
+
+/* Responsive Utilities */
+@media (max-width: 768px) {
+    .mb-hide-mobile { display: none !important; }
+    .mb-show-mobile { display: block !important; }
+    
+    .mb-col-mobile-12 { flex: 0 0 100%; }
+    .mb-col-mobile-6 { flex: 0 0 50%; }
+}
+
+@media (min-width: 769px) {
+    .mb-hide-desktop { display: none !important; }
+    .mb-show-desktop { display: block !important; }
+}
+
+/* Animation Utilities */
+.mb-fade-in {
+    animation: mbFadeIn 0.3s ease-in-out;
+}
+
+.mb-slide-in {
+    animation: mbSlideIn 0.3s ease-in-out;
+}
+
+@keyframes mbFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes mbSlideIn {
+    from { transform: translateX(-20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+/* State Utilities */
+.mb-active {
+    /* Active state */
+}
+
+.mb-disabled {
+    /* Disabled state */
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.mb-loading {
+    /* Loading state */
+    position: relative;
+    pointer-events: none;
+}
+
+.mb-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

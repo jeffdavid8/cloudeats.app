@@ -1,0 +1,2200 @@
+/* THE ARCHITECT'S FONT LOCK */
+:root {
+  --system-font:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu,
+    Cantarell, "Helvetica Neue", sans-serif;
+}
+
+body,
+html,
+.hud-layer h2 {
+  font-family: var(--system-font) !important;
+  -webkit-font-smoothing: antialiased;
+}
+body {
+  background: url(../images/observation_deck_bg.jpg) no-repeat center center
+    fixed;
+  background-size: cover;
+  min-height: 100vh;
+}
+body.stitch.app .header nav,
+#stitch-list-container .field-toolbar {
+  border-radius: 0;
+}
+
+#terminal-container {
+  padding: 5px 20px 0 20px;
+  border: 1px solid #444;
+  border-radius: 0 0 8px 8px;
+  width: 100%;
+  -webkit-transition: top 0.5s; /* Safari */
+  transition: top 0.5s;
+  z-index: 890;
+}
+
+footer {
+  background-color: #000;
+  overflow: visible;
+  position: fixed;
+  bottom: 0;
+  height: 50px;
+  width: 100%;
+  z-index: 99;
+}
+footer .powered-by {
+  text-align: right;
+}
+.terminal-view-card-container {
+  display: none;
+  visibility: hidden;
+  width: 100%;
+  max-height: 400px;
+  overflow-y: auto;
+  z-index: 99;
+  justify-content: baseline;
+  align-items: center;
+  background-color: #0000005c;
+  backdrop-filter: blur(20px); /* Heavier blur for the Landscape vibe */
+  align-content: baseline;
+  flex-direction: column;
+  transition:
+    max-height 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1),
+    opacity 0.2s ease-out,
+    transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+  transform: translateY(30px) scale(0.98);
+  transform-origin: bottom center;
+}
+.terminal-view-card-container.active-cli-output {
+  position: fixed;
+  display: flex;
+  visibility: visible;
+  max-height: 500px;
+  opacity: 1;
+  transform: translateY(0);
+}
+#deck-container {
+  display: none;
+  bottom: 50px;
+  width: 100%;
+  z-index: 99;
+  justify-content: baseline;
+  align-items: center;
+  background-color: #0000005c;
+  backdrop-filter: blur(20px); /* Heavier blur for the Landscape vibe */
+  align-content: baseline;
+  flex-direction: column;
+}
+#deck-container.panel-open {
+  display: flex;
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+  bottom: 0;
+}
+
+.stitch-app-container {
+  padding-top: 4em;
+  padding-bottom: 10em; /* Space for the Chronicle Monitor */
+}
+body.horizon-reached {
+  padding-bottom: 0;
+}
+#horizon-terminal {
+  -webkit-transition: top 0.5s; /* Safari */
+  transition: all 0.5s;
+  display: none;
+}
+body.horizon-reached #horizon-terminal {
+  display: block;
+}
+/* The Observation Deck Hero */
+.hero-container {
+  margin-top: 3em;
+  width: 100%;
+}
+.field-hero {
+  position: relative;
+  overflow: hidden; /* Keeps the drift inside the lines */
+  background: #000000ad;
+  background-size: cover;
+  border-radius: 12px;
+  padding-bottom: 2rem;
+  border: 1px solid #333;
+  display: flex;
+  align-items: flex-end;
+  height: 200px;
+  margin-bottom: 4em;
+}
+
+#hud-container {
+  width: 100%;
+  padding: 0;
+  margin-top: 6em;
+  display: none;
+}
+body.hud-active #hud-container {
+  display: block;
+  background-color: #000000cf;
+}
+/* 🕰️ The Chronos Visor - Top-Down Deployment */
+#hud-container {
+  /*
+  visibility: hidden;
+  max-height: 0;
+  opacity: 0;
+  */
+  border-radius: 0 0 20px 20px;
+  overflow: hidden;
+  /* background: rgba(18, 18, 18, 0.35); */
+  background-color: #562fdf4a !important;
+  backdrop-filter: blur(15px); /* Heavier blur for the Landscape vibe */
+  border-bottom: 2px solid #7c8ef482;
+
+  /* ⚡ The "Miles" Snap: Fast and clean */
+  transition:
+    max-height 0.35s cubic-bezier(0.23, 1, 0.32, 1),
+    opacity 0.2s ease-out,
+    transform 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+
+  transform: translateY(-40px); /* Starts tucked high */
+  z-index: 1001;
+}
+
+#hud-container.panel-open {
+  visibility: visible;
+  max-height: 500px;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#hud-container .field-toolbar {
+  box-shadow: 0 0 41px rgba(204, 134, 210, 0.24);
+  background-color: #00000091;
+}
+/* --- Large Devices (Laptops/Desktops, 992px and up) --- */
+@media only screen and (min-width: 992px) {
+  /*
+  #deck-container {
+    width: 750px;
+    right: 100px;
+  }
+  */
+  .hero-container {
+    margin-top: 2em;
+  }
+  .field-hero {
+    height: 300px;
+    padding: 30px;
+  }
+}
+/* The Drifting Grid Overlay */
+.field-hero::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background-image:
+    linear-gradient(rgba(0, 230, 118, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 230, 118, 0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+  transform: rotate(15deg);
+  animation: satelliteDrift 60s linear infinite;
+  pointer-events: none; /* Let clicks pass through to the UI */
+}
+
+.nightMode .card,
+.nightMode .header nav {
+  /* background-color: #070613e5; */
+  /* background-color: #10121ad1; */
+  backdrop-filter: blur(3px);
+  border-radius: 15px;
+}
+.nightMode .card {
+  background: radial-gradient(ellipse at top, #1016267a 20%, #07090dc4 85%);
+  backdrop-filter: blur(6px);
+  border: 2px solid #7c8ef482;
+}
+
+.nightMode .card-inner-bevel {
+  border-left: 1px solid #122833;
+  border-right: 1px solid #402350;
+  border-bottom: 1px solid #2f263c;
+  border-radius: 12px;
+  padding: 5px 0;
+}
+
+input[type="range"]::-moz-range-track {
+  height: 3px;
+  background: #86b7d4;
+  border: none;
+}
+.nightMode input[type="range"] {
+  background-color: #150c2b !important;
+  background: radial-gradient(ellipse at bottom, #1a2333bd 0%, #0009 100%);
+  color: #e0e0e0 !important;
+  border: 1px solid #555 !important;
+}
+/* The Slow Aerial Motion */
+@keyframes satelliteDrift {
+  from {
+    transform: rotate(15deg) translate(0, 0);
+  }
+  to {
+    transform: rotate(15deg) translate(-50px, -50px);
+  }
+}
+.hero-hud {
+  z-index: 10;
+  position: relative;
+  pointer-events: none;
+}
+
+/* High Fidelity Glow Pulse */
+.high-fidelity-glow {
+  border: 1px solid #00e676 !important;
+  box-shadow: 0 0 20px rgba(0, 230, 118, 0.2);
+  animation: glowPulse 4s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 15px rgba(0, 230, 118, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(0, 230, 118, 0.4);
+  }
+}
+
+.earth-layer {
+  position: absolute;
+  inset: -20%;
+  pointer-events: none;
+  will-change: background-position;
+}
+
+#earth-terrain {
+  /* background: url(../images/observation_deck_bg.jpg) repeat; */
+  background-size: 1024px 1024px;
+  animation: none !important;
+  transform: none !important;
+  will-change: background-position;
+  z-index: 0;
+}
+
+#clouds-low {
+  background: url("/apps/researcher/assets/clouds-dense.webp") repeat;
+  background-size: 1024px 1024px;
+  animation: driftMicroMed 0.9s linear infinite;
+  mix-blend-mode: screen;
+  opacity: var(--cloud-low-opacity, 0.55);
+  z-index: 1;
+}
+
+#clouds-high {
+  background: url("/apps/researcher/assets/clouds-low.webp") repeat;
+  background-size: 1024px 1024px;
+  animation: driftMicroFast 0.6s linear infinite;
+  mix-blend-mode: screen;
+  opacity: var(--cloud-high-opacity, 0.28);
+  z-index: 1;
+}
+
+#earth-terrain,
+#clouds-low,
+#clouds-high {
+  animation: none !important;
+  transform: none !important;
+  will-change: background-position; /* Keep this for performance */
+}
+
+@keyframes driftMicroSlow {
+  from {
+    transform: translate3d(0px, 0px, 0);
+  }
+  to {
+    transform: translate3d(-1px, -0.5px, 0);
+  }
+}
+
+@keyframes driftMicroMed {
+  from {
+    transform: translate3d(0px, 0px, 0);
+  }
+  to {
+    transform: translate3d(-1.5px, -0.75px, 0);
+  }
+}
+
+@keyframes driftMicroFast {
+  from {
+    transform: translate3d(0px, 0px, 0);
+  }
+  to {
+    transform: translate3d(-2px, -1px, 0);
+  }
+}
+/* The Subtle HUD Pulse */
+@keyframes textFlicker {
+  0% {
+    opacity: 0.99;
+    text-shadow: 0 0 10px rgba(155, 89, 182, 0.3);
+  }
+  5% {
+    opacity: 0.96;
+    text-shadow: 0 0 15px rgba(155, 89, 182, 0.5);
+  }
+  10% {
+    opacity: 0.99;
+    text-shadow: 0 0 10px rgba(155, 89, 182, 0.3);
+  }
+  75% {
+    opacity: 0.99;
+    text-shadow: 0 0 10px rgba(155, 89, 182, 0.3);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Erratic Signal Interference */
+@keyframes hudShortCircuit {
+  0%,
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+    filter: blur(0px);
+  }
+  1% {
+    opacity: 0.2;
+    transform: translateX(2px);
+    filter: blur(1px);
+  } /* The "Short" */
+  2% {
+    opacity: 1;
+    transform: translateX(-1px);
+  }
+  3% {
+    opacity: 0.5;
+  }
+  4% {
+    opacity: 1;
+  }
+  /* Long pause of stability */
+  40% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  41% {
+    opacity: 0.8;
+    transform: skewX(10deg);
+    color: #9b59b2;
+  } /* Purple Tint Pop */
+  42% {
+    opacity: 1;
+    transform: skewX(0deg);
+    color: #fff;
+  }
+}
+#header-search {
+  width: 100%;
+}
+#terminal-container {
+  text-align: center;
+  padding: 5px 8px 0 8px;
+}
+.toolbar-actions {
+  display: block;
+  justify-content: flex-end;
+  align-items: flex-start;
+  gap: 20px;
+  flex-grow: 1;
+  float: right;
+  text-align: right;
+  margin: 0 5px 5px 6px;
+}
+.toolbar-actions .action-unit {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#terminal-container {
+  padding-bottom: 5px;
+  background-color: #00000046;
+  backdrop-filter: blur(3px); /* Heavier blur for the Landscape vibe */
+  border-radius: 6px;
+}
+body.desktop-cli-active #terminal-container {
+  position: fixed;
+  bottom: 3em;
+}
+
+#terminal-container .brand-container {
+  padding: 0;
+}
+#terminal-container .row {
+  margin-bottom: 0;
+}
+.hero-hud h2 {
+  /* Use 'steps' or very short duration to make it feel like a hardware glitch */
+  animation: hudShortCircuit 5s linear infinite;
+  display: inline-block;
+  will-change: opacity, transform;
+}
+/* 🔮 The Expanding Command Buffer */
+.command-prompt-container {
+  background: rgba(18, 18, 18, 0.8);
+  border: 1px solid rgba(179, 157, 219, 0.3); /* Lavender Border */
+  border-radius: 12px;
+  padding: 10px 15px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+}
+
+.command-prompt-container:focus-within {
+  border-color: #b39ddb;
+  box-shadow: 0 0 15px rgba(179, 157, 219, 0.2);
+}
+.command-prompt-container .cli-wrapper {
+  width: auto;
+}
+.command-prompt-container.cli-active .cli-wrapper {
+  display: block;
+}
+.command-prompt-container {
+  min-height: 4em;
+  -webkit-transition: all 1s; /* Safari */
+  transition: all 1s;
+}
+.master-command-prompt {
+  width: 100%;
+  height: auto;
+  max-height: 132px; /* Prevent it from taking over the whole screen */
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-family: "Monaco", "Consolas", monospace;
+  font-size: 1rem;
+  resize: none; /* Disables the manual resize handle */
+  outline: none;
+  overflow-y: hidden;
+  padding-top: 0;
+  line-height: 1.5;
+}
+.nightMode .master-command-prompt {
+  background-color: #161515 !important;
+  color: #e0e0e0 !important;
+}
+.prompt-icon {
+  color: #b39ddb;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+.stitch-action-menu-wrapper {
+  width: 130px;
+  display: block;
+  float: right;
+  margin-left: 10px;
+}
+.hero-hud h2 {
+  font-size: 2em;
+}
+
+@media only screen and (max-width: 768px) {
+  .stitch-action-menu-wrapper {
+    width: 200px;
+  }
+  #header-search {
+    width: 100%;
+    float: left;
+  }
+
+  #terminal-container .brand-container {
+    padding: 0 0.75rem;
+  }
+  .command-prompt-container .cli-wrapper {
+    width: calc(100% - 110px);
+  }
+}
+/* --- Medium Devices (Tablets/Small Laptops, 768px and up) --- */
+@media (min-width: 768px) {
+  /* Styles for tablets/small laptops */
+}
+
+/* --- Large Devices (Laptops/Desktops, 992px and up) --- */
+@media (min-width: 992px) {
+  /* Styles for desktops */
+}
+
+/* THE SATELLITE SCANNER (Spinner) */
+#horizon-sentinel {
+  height: 100px;
+  width: 250px;
+  border-radius: 50px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 50px;
+  margin-bottom: 50px;
+  padding: 1em;
+  background-color: #1b1836d5;
+}
+
+.satellite-loader {
+  width: 48px;
+  height: 48px;
+  border: 3px solid rgba(155, 89, 182, 0.2);
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+.satellite-loader::after {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-bottom-color: #9b59b2; /* That Sunday Purple */
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-text {
+  font-family: monospace;
+  color: #9b59b2;
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  margin-top: 10px;
+  text-transform: uppercase;
+  animation: textFlicker 0.5s infinite; /* Re-using your flicker logic */
+}
+
+/* HIGH-FIDELITY TOASTS */
+
+#toast-container {
+  top: auto;
+  right: 0;
+  bottom: 115px;
+}
+/* tablet and above */
+@media only screen and (min-width: 900px) {
+  #toast-container {
+    top: 15% !important;
+    left: initial !important;
+    bottom: auto;
+    right: 0;
+  }
+}
+
+#toast-container .toast {
+  border-radius: 0 !important; /* Sharp tactical edges */
+  border-left: 4px solid #9b59b2;
+  background-color: rgba(18, 18, 18, 0.9) !important;
+  font-family: monospace;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 0 20px rgba(155, 89, 182, 0.3);
+}
+
+.toast.purple {
+  border-left-color: #9b59b2;
+}
+.toast.blue {
+  border-left-color: #29b6f6;
+}
+.toast.red {
+  border-left-color: #ff5252;
+}
+
+.amethyst-anchor-btn {
+  background-color: #9b59b2 !important; /* Amethyst Purple */
+  font-family: monospace;
+  font-weight: bold;
+  letter-spacing: 2px;
+  border: 1px solid #be90d4;
+  box-shadow: 0 0 15px rgba(155, 89, 182, 0.4);
+  transition: all 0.3s ease;
+}
+
+.amethyst-anchor-btn:hover {
+  box-shadow: 0 0 25px rgba(155, 89, 182, 0.8);
+  transform: translateY(-2px);
+  background-color: #8e44ad !important;
+}
+
+/* THE CRT FLICKER EFFECT */
+.crt-flicker {
+  animation: textShadow 1.5s infinite;
+}
+
+@keyframes textShadow {
+  0% {
+    text-shadow:
+      0.43px 1.1px 0px rgba(255, 0, 80, 0.1),
+      -0.43px -1.1px 0px rgba(0, 255, 255, 0.1);
+  }
+  50% {
+    text-shadow:
+      1.5px 0.5px 0px rgba(255, 0, 80, 0.2),
+      -1.5px -0.5px 0px rgba(0, 255, 255, 0.2);
+  }
+  100% {
+    text-shadow:
+      0.43px 1.1px 0px rgba(255, 0, 80, 0.1),
+      -0.43px -1.1px 0px rgba(0, 255, 255, 0.1);
+  }
+}
+
+/* The Terminal Glow */
+#chronicle-monitor {
+  width: 100%;
+  height: 60px;
+  z-index: 999;
+  background: #0a0a0a !important;
+  border-top: 1px solid #9b59b2;
+  /*
+  mask-image: linear-gradient(to right, black 90%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, black 90%, transparent 100%);
+  */
+}
+
+/* The Scanline Overlay */
+#chronicle-monitor::before {
+  content: " ";
+  display: block;
+  background:
+    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+    linear-gradient(
+      90deg,
+      rgba(255, 0, 0, 0.06),
+      rgba(0, 255, 0, 0.02),
+      rgba(0, 0, 255, 0.06)
+    );
+  background-size:
+    100% 4px,
+    3px 100%;
+  pointer-events: none;
+}
+/* Desktop: The HUD is always on */
+#chronicle-monitor {
+  position: fixed;
+  bottom: 0;
+  z-index: 1000;
+}
+
+/* Mobile: The HUD stays at the bottom of the content */
+@media only screen and (max-width: 600px) {
+  #chronicle-monitor {
+    position: relative !important;
+    bottom: auto !important;
+  }
+  /* Move the FAB up so it doesn't overlap the relative footer */
+  /*
+  .fixed-action-btn {
+    bottom: 20px !important;
+  }
+  */
+}
+/* The CRT Flicker Animation */
+.crt-flicker-text {
+  animation: textShadow 1.5s infinite;
+  text-shadow: 0 0 5px #9b59b2;
+}
+
+@keyframes textShadow {
+  0% {
+    text-shadow:
+      0.43px 0 1px rgba(0, 255, 255, 0.5),
+      -0.43px 0 1px rgba(255, 0, 255, 0.5),
+      0 0 3px;
+  }
+  5% {
+    text-shadow:
+      -0.43px 0 1px rgba(0, 255, 255, 0.5),
+      0.43px 0 1px rgba(255, 0, 255, 0.5),
+      0 0 3px;
+  }
+  /* ... and so on ... */
+  100% {
+    text-shadow:
+      0.43px 0 1px rgba(0, 255, 255, 0.5),
+      -0.43px 0 1px rgba(255, 0, 255, 0.5),
+      0 0 3px;
+  }
+}
+
+/* RESPONSIVE HEADER & BUTTONS */
+@media only screen and (max-width: 600px) {
+  .header-area {
+    flex-direction: column !important;
+    align-items: stretch !important; /* Makes buttons full-width */
+    gap: 15px;
+    text-align: center;
+  }
+
+  /* Move the FAB up a bit so it doesn't block the Chronicle Monitor */
+  /*
+  .fixed-action-btn {
+    bottom: 175px !important;
+  }
+  */
+  /* Ensure the mobile search bar doesn't feel cramped */
+  #observationSearch {
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+}
+
+/* THE PULSE OF CREATION (The Violet Pulse) */
+.btn-pulse-violet {
+  background-color: #9b59b2 !important;
+  box-shadow: 0 0 0 0 rgba(155, 89, 178, 0.7);
+  animation: violet-pulse 2s infinite;
+}
+
+.btn-pulse-violet:hover {
+  background-color: #8e44ad !important;
+  box-shadow: 0 0 20px rgba(155, 89, 178, 1);
+  transform: scale(1.05);
+}
+
+@keyframes violet-pulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(155, 89, 178, 0.4);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 15px rgba(155, 89, 178, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(155, 89, 178, 0);
+  }
+}
+
+/* 🧪 THE MECHANICAL TRANSITION */
+.tab-content {
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* A little 'bounce' */
+  opacity: 1;
+  transform: translateX(0);
+  min-height: 100px;
+}
+
+.tab-content.hidden {
+  display: none;
+  height: 0;
+  opacity: 0;
+  transform: translateX(20px); /* Slides in from the side */
+}
+
+/* 💎 THE ACTIVE JEWEL EFFECT */
+.tab-buttons button.active {
+  border-bottom: 2px solid #ffab40 !important; /* Amber Jewel Glow */
+  background: rgba(255, 171, 64, 0.1) !important;
+  text-shadow: 0 0 8px rgba(255, 171, 64, 0.5);
+}
+.tab-buttons {
+  border: 1px solid #444;
+  border-radius: 7px;
+  padding: 1em 0;
+}
+.tab-buttons button {
+  padding: 5px;
+  border: 1px solid var(--truth-meridian);
+  border-radius: 5px;
+}
+.tab-buttons button:hover {
+  color: #fff !important;
+  box-shadow: 0 0 15px rgba(155, 89, 182, 0.6);
+  border: 1px solid var(--truth-meridian) !important;
+}
+
+.card-action .btn-save {
+  color: var(--blue-gem);
+}
+
+/* The Branching Tether */
+.stitch-branch {
+  margin-left: 40px !important; /* Indent the branch */
+  border-left: 2px solid #9b59b2; /* The vertical fiber tether */
+  padding-left: 20px;
+  position: relative;
+}
+
+/* The horizontal "hook" connecting the tether to the card */
+.stitch-branch::before {
+  content: "";
+  position: absolute;
+  top: 30px;
+  left: 0;
+  width: 15px;
+  height: 2px;
+  background: #9b59b2;
+}
+
+.credits-wrap {
+  display: block;
+  background-color: #000;
+  text-align: right;
+}
+
+/* The Infinite Ticker */
+/* 🛰️ The Ticker Container */
+.ticker-wrap {
+  width: 100%;
+  overflow: hidden;
+  background: #000;
+  white-space: nowrap;
+}
+
+.ticker-move {
+  display: inline-flex; /* Puts Part A and Part B side-by-side */
+  animation: ticker-loop 60s linear infinite;
+  will-change: transform; /* Optimization for smoother movement */
+}
+
+.ticker-items-container {
+  display: flex;
+  align-items: center;
+  padding-right: 50px; /* Gap between the end of A and start of B */
+}
+
+@keyframes ticker-loop {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  } /* Move exactly half the total width */
+}
+
+#chronicle-monitor {
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+  background: #000;
+  border-top: 1px solid #9b59b2;
+}
+
+#chronicle-scroller {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  white-space: nowrap;
+  padding: 0 !important;
+  margin: 0 !important;
+  will-change: transform;
+  /* Do NOT put 'animation' here; the JS handles it now */
+}
+
+#chronicle-scroller span {
+  flex-shrink: 0;
+  display: inline-block;
+  transition: opacity 0.4s ease-in-out;
+  text-shadow: 0 0 5px rgba(155, 89, 178, 0.5); /* Soft Purple Glow */
+}
+
+#total-vouch-count {
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin-left: 5px;
+  /* This makes the rolling numbers look like a mechanical odometer */
+  display: inline-block;
+  min-width: 25px;
+  text-align: center;
+}
+
+.vouch-surge {
+  filter: brightness(1.5) contrast(1.2);
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.5);
+  transition:
+    filter 0.3s ease,
+    box-shadow 0.3s ease;
+}
+.hero-container .ribbon-wrapper {
+  position: absolute;
+  width: 100px;
+  height: 35px;
+  bottom: 25px;
+  right: 0px;
+  z-index: 10;
+  padding: 6.5px 22px;
+  border-radius: 4px 0 0 4px;
+  background: linear-gradient(#4370c669 0%, #103bbb6b 100%);
+  color: #ffffff;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+.field-hero .hero-hud {
+  padding: 1em 0;
+}
+@media only screen and (max-width: 600px) {
+  .field-hero .hero-hud {
+    padding: 5px;
+  }
+}
+
+/* Sync the LED to the Ticker Beat */
+.music-sync #heartbeat-led {
+  animation: LED_PULSE 0.45s infinite ease-in-out;
+}
+
+@keyframes LED_PULSE {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.3);
+    background-color: #00e5ff;
+  }
+}
+
+/* Universal Mood: The Vouch Pulse */
+.mood-vouch {
+  color: #ffd700; /* Gold */
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+  border-left: 3px solid #ffd700; /* For the List */
+}
+
+/* Universal Mood: The Ghost Packet */
+.mood-ghost {
+  color: #a0a0a0;
+  font-style: italic;
+  opacity: 0.7;
+}
+
+/* The Ticker specific behavior for Moods */
+#ticker .mood-vouch {
+  animation: gold-shimmer 2s infinite linear;
+}
+
+@keyframes VOUCH_PULSE {
+  0% {
+    text-shadow:
+      2px 0 0 rgba(255, 0, 0, 0.5),
+      -2px 0 0 rgba(0, 255, 255, 0.5);
+  }
+  50% {
+    text-shadow:
+      -2px 0 0 rgba(255, 0, 0, 0.5),
+      2px 0 0 rgba(0, 255, 255, 0.5);
+  }
+  100% {
+    text-shadow:
+      2px 0 0 rgba(255, 0, 0, 0.5),
+      -2px 0 0 rgba(0, 255, 255, 0.5);
+  }
+}
+
+.mood-vouch {
+  color: #00e5ff !important;
+  animation: VOUCH_PULSE 0.2s infinite; /* Rapid visual vibration */
+}
+
+/* 🛰️ Mobile Responsive Vitals */
+@media only screen and (max-width: 600px) {
+  /* 1. Slim down the container to save horizontal space */
+  .vitals-overlay {
+    padding: 10px 8px !important;
+    gap: 5px !important;
+  }
+
+  /* 2. Hide the bulky label, keep the number */
+  .vitals-overlay span.purple-text {
+    display: none;
+  }
+
+  /* 3. Make the stability number stand out more in the small space */
+  #total-vouch-count {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #b39ddb !important; /* Soft Purple to match the vibe */
+  }
+
+  /* 4. Ensure the Ticker Wrap expands to fill the rescued space */
+  .ticker-wrap {
+    width: 100% !important; /* Adjust based on new overlay width */
+  }
+}
+/* 🛰️ Mobile-First Ergonomics for the Stitch Manager */
+@media only screen and (max-width: 600px) {
+  .stitch-input-wrap {
+    flex-direction: column !important; /* Stack inputs vertically */
+    gap: 15px;
+  }
+
+  input[type="text"],
+  .btn-large {
+    width: 100%; /* Full width for easy tapping */
+    height: 55px; /* Larger hit-area for fingers */
+    font-size: 1.1rem;
+  }
+
+  .vitals-overlay {
+    bottom: 10px !important; /* Move it up slightly to avoid mobile nav bars */
+  }
+}
+/* 🛰️ THE MID-RANGE NUCLEAR ALIGNMENT (Fixes the Button Jam) */
+@media only screen and (max-width: 1400px) {
+  /* 1. Force the container to stack everything vertically */
+  .header-area {
+    display: block !important; /* Kills the flex-row entirely */
+    text-align: center !important;
+    height: auto !important;
+  }
+
+  /* 2. Give the Title its own row */
+  .header-area h3 {
+    display: block !important;
+    margin-bottom: 20px !important;
+    width: 100% !important;
+  }
+
+  /* 3. Force EVERY button to be a full-width block */
+  .header-area a.btn,
+  .header-area button.btn-small {
+    width: 80% !important; /* Take up most of the screen */
+    max-width: 400px !important;
+    margin: 10px auto !important; /* Center them with space between */
+    float: none !important; /* Kill any potential floats */
+  }
+
+  /* 4. Ensure the Archive button looks like a button, not a tiny strip */
+  .header-area button.btn-small {
+    height: 45px !important;
+    line-height: 45px !important;
+  }
+}
+
+/* 🛰️ THE CHRONOS GLITCH EFFECT */
+/* 🛰️ CHRONOS TEMPORAL GLITCH */
+.stitch-wrapper {
+  transition:
+    filter 0.4s ease,
+    transform 0.4s ease,
+    opacity 0.4s ease;
+}
+
+.chronos-glitch {
+  filter: blur(8px) brightness(2) contrast(0.5);
+  transform: scale(0.95);
+  pointer-events: none;
+}
+
+.chronos-glitch-out {
+  filter: blur(10px) brightness(2) contrast(0.5);
+  transform: scale(0.9) translateY(10px);
+  pointer-events: none;
+}
+
+/* 💎 THE NEW STITCH LANDING PULSE */
+@keyframes STAGE_PULSE {
+  0% {
+    border-color: #9b59b2;
+    box-shadow: 0 0 0px rgba(155, 89, 182, 0);
+  }
+  50% {
+    border-color: #ff00ff;
+    box-shadow: 0 0 25px rgba(255, 0, 255, 0.7);
+  }
+  100% {
+    border-color: #9b59b2;
+    box-shadow: 0 0 0px rgba(155, 89, 182, 0);
+  }
+}
+
+.stage-active-pulse {
+  animation: STAGE_PULSE 1.2s ease-out !important;
+}
+
+stitch-wrapper {
+  animation: materialize 0.4s ease-out forwards;
+}
+
+@keyframes materialize {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+    filter: blur(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+/* 🌀 QUANTUM SPINNER */
+.quantum-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(156, 39, 176, 0.3);
+  border-top: 2px solid #9c27b0;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(3600deg);
+  }
+}
+
+#content-masque {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  /* background: rgba(0, 0, 0, 0.76);
+  backdrop-filter: blur(5px); */
+  display: none; /* Hidden by default */
+}
+
+#stitch-card-container .collapsible-body {
+  padding: 0 8px 0px 8px;
+}
+.nexus-detail-container {
+  cursor: pointer;
+}
+pre.debugger-info {
+  padding: 10px;
+  position: relative;
+}
+
+.nightMode .toast {
+  background-color: #eee;
+  color: #ce93d8;
+  -webkit-box-shadow: 0px -8px 32px 13px rgba(0, 0, 0, 0.56);
+  -moz-box-shadow: 0px -8px 32px 13px rgba(0, 0, 0, 0.56);
+  box-shadow: 0px -8px 32px 13px rgba(0, 0, 0, 0.56);
+}
+/*            COLORS !!! 
+ 🎯 THE PURE HEART COLOR ENGINE - 2026 REINFORCEMENT */
+:root {
+  /* 🕯️ The Legacy Tones (Warmth & Action) */
+  --truth-gold-shine: #e1a14f;
+  --truth-gold: #ffca28;
+  --truth-blue: #2885ff;
+  --truth-blue-shine: #4f8ee1;
+  --truth-ember: #ff8f00;
+  --truth-blue-glow: rgba(0, 140, 255, 0.59);
+  --truth-glow: rgba(255, 143, 0, 0.59);
+  --truth-focus-glow: rgba(255, 202, 40, 0.4);
+  --truth-lavender: #b39ddb;
+  --truth-lavender-glow: #d1c4e9;
+  --truth-deep-space: #311b92;
+  --truth-pulse: rgba(179, 157, 219, 0.3);
+  --blue-gem: #9fe8ff;
+
+  /* 🛰️ The Lavender Set (Perspective & Resonance) */
+  --sentinel-lavender: #b39ddb; /* Primary UI logic */
+  --sentinel-lavender-glow: #d1c4e9; /* Highlights & Scans */
+  --sentinel-deep-space: #311b92; /* The 2026 Background Depth */
+  --sentinel-pulse: rgba(179, 157, 219, 0.3);
+
+  /* 🧪 Mixed Resonance */
+  --truth-meridian: #7e57c2; /* The bridge between Blue and Lavender */
+  --horizon-cyan: #00e5ff; /* The /find active scan color */
+}
+
+.datepicker-modal.open {
+  height: inherit;
+}
+
+.modal .modal-content {
+  display: flex;
+  flex-direction: inherit;
+  border-radius: inherit;
+  margin: inherit;
+  padding: inherit;
+  min-width: inherit;
+  height: inherit; /* Adjust as needed */
+}
+.modal button {
+  border-radius: inherit;
+  border: none;
+  margin: 0 3px;
+  padding: 2px 3px;
+}
+.action-bar {
+  display: flex;
+}
+.action-bar ul {
+  width: 100%;
+}
+.modal-footer {
+  background-color: rgba(128, 128, 128, 0.5);
+}
+.modal-footer ul.tab-buttons button,
+.action-bar ul.tab-buttons button {
+  background-color: inherit;
+  border: 1px solid rgba(255, 202, 40, 0.05) !important;
+  border-radius: 5px;
+}
+.modal-footer ul.tab-buttons button:hover,
+.action-bar ul.tab-buttons button:hover {
+  border: 1px solid rgba(128, 128, 128, 0.5) !important;
+  background-color: inherit;
+}
+.modal-footer ul.tab-buttons li,
+.action-bar ul.tab-buttons li {
+  margin: 0 1em;
+}
+
+/* 🎨 Style the native picker for the Dark/LCARS aesthetic */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1); /* Makes the calendar icon white */
+  cursor: pointer;
+}
+.card-action button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin: 0;
+  padding: 3em 1em;
+}
+.card-action button i {
+  padding-right: 5px;
+}
+.card-action button:hover {
+  background-color: #252525a9;
+}
+
+#modal-importer {
+  top: 0 !important;
+  height: 100% !important;
+}
+/* Add this to your main CSS file */
+.mb-modal-fixed {
+  flex-direction: column;
+  height: 80% !important; /* Fixed height */
+  overflow: hidden !important; /* Disable modal's native scroll */
+}
+#deck-container.mb-modal-fixed {
+  height: 100% !important; /* Fixed height */
+}
+.mb-modal-fixed .open {
+  display: flex !important;
+  top: 0 !important;
+  height: 100% !important;
+}
+
+.mb-modal-fixed .modal-header {
+  flex: 0 0 auto; /* Don't grow, don't shrink */
+  padding: 20px;
+  z-index: 10001;
+}
+
+.mb-modal-fixed .modal-content {
+  flex: 1 1 auto; /* Take up all remaining space */
+  overflow-y: auto !important; /* Only this part scrolls */
+  padding: 20px !important;
+  width: 100%;
+}
+
+.mb-modal-fixed .modal-footer {
+  flex: 0 0 auto; /* Don't grow, don't shrink */
+  position: relative !important; /* Override Materialize absolute positioning */
+  border-top: 1px solid #ddd;
+  background: #fff;
+  height: auto !important;
+}
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 768px) {
+  .card-action button {
+    display: flex;
+    flex-direction: row;
+    margin: 0;
+    padding: 1em;
+  }
+  .toolbar-actions {
+    margin: 0 9px 5px 9px;
+  }
+  #terminal-container {
+    text-align: left;
+  }
+  #chronos-module input {
+    max-width: 125px;
+  }
+  .toolbar-actions {
+    display: flex;
+    width: 100%;
+  }
+  .toolbar-actions {
+    width: auto;
+    display: flex;
+  }
+  .tab-content {
+    min-height: 150px;
+  }
+}
+
+.field-toolbar .toolbar-date-input {
+  width: 100%;
+}
+.nightMode .field-toolbar input[type="range"]::-moz-range-thumb {
+  background: #62b2f9;
+}
+/* 🏢 THE CHRONOS MODULE BASE */
+.nightMode .field-toolbar input {
+  border: 2px solid var(--truth-blue-glow) !important;
+  border-top: 2px solid var(--truth-blue-shine) !important;
+  box-shadow: 0 2px 10px var(--truth-blue-glow) !important;
+  background: rgba(0, 0, 0, 0.4) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 15px;
+}
+/* 🚀 THE ACTIVE FOCUS (Engagement Mode) */
+.field-toolbar input:focus,
+.nightMode .stitch.app textarea:focus {
+  border: 2px solid var(--truth-glow) !important;
+  border-top: 2px solid var(--truth-gold) !important;
+  box-shadow: 0 0 25px var(--truth-focus-glow) !important;
+  background: rgba(
+    255,
+    202,
+    40,
+    0.05
+  ) !important; /* Subtle internal amber wash */
+  /* border-radius: 50%; */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.field-toolbar .toolbar-date-input:focus {
+  padding-left: 15px;
+  width: 125px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.field-toolbar input[type="range"] {
+  border: 2px solid var(--truth-glow) !important;
+  border-top: 2px solid var(--truth-gold-shine) !important;
+  box-shadow: 0 2px 10px var(--truth-glow) !important;
+  background: rgba(0, 0, 0, 0.4) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.field-toolbar input[type="range"]:focus {
+  border: 2px solid var(--truth-glow) !important;
+  border-top: 2px solid var(--truth-gold) !important;
+  box-shadow: 0 0 25px var(--truth-focus-glow) !important;
+  border-radius: 50%;
+}
+/* ⚓ THE SLIDER TRACK & THUMB */
+.field-toolbar input[type="range"] {
+  accent-color: var(--truth-gold);
+}
+
+/* 🛡️ OPTIONAL: TEXTAREA ENHANCEMENT */
+.nightMode .stitch.app textarea:focus {
+  border-left: 2px solid var(--truth-ember) !important;
+  border-right: 2px solid var(--truth-ember) !important;
+}
+#nexus-layer-modal {
+  height: 100%;
+  width: 100%;
+  max-height: 100%;
+  background-color: rgba(0, 0, 0, 0);
+  z-index: 1003;
+  opacity: 1;
+  top: 0% !important;
+  transform: scaleX(1) scaleY(1);
+  bottom: 5em;
+}
+.modal-header .modal-close {
+  right: 0;
+}
+.nightMode #nexus-custom-window .modal-header .modal-close:hover {
+  color: #eee !important;
+}
+.nightMode #nexus-layer-modal .modal-content {
+  position: relative;
+  background: linear-gradient(135deg, #101317, #262a37, #101b26);
+  background-color: rgba(0, 0, 0, 0);
+  border: 1px solid #7244f2;
+  border-radius: 0px;
+  color: #caf0f8;
+  box-shadow:
+    0 0 40px rgba(72, 202, 228, 0.5),
+    0 0 80px rgba(0, 119, 182, 0.3);
+}
+#nexus-layer-modal .modal-content {
+  top: 0;
+  height: calc(100% - 8em);
+  padding: 0;
+  margin: 0;
+  width: 95%;
+}
+#nexus-layer-modal .modal .modal-content {
+  position: absolute;
+  height: calc(100% - 146px);
+  max-height: 100%;
+  overflow-y: auto;
+}
+#inline-stitch-stage .card-content {
+  padding: 24px;
+  border-radius: 0 0 2px 2px;
+}
+/* 🧬 The Stage Container */
+#inline-stitch-stage {
+  visibility: hidden;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  /* ⚡ 0.3s with a 'back-out' effect for that mechanical snap */
+  transition:
+    max-height 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1),
+    opacity 0.2s ease-out,
+    transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+  transform: translateY(30px) scale(0.98);
+  transform-origin: bottom center;
+  border-radius: 10px;
+  margin-top: 1em;
+}
+body.stitch-form-overlay {
+  /* Lock the body scroll location */
+  overflow-y: hidden;
+}
+body.stitch-form-overlay #terminal-container {
+  /* top: 0; 
+  z-index: 1015;
+  position: relative; */
+}
+body.stitch-form-overlay #inline-stitch-stage {
+  visibility: visible;
+  max-height: 90vh;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  margin-bottom: 2rem;
+}
+body.stitch-form-overlay #terminal-container .card-inner-bevel {
+  /* border: none; */
+}
+
+#nexus-layer-content {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.modal .modal-header {
+  width: 100%;
+  padding: 20px 10px 0;
+  text-align: right;
+  border-bottom: 2px solid #00ccff;
+  border-bottom: 1px solid #0077b6;
+  flex-shrink: 0;
+}
+.modal.modal-fixed-footer .modal-footer {
+  height: 75px;
+}
+@media only screen and (min-width: 768px) {
+  .modal .modal-header {
+    padding: 20px 20px 0;
+  }
+  .modal-header .modal-close {
+    top: 0;
+    right: 10px;
+  }
+}
+#modal-back-btn button {
+  height: 50px;
+}
+/* 🛡️ THE TOAST REPELLENT */
+#toast-container {
+  pointer-events: none; /* 🎯 THE SILVER BULLET: Clicks pass THROUGH the container */
+}
+
+.modal-overlay {
+  pointer-events: none !important; /* Clicks pass right through the dark mask */
+}
+
+#nexus-layer-modal {
+  pointer-events: auto !important; /* Re-enable clicks for the modal itself */
+}
+
+#new-stitch-form-container {
+  z-index: 2100 !important; /* Ensure this is HIGHER than the modal (1003) */
+  pointer-events: auto !important;
+}
+.new-stitch-form-dropdown-trigger {
+  color: black;
+}
+.nightMode .new-stitch-form-dropdown-trigger {
+  color: white;
+}
+#nexus-masque-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.767);
+  z-index: 1000;
+}
+.nightMode #nexus-masque-overlay {
+  background: #000000c4;
+  backdrop-filter: blur(3px);
+}
+
+.nightMode #nexus-custom-window {
+  background: #0a090fc2;
+  backdrop-filter: blur(3px);
+}
+
+#nexus-custom-window {
+  display: none;
+  position: fixed;
+  top: 75px;
+  left: 10%;
+  width: 80%;
+  height: calc(100% - 140px);
+  background: #1a1a1a;
+  border: 1px solid #444;
+  z-index: 1001;
+  flex-direction: column;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 1);
+}
+.nightMode .btn-large,
+.nightMode .btn-small,
+.btn-large,
+.btn-small {
+  background-color: #1d2d3e87 !important;
+  color: #cac9c9 !important;
+}
+.fixed-action-btn {
+  right: 10px;
+  z-index: 80;
+}
+body.desktop-cli-active #ascension-btn {
+  bottom: 17em;
+}
+
+#ascension-btn {
+  bottom: 150px;
+  z-index: 101;
+}
+#terminal-toggle-btn {
+  bottom: 5em;
+}
+#terminal-toggle-btn a {
+  background-color: #000000c4 !important;
+}
+.custom-window-header h4 {
+  font-size: 28px;
+  margin: 2px 0;
+}
+.custom-window-header {
+  padding: 20px;
+  border-bottom: 1px dashed #333;
+  flex: 0 0 auto;
+}
+
+.custom-window-body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 20px;
+  height: calc(100% - 10em);
+  overflow-y: auto;
+}
+
+.custom-window-footer {
+  padding: 0 15px;
+  border-top: 1px solid #333;
+  flex: 0 0 auto;
+  text-align: right;
+}
+
+.positronic-matrix-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 10, 10, 0.9); /* Deep Space Black */
+  backdrop-filter: blur(15px);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.active-viewport {
+  z-index: 10000 !important;
+}
+
+.sync-text {
+  font-family: "Monospace", monospace;
+  color: #ba68c8; /* Soft Purple */
+  font-size: 0.8rem;
+  letter-spacing: 4px;
+  margin-bottom: 10px;
+  text-shadow: 0 0 10px rgba(186, 104, 200, 0.8);
+  animation: flicker 0.1s infinite secondary;
+}
+
+/* ⚡ The "Data Stream" progress bar */
+.progress-bar-container {
+  width: 100%;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  width: 0%;
+  height: 100%;
+  background: #ff4081; /* Pink Action Color! */
+  box-shadow: 0 0 10px #ff4081;
+}
+
+@keyframes flicker {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.switch label input[type="checkbox"]:checked + .lever {
+  /* background-color: var(--truth-focus-glow); */
+  background-color: #4a148c;
+}
+
+.switch label input[type="checkbox"]:checked + .lever:after {
+  /* background-color: var(--truth-gold); */
+  background-color: #7b1fa2;
+}
+
+.switch label .lever {
+  background-color: #00acc1; /* Cyan accent-4 */
+}
+
+.switch label .lever:after {
+  background-color: #00e5ff;
+}
+
+/* The base labels */
+.mode-label {
+  font-family: "Monospace", monospace;
+  font-size: 0.7rem;
+  color: #bd8446; /* Dimmed by default */
+  transition: all 0.3s ease;
+}
+
+/* The Active Glows */
+.mode-label.active-history {
+  color: #c29a2d !important; /* Your gold color */
+  text-shadow: 0 0 8px rgba(194, 154, 45, 0.6);
+}
+
+.mode-label.active-discovery {
+  color: #00e5ff !important; /* Cyan */
+  text-shadow: 0 0 8px rgba(0, 229, 255, 0.6);
+}
+
+/* The Text Label Below */
+.action-label {
+  margin-top: 6px;
+  font-family: "Monospace", monospace;
+  font-size: 0.6rem;
+  font-weight: 800;
+  color: #9e9e9e; /* Grey-text */
+  letter-spacing: 1px;
+  text-align: center;
+  pointer-events: none; /* Clicking label doesn't interfere */
+  display: none;
+}
+
+/* The Circular Button */
+.btn-round-action,
+.modal .btn-round-action {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(106, 27, 154, 0.3); /* Soft purple glow */
+  transition: all 0.2s ease;
+  padding: 5px;
+}
+
+.tab-buttons button {
+  display: block;
+}
+.tab-buttons button label {
+  display: none;
+}
+
+@media only screen and (min-width: 900px) {
+  .tab-buttons button label {
+    display: block;
+  }
+
+  .dimension-toggle-container {
+    display: block;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.21);
+    border-radius: 25px;
+    margin: 0 auto;
+    width: 34%;
+  }
+  .custom-window-body {
+    height: calc(100% - 7em);
+  }
+}
+
+.btn-round-action:hover {
+  box-shadow: 0 0 15px rgba(106, 27, 154, 0.6);
+  transform: translateY(-1px);
+}
+
+/* The Icon inside */
+.btn-round-action i {
+  font-size: 1.4rem;
+  color: #fff;
+}
+
+.action-badge {
+  position: absolute;
+  top: -5px; /* Adjust to sit on the edge */
+  right: -8px;
+  background-color: #ff4081; /* Pink/Red 'Alert' color */
+  color: white;
+  font-family: "Monospace", monospace;
+  font-size: 0.65rem;
+  font-weight: 900;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #1a1a1a; /* Matches your background to 'cut' the shape */
+  box-shadow: 0 0 5px rgba(255, 64, 129, 0.5);
+  z-index: 5;
+  pointer-events: none;
+}
+@keyframes badgePop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.4);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.pulse-once {
+  animation: badgePop 0.3s ease-out;
+}
+
+.nexus-chip {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(106, 27, 154, 0.1); /* Very faint purple */
+  border: 1px solid rgba(142, 36, 170, 0.4);
+  border-radius: 16px;
+  padding: 4px 12px;
+  margin: 5px;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nexus-chip:hover {
+  background: rgba(142, 36, 170, 0.3);
+  border-color: #ba68c8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(106, 27, 154, 0.4);
+}
+
+.nexus-chip .count {
+  background: #ff4081; /* Our pink action color! */
+  color: white;
+  font-size: 0.6rem;
+  font-weight: 900;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px;
+}
+.nexus-overlay-actions {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.nexus-overlay-actions button {
+  /* 🕯️ The Ghost Red Aesthetic */
+  background-color: rgba(229, 115, 115, 0.1) !important;
+  color: #ef9a9a !important;
+  border: 1px solid rgba(229, 115, 115, 0.4);
+  backdrop-filter: blur(8px); /* Deeper blur for a more premium feel */
+
+  /* 📐 Layout */
+  padding: 12px 24px;
+  font-family: "Monaco", "Consolas", monospace;
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+}
+
+.btn-exit-field:hover {
+  background-color: rgba(229, 115, 115, 0.3) !important;
+  border-color: #e57373;
+  color: #fff !important;
+  box-shadow: 0 0 20px rgba(229, 115, 115, 0.4);
+  transform: translateY(-2px); /* Physical "clicky" feel */
+}
+
+.btn-exit-field:active {
+  transform: translateY(1px); /* Pressed state */
+}
+
+#positronic-matrix-view,
+.subtle-scanning-line-effect {
+  background: radial-gradient(
+    circle at center,
+    #140b2e 0%,
+    #050505 100%
+  ) !important;
+  /* Adding a subtle scanning line effect for that HUD feel */
+  background-image:
+    linear-gradient(rgba(16, 16, 18, 0.37) 50%, rgba(0, 0, 0, 0.35) 50%),
+    linear-gradient(
+      90deg,
+      rgba(255, 0, 0, 0.03),
+      rgba(0, 255, 0, 0.01),
+      rgba(0, 0, 255, 0.03)
+    ) !important;
+  background-size:
+    100% 4px,
+    3px 100% !important;
+}
+#positronic-matrix-view {
+  width: 100%;
+  height: 600px; /* Or whatever height fits your HUD */
+  background: transparent;
+}
+#horizon-terminal {
+  border-top: 2px solid #b39ddb;
+  margin-top: 50px;
+  position: fixed;
+  width: 100%;
+  bottom: 101px;
+  margin-bottom: 0;
+  border-radius: 25px 25px 0 0;
+}
+
+/* 🧪 The Command Station Stack */
+.bottom-command-deck {
+  width: 100%;
+  padding: 10px 20px;
+  background: rgba(18, 18, 18, 0.9);
+  backdrop-filter: blur(15px);
+  border-top: 2px solid rgba(179, 157, 219, 0.4); /* Lavender Horizon */
+  display: none;
+}
+
+/* 🧬 Space for the form when it opens */
+
+#inline-stitch-stage {
+  background: rgba(0, 0, 0, 0.5);
+  margin-bottom: 1rem; /* Space between form and CLI */
+  overflow-y: auto;
+  display: none;
+}
+body.stitch-form-overlay #inline-stitch-stage {
+  display: block;
+}
+
+body.stitch-form-overlay #inline-stitch-stage {
+  display: block;
+}
+@media only screen and (max-width: 600px) {
+  textarea#newStitchContent {
+    padding: 0;
+  }
+}
+.blink {
+  /* Apply the 'blinker' animation */
+  animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+  /* At 50% of the animation duration, the opacity becomes 0 (hidden) */
+  70% {
+    opacity: 0;
+  }
+}
+
+.prototype {
+  display: none;
+}
+path.leaflet-interactive {
+  filter: drop-shadow(0 0 2px rgba(155, 89, 178, 0.8));
+  transition: stroke-width 0.3s ease;
+}
+/* 🔮 The Sub-Processor Glow */
+.lavender-pulse-glow {
+  position: absolute;
+  top: -50px;
+  left: -50px;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(
+    circle,
+    rgba(179, 157, 219, 0.4) 0%,
+    rgba(179, 157, 219, 0) 70%
+  );
+  filter: blur(20px);
+  animation: sub-processor-drift 10s infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes sub-processor-drift {
+  from {
+    transform: translate(0, 0);
+  }
+  to {
+    transform: translate(400px, 200px);
+  }
+}
+
+/* 🛰️ Refined Lavender Protocol */
+.lavender-text {
+  color: var(--sentinel-lavender) !important;
+  text-shadow: 0 0 10px var(--sentinel-pulse);
+  font-family: "Monaco", "Consolas", monospace;
+  letter-spacing: 0.05em;
+}
+
+.lavender-glow-text {
+  color: var(--sentinel-lavender-glow);
+  filter: drop-shadow(0 0 5px var(--sentinel-lavender));
+}
+
+/* The "Active Trace" for CLI commands */
+.cyan-text {
+  color: var(--horizon-cyan);
+  text-shadow: 0 0 8px rgba(0, 229, 255, 0.4);
+}
+.border-lavender {
+  border: 1px solid rgba(179, 157, 219, 0.5) !important;
+}
+
+.pulse-lavender {
+  animation: pulse-lavender-glow 2s infinite;
+}
+
+@keyframes pulse-lavender-glow {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* 🛰️ The Terminal Scan Animation */
+.help-terminal-container {
+  position: relative;
+  overflow: hidden;
+  animation: terminalFadeIn 0.4s ease-out;
+}
+
+/* The scanning light bar */
+.help-terminal-container::after {
+  content: "";
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 20%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(179, 157, 219, 0.1),
+    transparent
+  );
+  animation: scanLine 3s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes terminalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scanLine {
+  0% {
+    top: -100%;
+  }
+  100% {
+    top: 200%;
+  }
+}
+
+/* ✨ Typewriter effect for headers */
+/* ✨ Refined Typewriter with Auto-Hide Cursor */
+.animated-text {
+  display: inline-block; /* Keeps the border tight to the text */
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 0.15em solid #b39ddb; /* The Cursor */
+  letter-spacing: 0.1em;
+  width: 0;
+  animation:
+    typing 1.5s steps(40, end) forwards,
+    blink-caret 0.75s step-end 2; /* 🔄 Only blinks twice, then stops */
+}
+
+/* This rule hides the cursor (border) after the animation finishes */
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+    border-color: transparent;
+  }
+}
+
+@keyframes blink-caret {
+  from,
+  to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: #b39ddb;
+  }
+}
+
+.modal .close {
+  background-color: rgba(229, 115, 115, 0.1) !important;
+  /* color: #ef9a9a !important; */
+  border: 1px solid rgba(229, 115, 115, 0.4);
+  backdrop-filter: blur(8px);
+}
+.modal .close:hover {
+  background-color: rgba(229, 115, 115, 0.3) !important;
+  border-color: #e57373;
+  color: #fff !important;
+  box-shadow: 0 0 20px rgba(229, 115, 115, 0.4);
+  transform: translateY(-2px);
+}
+#cli-terminal-viewport .quantum-spinner {
+  height: 18px;
+  margin: 0 0 0 5px;
+}
+
+/* ✨ The Chronos Transition */
+.stitch-wrapper {
+  transition:
+    opacity 0.6s ease,
+    filter 0.6s ease,
+    transform 0.6s ease;
+  will-change: opacity, filter;
+}
+
+/* Optional: Give them a slight 'blur' when they are far away */
+.temporal-ghost {
+  filter: grayscale(80%) blur(1px);
+  pointer-events: none; /* Make 'ghost' cards less interactive */
+}
+
+.ellipsis-url {
+  display: block;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 0.9rem;
+  max-width: 480px;
+}
+
+@media only screen and (max-width: 600px) {
+  /* Target the text inside the action buttons */
+  .card-action button.btn-flat {
+    padding: 0 8px !important; /* Tighten the button width */
+    display: block;
+    align-items: center;
+    justify-content: center;
+    font-size: 0; /* Effectively hides the text nodes */
+  }
+
+  /* Keep the icon visible and centered */
+  .card-action button.btn-flat i.material-icons {
+    font-size: 1.5rem !important;
+    margin: 0 !important; /* Remove the 'left' margin since there's no text now */
+  }
+
+  /* Optional: If you want to keep the icon purple/green but lose the bulky text */
+  .card-action {
+    display: flex;
+    justify-content: space-around;
+  }
+}

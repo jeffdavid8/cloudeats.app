@@ -1,0 +1,218 @@
+#tryit-source {
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+.source-view-on #tryit-source {
+    display: flex !important;
+    flex-direction: column;
+    flex: 1 1 0;
+    min-height: 0;
+    height: 100%;
+}
+#tryit-grapejs {
+    display: flex;
+    flex-direction: row;
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 0;
+    width: 100%;
+    height: 100%;
+}
+#gjs-blocks {
+  flex: 0 0 220px;
+  width: 220px;
+  min-width: 120px;
+  max-width: 320px;
+  background: #232323;
+  border-right: 1px solid #333;
+  overflow-y: auto;
+}
+#grapesjs-editor {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+  background: #222;
+}
+.tryit-panel-right {
+  flex: 0 0 320px;
+  width: 320px;
+  min-width: 220px;
+  max-width: 400px;
+  background: #232323;
+  border-left: 1px solid #333;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  height: 100%;
+  overflow: hidden;
+}
+#gjs-style-manager {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  overflow-y: auto;
+  height: 100%;
+  padding: 0.5rem 0.5rem 0 0.5rem;
+  width: 100%;
+}
+/* tryitEditor main CSS */
+#tryitEditor-root {
+    font-family: Arial, sans-serif;
+    padding: 2rem;
+}
+
+.tryit-editor-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+.tryit-toolbar {
+    flex: 0 0 auto;
+    padding: 0.5rem 1rem;
+    background: #222;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.tryit-toolbar-btn {
+    background: #333;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 0.3rem 1.1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-right: 0.5rem;
+    transition: background 0.2s;
+}
+.tryit-toolbar-btn.active, .tryit-toolbar-btn:hover {
+    background: #444;
+}
+.tryit-main-layout {
+    display: flex;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+.tryit-panel {
+    width: 48px;
+    background: #333;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 1rem;
+    position: relative;
+}
+.tryit-panel-left {
+    width: 260px;
+    min-width: 48px;
+    max-width: 400px;
+    background: #222;
+    padding: 0;
+    align-items: stretch;
+    overflow: visible;
+}
+#grapesjs-editor {
+    width: 100%;
+    height: 100%;
+    min-height: 300px;
+    background: #222;
+    border: none;
+    flex: 1 1 auto;
+}
+.tryit-full {
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: row;
+    min-width: 0;
+    min-height: 0;
+    width: 100%;
+    height: 100%;
+    min-height: 220px;
+}
+.tryit-editors {
+    display: flex;
+    flex: 1 1 0;
+    min-height: 0;
+    min-width: 0;
+    height: 100%;
+}
+.tryit-editor-pane {
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 0;
+    height: 100%;
+    border-right: 1px solid #222;
+    background: #1e1e1e;
+}
+.tryit-editor-pane:last-child {
+    border-right: none;
+}
+.tryit-resizer {
+    width: 6px;
+    background: #444;
+    cursor: col-resize;
+    position: relative;
+    z-index: 2;
+    transition: background 0.2s;
+}
+.tryit-resizer:hover, .tryit-resizing .tryit-resizer {
+    background: #666;
+}
+.tryit-panel.collapsed {
+    width: 0 !important;
+    min-width: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    border: none !important;
+}
+.tryit-panel.collapsed .tryit-panel-toggle {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 10;
+}
+body.tryit-resizing {
+    cursor: col-resize !important;
+    user-select: none;
+}
+.tryit-preview {
+    flex: 0 0 200px;
+    background: #222;
+    border-top: 1px solid #444;
+    padding: 0;
+}
+.tryit-panel-toggle {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    margin-bottom: 1rem;
+}
+/* Source view toggle logic */
+.source-view-on #tryit-grapejs {
+    display: none !important;
+}
+.source-view-off #tryit-grapejs {
+    display: flex !important;
+}
+.source-view-off #tryit-source {
+    display: none !important;
+}
+
+/* Adjustments for GrapesJS fields */
+.gjs-field-arrows {
+  right: calc(var(--gjs-input-padding) - 10px);
+}
+.gjs-field-units {
+  width: calc(50% - 10px);
+}

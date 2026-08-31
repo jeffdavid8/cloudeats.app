@@ -1,0 +1,46 @@
+{
+    "2026-06-03": {
+        "date": "2026-06-03",
+        "total_visits": 3449,
+        "unique_visitors": [
+            "172.18.0.xxx"
+        ],
+        "pages": {
+            "home": 3370,
+            "neighborhub": 19,
+            "admin": 58,
+            "stitch": 2
+        },
+        "browsers": {
+            "Firefox": 3443,
+            "Other": 4,
+            "IE": 2
+        },
+        "devices": {
+            "Desktop": 3449
+        },
+        "authenticated_visits": 3440,
+        "anonymous_visits": 9
+    },
+    "2026-06-04": {
+        "date": "2026-06-04",
+        "total_visits": 17,
+        "unique_visitors": [
+            "172.18.0.xxx"
+        ],
+        "pages": {
+            "home": 14,
+            "admin": 1,
+            "stitch": 1,
+            "neighborhub": 1
+        },
+        "browsers": {
+            "Firefox": 17
+        },
+        "devices": {
+            "Desktop": 17
+        },
+        "authenticated_visits": 17,
+        "anonymous_visits": 0
+    }
+}

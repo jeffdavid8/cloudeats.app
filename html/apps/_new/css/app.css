@@ -1,0 +1,31 @@
+
+.nightMode .panel {
+   background-color: rgb(50, 49, 56);
+}
+.nightMode .panel .card.preview {
+   background-color: inherit;
+}
+#editor {
+   padding: 1em 0;
+}
+.nightMode #editor textarea {
+   background-color:rgb(210, 207, 224);
+}
+#editor textarea {
+   font-size: 1.2em;
+   height: 2rem;
+   resize: none;
+   -webkit-transition: all .7s; /* Safari */
+   transition: all .4s;
+}
+#editor.focus textarea {
+   height: 6rem;
+   resize: vertical;
+   padding-top: 8px;
+}
+#editor .toolbar {
+   display: none;
+}
+#editor.focus .toolbar {
+   display: block;
+}

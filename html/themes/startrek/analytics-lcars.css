@@ -1,0 +1,339 @@
+/* Star Trek LCARS Theme - Analytics Dashboard */
+
+/* LCARS Analytics Cards */
+.analytics-card.lcars-theme {
+    background: linear-gradient(135deg, rgba(0, 8, 20, 0.95) 0%, rgba(20, 20, 40, 0.95) 100%);
+    border: 3px solid var(--lcars-orange);
+    border-radius: 20px 0 20px 0;
+    box-shadow: 
+        0 0 20px rgba(255, 153, 0, 0.3),
+        inset 0 0 30px rgba(255, 153, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.analytics-card.lcars-theme::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 153, 0, 0.2), 
+        transparent);
+    animation: lcars-scan 3s infinite;
+}
+
+@keyframes lcars-scan {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+.analytics-card.lcars-theme:hover {
+    border-color: var(--lcars-blue);
+    box-shadow: 
+        0 0 30px rgba(153, 153, 255, 0.5),
+        inset 0 0 40px rgba(153, 153, 255, 0.2);
+    transform: translateY(-2px) scale(1.01);
+}
+
+/* LCARS Stat Icons */
+.analytics-card.lcars-theme .stat-icon {
+    text-shadow: 0 0 15px currentColor;
+    animation: lcars-pulse 2s infinite alternate;
+}
+
+@keyframes lcars-pulse {
+    0% { opacity: 0.8; }
+    100% { opacity: 1; }
+}
+
+/* LCARS Stat Numbers */
+.analytics-card.lcars-theme .stat-number {
+    font-family: 'Orbitron', 'Antonio', monospace;
+    text-shadow: 0 0 10px currentColor;
+    letter-spacing: 2px;
+}
+
+/* LCARS Corner Brackets */
+.analytics-card.lcars-theme::after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    width: 30px;
+    height: 30px;
+    border-right: 3px solid var(--lcars-orange);
+    border-bottom: 3px solid var(--lcars-orange);
+    border-radius: 0 0 10px 0;
+}
+
+/* Real-time Active Users - Special LCARS Treatment */
+.analytics-card.lcars-theme.active-users {
+    border-color: var(--lcars-green);
+    animation: lcars-active-pulse 1.5s infinite;
+}
+
+@keyframes lcars-active-pulse {
+    0%, 100% { 
+        box-shadow: 
+            0 0 20px rgba(0, 255, 0, 0.4),
+            inset 0 0 30px rgba(0, 255, 0, 0.15);
+    }
+    50% { 
+        box-shadow: 
+            0 0 30px rgba(0, 255, 0, 0.6),
+            inset 0 0 40px rgba(0, 255, 0, 0.25);
+    }
+}
+
+/* Error Card - Red Alert Style */
+.analytics-card.lcars-theme.error-card {
+    border-color: var(--lcars-red);
+    animation: lcars-alert 2s infinite;
+}
+
+@keyframes lcars-alert {
+    0%, 100% { 
+        box-shadow: 
+            0 0 20px rgba(255, 102, 0, 0.4),
+            inset 0 0 30px rgba(255, 102, 0, 0.15);
+    }
+    50% { 
+        box-shadow: 
+            0 0 35px rgba(255, 0, 0, 0.7),
+            inset 0 0 40px rgba(255, 0, 0, 0.25);
+    }
+}
+
+/* LCARS Chart Container */
+.chart-container.lcars-theme {
+    background: rgba(0, 8, 20, 0.8);
+    border: 2px solid var(--lcars-blue);
+    border-radius: 15px 0 15px 0;
+    padding: 20px;
+    box-shadow: 
+        0 0 15px rgba(153, 153, 255, 0.3),
+        inset 0 0 20px rgba(153, 153, 255, 0.1);
+}
+
+/* LCARS Page Stats Items */
+.page-stats-item.lcars-theme {
+    border-left: 4px solid var(--lcars-orange);
+    background: linear-gradient(90deg, rgba(255, 153, 0, 0.1) 0%, transparent 50%);
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 0 10px 10px 0;
+    transition: all 0.3s ease;
+}
+
+.page-stats-item.lcars-theme:hover {
+    background: linear-gradient(90deg, rgba(255, 153, 0, 0.2) 0%, rgba(153, 153, 255, 0.1) 100%);
+    border-left-color: var(--lcars-blue);
+    box-shadow: 0 0 15px rgba(153, 153, 255, 0.3);
+}
+
+/* LCARS Progress Bars */
+.progress.lcars-theme {
+    background: rgba(0, 8, 20, 0.6);
+    border: 1px solid var(--lcars-orange);
+    border-radius: 10px;
+    height: 8px;
+    overflow: hidden;
+}
+
+.progress.lcars-theme .determinate {
+    background: linear-gradient(90deg, 
+        var(--lcars-orange) 0%, 
+        var(--lcars-yellow) 50%, 
+        var(--lcars-orange) 100%);
+    box-shadow: 0 0 10px var(--lcars-orange);
+    animation: lcars-progress-glow 2s infinite;
+}
+
+@keyframes lcars-progress-glow {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 1; }
+}
+
+/* LCARS Visitor Log Items */
+.visitor-log-item.lcars-theme {
+    border-left: 3px solid var(--lcars-blue);
+    background: linear-gradient(90deg, 
+        rgba(153, 153, 255, 0.1) 0%, 
+        rgba(0, 8, 20, 0.5) 50%);
+    border-radius: 0 8px 8px 0;
+    margin: 8px 0;
+    padding: 10px 15px;
+    transition: all 0.3s ease;
+}
+
+.visitor-log-item.lcars-theme:hover {
+    border-left-color: var(--lcars-orange);
+    background: linear-gradient(90deg, 
+        rgba(255, 153, 0, 0.15) 0%, 
+        rgba(153, 153, 255, 0.1) 50%);
+    box-shadow: 0 0 12px rgba(255, 153, 0, 0.3);
+}
+
+/* LCARS Period Chips */
+.period-chip.lcars-theme {
+    background: linear-gradient(135deg, rgba(0, 8, 20, 0.9) 0%, rgba(40, 40, 60, 0.9) 100%);
+    border: 2px solid var(--lcars-orange);
+    border-radius: 20px 0 20px 0;
+    color: var(--lcars-orange);
+    padding: 10px 20px;
+    box-shadow: 0 0 10px rgba(255, 153, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.period-chip.lcars-theme:hover {
+    background: linear-gradient(135deg, var(--lcars-orange) 0%, var(--lcars-red) 100%);
+    color: #000;
+    box-shadow: 0 0 20px rgba(255, 153, 0, 0.6);
+    transform: scale(1.05);
+}
+
+.period-chip.lcars-theme.active {
+    background: linear-gradient(135deg, var(--lcars-blue) 0%, var(--lcars-purple) 100%);
+    border-color: var(--lcars-blue);
+    color: #000;
+    box-shadow: 0 0 25px rgba(153, 153, 255, 0.7);
+    font-weight: bold;
+}
+
+/* LCARS Card Titles */
+.card-title.lcars-theme {
+    color: var(--lcars-orange);
+    text-shadow: 0 0 10px var(--lcars-orange);
+    font-family: 'Orbitron', 'Antonio', sans-serif;
+    letter-spacing: 1px;
+    border-bottom: 2px solid var(--lcars-orange);
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+/* LCARS Breadcrumb */
+.admin-breadcrumb.lcars-theme {
+    background: linear-gradient(90deg, rgba(255, 153, 0, 0.2) 0%, rgba(153, 153, 255, 0.2) 100%);
+    border-left: 5px solid var(--lcars-orange);
+    border-radius: 0 15px 15px 0;
+    box-shadow: 0 0 15px rgba(255, 153, 0, 0.3);
+}
+
+.admin-breadcrumb.lcars-theme a {
+    color: var(--lcars-orange);
+    text-shadow: 0 0 5px var(--lcars-orange);
+}
+
+/* LCARS Error Log Container */
+#errorLogContainer.lcars-theme {
+    background: rgba(0, 8, 20, 0.9);
+    border: 2px solid var(--lcars-red);
+    border-radius: 10px;
+    box-shadow: 
+        0 0 15px rgba(255, 102, 0, 0.3),
+        inset 0 0 20px rgba(255, 0, 0, 0.1);
+    font-family: 'Courier New', monospace;
+}
+
+#errorLogContainer.lcars-theme.live-tail {
+    animation: lcars-error-live 1s infinite;
+}
+
+@keyframes lcars-error-live {
+    0%, 100% { border-color: var(--lcars-red); }
+    50% { border-color: var(--lcars-orange); }
+}
+
+/* LCARS Search Query Items */
+.search-query-item.lcars-theme {
+    border-left: 3px solid var(--lcars-purple);
+    background: linear-gradient(90deg, 
+        rgba(204, 153, 204, 0.1) 0%, 
+        transparent 50%);
+    padding: 10px;
+    margin: 6px 0;
+    border-radius: 0 8px 8px 0;
+}
+
+/* LCARS Data Loading Animation */
+@keyframes lcars-data-stream {
+    0% { 
+        background-position: 0% 50%;
+        opacity: 0.8;
+    }
+    50% { 
+        background-position: 100% 50%;
+        opacity: 1;
+    }
+    100% { 
+        background-position: 0% 50%;
+        opacity: 0.8;
+    }
+}
+
+.lcars-loading {
+    background: linear-gradient(90deg, 
+        var(--lcars-orange) 0%, 
+        var(--lcars-blue) 25%, 
+        var(--lcars-red) 50%, 
+        var(--lcars-purple) 75%, 
+        var(--lcars-orange) 100%);
+    background-size: 200% 100%;
+    animation: lcars-data-stream 2s infinite;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* LCARS Screen Effect */
+.lcars-screen-effect {
+    position: relative;
+}
+
+.lcars-screen-effect::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(255, 153, 0, 0.03) 0px,
+        transparent 2px,
+        transparent 4px
+    );
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* LCARS Panel Headers with Elbows */
+.lcars-panel-header {
+    position: relative;
+    padding: 15px 20px;
+    background: linear-gradient(90deg, 
+        var(--lcars-orange) 0%, 
+        var(--lcars-orange) 20px, 
+        rgba(0, 8, 20, 0.8) 20px);
+    border-radius: 20px 0 0 0;
+    color: #000;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.lcars-panel-header::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 100px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        var(--lcars-blue) 100%);
+    border-radius: 0 20px 0 0;
+}

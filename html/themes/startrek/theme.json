@@ -1,0 +1,38 @@
+{
+    "name": "Star Trek LCARS Theme",
+    "description": "Futuristic interface inspired by Star Trek's LCARS (Library Computer Access and Retrieval System). Features sleek panels, glowing elements, and a sci-fi aesthetic.",
+    "author": "MediaBrain Development Team",
+    "version": "1.0",
+    "category": "Futuristic",
+    "preview_image": "preview.png",
+    "css_files": [
+        "lcars-base.css",
+        "dashboard.css",
+        "components.css",
+        "animations.css"
+    ],
+    "js_files": [
+        "theme.js",
+        "lcars-effects.js"
+    ],
+    "variables": {
+        "primary_color": "#FF9900",
+        "secondary_color": "#9999FF",
+        "accent_color": "#FF6600",
+        "background_color": "#000000",
+        "text_color": "#FFFFFF",
+        "panel_color": "#1a1a1a",
+        "glow_color": "#FF9900",
+        "alert_color": "#FF0000",
+        "success_color": "#00FF00"
+    },
+    "features": [
+        "LCARS-inspired interface",
+        "Glowing panels and buttons",
+        "Animated transitions",
+        "Sci-fi sound effects",
+        "Futuristic typography",
+        "Holographic elements",
+        "Dark space theme"
+    ]
+}

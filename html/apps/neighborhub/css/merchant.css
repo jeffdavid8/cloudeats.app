@@ -1,0 +1,393 @@
+html,
+body {
+  margin: 0;
+  width: 100%;
+}
+/*
+header.header {
+  display: none;
+}
+*/
+.nh-role-header {
+  height: 3rem;
+}
+
+.merchant-logo-container {
+  position: fixed;
+  text-align: center;
+  width: 150px;
+  margin: 0 auto;
+  right: calc(50% - 75px);
+  top: -15px;
+}
+
+@media only screen and (min-width: 992px) {
+  .nh-role-header {
+    height: 6rem;
+  }
+}
+
+body.nightMode {
+  background: #000000;
+}
+
+body.nightMode .nh-role-header {
+  background: #231820d9;
+  backdrop-filter: blur(8px);
+}
+
+body.scrolled .pk-hero-banner {
+  height: 80vh;
+  padding-top: 10rem;
+  padding-bottom: 5rem;
+}
+
+body {
+  padding-top: 4rem;
+}
+
+body.scrolled {
+  padding-top: 6rem;
+}
+
+body .nh-role-header {
+  border-bottom: 2px solid var(--border-color);
+  padding: var(--space-6) 0;
+  position: sticky;
+  top: 4rem;
+  height: 6rem;
+  z-index: var(--z-sticky);
+  box-shadow: var(--shadow-sm);
+  transition:
+    background-color var(--transition-base),
+    border-color var(--transition-base);
+}
+
+header.header {
+  z-index: 997;
+  border-bottom: none;
+}
+
+header.header nav {
+  height: 65px;
+  transition: all 0.3s;
+  box-shadow: none;
+  /* border-bottom: 4px solid var(--brand-nav-border); */
+  border-bottom: none;
+}
+
+body.scrolled header.header {
+  top: 0;
+  border-bottom: 2px solid #dd3731;
+}
+
+body.scrolled header.header nav {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+.merchant-header-image .online-status-dot {
+  bottom: 3px;
+  right: 0px;
+  width: 20px;
+  height: 20px;
+  outline-width: 3px;
+}
+body.scrolled .merchant-header-image .online-status-dot {
+  /* top: 60px; */
+  bottom: 3px;
+  right: 0px;
+  width: 20px;
+  height: 20px;
+  outline-width: 3px;
+}
+
+/* Floating Branding Logo */
+.merchant-header-image {
+  position: fixed;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  z-index: 999;
+  top: 2px;
+  width: 100px;
+  right: calc(50% - 50px);
+}
+
+.merchant-header-image img {
+  margin: 0 auto;
+  border: 4px solid var(--brand-gold);
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  transition: all 0.4s;
+}
+
+body.scrolled .merchant-header-image {
+}
+
+body.scrolled .merchant-header-image img {
+}
+
+.action_menu .btn:hover,
+.top-right-dropdown-wrapper .btn:hover,
+.action_menu .btn-large:hover,
+.top-right-dropdown-wrapper .btn-large:hover,
+.action_menu .btn-small:hover,
+.top-right-dropdown-wrapper .btn-small:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+/* 🍳 INDUSTRY-GRADE RESPONSIVE KITCHEN SYSTEM GRAPHICS (KDS) */
+body.kds-fullscreen-mode {
+  background: #121212 !important;
+  color: #ffffff !important;
+  padding: 10px !important;
+  overflow-x: hidden;
+}
+
+body.kds-fullscreen-mode header.nh-role-header,
+body.kds-fullscreen-mode .nh-staff-team,
+body.kds-fullscreen-mode .nh-storefront-parameters,
+body.kds-fullscreen-mode .top-right-dropdown-wrapper {
+  display: none !important;
+}
+
+/* Strip wrappers so layout spans edge-to-edge on any viewport */
+body.kds-fullscreen-mode .nh-wrapper,
+body.kds-fullscreen-mode main.nh-main,
+body.kds-fullscreen-mode .nh-container {
+  max-width: 100% !important;
+  width: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Core Fulfillment Lanes Layout */
+body.kds-fullscreen-mode .nh-pending-queue {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* 📱 MOBILE & PORTRAIT FIRST (1 Column) */
+body.kds-fullscreen-mode [data-orders-list] {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 1rem !important;
+  align-items: start;
+}
+
+.nh-container {
+  max-width: initial;
+}
+
+/* 🖥️ LANDSCAPE & LARGE MONITORS (Dynamic Auto-Fit Columns) */
+@media only screen and (min-width: 601px) {
+  body.kds-fullscreen-mode [data-orders-list] {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
+  }
+}
+
+/* Extra large screens can hold up to 4-5 tickets across natively */
+@media only screen and (min-width: 1200px) {
+  body.kds-fullscreen-mode [data-orders-list] {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)) !important;
+  }
+}
+
+/* Card Elements */
+body.kds-fullscreen-mode .nh-card {
+  background: #1e1e1e !important;
+  border: 2px solid #333 !important;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.28) !important;
+  margin: 0 !important;
+  /* Overrides default Materialize card spacing */
+}
+
+body.kds-fullscreen-mode .nh-order-number {
+  /* font-size: 1.75rem !important; */
+  font-weight: 900 !important;
+  color: #ffb300 !important;
+}
+
+/* Vertical Stack Fix for Item Options */
+body.kds-fullscreen-mode .nh-order-item,
+.nh-order-item {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 0.5rem 0 !important;
+  cursor: pointer;
+  border-bottom: 1px dashed #333;
+}
+
+.nh-order-item-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  font-size: 1.1rem !important;
+  font-weight: 700 !important;
+}
+
+body.kds-fullscreen-mode .kds-item-modifiers {
+  display: block !important;
+  width: 100%;
+  font-size: 0.95rem !important;
+  font-weight: 600 !important;
+  color: #ffca28 !important;
+  padding-left: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+body.kds-fullscreen-mode .nh-order-item.kds-item-done {
+  text-decoration: line-through;
+  opacity: 0.25;
+}
+
+body.kds-fullscreen-mode .kds-minor-detail {
+  display: none !important;
+}
+
+body.kds-fullscreen-mode .nh-order-detail-label {
+  font-size: 0.8rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+body.kds-fullscreen-mode .nh-order-detail-value {
+  font-size: 0.95rem !important;
+}
+
+body.kds-fullscreen-mode .kds-ticket-meta {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+body.kds-fullscreen-mode .kds-channel-badge,
+body.kds-fullscreen-mode .kds-timer-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+body.kds-fullscreen-mode .kds-channel-delivery {
+  background: #7c3aed;
+  color: #fff;
+}
+
+body.kds-fullscreen-mode .kds-channel-pickup {
+  background: #0f766e;
+  color: #fff;
+}
+
+/* Merchant Online Indicator UI Toggle */
+.kds-store-status-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1rem;
+  border: 0;
+  border-radius: 999px;
+  color: #fff;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  margin-left: 1rem;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.kds-store-status-btn.is-online {
+  background: #16a34a;
+  animation: pulseOnline 1.6s ease-in-out infinite;
+}
+
+.kds-store-status-btn.is-offline {
+  background: #dc2626;
+}
+
+.kds-store-status-btn .kds-status-dot {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  background: currentColor;
+  display: inline-block;
+}
+
+.kds-store-status-btn.is-offline .kds-status-dot {
+  animation: blinkOffline 1s steps(2, start) infinite;
+}
+
+.order-card .item-highlight {
+  background-color: #fff9c4 !important;
+  /* Soft Materialize Yellow */
+  color: #000 !important;
+  font-weight: bold;
+  transition: background-color 0.1s ease;
+}
+
+.nh-badge.badge-pending_confirmation {
+  /* Creates a soft, multi-layered dark glow directly behind the text */
+  text-shadow:
+    0 0 30px rgba(0, 0, 0, 0.8),
+    0 0 4px rgba(0, 0, 0, 0.9);
+
+  /* Optional: Ensures the text stands out cleanly against the dark glow */
+  color: #ffffff;
+}
+
+/* Helper alignment rules for the dropdown */
+#store-status-dropdown {
+  min-width: 160px !important;
+  border-radius: 4px;
+}
+
+#store-status-dropdown li > a {
+  display: flex;
+  align-items: center;
+  font-size: 0.95rem;
+  padding: 14px 16px;
+}
+
+/* Indicators in dropdown options */
+.status-dot-indicator {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.status-dot-indicator.online {
+  background-color: #4caf50;
+  /* Emerald green */
+}
+
+.status-dot-indicator.offline {
+  background-color: #f44336;
+  /* Crimson red */
+}
+
+@keyframes pulseOnline {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.4);
+  }
+
+  50% {
+    box-shadow: 0 0 0 7px rgba(22, 163, 74, 0);
+  }
+}
+
+@keyframes blinkOffline {
+  to {
+    opacity: 0.35;
+  }
+}

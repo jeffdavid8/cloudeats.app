@@ -1,0 +1,35 @@
+{
+"guest": {
+"custom_permissions": {
+"apps.weather": [
+"access"
+],
+"apps.bibleBot": [
+"access"
+],
+"apps.help": [
+"access"
+],
+"apps.weather.features.current_weather": [
+"view"
+],
+"apps.weather.features.forecasts": [
+"view"
+],
+"apps.bibleBot.features.search": [
+"use"
+],
+"apps.bibleBot.features.bookmarks": [
+"create",
+"view",
+"delete"
+],
+"apps.bibleBot.features.notes": [
+"create",
+"view",
+"update",
+"delete"
+]
+}
+}
+}

@@ -1,0 +1,325 @@
+/* Star Trek LCARS Theme - Dashboard Styles */
+
+/* Enhanced Dashboard Statistics Cards */
+.dashboard-stat-card {
+    background: var(--panel-medium);
+    border: 2px solid var(--lcars-orange);
+    border-radius: var(--border-radius-lcars);
+    box-shadow: 
+        var(--glow-intensity) var(--lcars-orange),
+        inset 0 0 15px rgba(255, 153, 0, 0.1);
+    transition: all var(--transition-speed) ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.dashboard-stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, 
+        var(--lcars-orange) 0%, 
+        var(--lcars-red) 50%, 
+        var(--lcars-blue) 100%);
+}
+
+.dashboard-stat-card:hover {
+    border-color: var(--lcars-blue);
+    box-shadow: 
+        var(--glow-intensity) var(--lcars-blue),
+        inset 0 0 15px rgba(153, 153, 255, 0.1);
+    transform: translateY(-3px) scale(1.02);
+}
+
+.dashboard-stat-card .card-content {
+    padding: 25px;
+    background: transparent;
+}
+
+.dashboard-stat-card h3 {
+    margin: 0 0 10px 0;
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+    font-size: 3em;
+    color: var(--lcars-orange);
+    text-shadow: var(--glow-intensity) var(--lcars-orange);
+    text-align: center;
+    position: relative;
+}
+
+.dashboard-stat-card h3::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 2px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        var(--lcars-orange) 50%, 
+        transparent 100%);
+}
+
+.dashboard-stat-card p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-family: 'Exo 2', sans-serif;
+    font-size: 0.9em;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-align: center;
+    font-weight: 400;
+}
+
+/* Enhanced Breadcrumb Navigation */
+.enhanced-breadcrumb {
+    background: linear-gradient(135deg, var(--panel-dark) 0%, var(--panel-medium) 100%);
+    border: 2px solid var(--lcars-orange);
+    border-radius: var(--border-radius-lcars);
+    color: var(--text-primary);
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 
+        var(--glow-intensity) var(--lcars-orange),
+        inset 0 0 20px rgba(255, 153, 0, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+.enhanced-breadcrumb::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 30px 30px 0;
+    border-color: transparent var(--lcars-blue) transparent transparent;
+}
+
+.enhanced-breadcrumb h4 {
+    margin: 0 0 10px 0;
+    font-family: 'Orbitron', monospace;
+    font-weight: 600;
+    color: var(--lcars-orange);
+    text-shadow: var(--glow-intensity) var(--lcars-orange);
+}
+
+.enhanced-breadcrumb p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.95em;
+    font-weight: 300;
+}
+
+.datetime-display {
+    font-size: 0.85em;
+    color: var(--lcars-blue);
+    margin-top: 15px;
+    font-family: 'Orbitron', monospace;
+    text-shadow: var(--glow-intensity) var(--lcars-blue);
+}
+
+/* Widget Containers */
+.widget-container {
+    margin-bottom: 30px;
+}
+
+.widget-item {
+    margin: 20px 0;
+}
+
+/* Quick Actions Enhancement */
+.quick-action-item {
+    background: var(--panel-medium);
+    border: 1px solid var(--lcars-orange);
+    border-left: 4px solid var(--lcars-orange);
+    color: var(--text-primary);
+    transition: all var(--transition-speed) ease;
+    margin-bottom: 5px;
+    border-radius: 0 15px 15px 0;
+}
+
+.quick-action-item:hover {
+    border-color: var(--lcars-blue);
+    border-left-color: var(--lcars-blue);
+    background: linear-gradient(90deg, 
+        rgba(153, 153, 255, 0.1) 0%, 
+        var(--panel-medium) 20%);
+    transform: translateX(10px);
+    box-shadow: var(--glow-intensity) var(--lcars-blue);
+    color: var(--text-primary);
+}
+
+.quick-action-item .material-icons {
+    transition: color var(--transition-speed) ease;
+    text-shadow: var(--glow-intensity) currentColor;
+}
+
+.quick-action-item:hover .material-icons {
+    color: var(--lcars-blue);
+}
+
+/* Enhanced Card Styling */
+.card {
+    background: var(--panel-medium);
+    border: 2px solid var(--lcars-orange);
+    border-radius: var(--border-radius-lcars);
+    box-shadow: 
+        var(--glow-intensity) var(--lcars-orange),
+        inset 0 0 15px rgba(255, 153, 0, 0.05);
+    transition: all var(--transition-speed) ease;
+}
+
+.card:hover {
+    border-color: var(--lcars-blue);
+    box-shadow: 
+        var(--glow-intensity) var(--lcars-blue),
+        inset 0 0 15px rgba(153, 153, 255, 0.1);
+}
+
+.card-title {
+    font-family: 'Orbitron', monospace;
+    font-weight: 500;
+    color: var(--lcars-orange);
+    text-shadow: var(--glow-intensity) var(--lcars-orange);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.card-title .material-icons {
+    margin-right: 10px;
+    vertical-align: middle;
+    text-shadow: var(--glow-intensity) currentColor;
+}
+
+.card-content {
+    background: transparent;
+    color: var(--text-primary);
+}
+
+.card-action {
+    background: rgba(255, 153, 0, 0.05);
+    border-top: 1px solid var(--lcars-orange);
+}
+
+/* Recent Activity Timeline */
+.collection {
+    background: var(--panel-medium);
+    border: 2px solid var(--lcars-orange);
+    border-radius: var(--border-radius-lcars);
+    box-shadow: var(--glow-intensity) var(--lcars-orange);
+}
+
+.collection-item {
+    background: transparent;
+    border-bottom: 1px solid rgba(255, 153, 0, 0.3);
+    color: var(--text-primary);
+    transition: all var(--transition-speed) ease;
+}
+
+.collection-item:hover {
+    background: linear-gradient(90deg, 
+        rgba(153, 153, 255, 0.1) 0%, 
+        transparent 100%);
+    border-left: 4px solid var(--lcars-blue);
+    padding-left: 16px;
+}
+
+.collection-item .material-icons {
+    font-size: 28px;
+    margin-right: 15px;
+    text-shadow: var(--glow-intensity) currentColor;
+}
+
+.collection-item .title {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.collection-item .grey-text {
+    color: var(--text-secondary) !important;
+}
+
+/* Color-coded Statistics with LCARS colors */
+.blue-text { 
+    color: var(--lcars-blue) !important; 
+    text-shadow: var(--glow-intensity) var(--lcars-blue);
+}
+.green-text { 
+    color: var(--lcars-green) !important; 
+    text-shadow: var(--glow-intensity) var(--lcars-green);
+}
+.orange-text { 
+    color: var(--lcars-orange) !important; 
+    text-shadow: var(--glow-intensity) var(--lcars-orange);
+}
+.purple-text { 
+    color: var(--lcars-purple) !important; 
+    text-shadow: var(--glow-intensity) var(--lcars-purple);
+}
+.red-text { 
+    color: var(--lcars-red) !important; 
+    text-shadow: var(--glow-intensity) var(--lcars-red);
+}
+.cyan-text { 
+    color: var(--lcars-cyan) !important; 
+    text-shadow: var(--glow-intensity) var(--lcars-cyan);
+}
+.yellow-text { 
+    color: var(--lcars-yellow) !important; 
+    text-shadow: var(--glow-intensity) var(--lcars-yellow);
+}
+
+/* Alert and Status Cards */
+.card.red.lighten-4 {
+    background: rgba(255, 102, 0, 0.1);
+    border-color: var(--lcars-red);
+    box-shadow: var(--glow-intensity) var(--lcars-red);
+}
+
+.card.orange.lighten-4 {
+    background: rgba(255, 204, 0, 0.1);
+    border-color: var(--lcars-yellow);
+    box-shadow: var(--glow-intensity) var(--lcars-yellow);
+}
+
+.card.blue-grey.lighten-5 {
+    background: var(--panel-light);
+    border-color: var(--lcars-blue);
+    box-shadow: var(--glow-intensity) var(--lcars-blue);
+}
+
+/* Footer Enhancement */
+.card.blue-grey.lighten-5 p {
+    font-size: 0.9em;
+    color: var(--text-secondary);
+    font-family: 'Orbitron', monospace;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Responsive Design Enhancements */
+@media (max-width: 768px) {
+    .dashboard-stat-card h3 {
+        font-size: 2.5em;
+    }
+    
+    .enhanced-breadcrumb {
+        padding: 20px;
+    }
+    
+    .quick-action-item:hover {
+        transform: translateX(5px);
+    }
+    
+    .container {
+        padding: 0 15px;
+    }
+}

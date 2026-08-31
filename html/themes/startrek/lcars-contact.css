@@ -1,0 +1,23 @@
+/* LCARS Contact Console Custom Styles */
+.lcars-console {
+    animation: lcarsFadeIn 1.2s ease;
+}
+@keyframes lcarsFadeIn {
+    0% { opacity: 0; transform: scale(0.95); }
+    100% { opacity: 1; transform: scale(1); }
+}
+.lcars-console-transmit {
+    animation: lcarsPulse 1.5s infinite alternate;
+}
+@keyframes lcarsPulse {
+    0% { box-shadow: 0 0 8px #FF9900; }
+    100% { box-shadow: 0 0 24px #66ff99; }
+}
+.lcars-header {
+    animation: lcarsScan 2.5s infinite linear;
+}
+@keyframes lcarsScan {
+    0% { text-shadow: 0 0 8px #66ff99; }
+    50% { text-shadow: 0 0 24px #FF9900; }
+    100% { text-shadow: 0 0 8px #66ff99; }
+}

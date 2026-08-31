@@ -1,0 +1,36 @@
+services:
+  cloudeats-web:
+    build:
+      context: .
+      target: development_build # Use the development stage with SSL enabled
+      args:
+        SKIP_COMPOSER_INSTALL: "true"
+    #ports:
+    #  - "8080:8080"
+    #  - "8443:8443"
+    volumes:
+      - ./html:/var/www/html
+      - ./html/db:/var/www/html/db
+      - ./vendor:/var/www/html/vendor
+      - ./local-dev.crt:/etc/ssl/certs/local-dev.crt:ro
+      - ./local-dev.key:/etc/ssl/private/local-dev.key:ro
+      - ./storage:/var/www/cloudeats.app.local/storage
+      - ./secrets/tts-sa-key.json:/tmp/mediabrain-secret-sa-key.json:ro
+      - ./secrets/service-account-key.json:/tmp/service-account-key.json:ro
+    environment:
+      VIRTUAL_HOST : cloudeats.app.local
+      GOOGLE_APPLICATION_CREDENTIALS : /tmp/service-account-key.json
+      STRIPE_PUBLISHABLE_KEY : ${STRIPE_PUBLISHABLE_KEY}
+      STRIPE_SECRET_KEY : ${STRIPE_SECRET_KEY}    
+      STRIPE_FEE_PERCENT : ${STRIPE_FEE_PERCENT}    
+      STRIPE_FEE_FLAT : ${STRIPE_FEE_FLAT}    
+    # Explicitly set the entrypoint for the Apache image.
+    # The default entrypoint for the php:apache images is the docker-php-entrypoint.
+    # By running the apache2ctl command with -DFOREGROUND, Apache will run in the foreground.
+    entrypoint: [ "apache2ctl", "-DFOREGROUND" ]
+    networks:
+      - web-proxy-network
+
+networks:
+  web-proxy-network:
+      external: true

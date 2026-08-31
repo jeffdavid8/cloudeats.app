@@ -1,0 +1,29 @@
+.board {
+    display: flex;
+    overflow-x: auto;
+}
+
+.board-column {
+    flex: 1;
+    margin: 0 10px;
+    background-color: #f4f5f7;
+    border-radius: 3px;
+    padding: 10px;
+}
+
+.column-header {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.cards {
+    min-height: 100px;
+}
+
+.card {
+    background-color: #fff;
+    border-radius: 3px;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 0 rgba(9,30,66,.25);
+}

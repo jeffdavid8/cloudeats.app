@@ -1,0 +1,22 @@
+# Exclude vendor symlinks that cause Windows file system issues
+html/vendor/
+vendor/
+
+# Exclude development files
+.git/
+.gitignore
+.gcloudignore
+README.md
+docker-compose.local.yml
+
+# Exclude local development certificates
+local-dev.crt/
+local-dev.key/
+config/webserver1.local.crt
+config/webserver1.local.key
+
+# Exclude logs and temporary files
+*.log
+*.tmp
+.DS_Store
+Thumbs.db

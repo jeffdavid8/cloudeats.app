@@ -1,0 +1,579 @@
+/* Night Mode Styles for MediaBrain */
+.nightMode body {
+    color: #131313;
+}
+
+/* Dark Mode Support */
+
+.nightMode .admin-app {
+    background-color: #121212;
+    color: #e0e0e0;
+    min-height: 100vh;
+}
+
+.nightMode .admin-app.login-only {
+    background: linear-gradient(135deg, #0d1421, #1e1e1e);
+}
+
+.nightMode .admin-breadcrumb .breadcrumb {
+    color: #90caf9;
+}
+
+.nightMode .admin-breadcrumb .breadcrumb:before {
+    color: #666;
+}
+
+.nightMode .admin-breadcrumb .breadcrumb:last-child {
+    color: #b0b0b0;
+}
+
+.nightMode .admin-header {
+    background: linear-gradient(135deg, #1565c0, #1976d2);
+}
+
+.nightMode .admin-nav {
+    background-color: #1e1e1e;
+    border: 1px solid #333;
+}
+
+.nightMode .admin-nav .collection-item {
+    background-color: #2d2d2d;
+    color: #e0e0e0;
+    border-bottom: 1px solid #444;
+}
+
+.nightMode .admin-nav .collection-item:hover {
+    background-color: #1976d2;
+    color: white;
+}
+
+.nightMode .admin-nav .collection-item.active {
+    background-color: #1976d2;
+    color: white;
+}
+
+.nightMode .stats-card {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    border: 1px solid #333;
+}
+
+.nightMode .stats-card:hover {
+    background-color: #2d2d2d;
+}
+
+.nightMode .user-table {
+    background-color: #1e1e1e;
+    border: 1px solid #333;
+}
+
+.nightMode .user-table th {
+    background-color: #2d2d2d;
+    color: #e0e0e0;
+    border-bottom: 2px solid #444;
+}
+
+.nightMode .user-table td {
+    color: #e0e0e0;
+    border-bottom: 1px solid #444;
+    background-color: #1e1e1e;
+}
+
+.nightMode .user-table tr:hover td {
+    background-color: #2d2d2d;
+}
+
+.nightMode .user-form-card,
+.nightMode .profile-card {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    border: 1px solid #333;
+}
+
+.nightMode .login-container {
+    background: linear-gradient(135deg, #0d1421, #1e1e1e);
+}
+
+.nightMode .login-card {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    border: 1px solid #333;
+}
+
+.nightMode .card {
+    background-color: #1e1e1e !important;
+    color: #e0e0e0 !important;
+    border: 1px solid #333;
+}
+
+.nightMode .card-content {
+    color: #e0e0e0 !important;
+}
+
+.nightMode .card-title {
+    color: #e0e0e0 !important;
+}
+
+.nightMode .form-section {
+    border-bottom: 1px solid #444;
+}
+
+.nightMode .system-info .collection-item {
+    background-color: #2d2d2d;
+    color: #e0e0e0;
+    border: 1px solid #444;
+}
+
+.nightMode .quick-actions .collection-item {
+    background-color: #2d2d2d;
+    color: #e0e0e0;
+    border: 1px solid #444;
+}
+
+.nightMode .quick-actions .collection-item:hover {
+    background-color: #1976d2;
+    color: white;
+}
+
+.nightMode .collection {
+    border: 1px solid #333;
+}
+
+.nightMode .collection .collection-item {
+    background-color: #2d2d2d;
+    color: #a6a1a1;
+    border-bottom: none;
+}
+.nightMode .help-container .collection .collection-item {
+    background-color: #211f28;
+    color: #a6bce8;
+}
+
+.nightMode .collection a.collection-item:hover {
+    background-color: #1e1d1d !important;
+    color: #fff
+}
+
+.nightMode .admin-message {
+    border: 1px solid #444;
+}
+
+.nightMode .admin-message.success {
+    background-color: #1b4332;
+    border-left-color: #4caf50;
+    color: #a5d6a7;
+}
+
+.nightMode .admin-message.error {
+    background-color: #5c1e1e;
+    border-left-color: #f44336;
+    color: #ef9a9a;
+}
+
+.nightMode .admin-message.info {
+    background-color: #0d2749;
+    border-left-color: #2196f3;
+    color: #90caf9;
+}
+
+.nightMode .admin-message.warning {
+    background-color: #4a3728;
+    border-left-color: #ff9800;
+    color: #ffcc02;
+}
+
+.nightMode .btn,
+.nightMode .btn-large,
+.nightMode .btn-small {
+    background-color: #495159;
+    color: #cac9c9;
+}
+
+.nightMode .btn:hover,
+.nightMode .btn-large:hover,
+.nightMode .btn-small:hover {
+    background-color: #6d7784;
+    color: #ffffff;
+}
+
+.nightMode .blue.btn,
+.nightMode .blue.btn-large,
+.nightMode .blue.btn-small {
+    background-color: #004284 !important;
+    color: #cac9c9 !important;
+}
+
+.nightMode .blue.btn:hover,
+.nightMode .blue.btn-large:hover,
+.nightMode .blue.btn-small:hover {
+    background-color: #145db0 !important;
+    color: #ffffff !important;
+}
+
+.nightMode .btn.orange {
+    background-color: #f57c00 !important;
+}
+
+.nightMode .btn.orange:hover {
+    background-color: #ef6c00 !important;
+}
+
+.nightMode .btn.red {
+    background-color: #d32f2f !important;
+}
+
+.nightMode .btn.red:hover {
+    background-color: #7e1d1d !important;
+}
+
+.nightMode .btn.green {
+    background-color: #388e3c !important;
+}
+
+.nightMode .btn.green:hover {
+    background-color: #2e7d32 !important;
+}
+
+.nightMode textarea::placeholder,
+.nightMode input::placeholder,
+.nightMode select::placeholder {
+  color: #a2a2a2;
+}
+.nightMode input,
+.nightMode textarea,
+.nightMode select {
+    background-color: #2d2d2d !important;
+    color: #e0e0e0 !important;
+    border: 1px solid #555 !important;
+}
+
+.nightMode input:focus,
+.nightMode textarea:focus,
+.nightMode select:focus {
+    border-color: #1976d2 !important;
+    box-shadow: 0 1px 0 0 #1976d2 !important;
+}
+
+.nightMode label {
+    color: #b0b0b0 !important;
+}
+
+.nightMode label.active {
+    color: #1976d2 !important;
+}
+
+.nightMode .input-field .prefix {
+    color: #b0b0b0 !important;
+}
+
+.nightMode .input-field .prefix.active {
+    color: #1976d2 !important;
+}
+
+.nightMode .dropdown-content {
+    background-color: #2d2d2d !important;
+    border: 1px solid #555;
+}
+
+.nightMode .dropdown-content li > a,
+.nightMode .dropdown-content li > span {
+    color: #e0e0e0 !important;
+}
+
+.nightMode .dropdown-content li:hover {
+    background-color: #444 !important;
+}
+
+.nightMode .select-wrapper input.select-dropdown {
+    color: #e0e0e0 !important;
+    border-bottom: 1px solid #555 !important;
+}
+
+.nightMode .select-wrapper .caret {
+    fill: #b0b0b0 !important;
+}
+
+.nightMode .container {
+    color: #e0e0e0;
+}
+
+.nightMode h1, .nightMode h2, .nightMode h3, .nightMode h4, .nightMode h5, .nightMode h6 {
+    color: #e0e0e0;
+}
+
+.nightMode .chip {
+    color: #333;
+}
+
+.nightMode .suggestions_section .search-container .search_prompt {
+    color: #999593;
+}
+.nightMode .suggestions_section .collapsible-header,
+.suggestions_section .popular_topics_toggle {
+  border: 1px solid #3C3C3C;
+}
+.nightMode .collapsible a {
+  color: #a6a2a2;
+}
+.nightMode .profile-avatar {
+    background: linear-gradient(135deg, #1565c0, #1976d2);
+}
+
+.nightMode .maintenance-tools .btn-large {
+    border: 1px solid #444;
+}
+
+.nightMode .striped tbody tr:nth-child(odd) {
+    background-color: #2d2d2d;
+}
+
+.nightMode .striped tbody tr:nth-child(even) {
+    background-color: #1e1e1e;
+}
+
+.nightMode .card-panel {
+    background-color: #1e1e1e !important;
+    color: #e0e0e0 !important;
+    border: 1px solid #333;
+}
+
+.nightMode .green.lighten-4 {
+    background-color: #1b4332 !important;
+}
+
+.nightMode .red.lighten-4 {
+    background-color: #5c1e1e !important;
+}
+
+.nightMode .blue.lighten-4 {
+    background-color: #0d2749 !important;
+}
+
+.nightMode .orange.lighten-4 {
+    background-color: #4a3728 !important;
+}
+
+.nightMode .green-text {
+    color: #a5d6a7 !important;
+}
+
+.nightMode .red-text {
+    color: #ef9a9a !important;
+}
+
+.nightMode .blue-text {
+    color: #90caf9 !important;
+}
+
+.nightMode .orange-text {
+    color: #ffcc02 !important;
+}
+
+.nightMode .purple-text {
+    color: #ce93d8 !important;
+}
+
+.nightMode .grey-text {
+    color: #9e9e9e !important;
+}
+
+.nightMode .header nav,
+.nightMode .header nav ul.dropdown-content,
+.nightMode .searchable-select-dropdown,
+.nightMode .suggestions_container .collapsible-body,
+body .tts_player_menu_container nav {
+  color: rgb(255, 255, 255);
+  background-color: rgba(17, 17, 17, 0.69) !important;
+  backdrop-filter: blur(7px);
+  border-bottom: 1px solid #19191a;
+}
+
+/* Dark Mode Styles for Admin Sidenav */
+.nightMode .sidenav {
+  background-color: rgba(15, 14, 14, 0.82);
+}
+
+.nightMode .sidenav .admin-auth-section {
+    background-color: #2d2d2d;
+}
+.nightMode .sidenav .admin-auth-section .collapsible-header {
+    color: #2f2f39;
+}
+
+.nightMode .sidenav .admin-auth-section .collapsible-header i.material-icons {
+    color: #90caf9;
+}
+
+.nightMode .sidenav .admin-auth-section .collapsible-body a {
+    color: #e0e0e0;
+}
+
+.nightMode .sidenav .admin-auth-section .collapsible-body a:hover {
+    background-color: #1976d2;
+    color: white;
+}
+
+.nightMode .sidenav .admin-auth-section .divider {
+    background-color: #555;
+}
+
+/* Dark Mode Styles for Admin Status Bar */
+.nightMode .admin-status-bar {
+    background-color: #2d2d2d;
+    border-bottom: 1px solid #555;
+}
+
+.nightMode .admin-status-bar span {
+    color: #e0e0e0;
+}
+
+.nightMode .admin-status-bar a {
+    color: #90caf9;
+}
+
+.nightMode .admin-status-bar a:hover {
+    color: #42a5f5;
+}
+
+/* Night Mode Login Page Styles */
+.nightMode body {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%) !important;
+}
+
+/* Night Mode Theme Toggle */
+.nightMode .theme-toggle {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.nightMode .theme-toggle:hover {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+/* Night Mode Login Container */
+.nightMode .login-container {
+    /*
+    background: #151a2b;
+    border: 1px solid #404060;
+    */
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+.nightMode .login-header h4 {
+    color: #ffffff;
+}
+
+.nightMode .login-header p {
+    color: #b0b0b0;
+}
+
+/* Night Mode Input Fields */
+.nightMode .input-field input {
+    color: #ffffff;
+    border-bottom: 1px solid #555;
+}
+
+.nightMode .input-field input:focus {
+    border-bottom: 1px solid #667eea !important;
+    box-shadow: 0 1px 0 0 #667eea !important;
+}
+
+.nightMode .input-field label {
+    color: #888;
+}
+
+.nightMode .input-field label.active {
+    color: #667eea;
+}
+
+.nightMode .input-field input:focus + label {
+    color: #667eea !important;
+}
+
+.nightMode .material-icons.prefix {
+    color: #888;
+}
+.nightMode .searchable-select-option {
+    border: none;
+}
+.nightMode .searchable-select-option:hover,
+.nightMode .searchable-select-option:active,
+.nightMode .searchable-select-option:focus
+{
+  background: rgba(81, 84, 104, 0.51);
+  color: #eeeff4;
+}
+/* Night Mode Buttons */
+.nightMode .btn-login {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Night Mode Demo Users Section */
+.nightMode .demo-users {
+    background-color: #1a1a2e;
+    border: 1px solid #404060;
+}
+
+.nightMode .demo-users h6 {
+    color: #ffffff;
+}
+
+.nightMode .demo-users li {
+    color: #b0b0b0;
+}
+
+/* Night Mode OAuth Styles */
+.nightMode .oauth-divider:before {
+    background: #555;
+}
+
+.nightMode .oauth-divider span {
+    background: #2d2d44;
+    color: #888;
+}
+
+.nightMode .oauth-btn {
+    background: #1a1a2e;
+    border: 1px solid #555;
+    color: #ffffff;
+}
+
+.nightMode .google-btn {
+    border-color: #4285f4;
+    color: #4285f4;
+}
+
+.nightMode .apple-btn {
+    border-color: #ffffff;
+    color: #ffffff;
+}
+
+.nightMode .facebook-btn {
+    border-color: #1877f2;
+    color: #1877f2;
+}
+
+.nightMode .oauth-btn:hover:not(:disabled) {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+/* Night Mode Message Panels */
+.nightMode .card-panel.red.lighten-4 {
+    background-color: #3d1a1a !important;
+    color: #ff6b6b !important;
+    border: 1px solid #5d2a2a;
+}
+
+.nightMode .card-panel.green.lighten-4 {
+    background-color: #1a3d1a !important;
+    color: #6bff6b !important;
+    border: 1px solid #2a5d2a;
+}
+
+.nightMode #oauth-status {
+    color: #888;
+}
+
+/* Night Mode General Links */
+.nightMode a.grey-text:hover {
+    color: #b0b0b0 !important;
+}

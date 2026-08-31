@@ -1,0 +1,38 @@
+{
+    "columns": [
+        {
+            "id": 1,
+            "title": "To Do",
+            "cards": [
+                {
+                    "id": 1,
+                    "text": "Create the dashboard app"
+                },
+                {
+                    "id": 2,
+                    "text": "Add real-time functionality"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "title": "In Progress",
+            "cards": [
+                {
+                    "id": 3,
+                    "text": "Develop the UI"
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "title": "Done",
+            "cards": [
+                {
+                    "id": 4,
+                    "text": "Plan the project"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,44 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      # ⚠️ Build from the app directory so Docker can see files like config/webserver1.local.crt
+      - '--target'
+      - 'production_build'
+      - '-t'
+      - 'us-central1-docker.pkg.dev/${PROJECT_ID}/cloud-run-source-deploy/cloudeats.app/cloudeats-web:${COMMIT_SHA}'
+      - '-f'
+      - 'cloudeats.app/Dockerfile'
+      - 'cloudeats.app'
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'us-central1-docker.pkg.dev/${PROJECT_ID}/cloud-run-source-deploy/cloudeats.app/cloudeats-web:${COMMIT_SHA}'
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'cloudeats-web'
+      - '--image'
+      - 'us-central1-docker.pkg.dev/${PROJECT_ID}/cloud-run-source-deploy/cloudeats.app/cloudeats-web:${COMMIT_SHA}'
+      - '--region'
+      - 'us-central1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      # ⚠️ Update to the service account you wish to use, or omit this flag to use the default Compute Engine service account
+      - '--service-account'
+      - 'text-to-speech-dev@${PROJECT_ID}.iam.gserviceaccount.com'
+      - '--memory'
+      - '1Gi'
+      - '--network=default'
+      - '--subnet=default'
+      - '--vpc-egress=private-ranges-only'
+      # ⚠️ Update to Kammy's Kafe Cloud SQL instance if it has its own separate database:
+      - '--set-cloudsql-instances'
+      - '${PROJECT_ID}:us-central1:mediabrain-app'
+      # ⚠️ Update these environment variables with Kammy's Kafe credentials/database name
+images:
+  - 'us-central1-docker.pkg.dev/${PROJECT_ID}/cloud-run-source-deploy/cloudeats.app/cloudeats-web:${COMMIT_SHA}'
+options:
+  logging: CLOUD_LOGGING_ONLY

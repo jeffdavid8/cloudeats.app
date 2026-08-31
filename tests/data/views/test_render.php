@@ -1,0 +1,1 @@
+<?php echo "Render test: " . ($test_var ?? "no var"); ?>
