@@ -14,7 +14,7 @@ if (!defined('MB_RUNNING')) exit;
  */
 $app = App::getInstance();
 $customer = $app->get('customer');
-$customerId = $customer->id;
+$customerId = $customer->id ?? 0;
 $userName = isset($_SESSION['user']['username']) ? htmlspecialchars($_SESSION['user']['username']) : 'Customer';
 $availableMerchants = $this->get('available_merchants', array());
 $customerOrders = $this->get('customer_orders', array());

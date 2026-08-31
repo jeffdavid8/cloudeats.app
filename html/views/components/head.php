@@ -225,13 +225,16 @@ if (!empty($share_image_name)) {
   $scripts = isset($this->app_info['scripts']) ? $this->app_info['scripts'] : [];
   if (!empty($scripts)) {
     foreach ($scripts as $script) {
+      $script = $script . '?v=' . time();
       echo "<script src=\"$script\"></script>";
     }
   }
 
+  logger($this->app_info['styles']);
   $styles = isset($this->app_info['styles']) ? $this->app_info['styles'] : [];
   if (!empty($styles)) {
     foreach ($styles as $style) {
+      $style = $style . '?v=' . time();
       echo "<link rel=\"stylesheet\" href=\"$style\" />";
     }
   }

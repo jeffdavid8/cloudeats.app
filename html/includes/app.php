@@ -113,7 +113,7 @@ class App
     $this->root_url = (!empty($app)) ? '?app=' . $app : '/';
     $this->config['site_logo_url'] = 'https://storage.googleapis.com/mediabrain-system-data/apps/neighborhub/merchants/9/e838b992ed68c5403847421418fdcae3.png';
 
-    //$this->_connect_mysql();
+    $this->_connect_mysql();
 
     // Initialize AuthManager
     $this->authManager = new AuthManager($this->db, $this->logger);
@@ -375,8 +375,8 @@ class App
       'components' => array()
     );
 
-    if ($this->app) {
-      $this->app_info = app_invoke($this->app, 'info');
+    if ($this->appName) {
+      $this->app_info = app_invoke($this->appName, 'info', $this);
     }
   }
 

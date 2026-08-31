@@ -23,9 +23,8 @@ use Google\ApiCore\ArrayTrait;
  * 
  * @return array Application metadata
  */
-function neighborhub_info()
+function neighborhub_info(&$app)
 {
-  $app = App::getInstance();
 
   return array(
     'db_type' => 'mysql',

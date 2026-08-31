@@ -5,7 +5,7 @@ ini_set('display_errors', 'On');
 //error_reporting(E_ALL);
 error_reporting(E_ALL && ~E_WARNING && ~E_NOTICE);
 date_default_timezone_set('America/Indiana/Indianapolis');
-echo 'here'; die();
+
 // Set the absolute path to your log file
 require_once __DIR__ . '/includes/mb.bootstrap.php';
 

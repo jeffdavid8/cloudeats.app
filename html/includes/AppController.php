@@ -34,7 +34,7 @@ class AppController
                 // Call the info function directly
                 $infoFunction = $this->appName . '_info';
                 if (function_exists($infoFunction)) {
-                    $config = call_user_func($infoFunction);
+                    $config = call_user_func($infoFunction, $this->app);
                     if (is_array($config)) {
                         return $config;
                     }
