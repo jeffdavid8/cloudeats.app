@@ -79,7 +79,24 @@ function neighborhub_init(&$app)
   $app->includeModel('menucategory'); // Include class if using custom loader
   $app->includeModel('menuitem'); // Include class if using custom loader
   $app->includeModel('product');
-  $page = isset($_GET['p']) ? sanitize_text_field($_GET['p']) : 'dashboard';
+  $customer = 0;
+  if ($app->user->id) {
+    $customer = Customer::getCustomerByUserId($app->user->id);
+    if (!$customer) {
+      $new_customer = array(
+        'user_id' => $app->user->id,
+        'display_name' => '',
+        'phone' => '',
+        'status' => 'active',
+        'delivery_locations' => null,
+      );
+      $newCustomerId = Customer::create($new_customer);
+      $customer = Customer::getCustomerById($newCustomerId);
+    }
+  }
+  $app->set('customer', $customer);
+  $landing_page = ((get_var('view', 'customer') === 'customer') && !$customer) ? 'onboarding' : 'dashboard';
+  $page = isset($_GET['p']) ? sanitize_text_field($_GET['p']) : $landing_page;
   $view = isset($_GET['view']) ? sanitize_text_field($_GET['view']) : 'customer';
   $app->set('page', $page);
   $app->set('view', $view);
@@ -187,7 +204,7 @@ function neighborhub_render_body(&$app)
 {
   // Get active view context from app instance
   $currentView = $app->get('current_view', 'customer');
-  $currentPage = $app->get('page', 'dashboard');
+  $currentPage = $app->get('page');
   $merchant = $app->get('merchant');
   $merchantId = $app->get('merchant_id', null);
 
@@ -358,7 +375,7 @@ function neighborhub_render_body(&$app)
           break;
 
         default:
-          $templatePath = $currentPage . '.php';
+          $templatePath = $customerDir . $currentPage . '.php';
           break;
       }
       break;
@@ -390,6 +407,7 @@ function neighborhub_render_body(&$app)
     echo '<div class="nh-alert-content">';
     echo '<h3>Template Not Found</h3>';
     echo '<p>The requested view template could not be located.</p>';
+    echo '<p>Expected path: <code>' . htmlspecialchars($app->app_path . '/views/pages/' . $templatePath) . '</code></p>';
     echo '</div>';
     echo '</div>';
     error_log("Template not found: " . $app->app_path . '/views/pages/' . $templatePath);
@@ -525,30 +543,12 @@ function neighborhub_init_admin_context(&$app)
 function neighborhub_init_customer_context(&$app)
 {
   try {
-    $db = $app->db;
     $user_id = $app->user->id;
     $app->includeModel('merchant');
     $app->includeModel('order');
-
-    $app->includeModel('customer');
-    $customer = 0;
-    if ($user_id) {
-      $customer = Customer::getCustomerByUserId($user_id);
-      if (!$customer) {
-        $new_customer = array(
-          'user_id' => $app->user->id,
-          'display_name' => '',
-          'phone' => '',
-          'status' => 'active',
-          'delivery_locations' => null,
-        );
-        $newCustomerId = Customer::create($new_customer);
-        $customer = Customer::getCustomerById($newCustomerId);
-      }
-    }
-
+    $customer = $app->get('customer');
     $customer_id = ($customer) ? $customer->id : 0;
-    $app->set('customer', $customer);
+
     $app->set('show_header_shopping_basket', true);
     $app->set('shopping_basket_class_list', 'sidenav right-aligned');
 
