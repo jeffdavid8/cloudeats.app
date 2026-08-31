@@ -25,7 +25,7 @@
       "short_name": "CloudEats",
       "description": "Local food, products, services, and businesses.",
       "url": "/",
-      "icons": [{ "src": "/apps/neighborhub/images/android-chrome-192x192.png", "sizes": "192x192" }]
+      "icons": [{ "src": "/images/android-chrome-192x192.png", "sizes": "192x192" }]
     }
   ]
 }

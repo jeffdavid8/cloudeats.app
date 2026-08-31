@@ -39,12 +39,12 @@ function neighborhub_info(&$app)
     'public_app' => true,
     'version' => "0.1",
     'favicon' => array(
-      'favicon' => $app->config['base_url'] . '/apps/neighborhub/images/favicon.ico',
-      'favicon-32x32' => $app->config['base_url'] . '/apps/neighborhub/images/favicon-32x32.png',
-      'favicon-16x16' => $app->config['base_url'] . '/apps/neighborhub/images/favicon-16x16.png',
-      'android-chrome-512x512' => $app->config['base_url'] . '/apps/neighborhub/images/android-chrome-512x512.png',
-      'android-chrome-192x192' => $app->config['base_url'] . '/apps/neighborhub/images/android-chrome-192x192.png',
-      'apple-touch-icon-180x180' => $app->config['base_url'] . '/apps/neighborhub/images/apple-touch-icon.png',
+      'favicon' => $app->config['base_url'] . '/images/favicon.ico',
+      'favicon-32x32' => $app->config['base_url'] . '/images/favicon-32x32.png',
+      'favicon-16x16' => $app->config['base_url'] . '/images/favicon-16x16.png',
+      'android-chrome-512x512' => $app->config['base_url'] . '/images/android-chrome-512x512.png',
+      'android-chrome-192x192' => $app->config['base_url'] . '/images/android-chrome-192x192.png',
+      'apple-touch-icon-180x180' => $app->config['base_url'] . '/images/apple-touch-icon.png',
     ),
     'styles' => array(
       './css/leaflet.css',
@@ -116,7 +116,7 @@ function neighborhub_init(&$app)
   $app->set('user_id', $_SESSION['user']['id']);
   $app->set('merchant_id', $merchantId);
   $meta = array(
-    'image' => config('base_url') . '/apps/neighborhub/images/neighborhub-logo-black-circle-2020-600.png',
+    'image' => config('base_url') . '/images/android-chrome-512x512.png',
     'image_width' => '600',
     'image_height' => '600',
   );
@@ -592,10 +592,10 @@ function neighborhub_init_customer_context(&$app)
   }
 
   $meta = array(
-    'title' => 'Neighborhub',
+    'title' => 'CloudEats',
     'type' => 'article',
     'og:type' => 'article',
-    'image' => config('base_url') . '/apps/neighborhub/images/neighborhub-logo-black-circle-2020-600.png',
+    'image' => config('base_url') . '/images/android-chrome-512x512.png',
     'image_width' => '600',
     'image_height' => '600',
   );

@@ -1,3 +1,211 @@
+@font-face {
+  font-family: "Source Sans Pro";
+  src: url("/css/webfonts/SourceSans/SourceSans3-Regular.ttf")
+    format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Rye";
+  src: url("/css/webfonts/Rye-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+:root {
+  /* Light Mode Variables (Default) */
+  --primary-color: #2563eb;
+  --primary-light: #3b82f6;
+  --primary-dark: #1e40af;
+
+  /* Status Colors */
+  --status-pending-bg: #fbbf24;
+  --status-pending-text: #78350f;
+  --status-confirmed-bg: #60a5fa;
+  --status-confirmed-text: #1e3a8a;
+  --status-ready-bg: #818cf8;
+  --status-ready-text: #3730a3;
+  --status-transit-bg: #c084fc;
+  --status-transit-text: #581c87;
+  --status-delivered-bg: #34d399;
+  --status-delivered-text: #064e3b;
+  --status-cancelled-bg: #ef4444;
+  --status-cancelled-text: #7f1d1d;
+
+  /* Semantic Colors */
+  --success-color: #10b981;
+  --warning-color: #f59e0b;
+  --error-color: #ef4444;
+  --info-color: #3b82f6;
+
+  /* Light Neutral Colors */
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+  --gray-1000: #0f172a;
+
+  /* Typography */
+  --font-family-base:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
+  --font-family-mono:
+    "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+
+  /* Spacing */
+  --space-0: 0;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-base:
+    0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --shadow-md:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+  /* Borders & Radius */
+  --border-radius-sm: 0.375rem;
+  --border-radius-base: 0.5rem;
+  --border-radius-md: 0.75rem;
+  --border-radius-lg: 1rem;
+  --border-color: var(--gray-200);
+
+  /* Transitions */
+  --transition-fast: 150ms ease-in-out;
+  --transition-base: 200ms ease-in-out;
+  --transition-slow: 300ms ease-in-out;
+
+  /* Z-Index Scale */
+  --z-dropdown: 1000;
+  --z-sticky: 820;
+  --z-fixed: 1030;
+  --z-modal: 1040;
+}
+
+/* ============================================================================
+   DARK MODE - Browser Preference (prefers-color-scheme: dark)
+   ============================================================================ */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Dark Neutral Colors */
+    --gray-50: #0f172a;
+    --gray-100: #181a1e;
+    --gray-200: #334155;
+    --gray-300: #475569;
+    --gray-400: #64748b;
+    --gray-500: #94a3b8;
+    --gray-600: #cbd5e1;
+    --gray-700: #e2e8f0;
+    --gray-800: #f1f5f9;
+    --gray-900: #f8fafc;
+    --gray-1000: #ffffff;
+
+    --border-color: var(--gray-300);
+    --status-pending-text: #3c78c7;
+  }
+}
+
+/* ============================================================================
+   EXPLICIT NIGHT MODE OVERRIDE (body.nightMode)
+   ============================================================================ */
+
+body.nightMode {
+  --gray-50: #0f172a;
+  --gray-100: #181a1e;
+  --gray-200: #334155;
+  --gray-300: #475569;
+  --gray-400: #64748b;
+  --gray-500: #94a3b8;
+  --gray-600: #cbd5e1;
+  --gray-700: #e2e8f0;
+  --gray-800: #f1f5f9;
+  --gray-900: #f8fafc;
+  --gray-1000: #ffffff;
+
+  --border-color: var(--gray-300);
+
+  /* Status Colors */
+  --status-pending-bg: #fbbf24;
+  --status-pending-text: #dccc8c;
+  --status-confirmed-bg: #60a5fa;
+  --status-confirmed-text: #61dcc5;
+  --status-ready-bg: #818cf8;
+  --status-ready-text: #bbb9db;
+  --status-transit-bg: #c084fc;
+  --status-transit-text: #581c87;
+  --status-delivered-bg: #34d399;
+  --status-delivered-text: #064e3b;
+  --status-cancelled-bg: #ef4444;
+  --status-cancelled-text: #7f1d1d;
+
+  --text-primary: #FFFFFF;  /* Crisp white for "Cloud" */
+  --icon-bg-color: #202124; /* Deep dark grey */
+  --c-stroke-color: #5f6368; /* Muted dark grey accent */
+  --e-stroke-color: #8ab4f8; /* Vibrant glowing pastel blue */
+  --brand-accent: #F87171;  /* Lighter, pastel coral-red for "Eats" to pass accessibility standards */
+  
+  /* Icon variables if needed */
+  --icon-bg: #374151;
+  --icon-inner: #60A5FA;
+}
+
+/* ============================================================================
+   EXPLICIT DAY MODE OVERRIDE (body.dayMode)
+   ============================================================================ */
+
+body.dayMode {
+  --gray-10: #16181a;
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+  --gray-1000: #0f172a;
+
+  --border-color: var(--gray-200);
+
+  --text-primary: #1f2937; /* Deep charcoal/black for "Cloud" */
+  --icon-bg-color: #f0f4f8; /* Soft slate white */
+  --c-stroke-color: #94a3b8; /* Muted grey accent */
+  --e-stroke-color: #1a73e8; /* Crisp tech blue */
+  --brand-accent: #dc2626; /* Vibrant red/coral for "Eats" */
+
+  /* Icon variables if needed */
+  --icon-bg: #e5e7eb;
+  --icon-inner: #1d4ed8;
+}
+
 html,
 body {
   height: 100%;
@@ -15,6 +223,60 @@ body {
 body {
   font-family: var(--rhino-font);
 }
+/* Base Layout Sizing */
+/* Add an 'open' class to your icon/button when the menu is active */
+.nav-trigger-icon {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Micro-interaction on click */
+.nav-trigger-icon:active {
+  transform: scale(0.9);
+}
+
+/* Optional: If the side nav stays open, rotate the icon slightly to show it's active */
+.nav-trigger-icon.is-open {
+  transform: rotate(-90deg);
+}
+
+.nav-trigger-icon:hover {
+  transform: scale(1.05);
+}
+
+/* Vector Properties */
+.icon-bg {
+  fill: var(--icon-bg-color);
+  transition: fill 0.3s ease;
+}
+
+.letter-c,
+.letter-e {
+  fill: none;
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke 0.3s ease;
+}
+
+.letter-c {
+  stroke: var(--c-stroke-color);
+}
+
+.letter-e {
+  stroke: var(--e-stroke-color);
+}
+.brand-cloud {
+  color: var(--text-primary);
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.brand-eats {
+  color: var(--brand-accent);
+  font-weight: 700; /* Bolder weighting for emphasis */
+  transition: color 0.3s ease;
+}
+
 
 h1 {
   font-size: 3.5em;
@@ -159,7 +421,7 @@ header.header {
   color: rgb(44, 44, 46);
 }
 .header nav {
-  height: 66px;
+  height: 4rem;
 }
 .header nav,
 .header nav ul.dropdown-content,
@@ -196,6 +458,191 @@ header.header .round-header-action {
 #index-banner {
   padding-bottom: 2rem;
 }
+.nh-role-header {
+  height: 3rem;
+}
+
+.merchant-logo-container {
+  position: fixed;
+  text-align: center;
+  width: 150px;
+  margin: 0 auto;
+  right: calc(50% - 75px);
+  top: -15px;
+}
+
+@media only screen and (min-width: 992px) {
+  .nh-role-header {
+    height: 6rem;
+  }
+}
+
+body.nightMode {
+  background: #000000;
+}
+
+body.nightMode .nh-role-header {
+  background: #231820d9;
+  backdrop-filter: blur(8px);
+}
+
+body.scrolled .pk-hero-banner {
+  height: 80vh;
+  padding-top: 10rem;
+  padding-bottom: 5rem;
+}
+
+body {
+  padding-top: 6rem;
+}
+
+body.scrolled {
+  padding-top: 4rem;
+}
+
+body .nh-role-header {
+  border-bottom: 2px solid var(--border-color);
+  padding: var(--space-6) 0;
+  position: sticky;
+  top: 4rem;
+  height: 6rem;
+  z-index: var(--z-sticky);
+  box-shadow: var(--shadow-sm);
+  transition:
+    background-color var(--transition-base),
+    border-color var(--transition-base);
+}
+
+header.header {
+  z-index: 997;
+  border-bottom: none;
+}
+
+header.header nav {
+  height: 4rem;
+  transition: all 0.3s;
+  box-shadow: none;
+  /* border-bottom: 4px solid var(--brand-nav-border); */
+  border-bottom: none;
+}
+
+body.scrolled header.header nav {
+  top: 0;
+  border-bottom: 2px solid #dd3731;
+  height: 4rem;
+}
+
+body.scrolled header.header nav {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+.merchant-header-image .online-status-dot {
+  bottom: 3px;
+  right: 0px;
+  width: 20px;
+  height: 20px;
+  outline-width: 3px;
+}
+body.scrolled .merchant-header-image .online-status-dot {
+  /* top: 60px; */
+  bottom: 3px;
+  right: 0px;
+  width: 20px;
+  height: 20px;
+  outline-width: 3px;
+}
+
+/* Floating Branding Logo */
+.merchant-header-image {
+  position: fixed;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  z-index: 999;
+  top: 2px;
+  width: 100px;
+  right: calc(50% - 50px);
+}
+
+.merchant-header-image img {
+  margin: 0 auto;
+  border: 4px solid var(--brand-gold);
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  transition: all 0.4s;
+}
+
+body.scrolled .merchant-header-image {
+}
+
+body.scrolled .merchant-header-image img {
+}
+
+.merchant-logo-container img {
+  max-width: 150px;
+  border: 15px solid #9190902e;
+}
+.merchant-header-image .online-status-dot {
+  position: absolute;
+  /* top: 125px; */
+  bottom: 10px;
+  right: 8px;
+  width: 30px;
+  height: 30px;
+  background-color: #4caf50; /* Materialize green */
+  border: none;
+  outline: 5px solid #00000080;
+  border-radius: 50%;
+  transition: all 0.5s !important;
+}
+.dayMode .merchant-header-image .online-status-dot {
+  outline: 5px solid #ffffff80;
+}
+body.scrolled .merchant-header-image .online-status-dot {
+  /* top: 60px; */
+  bottom: 3px;
+  right: 0px;
+  width: 20px;
+  height: 20px;
+  outline-width: 3px;
+}
+#nh-spotlight-callout-panel .card-button-container {
+  flex-direction: column;
+}
+
+.custom-section-title {
+  color: #e0e0e0;
+}
+
+@media only screen and (min-width: 601px) {
+  .merchant-logo-container {
+    top: -85px;
+  }
+  .merchant-logo-container img {
+    max-width: 150px;
+    border: 10px solid #f6f0e180;
+  }
+  .merchant-header-image .online-status-dot {
+    /* top: 150px; */
+    bottom: 7px;
+    right: 15px;
+  }
+  #nh-spotlight-callout-panel .card-button-container {
+    flex-direction: row;
+  }
+
+  .sidenav {
+    top: 1px;
+  }
+  /* body.header-announcement .sidenav-overlay, */
+  body.header-announcement .sidenav {
+    top: 1px;
+  }
+  body.header-announcement.scrolled .sidenav-overlay,
+  body.header-announcement.scrolled .sidenav {
+    top: 1px;
+  }
+}
 
 ul#slide-out {
   z-index: 1001;
@@ -205,7 +652,7 @@ ul#slide-out {
   -moz-box-shadow: none;
   box-shadow: none;
   top: 56px;
-  height: calc(100% - 64px);
+  height: calc(100% - 3px);
   border-top: none;
   background-color: rgba(255, 255, 255, 0.84);
   backdrop-filter: blur(3px);
@@ -311,7 +758,7 @@ ul.sidenav .collapsible li a:hover,
 }
 
 .app-container {
-  min-height: calc(100vh - 6rem);
+  min-height: calc(100vh - 7rem);
 }
 /*
 #toast-container {
@@ -327,13 +774,16 @@ ul.sidenav .collapsible li a:hover,
   background-color: transparent;
   color: #d1d1d1;
   cursor: pointer;
-  -webkit-transition: background-color .2s;
-  transition: background-color .2s;
+  -webkit-transition: background-color 0.2s;
+  transition: background-color 0.2s;
 }
 .dayMode .btn-flat {
   color: #d1d1d1;
 }
-.dayMode .btn, .dayMode .btn-large, .dayMode .btn-small, .dayMode .btn-flat {
+.dayMode .btn,
+.dayMode .btn-large,
+.dayMode .btn-small,
+.dayMode .btn-flat {
   color: #505050;
   background-color: transparent;
 }

@@ -111,7 +111,8 @@ class App
     $this->includes_dir = dirname(__FILE__);
     $this->app_classes_dir = $this->includes_dir . '/classes/apps/' . $app;
     $this->root_url = (!empty($app)) ? '?app=' . $app : '/';
-    $this->config['site_logo_url'] = 'https://storage.googleapis.com/mediabrain-system-data/apps/neighborhub/merchants/9/e838b992ed68c5403847421418fdcae3.png';
+    //$this->config['site_logo_url'] = 'https://storage.googleapis.com/mediabrain-system-data/apps/neighborhub/merchants/9/e838b992ed68c5403847421418fdcae3.png';
+    $this->config['site_logo_url'] = $this->config['base_url'] . '/images/android-chrome-512x512.png';
 
     $this->_connect_mysql();
 

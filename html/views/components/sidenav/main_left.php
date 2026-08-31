@@ -5,7 +5,7 @@ $night_mode = (App::getInstance()->get('day_night_mode') == 'night');
 $merchant = $this->get('merchant');
 ?>
 <ul id="slide-out" class="sidenav show-on-large">
-  <li>
+  <li style="padding: 0; margin: 0; display: flex; justify-content: flex-end; align-items: center; background-color: var(--icon-bg-color);">
     <a href="#" data-target="slide-out" class="sidenav-trigger main-menu-btn"><i class="fas fa-times fa-lg"></i></a>
   </li>
   <li>

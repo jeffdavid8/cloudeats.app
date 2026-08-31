@@ -41,11 +41,11 @@ if ($notification) {
 ?>
 
 <div class="nh-wrapper">
-
-  <!-- Role Header with Navigation -->
+<? /* 
+  <!-- Sticky Role Header with Navigation -->
   <header class="nh-role-header">
     <div class="nh-container">
-      <div class="nh-role-header-content">
+      <div class="nh-role-header-content">`
         <div>
           <h1 style="margin: 0; font-size: 1.875rem;">Neighborhub</h1>
           <p style="margin: 0; color: var(--gray-500); font-size: 0.875rem;">Welcome<?= (isset($app->user->id)) ? ' back' : '' ?>, <?php echo $userName; ?>!</p>
@@ -53,6 +53,7 @@ if ($notification) {
       </div>
     </div>
   </header>
+ */ ?>
 
   <!-- Main Content Area -->
   <main class="nh-main">
