@@ -70,7 +70,7 @@ if (!empty($share_image_name)) {
   <title><?= $meta['title']; ?></title>
   <?
   $favicon = array_merge(array(
-    'favicon' => $this->config['base_url'] . '/favicon.ico',
+    'favicon' => $this->config['base_url'] . '/images/favicon.svg',
     'favicon-16x16' => $this->config['base_url'] . '/favicon-16x16.png',
     'favicon-32x32' => $this->config['base_url'] . '/favicon-32x32.png',
     'apple-touch-icon-180x180' => $this->config['base_url'] . '/apple-touch-icon-180x180.png',
@@ -79,9 +79,8 @@ if (!empty($share_image_name)) {
   ), $this->get('favicon', []));
   ?>
   <!-- Standard Icons -->
-  <link rel="icon" type="image/x-icon" href="<?= $favicon['favicon'] ?>">
-  <link rel="icon" type="image/png" sizes="16x16" href="<?= $favicon['favicon-16x16'] ?>">
-  <link rel="icon" type="image/png" sizes="32x32" href="<?= $favicon['favicon-32x32'] ?>">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyBjbGFzcz0ibmF2LXRyaWdnZXItZmF2aWNvbiIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPHN0eWxlPgogICAgLmZhdi1iZyB7IHRyYW5zaXRpb246IGZpbGwgMC4zcyBlYXNlOyB9CiAgICAuZmF2LWxldHRlcnMgeyBmaWxsOiBub25lOyBzdHJva2Utd2lkdGg6IDE0OyBzdHJva2UtbGluZWNhcDogcm91bmQ7IHN0cm9rZS1saW5lam9pbjogcm91bmQ7IHRyYW5zaXRpb246IHN0cm9rZSAwLjNzIGVhc2U7IH0KICAgIEBtZWRpYSAocHJlZmVycy1jb2xvci1zY2hlbWU6IGxpZ2h0KSB7IC5mYXYtYmcgeyBmaWxsOiAjMUE3M0U4OyB9IC5mYXYtbGV0dGVycyB7IHN0cm9rZTogI0ZGRkZGRjsgfSB9CiAgICBAbWVkaWEgKHByZWZlcnMtY29sb3Itc2NoZW1lOiBkYXJrKSB7IC5mYXYtYmcgeyBmaWxsOiAjMzAzMTM0OyB9IC5mYXYtbGV0dGVycyB7IHN0cm9rZTogIzhBQjRGODsgfSB9CiAgPC9zdHlsZT4KICA8Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0NiIgY2xhc3M9ImZhdi1iZyIgLz4KICA8cGF0aCBkPSJNIDcyLDI2IEggNDQgQSAyNCwyNCAwIDAgMCA0NCw3NCBIIDcyIE0gNDQsNTAgSCA2NiIgY2xhc3M9ImZhdi1sZXR0ZXJzIiAvPgo8L3N2Zz4=">
+
 
   <!-- Android / Chrome -->
   <link rel="icon" type="image/png" sizes="192x192" href="<?= $favicon['android-chrome-192x192'] ?>">

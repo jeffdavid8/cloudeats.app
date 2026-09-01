@@ -225,21 +225,26 @@ body {
 }
 /* Base Layout Sizing */
 /* Add an 'open' class to your icon/button when the menu is active */
-.nav-trigger-icon {
+
+.nav-trigger-favicon {
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+  vertical-align: middle;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Micro-interaction on click */
-.nav-trigger-icon:active {
+.nav-trigger-favicon:active {
   transform: scale(0.9);
 }
 
 /* Optional: If the side nav stays open, rotate the icon slightly to show it's active */
-.nav-trigger-icon.is-open {
+.nav-trigger-favicon.is-open {
   transform: rotate(-90deg);
 }
 
-.nav-trigger-icon:hover {
+.nav-trigger-favicon:hover {
   transform: scale(1.05);
 }
 
@@ -249,22 +254,33 @@ body {
   transition: fill 0.3s ease;
 }
 
-.letter-c,
-.letter-e {
+.fav-bg {
+  fill: var(--fav-bg-color);
+  transition: fill 0.3s ease;
+}
+
+.fav-letters {
   fill: none;
-  stroke-width: 8;
+  stroke: var(--fav-stroke-color);
+  stroke-width: 14;          /* Ultra-thick line weight for micro-rendering */
   stroke-linecap: round;
   stroke-linejoin: round;
   transition: stroke 0.3s ease;
 }
 
-.letter-c {
-  stroke: var(--c-stroke-color);
+/* ==========================================================================
+   Theme Variables
+   ========================================================================== */
+body.dayMode {
+  --fav-bg-color: #1A73E8;      /* Google Tech Blue background for maximum pop */
+  --fav-stroke-color: #FFFFFF;  /* Crisp white geometric letters */
 }
 
-.letter-e {
-  stroke: var(--e-stroke-color);
+body.nightMode {
+  --fav-bg-color: #303134;      /* Deep material dark gray container */
+  --fav-stroke-color: #8AB4F8;  /* Vivid, glowing pastel blue letters */
 }
+
 .brand-cloud {
   color: var(--text-primary);
   font-weight: 500;

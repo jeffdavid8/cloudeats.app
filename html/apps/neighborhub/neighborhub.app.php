@@ -39,7 +39,7 @@ function neighborhub_info(&$app)
     'public_app' => true,
     'version' => "0.1",
     'favicon' => array(
-      'favicon' => $app->config['base_url'] . '/images/favicon.ico',
+      'favicon' => $app->config['base_url'] . '/images/favicon.svg',
       'favicon-32x32' => $app->config['base_url'] . '/images/favicon-32x32.png',
       'favicon-16x16' => $app->config['base_url'] . '/images/favicon-16x16.png',
       'android-chrome-512x512' => $app->config['base_url'] . '/images/android-chrome-512x512.png',
