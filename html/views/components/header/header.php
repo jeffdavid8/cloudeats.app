@@ -24,7 +24,7 @@ if (!$customer->terms_accepted_at && get_var('app') == 'neighborhub' || ($_SERVE
       </div>
    </div>
 <? endif; ?>
-<header class="header">
+<header class="header" style="display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
 
    <nav>
       <div class="nav-wrapper ">

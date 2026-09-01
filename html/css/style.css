@@ -164,15 +164,15 @@ body.nightMode {
   --status-cancelled-bg: #ef4444;
   --status-cancelled-text: #7f1d1d;
 
-  --text-primary: #FFFFFF;  /* Crisp white for "Cloud" */
+  --text-primary: #ffffff; /* Crisp white for "Cloud" */
   --icon-bg-color: #202124; /* Deep dark grey */
   --c-stroke-color: #5f6368; /* Muted dark grey accent */
   --e-stroke-color: #8ab4f8; /* Vibrant glowing pastel blue */
-  --brand-accent: #F87171;  /* Lighter, pastel coral-red for "Eats" to pass accessibility standards */
-  
+  --brand-accent: #f87171; /* Lighter, pastel coral-red for "Eats" to pass accessibility standards */
+
   /* Icon variables if needed */
   --icon-bg: #374151;
-  --icon-inner: #60A5FA;
+  --icon-inner: #60a5fa;
 }
 
 /* ============================================================================
@@ -262,7 +262,7 @@ body {
 .fav-letters {
   fill: none;
   stroke: var(--fav-stroke-color);
-  stroke-width: 14;          /* Ultra-thick line weight for micro-rendering */
+  stroke-width: 14; /* Ultra-thick line weight for micro-rendering */
   stroke-linecap: round;
   stroke-linejoin: round;
   transition: stroke 0.3s ease;
@@ -272,13 +272,13 @@ body {
    Theme Variables
    ========================================================================== */
 body.dayMode {
-  --fav-bg-color: #1A73E8;      /* Google Tech Blue background for maximum pop */
-  --fav-stroke-color: #FFFFFF;  /* Crisp white geometric letters */
+  --fav-bg-color: #1a73e8; /* Google Tech Blue background for maximum pop */
+  --fav-stroke-color: #ffffff; /* Crisp white geometric letters */
 }
 
 body.nightMode {
-  --fav-bg-color: #303134;      /* Deep material dark gray container */
-  --fav-stroke-color: #8AB4F8;  /* Vivid, glowing pastel blue letters */
+  --fav-bg-color: #303134; /* Deep material dark gray container */
+  --fav-stroke-color: #8ab4f8; /* Vivid, glowing pastel blue letters */
 }
 
 .brand-cloud {
@@ -292,7 +292,6 @@ body.nightMode {
   font-weight: 700; /* Bolder weighting for emphasis */
   transition: color 0.3s ease;
 }
-
 
 h1 {
   font-size: 3.5em;
@@ -777,7 +776,7 @@ ul.sidenav .collapsible li a:hover,
   min-height: calc(100vh - 7rem);
 }
 body.header-announcement .app-container {
-  min-height: calc(100vh - 11rem);
+  min-height: calc(100vh - 13rem);
 }
 /*
 #toast-container {
@@ -1248,6 +1247,9 @@ header nav ul li a i.fas {
   }
 }
 @media only screen and (min-width: 768px) {
+  body.header-announcement .app-container {
+    min-height: calc(100vh - 11rem);
+  }
   .header nav ul li a {
     margin: 6px 10px 0;
   }
