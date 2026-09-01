@@ -74,12 +74,6 @@ header.header nav {
   border-bottom: 2px solid #63424b;
   transition: border-color var(--transition-base);
 }
-body.scrolled header.header nav {
-  border-bottom: 2px solid #dd3731;
-}
-body.header-announcement header.header nav {
-  border-bottom: 2px solid #e65100; /* 2px solid rgba(163, 116, 91, 0.59) */
-}
 #nh-terms-banner {
   /* display: none; */
   padding: 0.75rem 1rem;
