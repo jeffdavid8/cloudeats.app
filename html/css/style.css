@@ -545,10 +545,10 @@ header.header nav {
 .dayMode .header.header nav {
   border-bottom: 2px solid #f1e8eb;
 }
-body.header-announcement header.header nav {
+body.nightMode.header-announcement header.header nav {
   border-bottom: 2px solid #e65100;
 }
-body.header-announcement.scrolled header.header nav {
+body.nightMode.header-announcement.scrolled header.header nav {
 }
 
 body.scrolled header.header nav {
