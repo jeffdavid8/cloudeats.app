@@ -14,7 +14,7 @@ if ($app->getAuthManager()::isUserLoggedIn()) {
 
 // Handle app-specific access requests
 $requestedApp = $_GET['app'] ?? null;
-$appDisplayName = $requestedApp ? ucfirst($requestedApp) : 'MediaBrain';
+$appDisplayName = $requestedApp ? ucfirst($requestedApp) : 'Cloud Eats';
 $appMessage = '';
 
 if ($requestedApp) {

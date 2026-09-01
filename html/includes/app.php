@@ -72,7 +72,7 @@ class App
     $this->config = array(
       'version' => '0.5',
       'domain' => 'cloudeats.app',
-      'site_name' => 'CloudEats',
+      'site_name' => 'Cloud Eats',
       'site_description' => 'Local food, products, services, and businesses.',
       'fb_app_id' => '561081350692034',
       'site_name_short' => 'MB',

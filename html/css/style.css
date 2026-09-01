@@ -760,6 +760,9 @@ ul.sidenav .collapsible li a:hover,
 .app-container {
   min-height: calc(100vh - 7rem);
 }
+body.header-announcement .app-container {
+  min-height: calc(100vh - 11rem);
+}
 /*
 #toast-container {
   top: auto !important;

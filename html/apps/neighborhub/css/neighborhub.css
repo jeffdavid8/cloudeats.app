@@ -79,7 +79,7 @@ body.scrolled header.header nav {
 }
 #nh-terms-banner {
   border-bottom: 2px solid #e65100; /* 2px solid rgba(163, 116, 91, 0.59) */
-  display: none;
+  /* display: none; */
   padding: 0.75rem 1rem;
   text-align: center;
   font-size: 0.875rem;

@@ -17,7 +17,7 @@ if (!$customer->terms_accepted_at && get_var('app') == 'neighborhub' || ($_SERVE
 ?>
    <div id="nh-terms-banner">
       <div class="nh-terms-banner-content" style="display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
-         <span>By using Neighborhub, you agree to our <a href="/?app=neighborhub&p=terms-and-conditions" target="_blank" style="text-decoration: underline;">Terms & Conditions</a>.</span>
+         <span>By using Cloud Eats, you agree to our <a href="/?app=neighborhub&p=terms-and-conditions" target="_blank" style="text-decoration: underline;">Terms & Conditions</a>.</span>
          <button type="button" id="nh-accept-terms-btn" class="nh-btn" style="margin-left: 1rem; padding: 0.25rem 0.75rem; font-size: 0.8rem; background: #e65100;">
             Accept
          </button>

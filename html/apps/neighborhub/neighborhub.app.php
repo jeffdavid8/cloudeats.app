@@ -28,7 +28,7 @@ function neighborhub_info(&$app)
 
   return array(
     'db_type' => 'mysql',
-    'title' => "Neighborhub",
+    'title' => "Cloud Eats",
     'description' => "Local food, local products, local services, local businesses, local people.",
     'image' => $app->config['base_url'] . '/apps/neighborhub/images/neighborhub-app-index-logo-lg.png',
     'image_height' => '752',
@@ -396,11 +396,15 @@ function neighborhub_render_body(&$app)
     default:
       break;
   }
-
+//logger("Rendering template for view: $currentView, page: $currentPage, templatePath: $templatePath");
+logger($app->dir . '/views/pages/' . $currentPage . '.php');
   // Render the template if it exists
   if ($templatePath && file_exists($app->app_path . '/views/pages/' . $templatePath)) {
     render('pages/' . $templatePath, $vars);
-  } else {
+  } elseif (file_exists($app->dir . '/views/pages/' . $currentPage . '.php')) {
+    render('pages/' . $currentPage . '.php', $vars);
+  }
+  else {
     // Fallback error message
     echo '<div class="nh-alert nh-alert-error">';
     echo '<div class="nh-alert-icon">✕</div>';
