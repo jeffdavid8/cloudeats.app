@@ -247,7 +247,7 @@ body {
   padding-top: 59px;
 }
 header.header nav {
-  height: 60px;
+  /* height: 60px; */
 }
 header.header nav ul li a {
   margin-top: 6px;
