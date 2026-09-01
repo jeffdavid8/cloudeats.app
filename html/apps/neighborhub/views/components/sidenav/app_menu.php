@@ -3,7 +3,7 @@ if (!defined('MB_RUNNING')) exit;
 ?>
 
 <li>
-  <a href="/?app=neighborhub"><i class="material-icons">store</i>Home</a>
+  <a href="/"><i class="material-icons">store</i>Home</a>
 </li>
 
 <?
