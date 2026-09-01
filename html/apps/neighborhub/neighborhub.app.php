@@ -596,7 +596,7 @@ function neighborhub_init_customer_context(&$app)
   }
 
   $meta = array(
-    'title' => 'CloudEats',
+    'title' => 'Cloud Eats',
     'type' => 'article',
     'og:type' => 'article',
     'image' => config('base_url') . '/images/android-chrome-512x512.png',
