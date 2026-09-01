@@ -400,9 +400,13 @@ if (!empty($_SESSION['login_error'])) {
             <i class="material-icons">dark_mode</i>
         </button>
         <div class="login-header">
-            <h4><?php echo $requestedApp ? "Access {$appDisplayName}" : 'MediaBrain'; ?></h4>
-        </div>
+        <? /*
+            <h4><?php echo $requestedApp 
+            ? "Access {$appDisplayName}" 
+            : render('components/nav_trigger_icon.php', array('icon' => 'menu', 'size' => '35'), true) . '<span class="brand-cloud">Cloud</span><span class="brand-eats">Eats</span>'; ?></h4>
+        */ ?>
         <p><?php echo $appMessage ?: 'Sign in to your account'; ?></p>
+        </div>
 
         <?php if (!empty($error)): ?>
             <div class="card-panel red lighten-4 red-text text-darken-2 error-message" style="margin-bottom: 20px;">
