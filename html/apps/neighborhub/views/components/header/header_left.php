@@ -23,7 +23,7 @@ $merchant = $this->get('merchant');
       <a class="share_btn" href="<?= $_SERVER['PHP_SELF']. '?' . $_SERVER['QUERY_STRING'] ?>"><i class="material-icons">link</i></a>
    </li>
    */ ?>
-   <li>
+   <li class="hide-on-med-and-up">
       <a class="page_link waves-effect waves-light" href="<?= $this->config['base_url'] . $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ?>"><i class="material-icons">share</i></a>
    </li>
 

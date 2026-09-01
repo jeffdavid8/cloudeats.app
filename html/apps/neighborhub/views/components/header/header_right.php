@@ -188,6 +188,10 @@ if ($isUserLoggedIn) {
         </li>
     <?php endif; ?>
 
+   <li class="hide-on-small-only">
+      <a class="page_link waves-effect waves-light" href="<?= $this->config['base_url'] . $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ?>"><i class="material-icons">share</i></a>
+   </li>
+
     <li class="hide-on-small-only"><a href="javascript: void(0);" onclick="mb.toggleNightMode();"><i class="fas fa-lightbulb"></i></a></li>
 
 </ul>
