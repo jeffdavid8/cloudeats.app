@@ -11,7 +11,7 @@ $merchant = $this->get('merchant');
             <? render('components/nav_trigger_icon.php', array('icon' => 'menu', 'size' => '50')); ?>
 
          </a>
-         <a class="hover-grow" style="width: auto; margin-left: 0; padding: 0 5px; font-size: 1.3rem;" href="/"><span class="brand-cloud">Cloud</span><span class="brand-eats">Eats</span></a>
+         <a class="hover-grow hide-on-small-only" style="width: auto; margin-left: 0; padding: 0 5px; font-size: 1.3rem;" href="/"><span class="brand-cloud">Cloud</span><span class="brand-eats">Eats</span></a>
       </div>
    </li>
 
