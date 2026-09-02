@@ -47,7 +47,7 @@ if (!empty($_SESSION['login_error'])) {
 <style>
     /* Override main site styles for login page */
     body {
-        background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        /* background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important; */
         min-height: 100vh;
         align-items: center;
         justify-content: center;
@@ -157,7 +157,7 @@ if (!empty($_SESSION['login_error'])) {
     .oauth-btn {
         flex: 1;
         height: 48px;
-        border: 1px solid #ddd;
+        /* border: 1px solid #ddd; */
         border-radius: 6px;
         display: flex !important;
         align-items: center;

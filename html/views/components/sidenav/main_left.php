@@ -69,7 +69,7 @@ $merchant = $this->get('merchant');
   </li>
   */ ?>
   <li>
-    <a href="/?app=neighborhub&view=public&p=public.splash" target="_blank"><i class="fas fa-info-circle"></i>About Neighborhub</a>
+    <a href="/?app=neighborhub&view=public&p=public.splash" target="_blank"><i class="fas fa-info-circle"></i>About Cloud Eats</a>
   </li>
   <li>
     <a href="/?app=neighborhub&p=terms-and-conditions" target="_blank"><i class="fas fa-file-contract"></i>Terms & Conditions</a>

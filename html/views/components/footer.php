@@ -1,5 +1,4 @@
 <footer class="bodyImageBgOverlay">
-
 <? /*
   <div class="powered-by right hide">
     <? render('components/powered-by.php'); ?>
