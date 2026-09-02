@@ -525,31 +525,53 @@ body.loading-nav-trigger .nav-trigger-favicon,
 body.loading-preloader .nav-trigger-favicon {
   width: 64px;
   height: 64px;
-  filter: drop-shadow(0 4px 12px rgba(21, 101, 192, 0.3));
-  animation: cloudFloat 3s ease-in-out infinite;
 }
 
 /* Background Circle */
 body.loading-nav-trigger .nav-trigger-favicon .fav-bg,
 body.loading-preloader .nav-trigger-favicon .fav-bg {
-  fill: #1a1d24; /* Dark mode backing circle */
-  transition: fill 0.3s ease;
+  fill: #1e1b18;
+  stroke: #ffab40;
+  stroke-width: 2;
+  animation: heatPulse 2s ease-in-out infinite alternate;
 }
 
 /* Animated Path Tracing for CE Logo */
 body.loading-nav-trigger .nav-trigger-favicon .fav-letters,
 body.loading-preloader .nav-trigger-favicon .fav-letters {
   fill: none;
-  stroke: #42a5f5; /* Bright accent blue */
+  stroke: #ff6d00;
   stroke-width: 7;
   stroke-linecap: round;
   stroke-linejoin: round;
-  /* Total path length calculation */
-  stroke-dasharray: 220;
-  stroke-dashoffset: 220;
-  animation: dashTrace 2s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+  filter: drop-shadow(0 0 6px rgba(255, 109, 0, 0.8));
+  animation: steamBreathe 2s ease-in-out infinite alternate;
+}
+@keyframes heatPulse {
+  0% {
+    fill: #1a1512;
+    stroke-opacity: 0.3;
+  }
+  100% {
+    fill: #261c14;
+    stroke-opacity: 0.9;
+    filter: drop-shadow(0 0 12px rgba(255, 171, 64, 0.4));
+  }
 }
 
+@keyframes steamBreathe {
+  0% {
+    stroke: #ff9100;
+    transform: scale(0.96);
+    transform-origin: center;
+  }
+  100% {
+    stroke: #ff3d00;
+    transform: scale(1.02);
+    transform-origin: center;
+    filter: drop-shadow(0 0 10px rgba(255, 61, 0, 0.9));
+  }
+}
 /* Floating animation */
 @keyframes cloudFloat {
   0%, 100% {
