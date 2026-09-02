@@ -637,6 +637,15 @@ body.loading-nav-trigger .nav-trigger-favicon .fav-letters,
 nav ul a:hover {
   background-color: #aaa;
 }
+.hover-grow {
+  /* Smoothly animates the size change over 0.2 seconds */
+  transition: transform 0.2s ease-in-out; 
+}
+.hover-grow:hover {
+  /* Increases the size by 10% (1.1). Change to 1.05 for 5% */
+  transform: scale(1.1); 
+}
+
 .header nav .user-badge i {
   font-size: 1.7rem;
 }

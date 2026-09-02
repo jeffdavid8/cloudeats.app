@@ -336,8 +336,8 @@ body.kds-fullscreen-mode .kds-channel-pickup {
 .nh-badge.badge-pending_confirmation {
   /* Creates a soft, multi-layered dark glow directly behind the text */
   text-shadow:
-    0 0 30px rgba(0, 0, 0, 0.8),
-    0 0 4px rgba(0, 0, 0, 0.9);
+    0 0 30px rgba(0, 0, 0, 0.4),
+    0 0 4px rgba(0, 0, 0, 0.5);
 
   /* Optional: Ensures the text stands out cleanly against the dark glow */
   color: #ffffff;
