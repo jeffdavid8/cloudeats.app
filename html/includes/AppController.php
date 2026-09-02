@@ -174,10 +174,6 @@ class AppController
         $isCommander = $user->is_admin ? 'COMMANDER' : 'OBSERVER';
 
         // Set up app metadata and styling
-        $day_night_mode = (isset($_COOKIE['day_night_mode'])) ? $_COOKIE['day_night_mode'] : 'night';
-        $this->app->setCookie('day_night_mode', $day_night_mode);
-        $this->app->set('day_night_mode', $day_night_mode);
-
 
         $day_night_mode = get_var('day_night_mode', $day_night_mode);
         $day_night_mode_class = ($day_night_mode == 'day') ? 'dayMode' : ' nightMode';

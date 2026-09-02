@@ -121,6 +121,7 @@ function neighborhub_init(&$app)
     'image_height' => '600',
   );
   $day_night_mode = (isset($_COOKIE['day_night_mode'])) ? $_COOKIE['day_night_mode'] : 'day';
+  $app->set('day_night_mode', $day_night_mode);
   $app->set('night_mode_class', $day_night_mode . 'Mode');
 
   $scripts = array();
@@ -396,8 +397,7 @@ function neighborhub_render_body(&$app)
     default:
       break;
   }
-//logger("Rendering template for view: $currentView, page: $currentPage, templatePath: $templatePath");
-logger($app->dir . '/views/pages/' . $currentPage . '.php');
+
   // Render the template if it exists
   if ($templatePath && file_exists($app->app_path . '/views/pages/' . $templatePath)) {
     render('pages/' . $templatePath, $vars);
