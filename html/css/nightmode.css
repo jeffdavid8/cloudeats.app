@@ -383,7 +383,7 @@
 .nightMode .suggestions_container .collapsible-body,
 body .tts_player_menu_container nav {
   color: rgb(255, 255, 255);
-  background-color: rgba(17, 17, 17, 0.69) !important;
+  background-color: var(--gray-75) !important;
   backdrop-filter: blur(7px);
   border-bottom: 1px solid #19191a;
 }
