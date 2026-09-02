@@ -468,6 +468,27 @@ nav .progress {
 body.loading-progress nav .progress {
   display: block;
 }
+.nightMode nav .progress {
+  background-color: #ffb300;
+}
+.nightMode nav .progress .indeterminate {
+  background-color: #e65100;
+}
+.dayMode nav .progress {
+  background-color: #f1e8eb;
+}
+.dayMode nav .progress .indeterminate {
+  background-color: #dd3731;
+}
+/* Change the background track color */
+.progress {
+    background-color: #ffe082; /* Light yellow/gold track */
+}
+/* Change the moving indicator color */
+.progress .indeterminate {
+    background-color: #ffb300; /* Darker amber moving line */
+}
+
 nav ul a:hover {
   background-color: #aaa;
 }
