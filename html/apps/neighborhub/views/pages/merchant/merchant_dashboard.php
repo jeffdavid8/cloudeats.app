@@ -35,12 +35,11 @@ $isShopOnline = ($rawStatus === 'active' || $rawStatus === 'online' || $rawStatu
 <style>
 
 </style>
-
+<? /*
 <header class="nh-role-header">
   <div class="nh-container">
     <div class="nh-role-header-content">
       <div class="hide-on-med-and-down">
-        <h1 style="margin: 0; font-size: 1.875rem;">Neighborhub</h1>
         <p style="margin: 0; color: var(--gray-500); font-size: 0.875rem;">
           <?php echo htmlspecialchars($merchant->business_name ?? 'Merchant Dashboard'); ?> -
           <span style="text-transform: capitalize;"><?php echo htmlspecialchars($staffRole); ?></span>
@@ -48,12 +47,13 @@ $isShopOnline = ($rawStatus === 'active' || $rawStatus === 'online' || $rawStatu
       </div>
       <div style="position: fixed; z-index: 890; top: 1rem; right: 1rem; height: 5rem; width: 100%;">
         <div class="right">
-          <? /* render('components/merchant/merchant_nav_menu.php', array('merchant' => $merchant)); */ ?>
+          render('components/merchant/merchant_nav_menu.php', array('merchant' => $merchant));
         </div>
       </div>
     </div>
   </div>
 </header>
+*/ ?>
 <ul id="sidenav-right" class="sidenav right" style="width: 320px; padding: 1.25rem 1rem; z-index: 1004;">
   <li style="margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
     <h5 style="margin: 0; font-size: 1.2rem; font-weight: 700;">Menu Availability</h5>
@@ -632,6 +632,7 @@ $isShopOnline = ($rawStatus === 'active' || $rawStatus === 'online' || $rawStatu
       coverTrigger: false
     });
 
+    $('.materialboxed').materialbox();
 
     let rightSidenavElems = document.getElementById('sidenav-right');
     let sidenavInstances = M.Sidenav.init(rightSidenavElems, {
