@@ -267,8 +267,8 @@ mb.play = play;
 /*
  *  Loading Indicator
  */
-function loading(loading) {
-  if (loading) {
+function loading(loading, on=true) {
+  if (loading && on) {
     if (loading == 1) {
       $("body").addClass("loading-bg");
     } else if (loading == 2) {
@@ -283,9 +283,21 @@ function loading(loading) {
       $("body").addClass("loading-progress");
     }
   } else {
-    $("body").removeClass(
-      "loading loading-bg loading-progress loading-preloader loading-nav-trigger",
-    );
+    if (loading == 1) {
+      $("body").removeClass("loading-bg");
+    } else if (loading == 2) {
+      $("body").removeClass("loading");
+    } else if (loading == 3) {
+      $("body").removeClass("loading-nav-trigger");
+    } else if (loading == 4) {
+      $("body").removeClass("loading-progress");
+    } else if (loading == 5) {
+      $("body").removeClass("loading-preloader");
+    } else {
+      $("body").removeClass("loading-progress");
+    }
+
+    if (on) $("body").removeClass("loading loading-bg loading-progress loading-preloader loading-nav-trigger");
   }
 }
 

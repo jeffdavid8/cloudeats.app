@@ -504,7 +504,24 @@ body.loading-progress nav .progress {
   visibility: hidden;
   pointer-events: none;
 }
-body.loading-preloader .preloader-overlay {
+.modal-preloader-overlay {
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #121212; /* Dark mode backdrop */
+  align-items: center;
+  justify-content: center;
+  z-index: 99999; /* Sit above all POS/Sidenav panels */
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.loading-preloader .preloader-overlay,
+.loading-preloader .modal-preloader-overlay {
   display: flex;
   opacity: 1;
   visibility: visible;
@@ -522,14 +539,14 @@ body.loading-preloader .preloader-overlay {
 
 /* Base SVG styling */
 body.loading-nav-trigger .nav-trigger-favicon,
-body.loading-preloader .nav-trigger-favicon {
+.loading-preloader .nav-trigger-favicon {
   width: 64px;
   height: 64px;
 }
 
 /* Background Circle */
 body.loading-nav-trigger .nav-trigger-favicon .fav-bg,
-body.loading-preloader .nav-trigger-favicon .fav-bg {
+.loading-preloader .nav-trigger-favicon .fav-bg {
   fill: #1e1b18;
   stroke: #ffab40;
   stroke-width: 2;
@@ -538,7 +555,8 @@ body.loading-preloader .nav-trigger-favicon .fav-bg {
 
 /* Animated Path Tracing for CE Logo */
 body.loading-nav-trigger .nav-trigger-favicon .fav-letters,
-body.loading-preloader .nav-trigger-favicon .fav-letters {
+.loading-preloader .nav-trigger-favicon .fav-letters, 
+.modal-loading-preloader .nav-trigger-favicon .fav-letters {
   fill: none;
   stroke: #ff6d00;
   stroke-width: 7;
@@ -547,6 +565,7 @@ body.loading-preloader .nav-trigger-favicon .fav-letters {
   filter: drop-shadow(0 0 6px rgba(255, 109, 0, 0.8));
   animation: steamBreathe 2s ease-in-out infinite alternate;
 }
+
 @keyframes heatPulse {
   0% {
     fill: #1a1512;

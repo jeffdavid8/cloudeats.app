@@ -107,7 +107,7 @@ try {
         'steps' => $steps,
         'productType' => $productObj->type,
         'productId' => $productId
-      ]);
+      ], true);
 
       exit(json_encode([
         'success' => true,
@@ -151,7 +151,7 @@ try {
       $htmlOutput = $app->render('components/print-receipt.php', [
         'order' => $order,
         'merchant' => $merchant
-      ]);
+      ], true);
 
       send_json_response(['success' => true, 'html' => $htmlOutput]);
       break;
