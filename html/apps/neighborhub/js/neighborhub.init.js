@@ -89,7 +89,7 @@ $(document).ready(function () {
 
   // Handle Accept Button Click
   $("#nh-accept-terms-btn").on("click", function () {
-    loading(3);
+    loading(4);
     // Save to Database if user is logged in
     mb.ajax({
       type: "POST",

@@ -274,11 +274,11 @@ function loading(loading) {
     } else if (loading == 2) {
       $("body").addClass("loading");
     } else if (loading == 3) {
-      $("body").addClass("loading-progress");
-    } else if (loading == 4) {
-      $("body").addClass("loading-preloader");
-    } else if (loading == 5) {
       $("body").addClass("loading-nav-trigger");
+    } else if (loading == 4) {
+      $("body").addClass("loading-progress");
+    } else if (loading == 5) {
+      $("body").addClass("loading-preloader");
     } else {
       $("body").addClass("loading-progress");
     }
@@ -291,6 +291,7 @@ function loading(loading) {
 
 $(window).on("load", function () {
   $("body").removeClass("loading-preloader");
+  $('#cloudeats-preloader .preloader-text').html('');
 });
 
 mb.process = function (data) {
