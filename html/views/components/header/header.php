@@ -39,6 +39,7 @@ if ($this->get('view') === 'customer' && !$customer->terms_accepted_at):
 
 
       </div>
+      <div class="progress"><div class="indeterminate"></div></div>
    </nav>
 
 </header>

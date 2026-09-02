@@ -73,12 +73,7 @@ $merchant = $this->get('merchant');
   */ ?>
   <li>
     <a href="/?app=neighborhub&view=public&p=public.splash" target="_blank"><i class="fas fa-info-circle"></i>About Cloud Eats</a>
-    <?
-    if (get_var('app', false)) { ?>
-  <li class="no-padding">
-    <a href="/"><i class="fas fa-sign-out-alt"></i>Exit</a>
   </li>
-<? } ?>
 </ul>
 
 

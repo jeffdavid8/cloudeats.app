@@ -461,6 +461,13 @@ nav {
   /* background-color: rgba(10, 12, 14, .9); */
   background-color: #f4f5f7;
 }
+nav .progress {
+  display: none;
+  margin: 0;
+}
+body.loading-progress nav .progress {
+  display: block;
+}
 nav ul a:hover {
   background-color: #aaa;
 }

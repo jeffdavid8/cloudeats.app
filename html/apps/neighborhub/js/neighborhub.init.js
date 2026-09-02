@@ -89,13 +89,14 @@ $(document).ready(function () {
 
   // Handle Accept Button Click
   $("#nh-accept-terms-btn").on("click", function () {
+    loading(3);
     // Save to Database if user is logged in
     mb.ajax({
       type: "POST",
       url: "/?api=neighborhub&action=accept_terms",
       data: JSON.stringify({ accepted: true }),
       success: function (res) {
-        console.log("Terms acceptance recorded on backend.");
+        loading(0);
         // Hide Banner
         $("#nh-terms-banner").slideUp(200);
 

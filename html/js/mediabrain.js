@@ -269,13 +269,17 @@ mb.play = play;
  */
 function loading(loading) {
   if (loading) {
-    if (loading == 2) {
-      $("body").addClass("loading");
-    } else {
+    if (loading == 1) {
       $("body").addClass("loading-bg");
+    } else if (loading == 2) {
+      $("body").addClass("loading");
+    } else if (loading == 3) {
+      $("body").addClass("loading-progress");
+    } else {
+      $("body").addClass("loading-progress");
     }
   } else {
-    $("body").removeClass("loading loading-bg");
+    $("body").removeClass("loading loading-bg loading-progress");
   }
 }
 
