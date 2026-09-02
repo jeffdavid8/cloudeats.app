@@ -488,6 +488,110 @@ body.loading-progress nav .progress {
 .progress .indeterminate {
     background-color: #ffb300; /* Darker amber moving line */
 }
+.preloader-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #121212; /* Dark mode backdrop */
+  align-items: center;
+  justify-content: center;
+  z-index: 99999; /* Sit above all POS/Sidenav panels */
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+body.loading-preloader .preloader-overlay {
+  display: flex;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Container centered overlay or block */
+.cloudeats-preloader-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+/* Base SVG styling */
+body.loading-nav-trigger .nav-trigger-favicon,
+body.loading-preloader .nav-trigger-favicon {
+  width: 64px;
+  height: 64px;
+  filter: drop-shadow(0 4px 12px rgba(21, 101, 192, 0.3));
+  animation: cloudFloat 3s ease-in-out infinite;
+}
+
+/* Background Circle */
+body.loading-nav-trigger .nav-trigger-favicon .fav-bg,
+body.loading-preloader .nav-trigger-favicon .fav-bg {
+  fill: #1a1d24; /* Dark mode backing circle */
+  transition: fill 0.3s ease;
+}
+
+/* Animated Path Tracing for CE Logo */
+body.loading-nav-trigger .nav-trigger-favicon .fav-letters,
+body.loading-preloader .nav-trigger-favicon .fav-letters {
+  fill: none;
+  stroke: #42a5f5; /* Bright accent blue */
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  /* Total path length calculation */
+  stroke-dasharray: 220;
+  stroke-dashoffset: 220;
+  animation: dashTrace 2s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+}
+
+/* Floating animation */
+@keyframes cloudFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+/* Stroke line drawing animation */
+@keyframes dashTrace {
+  0% {
+    stroke-dashoffset: 220;
+    stroke: #1565c0;
+  }
+  50% {
+    stroke: #42a5f5;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    stroke: #90caf9;
+  }
+}
+
+/* Optional pulse indicator text below */
+.preloader-text {
+  margin-top: 1rem;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: #9e9e9e;
+  text-transform: uppercase;
+  animation: pulseText 1.5s ease-in-out infinite;
+}
+
+@keyframes pulseText {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
 
 nav ul a:hover {
   background-color: #aaa;

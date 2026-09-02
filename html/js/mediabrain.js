@@ -275,13 +275,23 @@ function loading(loading) {
       $("body").addClass("loading");
     } else if (loading == 3) {
       $("body").addClass("loading-progress");
+    } else if (loading == 4) {
+      $("body").addClass("loading-preloader");
+    } else if (loading == 5) {
+      $("body").addClass("loading-nav-trigger");
     } else {
       $("body").addClass("loading-progress");
     }
   } else {
-    $("body").removeClass("loading loading-bg loading-progress");
+    $("body").removeClass(
+      "loading loading-bg loading-progress loading-preloader loading-nav-trigger",
+    );
   }
 }
+
+$(window).on("load", function () {
+  $("body").removeClass("loading-preloader");
+});
 
 mb.process = function (data) {
   play("audio/Star Trek - Hail.wav");
@@ -683,27 +693,27 @@ mb.geoLocate = function (callback) {
   }
 };
 
-mb.reverseGeoCode = function(lat, lng, callback={}) {
-    mb.ajax({
-        url: '?api=neighborhub&action=reverse_geocode_proxy',
-        type: 'GET',
-        dataType: 'json',
-        data: {
-            lat: lat,
-            lng: lng
-        },
-        success: function(data) {
-            if (data && data.display_name) {
-                if (typeof callback === 'function') {
-                    callback(data);
-                }
-            }
-        },
-        error: function(xhr, status, error) {
-            console.error("Proxy Endpoint AJAX Error:", error);
+mb.reverseGeoCode = function (lat, lng, callback = {}) {
+  mb.ajax({
+    url: "?api=neighborhub&action=reverse_geocode_proxy",
+    type: "GET",
+    dataType: "json",
+    data: {
+      lat: lat,
+      lng: lng,
+    },
+    success: function (data) {
+      if (data && data.display_name) {
+        if (typeof callback === "function") {
+          callback(data);
         }
-    });
-}
+      }
+    },
+    error: function (xhr, status, error) {
+      console.error("Proxy Endpoint AJAX Error:", error);
+    },
+  });
+};
 
 /*
  * jQuery Responder
@@ -927,7 +937,9 @@ $(document).ready(function () {
 
   // 2. Custom Toggle Logic for the Button
   // Select the raw DOM element from the jQuery wrapper
-  $("#slide-out .sidenav-trigger, .header nav .header-sidenav-trigger, .header nav .sidenav-trigger").each(function () {
+  $(
+    "#slide-out .sidenav-trigger, .header nav .header-sidenav-trigger, .header nav .sidenav-trigger",
+  ).each(function () {
     $(this).on("click", function (e) {
       e.preventDefault();
       e.stopPropagation(); // Stops click from bubbling to document and auto-closing

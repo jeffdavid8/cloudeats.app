@@ -6,4 +6,4 @@ if (!defined('MB_RUNNING')) exit;
  */
 $customer = $this->get('customer');
 ?>
-<body class="<?= (!$this->appName) ? ' mb-home' : $this->appName . ' app ' ?> <?= $nightModeClass ?> <?= (!empty($bg_image)) ? ' image_bg' : '' ?><?= (!$customer->terms_accepted_at) ? ' header-announcement' : '' ?>">
+<body class="loading-preloader <?= (!$this->appName) ? ' mb-home' : $this->appName . ' app ' ?> <?= $nightModeClass ?> <?= (!empty($bg_image)) ? ' image_bg' : '' ?><?= (!$customer->terms_accepted_at) ? ' header-announcement' : '' ?>">
