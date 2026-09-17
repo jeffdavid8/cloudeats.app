@@ -107,12 +107,11 @@ function renderWeather() {
       '" />',
   );
 
-  $(".current_weather_details").html(
-    '<a class="radar_link" href="https://radar.weather.gov/?settings=v1_eyJhZ2VuZGEiOnsiaWQiOm51bGwsImNlbnRlciI6Wy05NS4xNDIsMzUuODg5XSwibG9jYXRpb24iOm51bGwsInpvb20iOjV9LCJhbmltYXRpbmciOnRydWUsImJhc2UiOiJzdGFuZGFyZCIsImFydGNjIjpmYWxzZSwiY291bnR5IjpmYWxzZSwiY3dhIjpmYWxzZSwicmZjIjpmYWxzZSwic3RhdGUiOmZhbHNlLCJtZW51Ijp0cnVlLCJzaG9ydEZ1c2VkT25seSI6ZmFsc2UsIm9wYWNpdHkiOnsiYWxlcnRzIjowLjgsImxvY2FsIjowLjYsImxvY2FsU3RhdGlvbnMiOjAuOCwibmF0aW9uYWwiOjAuNn19" target="_blank"><img data-v-26f286d2="" src="https://radar.weather.gov/ridge/standard/CONUS_loop.gif?refreshed=' +
-      new Date().getTime() +
-      '" class="mapImage responsive-img"></a>' +
-      weather.forecast.properties.periods[0].detailedForecast,
-  );
+  let currentWeatherDetails = '<a href="https://radar.weather.gov/?settings=v1_eyJhZ2VuZGEiOnsiaWQiOm51bGwsImNlbnRlciI6Wy05NS4xNDIsMzUuODg5XSwibG9jYXRpb24iOm51bGwsInpvb20iOjV9LCJhbmltYXRpbmciOnRydWUsImJhc2UiOiJzdGFuZGFyZCIsImFydGNjIjpmYWxzZSwiY291bnR5IjpmYWxzZSwiY3dhIjpmYWxzZSwicmZjIjpmYWxzZSwic3RhdGUiOmZhbHNlLCJtZW51Ijp0cnVlLCJzaG9ydEZ1c2VkT25seSI6ZmFsc2UsIm9wYWNpdHkiOnsiYWxlcnRzIjowLjgsImxvY2FsIjowLjYsImxvY2FsU3RhdGlvbnMiOjAuOCwibmF0aW9uYWwiOjAuNn19" target="_blank"><img data-v-26f286d2="" src="https://radar.weather.gov/ridge/standard/CONUS_loop.gif?refreshed='+new Date().getTime()+'" class="mapImage responsive-img"></a>'+weather.forecast.properties.periods[0].detailedForecast;
+
+  if ($(".current_weather_details").html() != currentWeatherDetails) {
+    $(".current_weather_details").html(currentWeatherDetails);
+  }
 
   $(".forecast").html("");
   weather.forecast.properties.periods.forEach(function (period, i, array) {
