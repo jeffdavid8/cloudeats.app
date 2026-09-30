@@ -449,7 +449,7 @@ header.header #user-dropdown {
 }
 
 body.nightMode .nh-card {
-  background: var(--gray-100);
+  background: var(--gray-75);
 }
 
 body.dayMode .nh-card {

@@ -12,20 +12,22 @@ if (!defined('MB_RUNNING')) exit;
  * - $app->get('available_merchants') - active merchant list
  * - $app->get('customer_orders') - recent customer orders
  */
-$app = App::getInstance();
-$customer = $app->get('customer');
+$customer = $this->get('customer');
 $customerId = $customer->id ?? 0;
 $userName = isset($_SESSION['user']['username']) ? htmlspecialchars($_SESSION['user']['username']) : 'Customer';
 $availableMerchants = $this->get('available_merchants', array());
 $customerOrders = $this->get('customer_orders', array());
-
 if (isset($_SESSION[get_var('session_key')]) && get_var('action', false) == 'checkout_success') {
   $pendingOrder = $_SESSION[get_var('session_key')];
   $merchant_id = $pendingOrder['merchant_id'];
-  unset($_SESSION[get_var('session_key')]);
+  //unset($_SESSION[get_var('session_key')]);
+  $merchant = Merchant::getMerchantById($merchant_id);
 ?>
   <script>
     $(document).ready(function() {
+      if (typeof NHCart === 'undefined') {
+        window.NHCart = new ShoppingCart(<?= json_encode($merchant) ?>);
+      }
       NHCart.activeMerchantId = <?= ($merchant_id) ? $merchant_id : 'null' ?>;
       NHCart.clear();
     });
@@ -149,6 +151,9 @@ if ($notification) {
 
       </section>
 
+      <?
+      if (!empty($customerOrders)): ?>
+
       <!-- Active Tracking Ledger Section -->
       <section class="nh-tracking-ledger">
         <h2 style="margin-bottom: 2rem;">Your Orders</h2>
@@ -209,6 +214,7 @@ if ($notification) {
         </div>
 
       </section>
+      <? endif; ?>
       <? /*
       */ ?>
       <!-- Merchant Browser Section -->
@@ -295,6 +301,17 @@ if ($notification) {
   /**
    * Select a merchant and load its products
    */
+  function toggleTrackingLedger() {
+    var ledgerSection = document.querySelector('.nh-tracking-ledger');
+    if (ledgerSection.style.display === 'none' || ledgerSection.style.display === '') {
+      ledgerSection.style.display = 'block';
+      document.getElementById('floating-tracking-ledger-toggle').innerHTML = '<i class="fas fa-receipt"></i> Hide Orders';
+    } else {
+      ledgerSection.style.display = 'none';
+      document.getElementById('floating-tracking-ledger-toggle').innerHTML = '<i class="fas fa-receipt"></i> Your Orders';
+    }
+  }
+
   /**
    * Select a merchant and load its products
    */

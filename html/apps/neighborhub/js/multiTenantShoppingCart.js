@@ -21,7 +21,9 @@ class ShoppingCart {
 
   save() {
     localStorage.setItem(this.storageKey, JSON.stringify(this.cart));
-    this.updateUI();
+    if ($('#nh-shopping-cart-sidenav').length) {
+      this.updateUI();
+    }
   }
 
   // Pass the merchantId directly into the item compilation logic

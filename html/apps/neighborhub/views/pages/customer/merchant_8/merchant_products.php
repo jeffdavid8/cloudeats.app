@@ -21,7 +21,7 @@ $params['menu_id'] = 2;
 $mjMenuLink = $current_path . '?' . http_build_query($params);
 $activeMenuId = get_var('menu_id', array_keys($menus)[0]);
 $menuProductsByCategory = Menu::getProductsGroupedByCategory($activeMenuId);
-error_log(print_r($menuProductsByCategory, true));
+
 /*
 */
 $menu_meta = array(

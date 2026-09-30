@@ -196,11 +196,10 @@ class AppController
         //$site_meta = array_merge($site_meta, $app_meta);
         $app_meta = $this->app->get('meta', $site_meta);
         $this->app->set('meta', $app_meta);
-
         // Render the complete page
-        render('components/head.php', array('meta' => $app_meta));
+        $this->app->render('components/head.php', array('meta' => $app_meta));
 
-        render('components/open_body_tag.php', array('nightModeClass' => $nightModeClass));
+        $this->app->render('components/open_body_tag.php', array('nightModeClass' => $nightModeClass));
 ?>
 
         <? render('components/cloudeats_preloader.php', array('text' => 'Loading CloudEats...')); ?>

@@ -15,6 +15,7 @@ $userCourierBadge = false;
 $currentView = get_var('view', 'customer');
 $merchant_id = get_var('merchant_id', false);
 $merchant = $this->get('merchant', false);
+$customerOrders = $this->get('customer_orders', array());
 
 // Verify user session exists
 $isUserLoggedIn = isset($_SESSION['user']);
@@ -83,6 +84,14 @@ if ($isUserLoggedIn) {
 
             <!-- Dropdown Structure -->
             <ul id="user-dropdown" class="dropdown-content" style="top: 60px !important;">
+                <?
+                if (($currentView == 'customer') && (!empty($customerOrders))): ?>
+                <li>
+                    <a id="floating-tracking-ledger-toggle" class="nh-btn nh-btn-secondary" style="" onclick="toggleTrackingLedger()">
+                        <i class="fas fa-receipt"></i> Your Orders
+                    </a>
+                </li>
+                <? endif; ?>
 
                 <!-- ============================================================================
                      NEIGHBORHUB DYNAMIC ROLE SWITCHING MATRIX

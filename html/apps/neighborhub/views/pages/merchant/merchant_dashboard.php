@@ -57,7 +57,7 @@ $isShopOnline = ($rawStatus === 'active' || $rawStatus === 'online' || $rawStatu
 <ul id="sidenav-right" class="sidenav right" style="width: 320px; padding: 1.25rem 1rem; z-index: 1004;">
   <li style="margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
     <h5 style="margin: 0; font-size: 1.2rem; font-weight: 700;">Menu Availability</h5>
-    <a href="#!" class="sidenav-close grey-text text-darken-1"><i class="fas fa-times"></i></a>
+    <a href="#!" class="sidenav-close grey-text text-darken-1"><i class="fas fa-ellipsis"></i></a>
   </li>
 
   <li class="divider" tabindex="-1"></li>

@@ -176,6 +176,9 @@ function neighborhub_init(&$app)
 
     case 'customer':
     default:
+      $styles = array(
+        'apps/neighborhub/css/customer.css',
+      );
       $scripts = array(
         'apps/neighborhub/js/multiTenantShoppingCart.js',
         'apps/neighborhub/js/merchantStorefront.js',
@@ -400,11 +403,10 @@ function neighborhub_render_body(&$app)
 
   // Render the template if it exists
   if ($templatePath && file_exists($app->app_path . '/views/pages/' . $templatePath)) {
-    render('pages/' . $templatePath, $vars);
+    $app->render('pages/' . $templatePath, $vars);
   } elseif (file_exists($app->dir . '/views/pages/' . $currentPage . '.php')) {
-    render('pages/' . $currentPage . '.php', $vars);
-  }
-  else {
+    $app->render('pages/' . $currentPage . '.php', $vars);
+  } else {
     // Fallback error message
     echo '<div class="nh-alert nh-alert-error">';
     echo '<div class="nh-alert-icon">✕</div>';
@@ -581,8 +583,7 @@ function neighborhub_init_customer_context(&$app)
 
     // Load customer's recent orders
     $recentOrders = ($user_id) ? Order::getOrdersByCustomerId($customer_id) : array();
-    //error_log(print_r($recentOrders, true));
-    $app->set('customer_orders', $recentOrders ? $recentOrders : array());
+    $app->set('customer_orders', $recentOrders);
 
     // Load available merchants (active status)
     $activeMerchants = Merchant::getAllMerchants(null, null, 0, 'business_name ASC', 'object');
@@ -996,7 +997,6 @@ function neighborhub_install_db()
 {
   $app = App::getInstance('neighborhub');
   $tableSql = "
--- Neighborhub MySQL/MariaDB Database Initialization Script
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS neighborhub_delivery_tracking;
 DROP TABLE IF EXISTS neighborhub_images;
@@ -1021,6 +1021,7 @@ CREATE TABLE neighborhub_merchants (
   address TEXT,
   latitude DOUBLE,
   longitude DOUBLE,
+  location POINT NULL,
   phone VARCHAR(50),
   email VARCHAR(255),
   messenger VARCHAR(255),
@@ -1097,8 +1098,8 @@ CREATE TABLE neighborhub_products (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS neighborhub_menus (
-  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  merchant_id INT UNSIGNED NOT NULL,
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  merchant_id INT NOT NULL,
   name VARCHAR(100) NOT NULL,
   description VARCHAR(255) DEFAULT NULL,
   is_active TINYINT(1) NOT NULL DEFAULT 1,
@@ -1112,8 +1113,8 @@ CREATE TABLE IF NOT EXISTS neighborhub_menus (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS neighborhub_menu_categories (
-  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  menu_id INT UNSIGNED NOT NULL,
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  menu_id INT NOT NULL,
   name VARCHAR(100) NOT NULL,
   sort_order INT UNSIGNED NOT NULL DEFAULT 0,
   status VARCHAR(20) DEFAULT 'inactive' CHECK(status IN ('active', 'inactive')),
@@ -1125,9 +1126,9 @@ CREATE TABLE IF NOT EXISTS neighborhub_menu_categories (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS neighborhub_menu_items (
-  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  category_id INT UNSIGNED NOT NULL,
-  product_id INT NOT NULL, -- Changed from INT UNSIGNED to INT
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  category_id INT NOT NULL,
+  product_id INT NOT NULL,
   override_price DECIMAL(10,2) DEFAULT NULL,
   is_available TINYINT(1) NOT NULL DEFAULT 1,
   sort_order INT UNSIGNED NOT NULL DEFAULT 0,
@@ -1149,6 +1150,7 @@ CREATE TABLE neighborhub_couriers (
   status VARCHAR(20) DEFAULT 'offline' CHECK(status IN ('available', 'on_delivery', 'offline')),
   latitude DOUBLE,
   longitude DOUBLE,
+  location POINT NULL,
   last_location_update DATETIME,
   total_deliveries INT DEFAULT 0,
   rating DECIMAL(3,2),
@@ -1172,7 +1174,7 @@ CREATE TABLE neighborhub_orders (
   delivery_fee DECIMAL(10,2) NOT NULL DEFAULT 0.00,
   tips DECIMAL(10,2) NOT NULL DEFAULT 0.00,
   total_amount DECIMAL(10,2) NOT NULL,
-  payment_method VARCHAR(30) NOT NULL DEFAULT 'STRIPE',     -- 'CASH', 'EXTERNAL_CARD'
+  payment_method VARCHAR(30) NOT NULL DEFAULT 'STRIPE',
   state VARCHAR(50) NOT NULL DEFAULT 'PENDING_CONFIRMATION',
   stripe_payment_intent_id VARCHAR(255),
   delivery_assignment_mode VARCHAR(20) DEFAULT 'auto' CHECK(delivery_assignment_mode IN ('auto', 'manual', 'disabled')),
@@ -1227,6 +1229,7 @@ CREATE TABLE neighborhub_delivery_tracking (
   courier_id INT NOT NULL,
   latitude DOUBLE,
   longitude DOUBLE,
+  location POINT NULL,
   status_update VARCHAR(255),
   details JSON NOT NULL,
   type VARCHAR(50) DEFAULT 'default',
@@ -1236,27 +1239,33 @@ CREATE TABLE neighborhub_delivery_tracking (
   FOREIGN KEY (courier_id) REFERENCES neighborhub_couriers(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `neighborhub_webrtc_sessions` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `session_id` varchar(64) NOT NULL,
-  `initiator_role` enum('admin','merchant','customer','courier') NOT NULL,
-  `initiator_id` int(11) NOT NULL,
-  `target_role` enum('admin','merchant','customer','courier') NOT NULL,
-  `target_id` int(11) DEFAULT NULL,
-  `offer_sdp` text DEFAULT NULL,
-  `answer_sdp` text DEFAULT NULL,
-  `status` enum('waiting','offered','answered','connected','closed') DEFAULT 'waiting',
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `idx_session_id` (`session_id`),
-  KEY `idx_lookup` (`target_role`, `target_id`, `status`)
+CREATE TABLE neighborhub_webrtc_sessions (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  session_id varchar(64) NOT NULL,
+  initiator_role enum('admin','merchant','customer','courier') NOT NULL,
+  initiator_id int(11) NOT NULL,
+  target_role enum('admin','merchant','customer','courier') NOT NULL,
+  target_id int(11) DEFAULT NULL,
+  offer_sdp text DEFAULT NULL,
+  answer_sdp text DEFAULT NULL,
+  status enum('waiting','offered','answered','connected','closed') DEFAULT 'waiting',
+  created_at datetime NOT NULL,
+  updated_at datetime DEFAULT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY idx_session_id (session_id),
+  KEY idx_lookup (target_role, target_id, status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE INDEX idx_nh_merch_user ON neighborhub_merchants(user_id, status);
+CREATE INDEX idx_nh_merch_status ON neighborhub_merchants(status);
+CREATE INDEX idx_nh_cust_user ON neighborhub_customers(user_id, status);
+CREATE INDEX idx_nh_cust_status ON neighborhub_customers(status);
+CREATE SPATIAL INDEX idx_merchants_spatial ON neighborhub_merchants(location);
+CREATE SPATIAL INDEX idx_tracking_spatial ON neighborhub_delivery_tracking(location);
+CREATE SPATIAL INDEX idx_couriers_spatial ON neighborhub_couriers(location);
 CREATE INDEX idx_nh_mu_user ON neighborhub_merchant_users(user_id, status);
 CREATE INDEX idx_nh_mu_merch ON neighborhub_merchant_users(merchant_id, status);
 CREATE INDEX idx_nh_prod_merch ON neighborhub_products(merchant_id, is_available);
-CREATE INDEX idx_nh_prod_menu_cat ON neighborhub_products(merchant_id, menu, category, is_available);
 CREATE INDEX idx_nh_orders_num ON neighborhub_orders(order_number);
 CREATE INDEX idx_nh_orders_cust ON neighborhub_orders(customer_id, state);
 CREATE INDEX idx_nh_orders_merch ON neighborhub_orders(merchant_id, state);
@@ -1265,6 +1274,7 @@ CREATE INDEX idx_nh_orders_state_time ON neighborhub_orders(state, created_at);
 CREATE INDEX idx_nh_cour_geo ON neighborhub_couriers(status, latitude, longitude);
 CREATE INDEX idx_nh_track_order ON neighborhub_delivery_tracking(order_id, created_at);
   ";
+
   $log = [];
   foreach (explode(';', $tableSql) as $q) {
     $q = trim($q);

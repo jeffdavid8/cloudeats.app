@@ -3,6 +3,7 @@
 class PageController
 {
     private $page;
+    private $app;
     private $requiresAuth = ['dashboard', 'edit', 'bookmarks'];
     private $layouts = [
         'dashboard' => 'default',  // Use default layout with header
@@ -20,6 +21,7 @@ class PageController
     public function __construct($page)
     {
         $this->page = $page;
+        $this->app = App::getInstance();
     }
 
     public function handleRequest()
@@ -37,6 +39,14 @@ class PageController
         // Handle authentication check BEFORE any output
         if (in_array($this->page, $this->requiresAuth)) {
             $this->checkAuthentication();
+        }
+
+        $redirectUrl = get_var('return', '?p=dashboard');
+
+        // Detect if logged in already, and redirect to dashboard
+        if ($this->app->getAuthManager()::isUserLoggedIn()) {
+            header('Location: ' . $redirectUrl, true, 302);
+            exit();
         }
 
         // Now it's safe to render with appropriate layout
@@ -62,26 +72,25 @@ class PageController
     private function render()
     {
         // Set up App instance for proper head rendering
-        $app = App::getInstance();
-        $user = $app->user;
+        $user = $this->app->user;
         $day_night_mode = (isset($_COOKIE['day_night_mode'])) ? $_COOKIE['day_night_mode'] : 'night';
-        $app->setCookie('day_night_mode', $day_night_mode);
-        $app->set('day_night_mode', $day_night_mode);
+        $this->app->setCookie('day_night_mode', $day_night_mode);
+        $this->app->set('day_night_mode', $day_night_mode);
 
         $day_night_mode = get_var('day_night_mode', $day_night_mode);
         $day_mode = ($day_night_mode == 'day');
-        $bg_image = $app->get('bg_image');
-        $app_meta = $app->get('meta', array());
-        $base_url = $app->config['base_url'];
+        $bg_image = $this->app->get('bg_image');
+        $app_meta = $this->app->get('meta', array());
+        $base_url = $this->app->config['base_url'];
         $page_title = get_var('page_title', ucwords(str_replace('-', ' ', $this->page)));
 
         $site_meta = array(
             'title' => (!empty($page_title)) ? $page_title : $app->config['site_title'],
-            'site_name' => $app->config['site_name'],
+            'site_name' => $this->app->config['site_name'],
             'description' => (!empty($app_meta['description'])) ? $app_meta['description'] : $app->config['site_description'],
-            'url' => $app->config['base_url'],
+            'url' => $this->app->config['base_url'],
             'type' => 'website',
-            'image' => $app->config['site_logo_url'],
+            'image' => $this->app->config['site_logo_url'],
             'image_width' => '600',
             'image_height' => '600',
         );
@@ -95,15 +104,15 @@ class PageController
             if (!empty($returnUrl)) {
                 // 1. Get the query string part of the return URL (e.g., "app=stitch")
                 $queryString = parse_url($returnUrl, PHP_URL_QUERY);
-    
+
                 if ($queryString) {
                     // 2. Parse that query string into an array
                     parse_str($queryString, $returnParams);
-                    
+
                     // 3. Extract the 'app' value
                     if (isset($returnParams['app'])) {
                         $appName = $returnParams['app'];
-                        $appInfo = app_invoke($appName, 'info');
+                        $appInfo = app_invoke($appName, 'info', $this->app);
                         if (is_array($appInfo)) {
                             $site_meta['title'] = $appInfo['title'] . ' | Login';
                             $site_meta['description'] = $appInfo['description'];

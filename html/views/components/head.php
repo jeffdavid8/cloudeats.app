@@ -229,7 +229,6 @@ if (!empty($share_image_name)) {
     }
   }
 
-  logger($this->app_info['styles']);
   $styles = isset($this->app_info['styles']) ? $this->app_info['styles'] : [];
   if (!empty($styles)) {
     foreach ($styles as $style) {

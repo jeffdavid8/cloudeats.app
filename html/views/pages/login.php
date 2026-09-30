@@ -4,19 +4,12 @@
 
 $app = App::getInstance();
 $error = [];
-$redirectUrl = get_var('return', '?p=dashboard');
-
-// Detect if logged in already, and redirect to dashboard
-if ($app->getAuthManager()::isUserLoggedIn()) {
-    header('Location: ' . $redirectUrl, true, 302);
-    exit();
-}
+$redirectUrl = get_var('return', '/');
 
 // Handle app-specific access requests
 $requestedApp = $_GET['app'] ?? null;
 $appDisplayName = $requestedApp ? ucfirst($requestedApp) : 'Cloud Eats';
 $appMessage = '';
-
 if ($requestedApp) {
     switch ($requestedApp) {
         case 'ancestry':
@@ -546,14 +539,15 @@ if (!empty($_SESSION['login_error'])) {
                 // We point to "auth" api with "login" action
                 mb.post('?api=auth', dataObject)
                     .then(data => {
-                        if (data && data.success) {
+
+                    if (data && data.success) {
                             // 🎷 Success! Play the "Genuine" Signal
                             play('audio/star trek sounds/computer_work_beep.mp3');
 
                             if (data.redirect) {
                                 window.location.href = data.redirect;
                             } else {
-                                window.location.href = '/?p=dashboard';
+                                window.location.href = '/';
                             }
                         } else {
                             // 🛑 The "Goobery" Error Signal

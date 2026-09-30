@@ -303,76 +303,52 @@ class Merchant
         try {
             $db = App::getInstance()->db;
 
-            // Validate required fields
             if (!isset($data['business_name']) || empty($data['business_name'])) {
-                error_log("Merchant::create Error: business_name is required");
                 return false;
             }
 
-            // Sanitize input data
-            $businessName = isset($data['business_name']) ? trim($data['business_name']) : null;
+            $businessName = trim($data['business_name']);
             $address = isset($data['address']) ? trim($data['address']) : null;
-            $latitude = isset($data['latitude']) ? floatval($data['latitude']) : null;
-            $longitude = isset($data['longitude']) ? floatval($data['longitude']) : null;
+            $latitude = isset($data['latitude']) && $data['latitude'] !== '' ? floatval($data['latitude']) : null;
+            $longitude = isset($data['longitude']) && $data['longitude'] !== '' ? floatval($data['longitude']) : null;
             $phone = isset($data['phone']) ? trim($data['phone']) : null;
             $userId = isset($data['user_id']) ? intval($data['user_id']) : null;
-            $website = isset($data['website']) ? $data['website'] : null;
-            $facebook = isset($data['facebook']) ? $data['facebook'] : null;
-            $platform_fee_rate = !empty($data['platform_fee_rate']) ? $data['platform_fee_rate'] : 0.40;
-            $platform_flat_fee = !empty($data['platform_flat_fee']) ? $data['platform_flat_fee'] : 1.50;
-            $store_hours = isset($data['store_hours']) ? $data['store_hours'] : null;
-            $menus = isset($data['menus']) ? $data['menus'] : null;
-            $delivery_assignment_mode = isset($data['delivery_assignment_mode']) ? $data['delivery_assignment_mode'] : null;
-            $delivery_max_distance = isset($data['delivery_max_distance']) ? $data['delivery_max_distance'] : null;
-            $stripeApiKey = isset($data['stripe_api_key']) ? intval($data['stripe_api_key']) : null;
-            $stripePercentFee = isset($data['stripe_percent_fee']) ? floatval($data['stripe_percent_fee']) : 0.029; // Default to 2.9%
-            $stripeFlatFee = isset($data['stripe_flat_fee']) ? floatval($data['stripe_flat_fee']) : 0.30; // Default to $0.30
+            $website = $data['website'] ?? null;
+            $facebook = $data['facebook'] ?? null;
+            $platform_fee_rate = !empty($data['platform_fee_rate']) ? $data['platform_fee_rate'] : 0.04;
+            $platform_flat_fee = !empty($data['platform_flat_fee']) ? $data['platform_flat_fee'] : 0.00;
+            $store_hours = $data['store_hours'] ?? null;
+            $menus = $data['menus'] ?? null;
+            $delivery_assignment_mode = $data['delivery_assignment_mode'] ?? 'auto';
+            $delivery_max_distance = $data['delivery_max_distance'] ?? 7.00;
+            $stripeApiKey = $data['stripe_api_key'] ?? null;
+            $stripePercentFee = isset($data['stripe_percent_fee']) ? floatval($data['stripe_percent_fee']) : 0.029;
+            $stripeFlatFee = isset($data['stripe_flat_fee']) ? floatval($data['stripe_flat_fee']) : 0.30;
             $status = isset($data['status']) ? trim($data['status']) : 'active';
             $type = isset($data['type']) ? trim($data['type']) : 'default';
-            $meta = isset($data['meta']) ? $data['meta'] : array();
+            $meta = isset($data['meta']) ? (is_array($data['meta']) ? json_encode($data['meta']) : $data['meta']) : '{}';
 
-            $sanitized = array(
-                'user_id' => $userId,
-                'business_name' => $businessName,
-                'address' => $address,
-                'latitude' => $latitude,
-                'longitude' => $longitude,
-                'phone' => $phone,
-                'status' => $status,
-                'website' => $website,
-                'facebook' => $facebook,
-                'platform_fee_rate' => $platform_fee_rate,
-                'platform_flat_fee' => $platform_flat_fee,
-                'store_hours' => $store_hours,
-                'delivery_assignment_mode' => $delivery_assignment_mode,
-                'delivery_max_distance' => $delivery_max_distance,
-                'stripe_api_key' => $stripeApiKey,
-                'stripe_percent_fee' => $stripePercentFee,
-                'stripe_flat_fee' => $stripeFlatFee,
-                'type' => $type,
-                'meta' => $meta
-            );
-            self::sanitize($sanitized);
+            // Set spatial point SQL snippet if coordinates are present (Longitude FIRST for SRID 4326)
+            $locationSql = ($latitude !== null && $longitude !== null)
+                ? "ST_PointFromText(CONCAT('POINT(', ?, ' ', ?, ')'), 4326)"
+                : "NULL";
 
-            // Validate status against allowed values
-            $allowedStatuses = array('active', 'paused', 'suspended');
-            if (!in_array($status, $allowedStatuses)) {
-                $status = 'active';
+            $sql = "INSERT INTO neighborhub_merchants
+            (user_id, business_name, address, latitude, longitude, location, phone, status, website, facebook, 
+             platform_fee_rate, platform_flat_fee, store_hours, menus, delivery_assignment_mode, 
+             delivery_max_distance, stripe_api_key, stripe_percent_fee, stripe_flat_fee, type, meta, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, {$locationSql}, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
+
+            $params = [$userId, $businessName, $address, $latitude, $longitude];
+
+            // Append lat/lng again for ST_PointFromText if coordinates exist
+            if ($latitude !== null && $longitude !== null) {
+                $params[] = $longitude;
+                $params[] = $latitude;
             }
 
-            // Prepare and execute insert statement
-            $stmt = $db->prepare(
-                "INSERT INTO neighborhub_merchants
-                (user_id, business_name, address, latitude, longitude, phone, status, website, facebook, platform_fee_rate, platform_flat_fee, store_hours, menus, delivery_assignment_mode, delivery_max_distance, stripe_api_key, stripe_percent_fee, stripe_flat_fee, type, meta, created_at, updated_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())"
-            );
-
-            $success = $stmt->execute([
-                $userId,
-                $sanitized['business_name'],
-                $address,
-                $latitude,
-                $longitude,
+            array_push(
+                $params,
                 $phone,
                 $status,
                 $website,
@@ -387,16 +363,14 @@ class Merchant
                 $stripePercentFee,
                 $stripeFlatFee,
                 $type,
-                $sanitized['meta']
-            ]);
+                $meta
+            );
 
-            if ($success) {
-                // Return the ID of the newly created merchant
+            $stmt = $db->prepare($sql);
+            if ($stmt->execute($params)) {
                 return intval($db->lastInsertId());
-            } else {
-                error_log("Merchant::create Error: Failed to insert merchant record");
-                return false;
             }
+            return false;
         } catch (Exception $e) {
             error_log("Merchant::create Exception: " . $e->getMessage());
             return false;
@@ -451,6 +425,22 @@ class Merchant
             if (isset($data['longitude'])) {
                 $updates[] = "longitude = ?";
                 $params[] = floatval($data['longitude']);
+            }
+
+            if (isset($data['latitude']) || isset($data['longitude'])) {
+                $lat = isset($data['latitude']) ? floatval($data['latitude']) : null;
+                $lng = isset($data['longitude']) ? floatval($data['longitude']) : null;
+
+                if ($lat !== null && $lng !== null) {
+                    $updates[] = "latitude = ?";
+                    $params[] = $lat;
+                    $updates[] = "longitude = ?";
+                    $params[] = $lng;
+                    // Keep spatial point synchronized (longitude first)
+                    $updates[] = "location = ST_PointFromText(CONCAT('POINT(', ?, ' ', ?, ')'), 4326)";
+                    $params[] = $lng;
+                    $params[] = $lat;
+                }
             }
 
             if (isset($data['phone'])) {
@@ -593,6 +583,72 @@ class Merchant
             return false;
         }
     }
+
+    /**
+     * Search active merchants within their allowed delivery radius using spatial indexing/Haversine formula
+     * 
+     * @param float $lat User Latitude
+     * @param float $lng User Longitude
+     * @param string $query Optional search keyword for business or product names
+     * @param int $limit Max results
+     * @return array List of matching merchants with distance_miles
+     */
+    public static function searchNearby($lat, $lng, $query = '', $limit = 30)
+    {
+        try {
+            $db = App::getInstance('neighborhub')->db;
+
+            $sql = "SELECT 
+                    m.id,
+                    m.user_id,
+                    m.business_name,
+                    m.address,
+                    m.latitude,
+                    m.longitude,
+                    m.phone,
+                    m.image_url,
+                    m.status,
+                    m.delivery_max_distance,
+                    (
+                        3959 * ACOS(
+                            COS(RADIANS(:lat1)) * COS(RADIANS(m.latitude)) * 
+                            COS(RADIANS(m.longitude) - RADIANS(:lng)) + 
+                            SIN(RADIANS(:lat2)) * SIN(RADIANS(m.latitude))
+                        )
+                    ) AS distance_miles
+                FROM neighborhub_merchants m
+                WHERE m.status IN ('active', 'online')";
+
+            $params = [
+                'lat1' => $lat,
+                'lng'  => $lng,
+                'lat2' => $lat
+            ];
+
+            if (!empty($query)) {
+                $sql .= " AND (m.business_name LIKE :q1 OR EXISTS (
+                        SELECT 1 FROM neighborhub_products p 
+                        WHERE p.merchant_id = m.id AND (p.name LIKE :q2 OR p.tags LIKE :q3)
+                    ))";
+                $searchTerm = '%' . trim($query) . '%';
+                $params['q1'] = $searchTerm;
+                $params['q2'] = $searchTerm;
+                $params['q3'] = $searchTerm;
+            }
+
+            $sql .= " HAVING distance_miles <= m.delivery_max_distance
+                  ORDER BY distance_miles ASC 
+                  LIMIT " . intval($limit);
+
+            $stmt = $db->prepare($sql);
+            $stmt->execute($params);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+        } catch (Exception $e) {
+            error_log("Merchant::searchNearby Error: " . $e->getMessage());
+            return [];
+        }
+    }
+    
 
     /**
      * Add a staff member to a merchant

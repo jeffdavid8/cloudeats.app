@@ -91,7 +91,7 @@ function handleLogin($data)
         return [
             'success' => true,
             'message' => 'Login successful',
-            'redirect' => $data['return'] ?? '?p=dashboard',
+            'redirect' => $data['return'] ?? '?app=neighborhub&p=dashboard',
             'is_admin' => $isAdmin
         ];
     } else {

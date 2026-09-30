@@ -46,6 +46,7 @@ if (!$action) {
 }
 // Verify authentication for secure requests
 if (!in_array($action, array(
+  'search_merchants',
   'reverse_geocode_proxy',
   'create_checkout_session',
   'list_customer_orders',
@@ -68,6 +69,9 @@ App::getInstance('neighborhub')->includeClass('HubSignalingEngine');
 // Route to appropriate handler
 try {
   switch ($action) {
+    case 'search_merchants':
+        handle_search_merchants($request);
+        break;
     // Inside neighborhub.api.php or your main endpoint switch
     case 'get_product_builder_view':
       $app = App::getInstance('neighborhub');
@@ -743,7 +747,7 @@ try {
         }
 
         $return_key = bin2hex(random_bytes(16));
-
+logger($stripe_key);
         \Stripe\Stripe::setApiKey($stripe_key);
 
         $session = \Stripe\Checkout\Session::create([
@@ -1402,6 +1406,35 @@ try {
     'error' => 'An unexpected error occurred'
   )));
 }
+
+
+
+
+function handle_search_merchants($request)
+{
+    $lat = isset($request['lat']) ? floatval($request['lat']) : null;
+    $lng = isset($request['lng']) ? floatval($request['lng']) : null;
+    $q   = isset($request['q']) ? trim($request['q']) : '';
+
+    if ($lat === null || $lng === null) {
+        http_response_code(400);
+        exit(json_encode([
+            'success' => false,
+            'error'   => 'Latitude (lat) and Longitude (lng) are required'
+        ]));
+    }
+
+    App::getInstance('neighborhub')->includeModel('merchant');
+    $merchants = Merchant::searchNearby($lat, $lng, $q);
+
+    http_response_code(200);
+    exit(json_encode([
+        'success'   => true,
+        'count'     => count($merchants),
+        'merchants' => $merchants
+    ]));
+}
+
 
 function calculate_delivery_fee($request)
 {
