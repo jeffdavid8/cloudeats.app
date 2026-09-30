@@ -8,12 +8,9 @@ if (!defined('MB_RUNNING')) exit;
     <div class="ce-hero-copy">
       <p class="ce-eyebrow"><span></span> GOOD THINGS, CLOSE BY</p>
       <h1 id="ce-heading" style="">
-        <a href="/" data-target="slide-out" class="waves-effect waves-light" style="padding: 0;">
-
           <? render('components/nav_trigger_icon.php', array('icon' => 'menu', 'size' => '50')); ?>
 
-          <span class="brand-cloud">Cloud</span><span class="brand-eats">Eats</span>
-        </a>
+          <span class="brand-cloud">Cloud</span><span class="brand-eats">Eats</span><span class="brand-extension">.app</span>
       </h1>
       <p class="ce-intro">Find the local places you love, ready to bring the good stuff to you.</p>
     </div>

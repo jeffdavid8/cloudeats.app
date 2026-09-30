@@ -293,12 +293,27 @@ body {
   color: var(--text-primary);
   font-weight: 500;
   transition: color 0.3s ease;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  letter-spacing: -0.02em;
 }
 
 .brand-eats {
   color: var(--brand-accent);
   font-weight: 700; /* Bolder weighting for emphasis */
   transition: color 0.3s ease;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.brand-extension {
+  color: var(--text-primary);
+  font-weight: 400;
+  transition: color 0.3s ease;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  letter-spacing: -0.02em;
+}
+.nightMode .brand-extension {
+  color: #e0e0e0; /* Light gray for night mode */
 }
 
 h1 {
