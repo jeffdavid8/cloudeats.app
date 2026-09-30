@@ -170,8 +170,8 @@
         url = window.location.href;
       }
       copyText(url);
-      notify(
-        '<i class="fas fa-copy"></i> &nbsp; Page link copied to clipboard',
+      notify('<i class="fas fa-copy"></i> &nbsp; Page link copied to clipboard',
+        classes = 'notify-success hide-on-small-only',
       );
       return false;
     });

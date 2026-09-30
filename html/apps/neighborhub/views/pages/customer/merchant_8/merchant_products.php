@@ -748,6 +748,7 @@ if ($spotlightProductId) {
                 style="color: #fff; background-color:#3d7329 !important;"
                 data-id="<?php echo $spotlightProduct['id']; ?>"
                 data-merchant-id="<?php echo $merchant->id; ?>"
+                data-customizable="<?php echo $isSpotCustom ? '1' : '0'; ?>"
                 data-merchant-address="<?php echo $merchant->address; ?>"
                 data-merchant-lat="<?php echo $merchant->latitude; ?>"
                 data-merchant-lon="<?php echo $merchant->longitude; ?>"
@@ -1029,6 +1030,7 @@ if ($spotlightProductId) {
         id: btn.data('id'),
         name: btn.data('name'),
         price: btn.data('price'),
+        customizable: btn.data('customizable') === 1,
         merchantImage: btn.data('merchant-image'),
         merchantId: btn.data('merchant-id'),
         merchantName: btn.data('merchant-name'),

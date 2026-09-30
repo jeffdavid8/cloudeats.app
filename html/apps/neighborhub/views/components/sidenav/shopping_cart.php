@@ -212,6 +212,7 @@ if (!isset($merchant->stripe_flat_fee)) {
         modifierHtml += '</div>';
       }
       const customerNotesHtml = item.customer_notes ? `<div style="font-size:12px; color:#9e9e9e; line-height:14px; margin-top:2px;"><strong>Notes:</strong> ${item.customer_notes}</div>` : '';
+      const editBtnHtml = item.customizable ? `<button class="btn-flat edit-cart-item-btn right" style="padding:0 8px; height:24px; line-height:24px;"><i class="material-icons">edit</i></button>` : '';
 
       const row = `
                 <div class="cart-item-row" data-item-key="${key}" style="padding: 1rem 0;">
@@ -226,9 +227,9 @@ if (!isset($merchant->stripe_flat_fee)) {
                             ${customerNotesHtml}
                         </div>
                         <span style="font-weight:700; font-size:14px;">$${(item.unit_price * item.quantity).toFixed(2)}<br/>
-                        <button class="btn-flat edit-cart-item-btn right">
-                          <i class="material-icons">edit</i>
-                        </button></span>
+                        ${editBtnHtml}
+                        </span>
+                        
                     </div>
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
                         <div style="display:flex; align-items:center; border-radius:4px; padding:2px;">

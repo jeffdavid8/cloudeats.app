@@ -741,6 +741,7 @@ if ($spotlightProductId) {
         id: btn.data('id'),
         name: btn.data('name'),
         price: btn.data('price'),
+        customizable: btn.data('customizable') === 1,
         merchantImage: btn.data('merchant-image'),
         merchantId: btn.data('merchant-id'),
         merchantName: btn.data('merchant-name'),

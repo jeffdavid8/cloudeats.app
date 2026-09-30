@@ -160,6 +160,7 @@ class MerchantStorefront {
         id: btn.data('id'),
         name: btn.data('name'),
         price: btn.data('price'),
+        customizable: btn.data('customizable') === 1,
         merchantImage: btn.data('merchant-image'),
         merchantId: btn.data('merchant-id'),
         merchantName: btn.data('merchant-name'),
@@ -178,7 +179,9 @@ class MerchantStorefront {
       btn.closest('.card-action').find('.nh-card-qty-input').val(1);
 
       M.toast({
-        html: `<i class="fas ${self.options.toastIcon}"></i> Added (${cardQty}) ${productInfo.name} to ${self.options.toastVerb}!`
+        html: `<i class="fas ${self.options.toastIcon}"></i> Added (${cardQty}) ${productInfo.name} to ${self.options.toastVerb}!`,
+        classes : 'notify-success notify-bottom',
+        displayLength: 2000
       });
     });
 

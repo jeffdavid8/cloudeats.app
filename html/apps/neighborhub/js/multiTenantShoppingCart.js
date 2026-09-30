@@ -56,6 +56,7 @@ class ShoppingCart {
           ? parseFloat(customizationReceipt.final_price)
           : parseFloat(productData.price),
         quantity: parsedQty, // Assign parsed quantity selection directly
+        customizable: productData.customizable || false,
         customizations: customizationReceipt
           ? customizationReceipt.choices
           : null,

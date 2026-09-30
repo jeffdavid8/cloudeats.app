@@ -2072,3 +2072,31 @@ body.loading #loadingIndicator {
     100% 4px,
     3px 100% !important;
 }
+
+/* notifications */
+.notify-bottom {
+   position: fixed !important;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  top: auto !important;
+  border-radius: 5px;
+  box-shadow:
+    0 2px 5px rgba(0, 0, 0, 0.3),
+    0 2px 10px rgba(0, 0, 0, 0.2);
+  z-index: 10000;
+}
+.notify-center {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #323232;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  box-shadow:
+    0 2px 5px rgba(0, 0, 0, 0.3),
+    0 2px 10px rgba(0, 0, 0, 0.2);
+  z-index: 10000;
+}
