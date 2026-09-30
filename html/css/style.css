@@ -39,6 +39,7 @@
   --info-color: #3b82f6;
 
   /* Light Neutral Colors */
+  --gray-10: #f9fafb;
   --gray-50: #f9fafb;
   --gray-75: #f3f4f6;
   --gray-100: #f3f4f6;
@@ -134,10 +135,11 @@
 }
 
 /* ============================================================================
-   EXPLICIT NIGHT MODE OVERRIDE (body.nightMode)
+   EXPLICIT NIGHT MODE OVERRIDE (.nightMode body)
    ============================================================================ */
 
-body.nightMode {
+.nightMode body {
+  --gray-10: #141416;
   --gray-50: #0f172a;
   --gray-75: #131314;
   --gray-100: #191a1b;
@@ -180,10 +182,10 @@ body.nightMode {
 }
 
 /* ============================================================================
-   EXPLICIT DAY MODE OVERRIDE (body.dayMode)
+   EXPLICIT DAY MODE OVERRIDE (.dayMode body)
    ============================================================================ */
 
-body.dayMode {
+.dayMode body {
   --gray-10: #16181a;
   --gray-50: #f9fafb;
   --gray-75: #f3f4f6;
@@ -277,12 +279,12 @@ body {
 /* ==========================================================================
    Theme Variables
    ========================================================================== */
-body.dayMode {
+.dayMode body {
   --fav-bg-color: #1a73e8; /* Google Tech Blue background for maximum pop */
   --fav-stroke-color: #ffffff; /* Crisp white geometric letters */
 }
 
-body.nightMode {
+.nightMode body {
   --fav-bg-color: #303134; /* Deep material dark gray container */
   --fav-stroke-color: #8ab4f8; /* Vivid, glowing pastel blue letters */
 }
@@ -353,7 +355,7 @@ body.programmatic {
   font-family: "Roboto", sans-serif;
 }
 
-body.nightMode.mb-home input.search {
+.nightMode body.mb-home input.search {
   /* color: rgb(210, 156, 51);
   color: #efefef; */
 }
@@ -414,7 +416,7 @@ body.mb-home .col .panel .icon-title {
 h3.section-header {
   margin: 0.25em;
 }
-body.nightMode.mb-home .col.item a:hover {
+.nightMode body.mb-home .col.item a:hover {
   background-color: rgba(28, 50, 70, 0.26);
 }
 body.mb-home .col.item a:hover {
@@ -506,6 +508,9 @@ body.loading-progress nav .progress {
   visibility: hidden;
   pointer-events: none;
 }
+.dayMode .preloader-overlay {
+  background-color: #f4f5f7; /* Light mode backdrop */
+}
 .modal-preloader-overlay {
   position: relative;
   top: 0;
@@ -521,6 +526,29 @@ body.loading-progress nav .progress {
   visibility: hidden;
   pointer-events: none;
 }
+.dayMode .modal-preloader-overlay {
+  background-color: #f4f5f7; /* Light mode backdrop */
+}
+/* Day Mode styles for the CloudEats preloader SVG */
+.dayMode body #cloudeats-preloader {
+  background-color: #ffffff; /* White background for the whole screen overlay */
+}
+.dayMode body #cloudeats-preloader .fav-bg {
+  fill: #f4f4f5; /* Light gray or white fill for the inner circle */
+  stroke: #e4e4e7; /* Subtle border for the circle */
+  stroke-width: 2px;
+}
+.dayMode body #cloudeats-preloader .fav-letters {
+  fill: none; /* Keeps the path as lines only */
+  stroke: #18181b; /* Dark charcoal/black color for the "CE" letter paths */
+  stroke-width: 8px; /* Matches standard SVG icon line thickness */
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.dayMode body #cloudeats-preloader .preloader-text {
+  color: #18181b; /* Dark text color for readability */
+}
+
 
 .loading-preloader .preloader-overlay,
 .loading-preloader .modal-preloader-overlay {
@@ -680,11 +708,11 @@ header.header .round-header-action {
   }
 }
 
-body.nightMode {
+.nightMode body {
   background: #000000;
 }
 
-body.nightMode .nh-role-header {
+.nightMode body .nh-role-header {
   background: #231820d9;
   backdrop-filter: blur(8px);
 }
@@ -733,10 +761,10 @@ header.header nav {
 .dayMode .header.header nav {
   border-bottom: 2px solid #f1e8eb;
 }
-body.nightMode.header-announcement header.header nav {
+.nightMode body.header-announcement header.header nav {
   border-bottom: 2px solid #e65100;
 }
-body.nightMode.header-announcement.scrolled header.header nav {
+.nightMode body.header-announcement.scrolled header.header nav {
 }
 
 body.scrolled header.header nav {
@@ -746,10 +774,10 @@ body.scrolled header.header nav {
   border-bottom: 2px solid #dd3731; */
   height: 4rem;
 }
-body.nightMode.scrolled header.header nav {
+.nightMode body.scrolled header.header nav {
   border-bottom: 2px solid #e65100; /* 2px solid rgba(163, 116, 91, 0.59) */
 }
-body.dayMode.scrolled header.header nav {
+.dayMode body.scrolled header.header nav {
   border-bottom: 2px solid #e65100; /* 2px solid rgba(163, 116, 91, 0.59) */
 }
 body.scrolled header.header nav {
@@ -1503,6 +1531,9 @@ footer .version {
 .loading-bg #loadingIndicator {
   background-color: rgba(255, 255, 255, 0.75);
 }
+.nightMode .loading-bg #loadingIndicator {
+  background-color: rgba(0, 0, 0, 0.75);
+}
 body #loadingIndicator .loader {
   position: fixed;
   top: 50%;
@@ -1550,7 +1581,7 @@ body.loading #loadingIndicator {
   padding-left: 10px !important;
 }
 
-body.nightMode {
+.nightMode body {
   background-color: var(--gray-100);
   color: #eee;
   /** background-image: url(../images/m45.jpg);

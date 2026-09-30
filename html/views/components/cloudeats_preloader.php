@@ -11,6 +11,6 @@ if (!defined('MB_RUNNING')) exit;
       <circle cx="50" cy="50" r="46" class="fav-bg"></circle>
       <path d="M 72,26 H 44 A 24,24 0 0,0 44,74 H 72 M 44,50 H 66" class="fav-letters"></path>
     </svg>
-    <div class="preloader-text"><?= $text ?? '' ?></div>
+    <div class="preloader-text"><?= $text ?></div>
   </div>
 </div>

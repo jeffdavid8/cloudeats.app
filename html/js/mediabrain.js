@@ -38,6 +38,7 @@ function storage_init() {
   if (!localStorage.getItem("mediabrain")) {
     mb.storage = {
       apps: {},
+      dayNightMode: 'dayMode',
     };
     storage_set();
   }
@@ -47,6 +48,18 @@ function storage_init() {
   if (!mb.storage.apps) {
     mb.storage.apps = {};
     storage_set();
+  }
+
+  if (!mb.storage.dayNightMode) {
+    mb.storage.dayNightMode = 'dayMode';
+    document.documentElement.classList.add('dayMode');
+    storage_set();
+  }
+  
+  if (mb.storage.dayNightMode == 'nightMode') {
+    document.documentElement.classList.add('nightMode');
+  } else {
+    document.documentElement.classList.add('dayMode');
   }
 }
 
@@ -303,7 +316,6 @@ function loading(loading, on=true) {
 
 $(window).on("load", function () {
   $("body").removeClass("loading-preloader");
-  $('#cloudeats-preloader .preloader-text').html('');
 });
 
 mb.process = function (data) {

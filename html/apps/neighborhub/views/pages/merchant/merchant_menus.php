@@ -39,7 +39,7 @@ foreach ($products as $p) {
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 
 <style>
-  body.dayMode,
+  .dayMode body,
   body {
     --brand-bg: #e30101;
     --brand-bg-secondary: #db1f26;
@@ -67,7 +67,7 @@ foreach ($products as $p) {
   }
 
   /* Night / Pub Mode */
-  body.nightMode {
+  .nightMode body {
     --brand-bg: #e30101;
     --brand-bg-secondary: #db1f26;
     /* Dark Tavern Backdrop */

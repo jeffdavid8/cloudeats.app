@@ -33,7 +33,7 @@ if ($spotlightProductId) {
   /* --- Brown's Sweets & Eats Semantic Color Palette --- */
 
   /* Day Mode (Vanilla-Cream & Cocoa) */
-  body.dayMode,
+  .dayMode body,
   body {
     --brand-bg: #FAF3EA;
     /* Cozy Bakery Paper background */
@@ -60,7 +60,7 @@ if ($spotlightProductId) {
   }
 
   /* Night Mode (Dark Chocolate & Honey Caramel) */
-  body.nightMode {
+  .nightMode body {
     --brand-bg: #1C110E;
     /* Dark Cocoa Roast background */
     --brand-card-bg: #2E1C16;
@@ -219,7 +219,7 @@ if ($spotlightProductId) {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08) !important;
   }
 
-  body.nightMode .secondary-category-menu {
+  .nightMode body .secondary-category-menu {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
   }
 

@@ -11,7 +11,7 @@ if ($this->user->is_admin):
   $merchants = Merchant::getAllMerchants();
 ?>
   <li style="margin-left: 10px;">
-    <select id="merchant-select" class="browser-default" onchange="window.location.href = updateQueryStringParameter('merchant_id', this.value);">
+    <select id="merchant-select" class="browser-default" onchange="window.location.href = updateQueryStringParameter('merchant_id', this.value); loading(5);">
       <option value="">Select Merchant</option>
       <? foreach ($merchants as $merchant): ?>
         <option value="<?= $merchant->id ?>" <?= (get_var('merchant_id') == $merchant->id) ? 'selected' : '' ?>><?= $merchant->id . ' - ' . htmlspecialchars($merchant->business_name) ?></option>

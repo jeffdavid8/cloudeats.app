@@ -209,18 +209,21 @@
   /*
    *
    */
-  mb.toggleNightMode = function() {
-    var $body = $("body");
+  mb.toggleNightMode = function () {
+    var $html = $("html");
 
-    if ($body.hasClass("nightMode")) {
-      $body.removeClass("nightMode");
-      $body.addClass("dayMode");
+    if ($html.hasClass("nightMode")) {
+      $html.removeClass("nightMode");
+      $html.addClass("dayMode");
     } else {
-      $body.removeClass("dayMode");
-      $body.addClass("nightMode");
+      $html.removeClass("dayMode");
+      $html.addClass("nightMode");
     }
 
-    var mode = $("body").hasClass("nightMode") ? "night" : "day";
+    mb.storage.dayNightMode = $("html").hasClass("nightMode") ? "nightMode" : "dayMode";
+    storage_set();
+
+    /*
     var package = {
       action: "toggle_night_mode",
       data: {
@@ -241,7 +244,8 @@
         console.log(response);
       },
     });
-  }
+    */
+  };
 
   /*
    *  Overlay

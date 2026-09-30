@@ -30,7 +30,7 @@ if ($spotlightProductId) {
 ?>
 <style>
   /* Day Mode (Vanilla-Cream & Cocoa) */
-  body.dayMode,
+  .dayMode body,
   body {
     --brand-bg: #FAF3EA;
     /* Cozy Bakery Paper background */
@@ -57,7 +57,7 @@ if ($spotlightProductId) {
   }
 
   /* Night Mode (Dark Chocolate & Honey Caramel) */
-  body.nightMode {
+  .nightMode body {
     --brand-bg: #1C110E;
     /* Dark Cocoa Roast background */
     --brand-card-bg: #2E1C16;
@@ -96,12 +96,12 @@ if ($spotlightProductId) {
     border-bottom: 3px solid #613891fd;
   }
 
-  body.nightMode.scrolled header.header nav {
+  .nightMode body.scrolled header.header nav {
     box-shadow: 0 19px 17px rgba(0, 0, 0, 0.25);
     border-bottom: 3px solid #13131b;
   }
 
-  body.dayMode.scrolled header.header nav {
+  .dayMode body.scrolled header.header nav {
     box-shadow: 0 19px 17px rgba(0, 0, 0, 0.25);
     border-bottom: 3px solid #ffffff;
   }
@@ -200,7 +200,7 @@ if ($spotlightProductId) {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08) !important;
   }
 
-  body.nightMode .secondary-category-menu {
+  .nightMode body .secondary-category-menu {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
   }
 

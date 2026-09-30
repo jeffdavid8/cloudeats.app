@@ -27,11 +27,11 @@ header.header {
   }
 }
 
-body.nightMode {
+.nightMode body {
   background: #000000;
 }
 
-body.nightMode .nh-role-header {
+.nightMode body .nh-role-header {
   background: #231820d9;
   backdrop-filter: blur(8px);
 }

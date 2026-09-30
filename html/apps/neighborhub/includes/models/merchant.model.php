@@ -608,6 +608,7 @@ class Merchant
                     m.phone,
                     m.image_url,
                     m.status,
+                    m.store_hours,
                     m.delivery_max_distance,
                     (
                         3959 * ACOS(

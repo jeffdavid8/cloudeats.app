@@ -128,36 +128,35 @@ class PageController
 
         // Render complete page with head
         render('components/head.php', array('meta' => $site_meta));
-?>
 
-        <body class="<?= $this->page ?><?= ($day_mode) ? 'dayMode' : ' nightMode' ?><?= (!empty($bg_image)) ? ' image_bg' : '' ?>">
+        render('components/open_body_tag.php');
 
-            <?php render('components/audio_interfaces.php'); ?>
+        render('components/audio_interfaces.php'); ?>
 
-            <div id="loadingIndicator">
-                <?php render('components/loading_indicator.php'); ?>
-            </div>
+        <div id="loadingIndicator">
+            <?php render('components/loading_indicator.php'); ?>
+        </div>
 
-            <?php
-            switch ($layout) {
-                case 'default':
-                    $this->renderWithDefaultLayout();
-                    break;
-                case 'minimal':
-                    $this->renderWithMinimalLayout();
-                    break;
-                default:
-                    $this->renderWithDefaultLayout();
-            }
+        <?php
+        switch ($layout) {
+            case 'default':
+                $this->renderWithDefaultLayout();
+                break;
+            case 'minimal':
+                $this->renderWithMinimalLayout();
+                break;
+            default:
+                $this->renderWithDefaultLayout();
+        }
 
-            render('components/footer.php');
+        render('components/footer.php');
 
-            if ($_SERVER['HTTP_HOST'] == config('domain')) {
-                render('components/google_analytics.php');
-            }
+        if ($_SERVER['HTTP_HOST'] == config('domain')) {
+            render('components/google_analytics.php');
+        }
 
-            render('components/runtime-errors.php');
-            ?>
+        render('components/runtime-errors.php');
+        ?>
 
         </body>
 

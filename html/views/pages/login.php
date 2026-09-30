@@ -269,7 +269,7 @@ if (!empty($_SESSION['login_error'])) {
     }
 
     /* Night Mode Styles */
-    body.nightMode {
+    .nightMode body {
         background-image: linear-gradient(135deg, #000 0%, #121828 50%, #2d263e 100%) !important;
     }
 

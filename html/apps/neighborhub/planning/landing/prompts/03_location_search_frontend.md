@@ -55,3 +55,8 @@ Build the merchant card list/grid container:
    * Distance badge (`distance_miles` formatted to 1 decimal, e.g., `1.2 mi`).
    * Operating Status (Open/Closed indicator based on `store_hours`).
    * Click action: Navigates to merchant menu page (`/store/{id}` or `/merchant/{id}`).
+
+
+Notes: 
+  * the login page link is /?p=login
+  * we also support google, facebook, and linkedin social logins in the \html\oauth directory

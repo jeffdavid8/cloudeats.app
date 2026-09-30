@@ -30,18 +30,20 @@ body {
 }
 
 @media (prefers-color-scheme: dark) {
+  /*
   body {
     background-color: var(--gray-10);
     color: var(--gray-800);
   }
+  */
 }
 
-body.nightMode {
-  background-color: --gray-10;
+.nightMode body {
+  background-color: var(--gray-100);
   color: var(--gray-800);
 }
 
-body.dayMode {
+.dayMode body {
   background-color: #f5f4f3;
   color: var(--gray-900);
 }
@@ -169,11 +171,11 @@ a:hover {
   }
 }
 
-body.nightMode .nh-content {
+.nightMode body .nh-content {
   background: var(--gray-100);
 }
 
-body.dayMode .nh-content {
+.dayMode body .nh-content {
   background: white;
 }
 
@@ -302,11 +304,11 @@ nav a.sidenav-trigger i {
 header .checkout-button {
   display: none;
 }
-body.nightMode .nh-role-header {
+.nightMode body .nh-role-header {
   background: var(--gray-100);
 }
 
-body.dayMode .nh-role-header {
+.dayMode body .nh-role-header {
   background: white;
 }
 
@@ -361,12 +363,12 @@ body.dayMode .nh-role-header {
   }
 }
 
-body.nightMode .nh-role-nav-link {
+.nightMode body .nh-role-nav-link {
   background: var(--gray-200);
   color: var(--gray-700);
 }
 
-body.dayMode .nh-role-nav-link {
+.dayMode body .nh-role-nav-link {
   background: var(--gray-100);
   color: var(--gray-700);
 }
@@ -383,7 +385,7 @@ body.dayMode .nh-role-nav-link {
   }
 }
 
-body.nightMode .nh-role-nav-link:hover {
+.nightMode body .nh-role-nav-link:hover {
   background: var(--gray-300);
   border-color: var(--gray-400);
 }
@@ -448,11 +450,11 @@ header.header #user-dropdown {
   }
 }
 
-body.nightMode .nh-card {
+.nightMode body .nh-card {
   background: var(--gray-75);
 }
 
-body.dayMode .nh-card {
+.dayMode body .nh-card {
   background: white;
 }
 
@@ -483,11 +485,11 @@ body.dayMode .nh-card {
   }
 }
 
-body.nightMode .nh-card-title {
+.nightMode body .nh-card-title {
   color: var(--gray-800);
 }
 
-body.dayMode .nh-card-title {
+.dayMode body .nh-card-title {
   color: var(--gray-900);
 }
 
@@ -581,11 +583,11 @@ body.dayMode .nh-card-title {
   }
 }
 
-body.nightMode .nh-product-image {
+.nightMode body .nh-product-image {
   background: linear-gradient(135deg, var(--gray-300), var(--gray-400));
 }
 
-body.dayMode .nh-product-image {
+.dayMode body .nh-product-image {
   background: linear-gradient(135deg, var(--gray-200), var(--gray-300));
 }
 
@@ -667,11 +669,11 @@ body.dayMode .nh-product-image {
   }
 }
 
-body.nightMode .nh-order-amount {
+.nightMode body .nh-order-amount {
   color: var(--gray-800);
 }
 
-body.dayMode .nh-order-amount {
+.dayMode body .nh-order-amount {
   color: var(--gray-900);
 }
 
@@ -710,11 +712,11 @@ body.dayMode .nh-order-amount {
   --gray-900: #111827;
 }
 
-body.nightMode .nh-order-detail-value {
+.nightMode body .nh-order-detail-value {
   color: var(--gray-800);
 }
 
-body.dayMode .nh-order-detail-value {
+.dayMode body .nh-order-detail-value {
   color: var(--gray-900);
 }
 
@@ -732,11 +734,11 @@ body.dayMode .nh-order-detail-value {
   }
 }
 
-body.nightMode .nh-order-items {
+.nightMode body .nh-order-items {
   background: var(--gray-200);
 }
 
-body.dayMode .nh-order-items {
+.dayMode body .nh-order-items {
   background: var(--gray-50);
 }
 /* High-visibility focus state for cards and headers */
@@ -766,11 +768,11 @@ body.dayMode .nh-order-items {
   }
 }
 
-body.nightMode .nh-order-items-title {
+.nightMode body .nh-order-items-title {
   color: var(--gray-600);
 }
 
-body.dayMode .nh-order-items-title {
+.dayMode body .nh-order-items-title {
   color: var(--gray-700);
 }
 
@@ -809,11 +811,11 @@ body.dayMode .nh-order-items-title {
   }
 }
 
-body.nightMode .nh-order-item-name {
+.nightMode body .nh-order-item-name {
   color: var(--gray-800);
 }
 
-body.dayMode .nh-order-item-name {
+.dayMode body .nh-order-item-name {
   color: var(--gray-900);
 }
 
@@ -833,11 +835,11 @@ body.dayMode .nh-order-item-name {
   }
 }
 
-body.nightMode .nh-order-item-price {
+.nightMode body .nh-order-item-price {
   color: var(--gray-800);
 }
 
-body.dayMode .nh-order-item-price {
+.dayMode body .nh-order-item-price {
   color: var(--gray-900);
 }
 
@@ -974,6 +976,7 @@ body.dayMode .nh-order-item-price {
 .dayMode .btn-large,
 .dayMode .btn-small {
   background-color: #dcdcdc;
+  color: #333;
 }
 .dayMode .btn-small i,
 .dayMode .btn-large i,
@@ -1020,11 +1023,11 @@ body.dayMode .nh-order-item-price {
   }
 }
 
-body.nightMode .nh-btn:disabled {
+.nightMode body .nh-btn:disabled {
   background: var(--gray-400);
 }
 
-body.dayMode .nh-btn:disabled {
+.dayMode body .nh-btn:disabled {
   background: var(--gray-300);
 }
 
@@ -1041,12 +1044,12 @@ body.dayMode .nh-btn:disabled {
   }
 }
 
-body.nightMode .nh-btn-secondary {
+.nightMode body .nh-btn-secondary {
   background: var(--gray-200);
   color: var(--gray-800);
 }
 
-body.dayMode .nh-btn-secondary {
+.dayMode body .nh-btn-secondary {
   background: var(--gray-100);
   color: var(--gray-900);
 }
@@ -1063,12 +1066,12 @@ body.dayMode .nh-btn-secondary {
   }
 }
 
-body.nightMode .nh-btn-secondary:hover {
+.nightMode body .nh-btn-secondary:hover {
   background: var(--gray-300);
   border-color: var(--gray-500);
 }
 
-body.dayMode .nh-btn-secondary:hover {
+.dayMode body .nh-btn-secondary:hover {
   background: var(--gray-200);
   border-color: var(--gray-400);
 }
@@ -1127,7 +1130,7 @@ body.dayMode .nh-btn-secondary:hover {
   }
 }
 
-body.nightMode .nh-form-label {
+.nightMode body .nh-form-label {
   color: var(--gray-600);
 }
 
@@ -1138,7 +1141,7 @@ body.nightMode .nh-form-label {
   color: #84848f;
 }
 
-body.dayMode .nh-form-label {
+.dayMode body .nh-form-label {
   color: var(--gray-700);
 }
 
@@ -1165,16 +1168,16 @@ body.dayMode .nh-form-label {
   }
 }
 
-body.nightMode .nh-form-input,
-body.nightMode .nh-form-select,
-body.nightMode .nh-form-textarea {
+.nightMode body .nh-form-input,
+.nightMode body .nh-form-select,
+.nightMode body .nh-form-textarea {
   background: var(--gray-200);
   color: var(--gray-800);
 }
 
-body.dayMode .nh-form-input,
-body.dayMode .nh-form-select,
-body.dayMode .nh-form-textarea {
+.dayMode body .nh-form-input,
+.dayMode body .nh-form-select,
+.dayMode body .nh-form-textarea {
   background: white;
   color: var(--gray-900);
 }
@@ -1204,16 +1207,16 @@ body.dayMode .nh-form-textarea {
   }
 }
 
-body.nightMode .nh-form-input:disabled,
-body.nightMode .nh-form-select:disabled,
-body.nightMode .nh-form-textarea:disabled {
+.nightMode body .nh-form-input:disabled,
+.nightMode body .nh-form-select:disabled,
+.nightMode body .nh-form-textarea:disabled {
   background: var(--gray-300);
   color: var(--gray-600);
 }
 
-body.dayMode .nh-form-input:disabled,
-body.dayMode .nh-form-select:disabled,
-body.dayMode .nh-form-textarea:disabled {
+.dayMode body .nh-form-input:disabled,
+.dayMode body .nh-form-select:disabled,
+.dayMode body .nh-form-textarea:disabled {
   background: var(--gray-100);
   color: var(--gray-500);
 }
@@ -1277,12 +1280,12 @@ body.dayMode .nh-form-textarea:disabled {
   }
 }
 
-body.nightMode .nh-alert-success {
+.nightMode body .nh-alert-success {
   background: rgba(16, 185, 129, 0.1);
   border-color: rgba(16, 185, 129, 0.3);
 }
 
-body.dayMode .nh-alert-success {
+.dayMode body .nh-alert-success {
   background: #ecfdf5;
   border-color: #d1fae5;
 }
@@ -1297,11 +1300,11 @@ body.dayMode .nh-alert-success {
   }
 }
 
-body.nightMode .nh-alert-success .nh-alert-title {
+.nightMode body .nh-alert-success .nh-alert-title {
   color: #6ee7b7;
 }
 
-body.dayMode .nh-alert-success .nh-alert-title {
+.dayMode body .nh-alert-success .nh-alert-title {
   color: #047857;
 }
 
@@ -1315,11 +1318,11 @@ body.dayMode .nh-alert-success .nh-alert-title {
   }
 }
 
-body.nightMode .nh-alert-success .nh-alert-message {
+.nightMode body .nh-alert-success .nh-alert-message {
   color: #a7f3d0;
 }
 
-body.dayMode .nh-alert-success .nh-alert-message {
+.dayMode body .nh-alert-success .nh-alert-message {
   color: #065f46;
 }
 
@@ -1336,12 +1339,12 @@ body.dayMode .nh-alert-success .nh-alert-message {
   }
 }
 
-body.nightMode .nh-alert-error {
+.nightMode body .nh-alert-error {
   background: rgba(239, 68, 68, 0.1);
   border-color: rgba(239, 68, 68, 0.3);
 }
 
-body.dayMode .nh-alert-error {
+.dayMode body .nh-alert-error {
   background: #fef2f2;
   border-color: #fee2e2;
 }
@@ -1356,11 +1359,11 @@ body.dayMode .nh-alert-error {
   }
 }
 
-body.nightMode .nh-alert-error .nh-alert-title {
+.nightMode body .nh-alert-error .nh-alert-title {
   color: #fca5a5;
 }
 
-body.dayMode .nh-alert-error .nh-alert-title {
+.dayMode body .nh-alert-error .nh-alert-title {
   color: #991b1b;
 }
 
@@ -1374,11 +1377,11 @@ body.dayMode .nh-alert-error .nh-alert-title {
   }
 }
 
-body.nightMode .nh-alert-error .nh-alert-message {
+.nightMode body .nh-alert-error .nh-alert-message {
   color: #fecaca;
 }
 
-body.dayMode .nh-alert-error .nh-alert-message {
+.dayMode body .nh-alert-error .nh-alert-message {
   color: #7f1d1d;
 }
 
@@ -1395,12 +1398,12 @@ body.dayMode .nh-alert-error .nh-alert-message {
   }
 }
 
-body.nightMode .nh-alert-warning {
+.nightMode body .nh-alert-warning {
   background: rgba(245, 158, 11, 0.1);
   border-color: rgba(245, 158, 11, 0.3);
 }
 
-body.dayMode .nh-alert-warning {
+.dayMode body .nh-alert-warning {
   background: #fffbeb;
   border-color: #fef3c7;
 }
@@ -1415,11 +1418,11 @@ body.dayMode .nh-alert-warning {
   }
 }
 
-body.nightMode .nh-alert-warning .nh-alert-title {
+.nightMode body .nh-alert-warning .nh-alert-title {
   color: #fcd34d;
 }
 
-body.dayMode .nh-alert-warning .nh-alert-title {
+.dayMode body .nh-alert-warning .nh-alert-title {
   color: #92400e;
 }
 
@@ -1433,11 +1436,11 @@ body.dayMode .nh-alert-warning .nh-alert-title {
   }
 }
 
-body.nightMode .nh-alert-warning .nh-alert-message {
+.nightMode body .nh-alert-warning .nh-alert-message {
   color: #fde68a;
 }
 
-body.dayMode .nh-alert-warning .nh-alert-message {
+.dayMode body .nh-alert-warning .nh-alert-message {
   color: #78350f;
 }
 
@@ -1454,12 +1457,12 @@ body.dayMode .nh-alert-warning .nh-alert-message {
   }
 }
 
-body.nightMode .nh-alert-info {
+.nightMode body .nh-alert-info {
   background: rgba(59, 130, 246, 0.1);
   border-color: rgba(59, 130, 246, 0.3);
 }
 
-body.dayMode .nh-alert-info {
+.dayMode body .nh-alert-info {
   background: #eff6ff;
   border-color: #bfdbfe;
 }
@@ -1474,11 +1477,11 @@ body.dayMode .nh-alert-info {
   }
 }
 
-body.nightMode .nh-alert-info .nh-alert-title {
+.nightMode body .nh-alert-info .nh-alert-title {
   color: #93c5fd;
 }
 
-body.dayMode .nh-alert-info .nh-alert-title {
+.dayMode body .nh-alert-info .nh-alert-title {
   color: #1e40af;
 }
 
@@ -1492,11 +1495,11 @@ body.dayMode .nh-alert-info .nh-alert-title {
   }
 }
 
-body.nightMode .nh-alert-info .nh-alert-message {
+.nightMode body .nh-alert-info .nh-alert-message {
   color: #bfdbfe;
 }
 
-body.dayMode .nh-alert-info .nh-alert-message {
+.dayMode body .nh-alert-info .nh-alert-message {
   color: #1e3a8a;
 }
 
@@ -1527,12 +1530,12 @@ body.dayMode .nh-alert-info .nh-alert-message {
   }
 }
 
-body.nightMode .nh-table th {
+.nightMode body .nh-table th {
   background: var(--gray-200);
   color: var(--gray-600);
 }
 
-body.dayMode .nh-table th {
+.dayMode body .nh-table th {
   background: var(--gray-50);
   color: var(--gray-700);
 }
@@ -1550,11 +1553,11 @@ body.dayMode .nh-table th {
   }
 }
 
-body.nightMode .nh-table td {
+.nightMode body .nh-table td {
   color: var(--gray-800);
 }
 
-body.dayMode .nh-table td {
+.dayMode body .nh-table td {
   color: var(--gray-900);
 }
 
@@ -1568,11 +1571,11 @@ body.dayMode .nh-table td {
   }
 }
 
-body.nightMode .nh-table tbody tr:hover {
+.nightMode body .nh-table tbody tr:hover {
   background: var(--gray-200);
 }
 
-body.dayMode .nh-table tbody tr:hover {
+.dayMode body .nh-table tbody tr:hover {
   background: var(--gray-50);
 }
 

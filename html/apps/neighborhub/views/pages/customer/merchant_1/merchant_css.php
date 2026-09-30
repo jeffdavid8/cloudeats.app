@@ -1,7 +1,7 @@
 <style>
   /* --- Kammy's Kafe Theme Palette (Cozy Vintage Diner & Warm Amber Accent) --- */
   /* Day / Warm Cafe Mode */
-  body.dayMode,
+  .dayMode body,
   body {
     --brand-bg: #4a1f1b;
     /* Rich Warm Mocha / Mahogany Backdrop */
@@ -30,7 +30,7 @@
   }
 
   /* Night / Warm Evening Diner Mode */
-  body.nightMode {
+  .nightMode body {
     --brand-bg: #21110F;
     /* Deep Espresso Night */
     --brand-bg-secondary: #2D1815;
@@ -206,7 +206,7 @@
     transition: all 0.3s ease;
   }
 
-  body.nightMode .kk-card {
+  .nightMode body .kk-card {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
   }
 
@@ -346,7 +346,7 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08) !important;
   }
 
-  body.nightMode .secondary-category-menu {
+  .nightMode body .secondary-category-menu {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
   }
 

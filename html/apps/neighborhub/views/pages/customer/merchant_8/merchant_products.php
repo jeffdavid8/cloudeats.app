@@ -58,7 +58,7 @@ if ($spotlightProductId) {
 <style>
   /* --- Pizza King & The Mason Jar Theme Palette --- */
   /* Day / Warm Rustic Mode */
-  body.dayMode,
+  .dayMode body,
   body {
     --brand-bg: #e30101;
     --brand-bg-secondary: #db1f26;
@@ -86,7 +86,7 @@ if ($spotlightProductId) {
   }
 
   /* Night / Pub Mode */
-  body.nightMode {
+  .nightMode body {
     --brand-bg: #e30101;
     --brand-bg-secondary: #db1f26;
     /* Dark Tavern Backdrop */
@@ -258,7 +258,7 @@ if ($spotlightProductId) {
     transition: all 0.3s ease;
   }
 
-  body.nightMode .pk-card {
+  .nightMode body .pk-card {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
   }
 
@@ -470,7 +470,7 @@ if ($spotlightProductId) {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08) !important;
   }
 
-  body.nightMode .secondary-category-menu {
+  .nightMode body .secondary-category-menu {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
   }
 

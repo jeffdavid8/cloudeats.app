@@ -10,5 +10,5 @@ $merchant = $this->get('merchant', false);
 ?>
 <script>
   nh.merchant = <?= json_encode($merchant) ?>;
-  const NHCart = new ShoppingCart(nh.merchant);
+  window.NHCart = new ShoppingCart(nh.merchant);
 </script>

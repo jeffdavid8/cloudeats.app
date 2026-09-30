@@ -87,12 +87,12 @@ if ($spotlightProductId) {
     border-bottom: 3px solid #9E1B1B;
   }
 
-  body.nightMode.scrolled header.header nav {
+  .nightMode body.scrolled header.header nav {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     border-bottom: 3px solid #13131b;
   }
 
-  body.dayMode.scrolled header.header nav {
+  .dayMode body.scrolled header.header nav {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     border-bottom: 3px solid #ffffff;
   }
@@ -259,7 +259,7 @@ if ($spotlightProductId) {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08) !important;
   }
 
-  body.nightMode .secondary-category-menu {
+  .nightMode body .secondary-category-menu {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
   }
 

@@ -32,7 +32,7 @@ if ($spotlightProductId) {
   /* --- Chuckwagon Pizza Western-Saloon Semantic Palette --- */
 
   /* Day Mode (Rustic Timber & Tomato Red) */
-  body.dayMode,
+  .dayMode body,
   body {
     --brand-bg: #F9F5F0;
     /* Dust & Flour Dough background */
@@ -58,7 +58,7 @@ if ($spotlightProductId) {
   }
 
   /* Night Mode (Warm Saloon & Glowing Campfire) */
-  body.nightMode {
+  .nightMode body {
     --brand-bg: #120A07;
     /* Midnight Ranch Sky */
     --brand-card-bg: #1A100C;
@@ -210,7 +210,7 @@ if ($spotlightProductId) {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08) !important;
   }
 
-  body.nightMode .secondary-category-menu {
+  .nightMode body .secondary-category-menu {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
   }
 

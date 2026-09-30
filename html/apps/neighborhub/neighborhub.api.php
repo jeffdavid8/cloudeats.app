@@ -47,6 +47,7 @@ if (!$action) {
 // Verify authentication for secure requests
 if (!in_array($action, array(
   'search_merchants',
+  'geocode_proxy',
   'reverse_geocode_proxy',
   'create_checkout_session',
   'list_customer_orders',
@@ -72,6 +73,9 @@ try {
     case 'search_merchants':
         handle_search_merchants($request);
         break;
+    case 'geocode_proxy':
+      handle_geocode_proxy($request);
+      break;
     // Inside neighborhub.api.php or your main endpoint switch
     case 'get_product_builder_view':
       $app = App::getInstance('neighborhub');
@@ -475,6 +479,9 @@ try {
       $checkout_return_url = (!empty($request['return_url'])) 
       ? $request['return_url'] 
       : config('base_url') . '/?app=neighborhub&view=customer&p=dashboard';
+      $checkout_cancel_url = (!empty($request['cancel_url'])) 
+      ? $request['cancel_url'] 
+      : config('base_url') . '/?app=neighborhub&view=customer&p=dashboard';
 
       $basket = $request['basket'] ?? null;
       if (!$basket || empty($basket['items'])) {
@@ -747,7 +754,7 @@ try {
         }
 
         $return_key = bin2hex(random_bytes(16));
-logger($stripe_key);
+
         \Stripe\Stripe::setApiKey($stripe_key);
 
         $session = \Stripe\Checkout\Session::create([
@@ -759,7 +766,7 @@ logger($stripe_key);
             'capture_method' => 'manual',
           ],
           'success_url' => $checkout_return_url . '&action=checkout_success&session_key=' . $return_key,
-          'cancel_url' => $checkout_return_url . '&action=checkout_cancelled',
+          'cancel_url' => $checkout_cancel_url . '&action=checkout_cancelled',
           'metadata' => [
             'customer_id' => $customer->id,
             'session_key' => $return_key
@@ -1426,6 +1433,18 @@ function handle_search_merchants($request)
 
     App::getInstance('neighborhub')->includeModel('merchant');
     $merchants = Merchant::searchNearby($lat, $lng, $q);
+    App::getInstance('neighborhub')->includeModel('order');
+
+    foreach ($merchants as &$merchant) {
+      $fee = Order::calculateDeliveryFee(
+        $merchant['latitude'],
+        $merchant['longitude'],
+        $lat,
+        $lng
+      );
+      $merchant['delivery_fee'] = $fee['fee'];
+    }
+    unset($merchant);
 
     http_response_code(200);
     exit(json_encode([
@@ -1433,6 +1452,59 @@ function handle_search_merchants($request)
         'count'     => count($merchants),
         'merchants' => $merchants
     ]));
+}
+
+function handle_geocode_proxy($request)
+{
+  $query = trim($request['q'] ?? '');
+  if (mb_strlen($query) < 3 || mb_strlen($query) > 160) {
+    http_response_code(400);
+    exit(json_encode(['success' => false, 'error' => 'Enter an address between 3 and 160 characters.']));
+  }
+
+  $targetUrl = 'https://photon.komoot.io/api/?limit=5&lang=en&q=' . urlencode($query);
+  $ch = curl_init();
+  curl_setopt($ch, CURLOPT_URL, $targetUrl);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  curl_setopt($ch, CURLOPT_USERAGENT, 'MediaBrain App (contact: admin@mediabrain.app)');
+  curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+
+  $response = curl_exec($ch);
+  $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+  curl_close($ch);
+
+  $payload = $response !== false ? json_decode($response, true) : null;
+  if ($httpCode !== 200 || !is_array($payload)) {
+    http_response_code(502);
+    exit(json_encode(['success' => false, 'error' => 'Address search is temporarily unavailable.']));
+  }
+
+  $suggestions = [];
+  foreach ($payload['features'] ?? [] as $feature) {
+    $coordinates = $feature['geometry']['coordinates'] ?? [];
+    if (count($coordinates) < 2) {
+      continue;
+    }
+
+    $properties = $feature['properties'] ?? [];
+    $street = trim(($properties['housenumber'] ?? '') . ' ' . ($properties['street'] ?? ''));
+    $parts = array_filter([
+      $properties['name'] ?? null,
+      $street !== '' ? $street : null,
+      $properties['postcode'] ?? null,
+      $properties['city'] ?? null,
+      $properties['state'] ?? null,
+      $properties['country'] ?? null,
+    ]);
+    $suggestions[] = [
+      'display_name' => implode(', ', array_unique($parts)),
+      'lat' => $coordinates[1],
+      'lon' => $coordinates[0],
+    ];
+  }
+
+  echo json_encode($suggestions);
+  exit;
 }
 
 

@@ -95,7 +95,8 @@ function neighborhub_init(&$app)
     }
   }
   $app->set('customer', $customer);
-  $landing_page = ((get_var('view', 'customer') === 'customer') && !$customer) ? 'onboarding' : 'dashboard';
+  //$landing_page = ((get_var('view', 'customer') === 'customer') && !$customer) ? 'onboarding' : 'dashboard';
+  $landing_page = 'onboarding';
   $page = isset($_GET['p']) ? sanitize_text_field($_GET['p']) : $landing_page;
   $view = isset($_GET['view']) ? sanitize_text_field($_GET['view']) : 'customer';
   $app->set('page', $page);
@@ -113,7 +114,7 @@ function neighborhub_init(&$app)
   // Store routing context in app object for use in render_body
   $app->set('page', $page);
   $app->set('current_view', $view);
-  $app->set('user_id', $_SESSION['user']['id']);
+  $app->set('user_id', $_SESSION['user']['id'] ?? null);
   $app->set('merchant_id', $merchantId);
   $meta = array(
     'image' => config('base_url') . '/images/android-chrome-512x512.png',
@@ -187,6 +188,10 @@ function neighborhub_init(&$app)
         'apps/neighborhub/js/customOrderBuilder.js',
         'js/HubMeshNode.js'
       );
+      if ($page === 'onboarding') {
+        $styles[] = 'apps/neighborhub/css/landing.css';
+        $scripts[] = 'apps/neighborhub/js/landing.js';
+      }
       neighborhub_init_customer_context($app);
       break;
   }

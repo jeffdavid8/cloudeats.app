@@ -373,7 +373,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Dark Mode Support */
-body.nightMode {
+.nightMode body {
     background-color: #141b37;
 }
 .nightMode .header nav, .nightMode .header nav ul.dropdown-content, .nightMode .searchable-select-dropdown, .nightMode .suggestions_container .collapsible-body, body .tts_player_menu_container nav {
@@ -381,58 +381,58 @@ body.nightMode {
   backdrop-filter: blur(3px);
   border-bottom: 1px solid #000;
 }
-body.nightMode .help-container {
+.nightMode body .help-container {
     background: radial-gradient(ellipse at bottom, #172644 0%, #030613 100%);
 }
 
-body.nightMode .help-sidebar,
-body.nightMode .help-content {
+.nightMode body .help-sidebar,
+.nightMode body .help-content {
     background: #2d2d4459;
     color: #ffffff;
 }
 
-body.nightMode .help-content h1,
-body.nightMode .help-content h2,
-body.nightMode .help-content h3 {
+.nightMode body .help-content h1,
+.nightMode body .help-content h2,
+.nightMode body .help-content h3 {
     color: #ffffff;
 }
 
-body.nightMode .help-content p,
-body.nightMode .help-content li {
+.nightMode body .help-content p,
+.nightMode body .help-content li {
     color: #dfdfdf;
 }
-body.nightMode .help-content p.over-dark {
+.nightMode body .help-content p.over-dark {
     color: #e0e0e0;
 }
-body.nightMode .help-content li {
+.nightMode body .help-content li {
     color: #b0b0b0;
 }
-body.nightMode .help-content .help-warning p,
-body.nightMode .help-content .help-warning li {
+.nightMode body .help-content .help-warning p,
+.nightMode body .help-content .help-warning li {
     color: #111;
 }
 
-body.nightMode .help-content .help-success p,
-body.nightMode .help-content .help-success li {
+.nightMode body .help-content .help-success p,
+.nightMode body .help-content .help-success li {
     color: #111;
 }
 
-body.nightMode .help-feature-card {
+.nightMode body .help-feature-card {
     background: #25254082;
     border-left-color: #667eea;
 }
 
-body.nightMode .help-code-block {
+.nightMode body .help-code-block {
     background: #1b1b20;
 }
 
-body.nightMode .help-step {
+.nightMode body .help-step {
     background: #1a1a2e78;
     border-color: #404060;
     border-left-color: #667eea;
 }
 
-body.nightMode .help-toc {
+.nightMode body .help-toc {
     background: #1a1a2ea8;
     border-color: #404060;
 }

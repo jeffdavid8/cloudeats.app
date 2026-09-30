@@ -20,7 +20,7 @@ $customerOrders = $this->get('customer_orders', array());
 if (isset($_SESSION[get_var('session_key')]) && get_var('action', false) == 'checkout_success') {
   $pendingOrder = $_SESSION[get_var('session_key')];
   $merchant_id = $pendingOrder['merchant_id'];
-  //unset($_SESSION[get_var('session_key')]);
+  unset($_SESSION[get_var('session_key')]);
   $merchant = Merchant::getMerchantById($merchant_id);
 ?>
   <script>

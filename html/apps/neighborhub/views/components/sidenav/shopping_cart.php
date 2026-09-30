@@ -739,7 +739,7 @@ if (!isset($merchant->stripe_flat_fee)) {
 
       //$(this).addClass('disabled').html('Preparing Secure Checkout <i class="fas fa-circle-notch fa-spin right"></i>');
 
-      loading(1);
+      loading(5);
 
       // Build out combined parameters payload object dictionary
       const checkoutOptions = {
@@ -754,6 +754,7 @@ if (!isset($merchant->stripe_flat_fee)) {
         delivery_lat: latVal,
         delivery_lon: lngVal,
         distanceIneligibleMerchants: NHCart.distanceIneligibleMerchants,
+        cancel_url: window.location.href,
         return_url: nh.cart.checkoutReturnUrl
       };
 

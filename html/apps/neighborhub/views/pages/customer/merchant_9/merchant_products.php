@@ -46,7 +46,7 @@ if ($spotlightProductId && isset($menus[$activeMenuId]['categories'])) {
 <style>
   /* --- Kammy's Kafe Theme Palette (Cozy Vintage Diner & Warm Amber Accent) --- */
   /* Day / Warm Cafe Mode */
-  body.dayMode,
+  .dayMode body,
   body {
     --brand-bg: #4a1f1b;
     /* Rich Warm Mocha / Mahogany Backdrop */
@@ -75,7 +75,7 @@ if ($spotlightProductId && isset($menus[$activeMenuId]['categories'])) {
   }
 
   /* Night / Warm Evening Diner Mode */
-  body.nightMode {
+  .nightMode body {
     --brand-bg: #21110F;
     /* Deep Espresso Night */
     --brand-bg-secondary: #2D1815;
@@ -236,7 +236,7 @@ if ($spotlightProductId && isset($menus[$activeMenuId]['categories'])) {
     transition: all 0.3s ease;
   }
 
-  body.nightMode .pk-card {
+  .nightMode body .pk-card {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
   }
 
@@ -377,7 +377,7 @@ if ($spotlightProductId && isset($menus[$activeMenuId]['categories'])) {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08) !important;
   }
 
-  body.nightMode .secondary-category-menu {
+  .nightMode body .secondary-category-menu {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
   }
 

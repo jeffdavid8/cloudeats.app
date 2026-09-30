@@ -60,7 +60,7 @@ if ($isUserLoggedIn) {
 }
 ?>
 
-<ul class="right" data-component="header-right">
+<ul class="right" data-component="header-right" style="display: flex; align-items: center; gap: 0.5rem; margin-right: 1rem;">
 
     <? if (($this->get('show_header_shopping_basket')) && ($merchant) && ($merchant->status == 'online')) { ?>
         <li><a href="#" style="display: block; overflow: visible; " data-target="nh-shopping-cart-sidenav" class="<?= $this->get('header_shopping_basket_class_list', 'waves-effect waves-light shopping-cart-sidenav-trigger accent-4 shadow-lift round-header-action') ?>">
@@ -73,24 +73,24 @@ if ($isUserLoggedIn) {
         <!-- User Profile Dropdown -->
         <li>
             <!-- Dropdown Trigger -->
-            <a class="dropdown-trigger user-badge" title="Logged in (<?= htmlspecialchars($username) ?>)" href="#!" data-target="user-dropdown" style="color: inherit; display: flex; min-width: auto; margin: 0; padding: 5px 0 0 10px;">
+            <a class="dropdown-trigger user-badge" title="Logged in (<?= htmlspecialchars($username) ?>)" href="#!" data-target="user-dropdown" style="color: inherit; display: flex; min-width: auto; margin: 0; padding: 6px 0 0 10px;height: 56px;">
                 <?php if (!empty($_SESSION['user']['profilePicture'])): ?>
                     <img src="<?= htmlspecialchars($_SESSION['user']['profilePicture']) ?>" alt="Profile Picture" class="circle responsive-img" style="width: 32px; height: 32px;">
                 <?php else: ?>
                     <i class="material-icons">account_circle</i>
                 <?php endif; ?>
-                <i class="material-icons right hide-on-small-only" style="margin-right: 0; margin-left: 0; position: relative; right: 8px; top: 13px;">arrow_drop_down</i>
+                <i class="material-icons right hide-on-small-only" style="margin-right: 0; margin-left: 0; position: relative; right: 8px; top: 11px; font-size: 1.3rem;">arrow_drop_down</i>
             </a>
 
             <!-- Dropdown Structure -->
             <ul id="user-dropdown" class="dropdown-content" style="top: 60px !important;">
                 <?
                 if (($currentView == 'customer') && (!empty($customerOrders))): ?>
-                <li>
-                    <a id="floating-tracking-ledger-toggle" class="nh-btn nh-btn-secondary" style="" onclick="toggleTrackingLedger()">
-                        <i class="fas fa-receipt"></i> Your Orders
-                    </a>
-                </li>
+                    <li>
+                        <a id="floating-tracking-ledger-toggle" class="nh-btn nh-btn-secondary" style="" onclick="toggleTrackingLedger()">
+                            <i class="fas fa-receipt"></i> Your Orders
+                        </a>
+                    </li>
                 <? endif; ?>
 
                 <!-- ============================================================================
@@ -180,7 +180,7 @@ if ($isUserLoggedIn) {
 
 
                 <!-- Logout Link -->
-                <li><a href="/?app=auth&action=logout&redirect=<?=  $_SERVER['REQUEST_URI'] ?>" class="logout-btn" title="Log out (<?= htmlspecialchars($username) ?>)"><i class="material-icons">exit_to_app</i>Logout</a></li>
+                <li><a href="/?app=auth&action=logout&redirect=<?= $_SERVER['REQUEST_URI'] ?>" class="logout-btn" title="Log out (<?= htmlspecialchars($username) ?>)"><i class="material-icons">exit_to_app</i>Logout</a></li>
 
             </ul>
         </li>
@@ -189,17 +189,32 @@ if ($isUserLoggedIn) {
         <!--<li><a class="fullscreen-btn"><i class="fas fa-expand"></i></a></li>-->
 
     <?php else: ?>
+
         <!-- Login Link (Not Logged In) -->
         <li style="margin-right: 10px;">
-            <a class="user-badge" href="?p=login&return=<?php echo urlencode($_SERVER['REQUEST_URI']); ?>" title="Login">
-                <i class="material-icons">account_circle</i>
-            </a>
+            <button
+                type="button"
+                onclick="window.location.href='/?p=login&return=<?= urlencode($_SERVER['REQUEST_URI']) ?>';"
+                id="btn-header-signin"
+                class="btn btn-text text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-200 dark:hover:text-white px-3 py-2 rounded-lg transition-colors"
+                data-action="open-signin-modal">
+                Sign In
+            </button>
+
+            <!-- Sign Up Button (Primary Action CTA) -->
+            <button
+                type="button"
+                id="btn-header-signup"
+                class="btn btn-primary bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-lg shadow-sm hover:shadow transition-all"
+                data-action="open-signup-modal">
+                Sign Up
+            </button>
         </li>
     <?php endif; ?>
 
-   <li class="hide-on-small-only">
-      <a class="page_link waves-effect waves-light" href="<?= $this->config['base_url'] . $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ?>"><i class="material-icons">share</i></a>
-   </li>
+    <li class="hide-on-small-only">
+        <a class="page_link waves-effect waves-light" href="<?= $this->config['base_url'] . $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ?>"><i class="material-icons">share</i></a>
+    </li>
 
     <li class="hide-on-small-only"><a href="javascript: void(0);" onclick="mb.toggleNightMode();"><i class="fas fa-lightbulb"></i></a></li>
 

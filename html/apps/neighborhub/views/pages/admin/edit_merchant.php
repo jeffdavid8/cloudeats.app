@@ -362,28 +362,28 @@ if (!$this->user->is_admin) {
       }
     }
 
-    body.nightMode .provisioning-form {
+    .nightMode body .provisioning-form {
       background-color: #0d0f11;
     }
 
-    body.nightMode .nh-form-group input {
+    .nightMode body .nh-form-group input {
       background-color: #111827;
       border-color: #374151;
     }
 
-    body.nightMode .provisioning-reset-btn {
+    .nightMode body .provisioning-reset-btn {
       background-color: #374151;
     }
 
-    body.nightMode .provisioning-reset-btn:hover {
+    .nightMode body .provisioning-reset-btn:hover {
       background-color: #4b5563;
     }
 
-    body.nightMode .media-dropzone-container {
+    .nightMode body .media-dropzone-container {
       background-color: #111827;
     }
 
-    body.nightMode .primary-preview-box {
+    .nightMode body .primary-preview-box {
       background: #111827;
     }
   </style>

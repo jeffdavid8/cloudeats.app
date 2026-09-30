@@ -60,9 +60,7 @@ mb.registerComponent(
     }
 
     function toggleTheme() {
-      const isNightMode = document.body.classList.toggle("nightMode");
-      localStorage.setItem("mediabrain_theme", isNightMode ? "dark" : "light");
-      updateToggleIcon(isNightMode);
+      mb.toggleNightMode();
     }
 
     function updateToggleIcon(isNightMode) {

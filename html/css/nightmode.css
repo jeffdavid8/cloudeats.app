@@ -437,7 +437,7 @@ body .tts_player_menu_container nav {
 
 /* Night Mode Login Page Styles */
 .nightMode body {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%) !important;
+    /* background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%) !important; */
 }
 
 /* Night Mode Theme Toggle */

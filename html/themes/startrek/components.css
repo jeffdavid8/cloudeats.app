@@ -609,6 +609,12 @@ input.valid:not([type]), input.valid:not([type]):focus, input.valid[type="text"]
   position: relative;
   color: #222;
 }
+.dayMode .lcars-console {
+  background: #cccaca;
+  border: 4px solid #e0dcd6;
+  box-shadow: 0 0 32px #ffffff;
+  color: #222;
+}
 .nightMode .lcars-console {
   background: #111;
   border: 4px solid #ff9900;

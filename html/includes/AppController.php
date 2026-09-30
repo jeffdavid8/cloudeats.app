@@ -199,32 +199,32 @@ class AppController
         // Render the complete page
         $this->app->render('components/head.php', array('meta' => $app_meta));
 
-        $this->app->render('components/open_body_tag.php', array('nightModeClass' => $nightModeClass));
+        $this->app->render('components/open_body_tag.php');
 ?>
 
-        <? render('components/cloudeats_preloader.php', array('text' => 'Loading CloudEats...')); ?>
+        <? $this->app->render('components/cloudeats_preloader.php', array('text' => 'Loading CloudEats...')); ?>
 
-        <?php render('components/audio_interfaces.php'); ?>
+        <?php $this->app->render('components/audio_interfaces.php'); ?>
 
         <div id="loadingIndicator">
-            <?php render('components/loading_indicator.php'); ?>
+            <?php $this->app->render('components/loading_indicator.php'); ?>
         </div>
 
         <?
         // Control header rendering based on app needs
         if ((!$this->app->app_config['no_header'])) {
-            render('components/header/header.php');
+            $this->app->render('components/header/header.php');
         }
         // Render the app content
         app_invoke($this->appName, 'render_body', $this->app);
 
-        render('components/footer.php');
+        $this->app->render('components/footer.php');
 
         if ($_SERVER['HTTP_HOST'] == config('domain')) {
-            render('components/google_analytics.php');
+            $this->app->render('components/google_analytics.php');
         }
 
-        render('components/runtime-errors.php');
+        $this->app->render('components/runtime-errors.php');
         ?>
 
         </body>
@@ -235,8 +235,8 @@ class AppController
 
     private function render404()
     {
-        render('components/header/header.php');
-        render('pages/error/404.php', array(
+        $this->app->render('components/header/header.php');
+        $this->app->render('pages/error/404.php', array(
             'message' => "Sorry, could not load the {$this->appName} app<br/> App not found"
         ));
     }
