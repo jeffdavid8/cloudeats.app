@@ -904,6 +904,7 @@ header nav ul.header-right {
 }
 header nav ul.header-right {
   float: right;
+  margin-right: 10px;
 }
 header nav ul.header-left {
   float: left;
