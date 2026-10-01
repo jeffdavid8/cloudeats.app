@@ -249,6 +249,7 @@ $(document).ready(function () {
     if (!location || !Number.isFinite(location.lat) || !Number.isFinite(location.lng)) return;
     const requestId = ++searchRequest;
     showLoading();
+    loading(4);
     mb.ajax({
       url: "?api=neighborhub&action=search_merchants",
       method: "POST",
@@ -265,6 +266,9 @@ $(document).ready(function () {
       error: function () {
         if (requestId === searchRequest) showMessage("Search is taking a break", "We couldn't reach the local store directory. Please try again.", true);
       },
+      complete: function () {
+        loading(0);
+      }
     });
   }
 
