@@ -100,7 +100,7 @@ if ($spotlightProductId) {
   .merchant-header-image {
     position: fixed;
     transition: all 0.3s;
-    top: 35px;
+    top: 3rem;
     display: none;
     align-items: center;
     width: 80px;

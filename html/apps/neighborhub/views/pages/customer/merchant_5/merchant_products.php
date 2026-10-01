@@ -84,7 +84,7 @@ if ($spotlightProductId) {
 
   /* Global Body Theme Override */
   body {
-    padding-top: 10rem;
+    padding-top: 11rem;
     background-color: var(--brand-bg) !important;
     color: var(--brand-text-main);
     font-family: 'Montserrat', 'Playfair Display', 'Helvetica Neue', sans-serif;
@@ -115,7 +115,7 @@ if ($spotlightProductId) {
   .merchant-header-image {
     position: fixed;
     transition: all 0.3s;
-    top: 35px;
+    top: 3rem;
     display: flex;
     align-items: center;
     width: 160px;
