@@ -34,7 +34,7 @@ if (!defined('MB_RUNNING')) exit;
     </nav>
   </section>
 
-  <section class="ce-results" aria-labelledby="ce-results-heading">
+  <section id="merchant-grid-section" class="ce-results" aria-labelledby="ce-results-heading">
     <div class="ce-results-heading">
       <div>
         <p class="ce-eyebrow">THE LOCAL LINEUP</p>

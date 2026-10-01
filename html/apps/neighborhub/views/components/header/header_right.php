@@ -60,7 +60,7 @@ if ($isUserLoggedIn) {
 }
 ?>
 
-<ul class="header-right" data-component="header-right" style="display: flex; align-items: center; gap: 3px; margin-right: 1rem;">
+<ul class="header-right" data-component="header-right">
 
     <? if (($this->get('show_header_shopping_basket')) && ($merchant) && ($merchant->status == 'online')) { ?>
         <li><a href="#" style="display: block; overflow: visible; " data-target="nh-shopping-cart-sidenav" class="<?= $this->get('header_shopping_basket_class_list', 'waves-effect waves-light shopping-cart-sidenav-trigger accent-4 shadow-lift round-header-action') ?>">
