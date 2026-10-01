@@ -413,7 +413,7 @@ header nav .header-login-link i,
 
 .ce-card-image {
   position: relative;
-  aspect-ratio: 16 / 9;
+  /* aspect-ratio: 16 / 9; */
   overflow: hidden;
   background: var(--ce-image-base);
 }
@@ -744,7 +744,7 @@ header nav .header-login-link i,
   }
 
   .ce-card-image {
-    aspect-ratio: 16 / 8.5;
+    /* aspect-ratio: 16 / 8.5; */
   }
 
   .ce-footer {
