@@ -82,9 +82,9 @@ $(document).ready(function () {
       error: function () {
         if (requestId === suggestionRequest) hideSuggestions();
       },
-      complete: function() {
+      complete: function () {
         loading(0);
-      }
+      },
     });
   }
 
@@ -362,6 +362,30 @@ $(document).ready(function () {
       },
     });
   }
+  
+  const heroBg = document.getElementById("heroBgParallax");
+
+  if (!heroBg) {
+    console.warn("Parallax element #heroBgParallax not found in DOM.");
+    return;
+  }
+
+  function updateParallax() {
+    const currentScroll = window.scrollY || window.pageYOffset;
+    // Apply transform if hero is still in view
+    if (currentScroll <= 800) {
+      const translateY = currentScroll * 0.3; // 30% scroll speed
+      heroBg.style.transform = "translate3d(0, " + translateY + "px, 0)";
+    }
+  }
+
+  window.addEventListener(
+    "scroll",
+    function () {
+      window.requestAnimationFrame(updateParallax);
+    },
+    { passive: true },
+  );
 
   input.addEventListener("input", function () {
     const query = input.value.trim();
@@ -449,9 +473,9 @@ $(document).ready(function () {
             locateButton.disabled = false;
             locateButton.classList.remove("is-loading");
           },
-          complete: function() {
+          complete: function () {
             loading(0);
-          }
+          },
         });
       },
       function (error) {

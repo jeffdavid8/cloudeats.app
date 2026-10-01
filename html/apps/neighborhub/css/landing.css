@@ -139,6 +139,69 @@ header nav .header-login-link i,
   background: linear-gradient(180deg, var(--ce-hero-start), var(--ce-hero-end) 74%);
   text-align: center;
 }
+/* Ensure hero is positioned for absolute background layering */
+.ce-hero {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--ce-bg-fallback, #f8fafc);
+}
+
+/* Make sure inner content sits above background layer */
+.ce-hero-container {
+  position: relative;
+  width: 100%;
+  text-align: center;
+  z-index: 2;
+}
+
+/* Parallax Layer */
+.hero-bg-parallax {
+  position: absolute;
+  top: -10%;
+  left: 0;
+  width: 100%;
+  height: 120%;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  will-change: transform;
+  z-index: 1;
+}
+
+/* Background image assignments */
+.dayMode body .hero-bg-parallax {
+  background-image: url('/images/hero-bg-day.jpg');
+}
+.nightMode body .hero-bg-parallax {
+  background-image: url('/images/hero-bg-day.jpg');
+}
+
+/* Radial Overlays for Text Legibility */
+.dayMode body .hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at center, 
+    rgba(248, 250, 252, 0.88) 0%, 
+    rgba(248, 250, 252, 0.72) 60%, 
+    rgba(248, 250, 252, 0.4) 100%
+  );
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+
+.nightMode body .hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at center, 
+    rgba(15, 23, 42, 0.92) 0%, 
+    rgba(15, 23, 42, 0.80) 60%, 
+    rgba(15, 23, 42, 0.55) 100%
+  );
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
 
 .ce-hero-copy {
   animation: ce-rise-in 550ms ease-out both;
@@ -186,6 +249,7 @@ header nav .header-login-link i,
   width: min(720px, 100%);
   min-height: 68px;
   padding: 7px;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   border: 1px solid var(--ce-search-border);
@@ -409,11 +473,14 @@ header nav .header-login-link i,
   border-color: var(--ce-leaf);
   box-shadow: var(--ce-card-shadow);
   outline: none;
+  .ce-card-image img {
+    transform: scale(1.04);
+  }
 }
 
 .ce-card-image {
   position: relative;
-  /* aspect-ratio: 16 / 9; */
+  aspect-ratio: 16 / 9;
   overflow: hidden;
   background: var(--ce-image-base);
 }
@@ -422,7 +489,8 @@ header nav .header-login-link i,
   width: 100%;
   height: 100%;
   display: block;
-  object-fit: cover;
+  object-fit: contain;
+  transition: transform 300ms ease;
 }
 
 .ce-card-image.is-placeholder {
@@ -744,7 +812,7 @@ header nav .header-login-link i,
   }
 
   .ce-card-image {
-    /* aspect-ratio: 16 / 8.5; */
+    aspect-ratio: 16 / 8.5;
   }
 
   .ce-footer {

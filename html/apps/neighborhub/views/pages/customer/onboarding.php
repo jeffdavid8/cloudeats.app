@@ -4,34 +4,44 @@ if (!defined('MB_RUNNING')) exit;
 
 <main class="ce-landing" id="ce-landing">
 
-  <section class="ce-hero" aria-labelledby="ce-heading">
-    <div class="ce-hero-copy">
-      <p class="ce-eyebrow"><span></span> GOOD THINGS, CLOSE BY</p>
-      <h1 id="ce-heading" style="">
-          <? render('components/nav_trigger_icon.php', array('icon' => 'menu', 'size' => '50')); ?>
-
-          <span class="brand-cloud">Cloud</span><span class="brand-eats">Eats</span><span class="brand-extension">.app</span>
-      </h1>
-      <p class="ce-intro">Find the local places you love, ready to bring the good stuff to you.</p>
+  <section class="ce-hero relative overflow-hidden" aria-labelledby="ce-heading">
+    
+    <!-- Parallax Background Layer & Mode Overlay -->
+    <div class="hero-bg-parallax" id="heroBgParallax" aria-hidden="true">
+      <div class="hero-overlay"></div>
     </div>
 
-    <form class="ce-search" id="ce-search-form" autocomplete="off">
-      <label class="ce-location-icon" for="ce-address"><i class="fas fa-map-marker-alt" aria-hidden="true"></i></label>
-      <input id="ce-address" name="address" type="search" placeholder="Enter your delivery address" aria-label="Delivery address" aria-controls="ce-suggestions" aria-autocomplete="list">
-      <button class="ce-locate" id="ce-locate" type="button" title="Use my current location" aria-label="Use my current location"><i class="fas fa-crosshairs" aria-hidden="true"></i></button>
-      <button class="ce-search-submit" type="submit"><span>Find places</span><i class="fas fa-arrow-right" aria-hidden="true"></i></button>
-      <ul class="ce-suggestions" id="ce-suggestions" role="listbox" hidden></ul>
-    </form>
-    <p class="ce-search-note" id="ce-location-note" aria-live="polite">Choose an address to see what delivers nearby.</p>
+    <!-- Hero Content Container -->
+    <div class="ce-hero-container relative z-10">
+      <div class="ce-hero-copy">
+        <p class="ce-eyebrow"><span></span> GOOD THINGS, CLOSE BY</p>
+        <h1 id="ce-heading" style="">
+            <? render('components/nav_trigger_icon.php', array('icon' => 'menu', 'size' => '50')); ?>
 
-    <nav class="ce-categories" aria-label="Filter by category">
-      <button type="button" class="is-active" data-category="">All nearby</button>
-      <button type="button" data-category="Pizza">Pizza</button>
-      <button type="button" data-category="Wings">Wings</button>
-      <button type="button" data-category="Grocery">Grocery</button>
-      <button type="button" data-category="Bakery">Bakery</button>
-      <button type="button" data-category="Late Night">Late night</button>
-    </nav>
+            <span class="brand-cloud">Cloud</span><span class="brand-eats">Eats</span><span class="brand-extension">.app</span>
+        </h1>
+        <p class="ce-intro">Find the local places you love, ready to bring the good stuff to you.</p>
+      </div>
+
+      <form class="ce-search" id="ce-search-form" autocomplete="off">
+        <label class="ce-location-icon" for="ce-address"><i class="fas fa-map-marker-alt" aria-hidden="true"></i></label>
+        <input id="ce-address" name="address" type="search" placeholder="Enter your delivery address" aria-label="Delivery address" aria-controls="ce-suggestions" aria-autocomplete="list">
+        <button class="ce-locate" id="ce-locate" type="button" title="Use my current location" aria-label="Use my current location"><i class="fas fa-crosshairs" aria-hidden="true"></i></button>
+        <button class="ce-search-submit" type="submit"><span>Find places</span><i class="fas fa-arrow-right" aria-hidden="true"></i></button>
+        <ul class="ce-suggestions" id="ce-suggestions" role="listbox" hidden></ul>
+      </form>
+      <p class="ce-search-note" id="ce-location-note" aria-live="polite">Choose an address to see what delivers nearby.</p>
+
+      <nav class="ce-categories" aria-label="Filter by category">
+        <button type="button" class="is-active" data-category="">All nearby</button>
+        <button type="button" data-category="Pizza">Pizza</button>
+        <button type="button" data-category="Wings">Wings</button>
+        <button type="button" data-category="Grocery">Grocery</button>
+        <button type="button" data-category="Bakery">Bakery</button>
+        <button type="button" data-category="Late Night">Late night</button>
+      </nav>
+    </div>
+
   </section>
 
   <section id="merchant-grid-section" class="ce-results" aria-labelledby="ce-results-heading">
@@ -55,4 +65,5 @@ if (!defined('MB_RUNNING')) exit;
     <span>Made for the places that make a neighborhood.</span>
     <span><a href="https://www.openstreetmap.org/copyright" rel="noreferrer">© OpenStreetMap contributors</a> · <a href="/?p=login">Own a local business? <strong>Join Cloud Eats</strong></a></span>
   </footer>
+
 </main>
