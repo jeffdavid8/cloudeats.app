@@ -173,7 +173,7 @@ header nav .header-login-link i,
   background-image: url('/images/hero-bg-day.jpg');
 }
 .nightMode body .hero-bg-parallax {
-  background-image: url('/images/hero-bg-day.jpg');
+  background-image: url('/images/hero-bg-night.jpg');
 }
 
 /* Radial Overlays for Text Legibility */
