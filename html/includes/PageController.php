@@ -129,7 +129,7 @@ class PageController
         // Render complete page with head
         render('components/head.php', array('meta' => $site_meta));
 
-        render('components/open_body_tag.php');
+        render('components/open_body_tag.php', array('page_name' => $this->page));
 
         render('components/audio_interfaces.php'); ?>
 

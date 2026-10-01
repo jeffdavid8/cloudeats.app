@@ -184,24 +184,31 @@ if ($isUserLoggedIn) {
     <?php else: ?>
 
         <!-- Login Link (Not Logged In) -->
-        <li class="hide-on-small-only" style="">
-            <button
-                type="button"
-                onclick="window.location.href='/?p=login&return=<?= urlencode($_SERVER['REQUEST_URI']) ?>';"
-                id="btn-header-signin"
-                class="btn btn-text text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-200 dark:hover:text-white px-3 py-2 rounded-lg transition-colors"
-                data-action="open-signin-modal">
-                Sign In
-            </button>
+        <li style="">
+            <div class="hide-on-med-and-up">
+                <a class="user-badge" href="?p=login&return=<?php echo urlencode($_SERVER['REQUEST_URI']); ?>" title="Login">
+                    <i class="material-icons">account_circle</i>
+                </a>
+            </div>
+            <div class="hide-on-small-only">
+                <button
+                    type="button"
+                    onclick="window.location.href='/?p=login&return=<?= urlencode($_SERVER['REQUEST_URI']) ?>';"
+                    id="btn-header-signin"
+                    class="btn btn-text text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-200 dark:hover:text-white px-3 py-2 rounded-lg transition-colors"
+                    data-action="open-signin-modal">
+                    Sign In
+                </button>
 
-            <!-- Sign Up Button (Primary Action CTA) -->
-            <button
-                type="button"
-                id="btn-header-signup"
-                class="btn btn-primary bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-lg shadow-sm hover:shadow transition-all"
-                data-action="open-signup-modal">
-                Sign Up
-            </button>
+                <!-- Sign Up Button (Primary Action CTA) -->
+                <button
+                    type="button"
+                    id="btn-header-signup"
+                    class="btn btn-primary bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-lg shadow-sm hover:shadow transition-all"
+                    data-action="open-signup-modal">
+                    Sign Up
+                </button>
+            </div>
         </li>
     <?php endif; ?>
 
