@@ -42,7 +42,7 @@ if (!defined('MB_RUNNING')) exit;
       </nav>
     <? if ($this->user): ?>
       <div class="my-cloudeats-link" style="">
-        <a href="/?app=neighborhub&view=customer&p=dashboard" class="btn waves-effect waves-light">My CloudEats</a>
+        <a href="/?app=neighborhub&view=customer&p=dashboard" class="btn waves-effect waves-light">My <span class="brand-cloud">Cloud</span><span class="brand-eats">Eats</span><span class="brand-extension">.app</span></a>
       </div>
     <? endif; ?>
     </div>

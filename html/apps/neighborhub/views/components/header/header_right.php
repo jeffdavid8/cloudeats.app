@@ -80,7 +80,7 @@ if ($isUserLoggedIn) {
                 <?
                 if (($currentView == 'customer') && (!empty($customerOrders))): ?>
                     <li>
-                        <a id="floating-tracking-ledger-toggle" class="nh-btn nh-btn-secondary" style="" onclick="toggleTrackingLedger()">
+                        <a href="/?app=neighborhub&view=customer&p=dashboard" class="" style="" >
                             <i class="fas fa-receipt"></i> Your Orders
                         </a>
                     </li>

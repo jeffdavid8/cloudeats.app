@@ -1758,7 +1758,9 @@ body.scrolled .my-cloudeats-link {
   text-decoration: none;
   border-radius: 50px;
   font-family: sans-serif;
+  text-transform: initial;
   font-weight: 600;
+  font-size: 1.1rem;
 
   /* Page load inflation using zoom to avoid transform conflicts */
   animation: balloonInflate 1s cubic-bezier(0.25, 1, 0.5, 1) both;
