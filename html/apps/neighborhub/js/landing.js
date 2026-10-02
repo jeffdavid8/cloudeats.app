@@ -438,7 +438,7 @@ $(document).ready(function () {
   });
 
   document.addEventListener("click", function (event) {
-    if (!form.contains(event.target)) hideSuggestions();
+    //if (!form.contains(event.target)) hideSuggestions();
   });
 
   locateButton.addEventListener("click", function () {
