@@ -1753,7 +1753,7 @@ body.scrolled .my-cloudeats-link {
   display: inline-block;
   height: auto;
   padding: 12px 24px;
-  background-color: #f6f9ff;
+  background-color: #f6f9ffbd;
   color: #3f8ff6;
   text-decoration: none;
   border-radius: 50px;
@@ -1767,17 +1767,19 @@ body.scrolled .my-cloudeats-link {
 
   /* Smooth transition for the hover state */
   transition:
-    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-    background-color 0.2s ease;
+    all  0.2s ease,
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .nightMode .my-cloudeats-link .btn {
-  background-color: #446284;
+  background-color: #43608166;
   color: #ffffff;
+  transition: all 0.2s ease;
 }
 /* Hover effect scales the ENTIRE button */
 .my-cloudeats-link .btn:hover {
-  background-color: #2b88f9;
+  background-color: #3469a6ad;
   transform: scale(1.1); /* Scales the entire button to 1.10 smoothly */
+  margin-right: 1rem;
 }
 .nightMode .my-cloudeats-link .btn:hover {
   color: #ffffff;
