@@ -425,11 +425,17 @@ header nav .header-login-link i,
   margin: 0 auto;
   padding: 14px 40px 74px;
   border-top: 1px solid var(--ce-coral);
+  transition: all 0.3 ease-in-out;
 }
 .dayMode .ce-results {
   border-top: 2px solid #d1fff2;
 }
-
+body.places-located .ce-results {
+  border-top: 2px solid #802c76;
+}
+.dayMode body.places-located .ce-results {
+  border-top: 2px solid #f39159;
+}
 .ce-results-heading {
   margin: 0 0 25px;
   display: flex;

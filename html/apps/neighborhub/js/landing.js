@@ -306,6 +306,7 @@ $(document).ready(function () {
       ? merchants.length + (merchants.length === 1 ? " place" : " places")
       : "";
     if (!merchants.length) {
+      $('body').removeClass('places-located');
       showMessage(
         "No local stores currently online near that location",
         "Try a nearby address or another category, or try back again a little later. Local businesses are always welcome to join.",
@@ -313,6 +314,7 @@ $(document).ready(function () {
       );
       return;
     }
+    $('body').addClass('places-located');
     grid.replaceChildren(...merchants.map(merchantCard));
   }
 
