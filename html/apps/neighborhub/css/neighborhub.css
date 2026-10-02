@@ -259,7 +259,7 @@ header.header nav ul.right ul li a {
 }
 @media (min-width: 768px) {
   header.header nav ul li a {
-    margin: 6px 0 0;
+    margin: 0;
   }
 }
 nav,
