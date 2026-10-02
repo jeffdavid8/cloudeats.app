@@ -971,11 +971,11 @@ $(document).ready(function () {
       var $sidenavOverlay = $(".sidenav-overlay");
 
       if (instance.isOpen) {
+        $sidenavOverlay.css("opacity", "0");
         instance.close();
-        $sidenavOverlay.css("opacity", "0").hide();
       } else {
+        $sidenavOverlay.css("opacity", "1");
         instance.open(); // This naturally creates and animates the overlay
-        $sidenavOverlay.css("opacity", "1").show();
       }
     });
   });
@@ -985,7 +985,7 @@ $(document).ready(function () {
     var $sidenavOverlay = $(".sidenav-overlay");
     if (instance.isOpen) {
       instance.close();
-      $sidenavOverlay.css("opacity", "0").hide();
+      $sidenavOverlay.css("opacity", "0");
     }
   });
 });

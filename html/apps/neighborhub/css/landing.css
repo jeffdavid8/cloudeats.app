@@ -424,6 +424,10 @@ header nav .header-login-link i,
   max-width: 1320px;
   margin: 0 auto;
   padding: 14px 40px 74px;
+  border-top: 1px solid var(--ce-coral);
+}
+.dayMode .ce-results {
+  border-top: 2px solid #d1fff2;
 }
 
 .ce-results-heading {

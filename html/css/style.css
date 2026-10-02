@@ -1020,6 +1020,7 @@ ul.sidenav .collapsible li a:hover,
   background-color: rgba(223, 220, 220, 0.65);
   backdrop-filter: blur(8px);
   z-index: 1000;
+  transition: all 0.2 ease-in-out;
 }
 .nightMode .sidenav-overlay {
   background-color: rgba(0, 0, 0, 0.72);
