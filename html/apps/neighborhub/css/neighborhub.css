@@ -1753,8 +1753,8 @@ body.scrolled .my-cloudeats-link {
   display: inline-block;
   height: auto;
   padding: 12px 24px;
-  background-color: #0070f3;
-  color: #ffffff;
+  background-color: #f6f9ff;
+  color: #3f8ff6;
   text-decoration: none;
   border-radius: 50px;
   font-family: sans-serif;
@@ -1770,13 +1770,26 @@ body.scrolled .my-cloudeats-link {
     transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
     background-color 0.2s ease;
 }
-
+.nightMode .my-cloudeats-link .btn {
+  background-color: #446284;
+  color: #ffffff;
+}
 /* Hover effect scales the ENTIRE button */
 .my-cloudeats-link .btn:hover {
-  background-color: #0051b3;
+  background-color: #2b88f9;
   transform: scale(1.1); /* Scales the entire button to 1.10 smoothly */
 }
-
+.nightMode .my-cloudeats-link .btn:hover {
+  color: #ffffff;
+}
+.dayMode .my-cloudeats-link .btn:hover {
+  span.brand-eats {
+    /* color: #ffffff; */
+  }
+  background-color: #f6f9ff;
+  /* color: #ffffff; */
+  transform: scale(1.1);
+}
 /* Balloon inflate using zoom keyframes */
 @keyframes balloonInflate {
   0% {
