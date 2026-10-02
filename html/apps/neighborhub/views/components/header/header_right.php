@@ -77,11 +77,20 @@ if ($isUserLoggedIn) {
 
             <!-- Dropdown Structure -->
             <ul id="user-dropdown" class="dropdown-content" style="top: 60px !important;">
+                <!-- Customer Marketplace (Always Available) -->
+                <li>
+                    <a href="/"
+                        title="Switch to Customer view"
+                        style="">
+                        <i class="material-icons" style="color: #FF6B6B;">shopping_cart</i>
+                        Customer Marketplace
+                    </a>
+                </li>
                 <?
                 if (($currentView == 'customer') && (!empty($customerOrders))): ?>
                     <li>
-                        <a href="/?app=neighborhub&view=customer&p=dashboard" class="" style="" >
-                            <i class="fas fa-receipt"></i> Your Orders
+                        <a href="/?app=neighborhub&view=customer&p=dashboard" class="" style="">
+                            <i class="fas fa-receipt"></i> My CloudEats
                         </a>
                     </li>
                 <? endif; ?>
@@ -119,18 +128,6 @@ if ($isUserLoggedIn) {
                         <?php endforeach; ?>
                     <?php endif; ?>
 
-                    <!-- Customer Marketplace (Always Available) -->
-                    <li>
-                        <a href="/?app=neighborhub&p=dashboard&view=customer"
-                            title="Switch to Customer view"
-                            style="<?php echo ($currentView === 'customer') ? 'background-color: var(--gray-100); border-left: 3px solid var(--primary-color); font-weight: 600;' : ''; ?>">
-                            <i class="material-icons" style="color: #FF6B6B;">shopping_cart</i>
-                            Customer Marketplace
-                            <?php if ($currentView === 'customer'): ?>
-                                <span style="float: right; color: var(--primary-color); font-weight: 700;">●</span>
-                            <?php endif; ?>
-                        </a>
-                    </li>
 
                     <!-- Courier Board (If has courier badge) -->
                     <?php if ($userCourierBadge): ?>
@@ -163,8 +160,6 @@ if ($isUserLoggedIn) {
                     <!-- Divider -->
                     <li class="divider" role="separator"></li>
                 <?php endif; ?>
-                <!-- Dashboard Link -->
-                <li><a href="?app=neighborhub&view=customer&p=dashboard" title="Dashboard (<?= htmlspecialchars($username) ?>)"><i class="material-icons">dashboard</i>My CloudEats</a></li>
 
                 <!-- Admin Link (if user is admin) -->
                 <?php if (isset($_SESSION['user']['is_admin']) && $_SESSION['user']['is_admin']): ?>

@@ -1006,8 +1006,7 @@ ul.sidenav .collapsible li a:hover,
   background-color: rgba(189, 189, 189, 0.75);
 }
 .dropdown-content li > a > span.emoji-icon {
-  margin: 0 14px 0 0;
-  margin-right: 14px;
+  margin: 0 24px 0 0;
   width: 20px;
 }
 .sidenav ul li a.right {
@@ -2074,7 +2073,7 @@ header.header nav .header-ce-logo-home-link:hover {
 }
 
 #user-dropdown li a i.material-icons {
-  margin-right: 10px !important;
+  /* margin-right: 10px !important; */
   font-size: 18px !important;
 }
 
