@@ -164,7 +164,7 @@ if ($isUserLoggedIn) {
                     <li class="divider" role="separator"></li>
                 <?php endif; ?>
                 <!-- Dashboard Link -->
-                <li><a href="?p=dashboard" title="Dashboard (<?= htmlspecialchars($username) ?>)"><i class="material-icons">dashboard</i>Dashboard</a></li>
+                <li><a href="?app=neighborhub&view=customer&p=dashboard" title="Dashboard (<?= htmlspecialchars($username) ?>)"><i class="material-icons">dashboard</i>My CloudEats</a></li>
 
                 <!-- Admin Link (if user is admin) -->
                 <?php if (isset($_SESSION['user']['is_admin']) && $_SESSION['user']['is_admin']): ?>
