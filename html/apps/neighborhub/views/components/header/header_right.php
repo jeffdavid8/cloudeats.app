@@ -254,7 +254,6 @@ if ($isUserLoggedIn) {
 
     #user-dropdown a:hover {
         background-color: rgba(37, 99, 235, 0.05);
-        padding-left: 1.75rem;
     }
 
     #user-dropdown a i.material-icons {
