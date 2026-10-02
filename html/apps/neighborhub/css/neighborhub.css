@@ -1743,10 +1743,13 @@ header.header #user-dropdown {
 body.scrolled .my-cloudeats-link {
   display: none;
 }
+.header-announcement .my-cloudeats-link a.btn {
+  top: 10rem;
+}
 .my-cloudeats-link a.btn {
   position: fixed;
+  top: 5rem;
   right: 1rem;
-  top: 10rem;
   display: inline-block;
   height: auto;
   padding: 12px 24px;
