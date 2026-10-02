@@ -5,7 +5,7 @@ if (!defined('MB_RUNNING')) exit;
 <main class="ce-landing" id="ce-landing">
 
   <section class="ce-hero relative overflow-hidden" aria-labelledby="ce-heading">
-    
+
     <!-- Parallax Background Layer & Mode Overlay -->
     <div class="hero-bg-parallax" id="heroBgParallax" aria-hidden="true">
       <div class="hero-overlay"></div>
@@ -16,9 +16,9 @@ if (!defined('MB_RUNNING')) exit;
       <div class="ce-hero-copy">
         <p class="ce-eyebrow"><span></span> GOOD THINGS, CLOSE BY</p>
         <h1 id="ce-heading" style="">
-            <? render('components/nav_trigger_icon.php', array('icon' => 'menu', 'size' => '50')); ?>
+          <? render('components/nav_trigger_icon.php', array('icon' => 'menu', 'size' => '50')); ?>
 
-            <span class="brand-cloud">Cloud</span><span class="brand-eats">Eats</span><span class="brand-extension">.app</span>
+          <span class="brand-cloud">Cloud</span><span class="brand-eats">Eats</span><span class="brand-extension">.app</span>
         </h1>
         <p class="ce-intro">Find the local places you love, ready to bring the good stuff to you.</p>
       </div>
@@ -40,7 +40,13 @@ if (!defined('MB_RUNNING')) exit;
         <button type="button" data-category="Bakery">Bakery</button>
         <button type="button" data-category="Late Night">Late night</button>
       </nav>
+    <? if ($this->user): ?>
+      <div class="my-cloudeats-link" style="">
+        <a href="/?app=neighborhub&view=customer&p=dashboard" class="btn waves-effect waves-light">My CloudEats</a>
+      </div>
+    <? endif; ?>
     </div>
+
 
   </section>
 

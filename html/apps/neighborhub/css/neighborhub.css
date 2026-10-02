@@ -1703,6 +1703,57 @@ header.header #user-dropdown {
   border-color: #424242;
 }
 
+/* Core button styling */
+body.scrolled .my-cloudeats-link {
+  display: none;
+}
+.my-cloudeats-link a.btn {
+  position: fixed;
+  right: 1rem;
+  top: 10rem;
+  display: inline-block;
+  height: auto;
+  padding: 12px 24px;
+  background-color: #0070f3;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 50px;
+  font-family: sans-serif;
+  font-weight: 600;
+
+  /* Page load inflation using zoom to avoid transform conflicts */
+  animation: balloonInflate 1s cubic-bezier(0.25, 1, 0.5, 1) both;
+
+  /* Smooth transition for the hover state */
+  transition:
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+    background-color 0.2s ease;
+}
+
+/* Hover effect scales the ENTIRE button */
+.my-cloudeats-link .btn:hover {
+  background-color: #0051b3;
+  transform: scale(1.1); /* Scales the entire button to 1.10 smoothly */
+}
+
+/* Balloon inflate using zoom keyframes */
+@keyframes balloonInflate {
+  0% {
+    opacity: 0;
+    zoom: 0;
+  }
+  60% {
+    opacity: 1;
+    zoom: 1.18; /* Over-inflates */
+  }
+  80% {
+    zoom: 0.97; /* Sinks back slightly */
+  }
+  100% {
+    zoom: 1; /* Settles at normal size */
+  }
+}
+
 /* ============================================================================
    13. RESPONSIVE DESIGN
    ============================================================================ */
