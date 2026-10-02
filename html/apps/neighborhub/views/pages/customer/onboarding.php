@@ -40,11 +40,12 @@ if (!defined('MB_RUNNING')) exit;
         <button type="button" data-category="Bakery">Bakery</button>
         <button type="button" data-category="Late Night">Late night</button>
       </nav>
-    <? if ($this->user): ?>
       <div class="my-cloudeats-link" style="">
-        <a href="/?app=neighborhub&view=customer&p=dashboard" class="btn waves-effect waves-light">My <span class="brand-cloud">Cloud</span><span class="brand-eats">Eats</span><span class="brand-extension">.app</span></a>
+        <?
+        $dashboard_url = '/?app=neighborhub&view=customer&p=dashboard';
+        ?>
+        <a href="<?= ($this->user) ? $dashboard_url : '/?p=login&return='.rawurlencode($dashboard_url) ?>" class="btn waves-effect waves-light">My <span class="brand-cloud">Cloud</span><span class="brand-eats">Eats</span><span class="brand-extension">.app</span></a>
       </div>
-    <? endif; ?>
     </div>
 
 
