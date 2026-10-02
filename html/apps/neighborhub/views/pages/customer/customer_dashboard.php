@@ -156,7 +156,7 @@ if ($notification) {
 
       <!-- Active Tracking Ledger Section -->
       <section class="nh-tracking-ledger">
-        <h2 style="margin-bottom: 2rem;">Your Orders</h2>
+        <h2 style="margin-bottom: 2rem;">Your Order History</h2>
 
         <div class="nh-alert nh-alert-info<?= (!empty($customerOrders)) ? ' hide' : ''; ?>" style="">
           <div class="nh-alert-icon">ℹ</div>
@@ -275,7 +275,7 @@ if ($notification) {
 <div id="order-detail-modal" class="modal mb-modal-fixed">
   <div class="modal-header">
     <h3 style="margin: 0;">Order Details</h3>
-    <button type="button" onclick="closeOrderDetail()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;position: absolute; right: 0; margin: 0; padding: 0;">✕</button>
+    <button type="button" onclick="closeOrderDetail()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;position: absolute; right: 1rem; margin: 0; padding: 0;">✕</button>
 
   </div>
   <div class="modal-content" style="max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto;">
@@ -639,7 +639,7 @@ if ($notification) {
       order.items.forEach(function(item) {
         html += `
                 <tr>
-                    <td>${escapeHtml(item.product_id)}</td>
+                    <td>${escapeHtml(item.product_name)}</td>
                     <td>${item.quantity}</td>
                     <td>$${parseFloat(item.price_at_order).toFixed(2)}</td>
                     <td>$${parseFloat(item.subtotal).toFixed(2)}</td>
