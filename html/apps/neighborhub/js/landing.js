@@ -307,7 +307,7 @@ $(document).ready(function () {
       : "";
     if (!merchants.length) {
       showMessage(
-        "No local stores currently online",
+        "No local stores currently online near that location",
         "Try a nearby address or another category, or try back again a little later. Local businesses are always welcome to join.",
         false,
       );
