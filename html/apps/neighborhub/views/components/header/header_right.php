@@ -62,6 +62,14 @@ if ($isUserLoggedIn) {
 
 <ul class="header-right" data-component="header-right">
 
+    <? if (($this->get('show_header_shopping_basket')) && ($this->get('merchant')->status == 'online')) { ?>
+        <li><a href="#" style="display: block; overflow: visible; " data-target="nh-shopping-cart-sidenav" class="<?= $this->get('header_shopping_basket_class_list', 'waves-effect waves-light shopping-cart-sidenav-trigger accent-4 shadow-lift round-header-action') ?>">
+                <i class="fas fa-shopping-basket"></i>
+                <span class="nh-cart-count-badge badge red white-text circle" style="position: absolute; top: 0; right: 0px; font-size: 11px; font-weight:700; display:none; min-width:20px; height:20px; line-height:20px; padding:0;">0</span>
+            </a></li>
+    <? } ?>
+
+
     <?php if ($isUserLoggedIn): ?>
         <!-- User Profile Dropdown -->
         <li>
@@ -206,13 +214,6 @@ if ($isUserLoggedIn) {
             </div>
         </li>
     <?php endif; ?>
-
-    <? if (($this->get('show_header_shopping_basket')) && ($this->get('merchant')->status == 'online')) { ?>
-        <li><a href="#" style="display: block; overflow: visible; " data-target="nh-shopping-cart-sidenav" class="<?= $this->get('header_shopping_basket_class_list', 'waves-effect waves-light shopping-cart-sidenav-trigger accent-4 shadow-lift round-header-action') ?>">
-                <i class="fas fa-shopping-basket"></i>
-                <span class="nh-cart-count-badge badge red white-text circle" style="position: absolute; top: 0; right: 0px; font-size: 11px; font-weight:700; display:none; min-width:20px; height:20px; line-height:20px; padding:0;">0</span>
-            </a></li>
-    <? } ?>
 
     <li class="hide-on-small-only">
         <a class="page_link waves-effect waves-light" href="<?= $this->config['base_url'] . $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ?>"><i class="material-icons">share</i></a>
