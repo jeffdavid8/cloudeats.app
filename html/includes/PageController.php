@@ -127,11 +127,11 @@ class PageController
 
 
         // Render complete page with head
-        render('components/head.php', array('meta' => $site_meta));
+        $this->app->render('components/head.php', array('meta' => $site_meta));
 
-        render('components/open_body_tag.php', array('page_name' => $this->page));
+        $this->app->render('components/open_body_tag.php', array('page_name' => $this->page));
 
-        render('components/audio_interfaces.php'); ?>
+        $this->app->render('components/audio_interfaces.php'); ?>
 
         <div id="loadingIndicator">
             <?php render('components/loading_indicator.php'); ?>
@@ -149,19 +149,23 @@ class PageController
                 $this->renderWithDefaultLayout();
         }
 
-        render('components/footer.php');
+        $this->app->render('components/footer.php');
 
         if ($_SERVER['HTTP_HOST'] == config('domain')) {
             render('components/google_analytics.php');
         }
 
-        render('components/runtime-errors.php');
+        $this->app->render('components/runtime-errors.php');
         ?>
 
         </body>
 
         </html>
 <?php
+    }
+
+    public function getApp() {
+        return $this->app;
     }
 
     private function getLayout()
