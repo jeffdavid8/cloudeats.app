@@ -1947,7 +1947,7 @@ body.loading #loadingIndicator {
 }
 .nightMode nav ul a:hover {
   color: #ffffff;
-  background-color: rgba(135, 161, 240, 0.059);
+  background-color: rgba(135, 161, 240, 0.24);
 }
 
 .nightMode .fb-like iframe span {

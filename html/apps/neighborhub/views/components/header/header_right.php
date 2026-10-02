@@ -66,13 +66,13 @@ if ($isUserLoggedIn) {
         <!-- User Profile Dropdown -->
         <li>
             <!-- Dropdown Trigger -->
-            <a class="dropdown-trigger user-badge" title="Logged in (<?= htmlspecialchars($username) ?>)" href="#!" data-target="user-dropdown" style="color: inherit; display: flex; min-width: auto; margin: 0; padding: 6px 0 0 10px;height: 56px;">
+            <a class="dropdown-trigger user-badge" title="Logged in (<?= htmlspecialchars($username) ?>)" href="#!" data-target="user-dropdown" style="position: relative; color: inherit; min-width: auto;">
                 <?php if (!empty($_SESSION['user']['profilePicture'])): ?>
                     <img src="<?= htmlspecialchars($_SESSION['user']['profilePicture']) ?>" alt="Profile Picture" class="circle responsive-img" style="width: 32px; height: 32px;">
                 <?php else: ?>
                     <i class="material-icons">account_circle</i>
                 <?php endif; ?>
-                <i class="material-icons right hide-on-small-only" style="margin-right: 0; margin-left: 0; position: relative; right: 8px; top: 11px; font-size: 1.3rem;">arrow_drop_down</i>
+                <i class="material-icons right hide-on-small-only" style="margin-right: 0; margin-left: 0; position: absolute; right: 0px; top: 10px; font-size: 1.3rem;">arrow_drop_down</i>
             </a>
 
             <!-- Dropdown Structure -->
