@@ -190,7 +190,7 @@ if ($isUserLoggedIn) {
                     <i class="material-icons">account_circle</i>
                 </a>
             </div>
-            <div class="hide-on-small-only">
+            <div class="hide-on-small-only" style="display: flex; align-items: center; justify-content: flex-end; gap: 1.1rem;">
                 <button
                     type="button"
                     onclick="window.location.href='/?p=login&return=<?= urlencode($_SERVER['REQUEST_URI']) ?>';"

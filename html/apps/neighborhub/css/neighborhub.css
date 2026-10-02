@@ -1,4 +1,3 @@
-
 /* ============================================================================
    2. RESET & BASE STYLES
    ============================================================================ */
@@ -254,6 +253,9 @@ header.header nav ul.left ul li a {
 }
 header.header nav ul.right ul li a {
   margin-right: 0;
+}
+.dayMode header.header nav button {
+  box-shadow: none;
 }
 @media (min-width: 768px) {
   header.header nav ul li a {
