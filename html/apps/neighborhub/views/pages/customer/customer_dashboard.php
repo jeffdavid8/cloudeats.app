@@ -164,7 +164,9 @@ if ($notification) {
             <p class="nh-alert-message"><?= (!$customerId) ? 'You are not logged in.  Please <a href="?p=login&return=' . $_SERVER['REQUEST_URI'] . '" />login</a> to save and review your orders.' : "You haven't placed any orders yet. Browse merchants above to get started!" ?></p>
           </div>
         </div>
-        <div class="nh-content<?= (empty($customerOrders)) ? ' hide' : ''; ?>" style="overflow-x: auto; ">
+        
+        <!-- CHANGED: Added 'nh-orders-scroll-container' class to the wrapper div below -->
+        <div class="nh-content nh-orders-scroll-container <?= (empty($customerOrders)) ? ' hide' : ''; ?>">
           <table class="nh-table" id="orders-table">
             <thead>
               <tr>
@@ -233,7 +235,7 @@ if ($notification) {
             <?php foreach ($availableMerchants as $merchant):
               if ($merchant->status !== 'disabled'):
             ?>
-                <div class="nh-card nh-merchant-card"
+                <div class="nh-card nh-merchant-card hover-grow"
                   data-merchant-id="<?php echo intval($merchant->id); ?>"
                   data-merchant-name="<?php echo $merchant->business_name; ?>"
                   style="cursor: pointer; transition: all 200ms ease-in-out;">
