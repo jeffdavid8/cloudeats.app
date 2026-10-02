@@ -307,8 +307,8 @@ $(document).ready(function () {
       : "";
     if (!merchants.length) {
       showMessage(
-        "No local stores delivering here yet",
-        "Try a nearby address or another category. Local businesses are always welcome to join.",
+        "No local stores currently online",
+        "Try a nearby address or another category, or try back again a little later. Local businesses are always welcome to join.",
         false,
       );
       return;
