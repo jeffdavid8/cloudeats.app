@@ -156,6 +156,7 @@ function neighborhub_init(&$app)
         'apps/neighborhub/js/customOrderBuilder.js',
         'apps/neighborhub/js/gallery_manager.js',
         'apps/neighborhub/js/polling.js',
+        'apps/neighborhub/js/kitchen.functions.js',
         'js/HubMeshNode.js'
       );
       break;

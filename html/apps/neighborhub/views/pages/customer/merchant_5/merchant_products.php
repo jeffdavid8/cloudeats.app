@@ -102,6 +102,9 @@ if ($spotlightProductId) {
     background-color: var(--brand-nav-bg) !important;
     border-bottom: 5px solid var(--brand-nav-border);
   }
+  .dayMode .header nav {
+    background-color: #D6C9C6 !important;
+  }
 
   body.scrolled header.header nav {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
