@@ -6,11 +6,9 @@ define('MB_RUNNING', true);
  * Handles Facebook OAuth authentication flow
  */
 // Enable error display and reporting for debugging
-/*
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-*/
+ini_set('display_errors', 'Off');
+//error_reporting(E_ALL);
+error_reporting(E_ALL && ~E_WARNING && ~E_NOTICE);
 
 // Include required files - use app.php as single entry point
 require_once __DIR__ . '/../includes/mb.bootstrap.php';

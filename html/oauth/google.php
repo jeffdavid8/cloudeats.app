@@ -10,9 +10,9 @@ require_once __DIR__ . '/../includes/mb.bootstrap.php';
 // Enable error display and reporting for debugging
 /*
 */
-//ini_set('display_errors', 1);
-//ini_set('display_startup_errors', 1);
-//error_reporting(E_ALL && ~E_WARNING);
+ini_set('display_errors', 'Off');
+//error_reporting(E_ALL);
+error_reporting(E_ALL && ~E_WARNING && ~E_NOTICE);
 
 try {
     $oauthHandler = new OAuthHandler();
