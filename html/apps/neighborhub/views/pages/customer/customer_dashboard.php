@@ -213,6 +213,7 @@ if ($notification) {
               <?php endif; ?>
             </tbody>
           </table>
+          <div class="bottom-fade"></div>
         </div>
 
       </section>

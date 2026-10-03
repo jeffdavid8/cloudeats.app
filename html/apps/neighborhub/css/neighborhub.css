@@ -1588,6 +1588,7 @@ header.header #user-dropdown {
 }
 /* 1. Sets the scrolling frame and max-height boundary */
 .nh-orders-scroll-container {
+  position: relative;
   max-height: 40vh;
   overflow-y: auto;  /* Vertical scrollbar if table has many orders */
   overflow-x: auto;  /* Horizontal scrollbar if viewed on mobile screens */
