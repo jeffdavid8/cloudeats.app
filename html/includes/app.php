@@ -368,6 +368,7 @@ class App
 
   private function _loadStructure()
   {
+    /*
     $structure_file = "./json/structure.json";
     $this->_structure = json_decode(file_get_contents($structure_file), true);
     $this->app_info = array(
@@ -375,6 +376,7 @@ class App
       'scripts' => array(),
       'components' => array()
     );
+    */
 
     if ($this->appName) {
       $this->app_info = app_invoke($this->appName, 'info', $this);

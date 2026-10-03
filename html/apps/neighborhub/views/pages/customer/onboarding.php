@@ -18,9 +18,9 @@ if (!defined('MB_RUNNING')) exit;
         <h1 id="ce-heading" style="">
           <? //render('components/nav_trigger_icon.php', array('icon' => 'menu', 'size' => '50')); 
           ?>
-          <img src="images/android-chrome-192x192.png" width="100">
 
           <div class="cloudeats-brand">
+            <img src="images/android-chrome-192x192.png" width="100">
             <span class="brand-cloud">Cloud</span><span class="brand-eats">Eats</span><span class="brand-extension">.app</span>
           </div>
         </h1>
