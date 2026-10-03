@@ -80,9 +80,11 @@ if ($isUserLoggedIn) {
             <a class="dropdown-trigger user-badge" title="Logged in (<?= htmlspecialchars($username) ?>)" href="#!" data-target="user-dropdown" style="color: inherit; display: flex; min-width: auto; margin: 4px 0 0; padding: 5px 0 0 10px;">
                 <?php if (!empty($_SESSION['user']['profilePicture'])): ?>
                     <img src="<?= htmlspecialchars($_SESSION['user']['profilePicture']) ?>" alt="Profile Picture" class="circle responsive-img" style="width: 32px; height: 32px; margin-top: 9px;">
+                    <i class="material-icons right hide-on-small-only" style="margin-right: 0; margin-left: 0; position: relative; right: 10px; top: 13px;">arrow_drop_down</i>
                 <?php else: ?>
                     <i class="material-icons">account_circle</i>
-                <?php endif; ?>
+                    <i class="material-icons right hide-on-small-only" style="margin-right: 0; margin-left: 0; position: relative; right: 8px; top: 13px;">arrow_drop_down</i>
+               <?php endif; ?>
                 <i class="material-icons right hide-on-small-only" style="margin-right: 0; margin-left: 0; position: relative; right: 8px; top: 13px;">arrow_drop_down</i>
             </a>
 
