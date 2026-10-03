@@ -76,7 +76,7 @@ if ($isUserLoggedIn) {
             <!-- Dropdown Trigger -->
             <a class="dropdown-trigger user-badge" title="Logged in (<?= htmlspecialchars($username) ?>)" href="#!" data-target="user-dropdown" style="position: relative; color: inherit; min-width: auto;">
                 <?php if (!empty($_SESSION['user']['profilePicture'])): ?>
-                    <img src="<?= htmlspecialchars($_SESSION['user']['profilePicture']) ?>" alt="Profile Picture" class="circle responsive-img" style="width: 32px; height: 32px;">
+                    <img src="<?= htmlspecialchars($_SESSION['user']['profilePicture']) ?>" alt="Profile Picture" class="circle responsive-img" style="width: 32px; height: 32px; margin-top: 9px;">
                 <?php else: ?>
                     <i class="material-icons">account_circle</i>
                 <?php endif; ?>
