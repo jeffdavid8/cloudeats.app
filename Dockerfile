@@ -110,7 +110,9 @@ RUN set -ex; \
 
 # Make local storage directory
 RUN mkdir -p /var/www/storage
+RUN mkdir -p /var/www/storage/data
 RUN mkdir -p /var/www/storage/backups
+RUN chown -R www-data:www-data /var/www/storage/data
 
 COPY ./storage/default_db.json /var/www/storage/backups/default_db.json
 

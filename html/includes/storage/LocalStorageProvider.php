@@ -10,7 +10,7 @@ class LocalStorageProvider implements StorageProviderInterface {
     
     public function __construct($config = []) {
         $this->config = array_merge([
-            'base_path' => '/var/data/mediabrain/storage',
+            'base_path' => '/var/www/storage/data',
             'public_url_base' => '/api/file.php?f=',
             'permissions' => 0644,
             'directory_permissions' => 0755
