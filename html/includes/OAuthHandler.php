@@ -75,7 +75,7 @@ class OAuthHandler
         $envJson = getenv('OAUTH_CONFIG_JSON');
         if ($envJson !== false && !empty($envJson)) {
             //$configData = file_get_contents($envJson);
-            $this->config = json_decode($configData, true);
+            $this->config = json_decode($envJson, true);
             //error_log(print_r($this->config, true));
             if (json_last_error() !== JSON_ERROR_NONE) {
                 throw new Exception('Invalid OAuth configuration format from OAUTH_CONFIG_JSON env var');
