@@ -116,7 +116,6 @@ p {
 }
 
 a {
-  color: var(--primary-color);
   text-decoration: none;
   transition: color var(--transition-fast);
 }
@@ -1574,11 +1573,14 @@ header.header #user-dropdown {
 }
 
 .nightMode body .nh-table tbody tr:hover {
-  background: var(--gray-200);
+  background: #1f2834;
+}
+.nightMode body .nh-table tbody tr a:hover {
+  color: #fff;
 }
 
 .dayMode body .nh-table tbody tr:hover {
-  background: var(--gray-50);
+  background: var(--gray-200);
 }
 
 .nh-table tbody tr:last-child td {
