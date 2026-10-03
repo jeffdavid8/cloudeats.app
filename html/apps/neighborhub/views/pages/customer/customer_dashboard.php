@@ -201,7 +201,7 @@ if ($notification) {
                       </span>
                     </td>
                     <td>
-                      <?php echo date('M d, Y h:i A', strtotime($order['created_at'])); ?>
+                      <?php echo date('M j, Y g:i A', strtotime($order['created_at'])); ?>
                     </td>
                     <td>
                       <button type="button" class="nh-btn nh-btn-sm" onclick="viewOrderDetail(<?php echo intval($order['id']); ?>)">

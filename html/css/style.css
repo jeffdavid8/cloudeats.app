@@ -1370,6 +1370,12 @@ ul.sidenav li a .switch {
   margin-top: 3rem;
 }
 
+
+
+table th {
+  border-radius: 0;
+}
+
 /**
 * Pages
 */
