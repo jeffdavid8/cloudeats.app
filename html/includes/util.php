@@ -79,7 +79,7 @@ function isCloudRun()
 function get_base_url()
 {
   $protocol = protocol();
-  $host = $_SERVER['HTTP_HOST'] ?? 'mediabrain.app';
+  $host = $_SERVER['HTTP_HOST'] ?? 'https://cloudeats.app';
 
   // If in development, use the actual host
   if (is_development()) {
@@ -87,7 +87,7 @@ function get_base_url()
   }
 
   // Production - always use the main domain with HTTPS
-  return 'https://mediabrain.app';
+  return 'https://cloudeats.app';
 }
 
 
