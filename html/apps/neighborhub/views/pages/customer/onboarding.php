@@ -16,7 +16,8 @@ if (!defined('MB_RUNNING')) exit;
       <div class="ce-hero-copy">
         <p class="ce-eyebrow"><span></span> GOOD THINGS, CLOSE BY</p>
         <h1 id="ce-heading" style="">
-          <? render('components/nav_trigger_icon.php', array('icon' => 'menu', 'size' => '50')); ?>
+          <? //render('components/nav_trigger_icon.php', array('icon' => 'menu', 'size' => '50')); ?>
+          <img src="images/android-chrome-192x192.png" width="100">
 
           <span class="brand-cloud">Cloud</span><span class="brand-eats">Eats</span><span class="brand-extension">.app</span>
         </h1>

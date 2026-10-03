@@ -1995,7 +1995,7 @@ body.scrolled .my-cloudeats-link {
 .mb-modal-fixed .modal-footer {
   flex: 0 0 auto; /* Don't grow, don't shrink */
   position: relative !important; /* Override Materialize absolute positioning */
-  border-top: 1px solid #ddd;
+  border-top: inherit;
   background: #fff;
   padding: 10px 20px;
   height: auto !important;

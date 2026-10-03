@@ -1987,7 +1987,7 @@ body.loading #loadingIndicator {
 }
 .nightMode nav ul a:hover {
   color: #ffffff;
-  background-color: rgba(135, 161, 240, 0.24);
+  /* background-color: rgba(135, 161, 240, 0.24); */
 }
 header.header nav .header-ce-logo-home-link:hover {
   background-color: inherit;

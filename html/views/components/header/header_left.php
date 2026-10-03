@@ -5,10 +5,11 @@ $merchant = $this->get('merchant');
 ?>
 <ul class="header-left">
    <li>
-      <div style="margin-left: 5px; display: inline-flex; align-items: center; gap: 8px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 1.25rem; letter-spacing: -0.02em;">
+      <div style="margin-top: 15px; margin-left: 5px; display: inline-flex; align-items: center; gap: 8px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 1.25rem; letter-spacing: -0.02em;">
          <a href="?app=neighborhub" data-target="slide-out" class="header-sidenav-trigger main-menu-btn show-on-large waves-effect waves-light" style="border-radius: 50%; padding: 0;">
 
-            <? render('components/nav_trigger_icon.php', array('icon' => 'menu', 'size' => '50')); ?>
+            <? //render('components/nav_trigger_icon.php', array('icon' => 'menu', 'size' => '50')); ?>
+            <img src="images/android-chrome-192x192.png" height="40" style="margin-top: 5px">
 
          </a>
          <a class="header-ce-logo-home-link hover-grow hide-on-small-only" style="width: auto; margin-left: 0; padding: 0 5px; font-size: 1.3rem;border-radius: 10px;" href="/"><span class="brand-cloud">Cloud</span><span class="brand-eats">Eats</span><span class="brand-extension">.app</span></a>
