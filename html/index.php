@@ -1,7 +1,7 @@
 <?php
 define('MB_RUNNING', true);
 define('ROOT_PATH', __DIR__);
-ini_set('display_errors', 'On');
+ini_set('display_errors', 'Off');
 //error_reporting(E_ALL);
 error_reporting(E_ALL && ~E_WARNING && ~E_NOTICE);
 date_default_timezone_set('America/Indiana/Indianapolis');
