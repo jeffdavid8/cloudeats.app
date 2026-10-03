@@ -17,7 +17,7 @@ class LocalStorageProvider implements StorageProviderInterface {
         ], $config);
         
         $this->basePath = $this->config['base_path'];
-        $this->ensureBaseDirectory();
+        //$this->ensureBaseDirectory();
     }
     
     public function uploadFile($file, $path, $options = []) {
