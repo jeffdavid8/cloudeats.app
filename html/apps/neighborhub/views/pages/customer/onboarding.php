@@ -16,10 +16,13 @@ if (!defined('MB_RUNNING')) exit;
       <div class="ce-hero-copy">
         <p class="ce-eyebrow"><span></span> GOOD THINGS, CLOSE BY</p>
         <h1 id="ce-heading" style="">
-          <? //render('components/nav_trigger_icon.php', array('icon' => 'menu', 'size' => '50')); ?>
+          <? //render('components/nav_trigger_icon.php', array('icon' => 'menu', 'size' => '50')); 
+          ?>
           <img src="images/android-chrome-192x192.png" width="100">
 
-          <span class="brand-cloud">Cloud</span><span class="brand-eats">Eats</span><span class="brand-extension">.app</span>
+          <div class="cloudeats-brand">
+            <span class="brand-cloud">Cloud</span><span class="brand-eats">Eats</span><span class="brand-extension">.app</span>
+          </div>
         </h1>
         <p class="ce-intro">Find the local places you love, ready to bring the good stuff to you.</p>
       </div>
@@ -45,7 +48,7 @@ if (!defined('MB_RUNNING')) exit;
         <?
         $dashboard_url = '/?app=neighborhub&view=customer&p=dashboard';
         ?>
-        <a href="<?= ($this->user) ? $dashboard_url : '/?p=login&return='.rawurlencode($dashboard_url) ?>" class="btn waves-effect waves-light">My <span class="brand-cloud">Cloud</span><span class="brand-eats">Eats</span><span class="brand-extension">.app</span></a>
+        <a href="<?= ($this->user) ? $dashboard_url : '/?p=login&return=' . rawurlencode($dashboard_url) ?>" class="btn waves-effect waves-light">My <span class="brand-cloud">Cloud</span><span class="brand-eats">Eats</span><span class="brand-extension">.app</span></a>
       </div>
     </div>
 

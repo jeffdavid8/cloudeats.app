@@ -393,12 +393,16 @@ if (!empty($_SESSION['login_error'])) {
             <i class="material-icons">dark_mode</i>
         </button>
         <div class="login-header">
-        <? /*
+            <? /*
             <h4><?php echo $requestedApp 
             ? "Access {$appDisplayName}" 
             : render('components/nav_trigger_icon.php', array('icon' => 'menu', 'size' => '35'), true) . '<span class="brand-cloud">Cloud</span><span class="brand-eats">Eats</span>'; ?></h4>
         */ ?>
-        <p><?php echo $appMessage ?: 'Sign in to your account'; ?></p>
+            <img src="images/android-chrome-192x192.png" width="100"><br />
+            <h3 class="cloudeats-brand">
+                <span class="brand-cloud">Cloud</span><span class="brand-eats">Eats</span><span class="brand-extension">.app</span>
+            </h4>
+            <p><?php echo $appMessage ?: 'Sign in to your account'; ?></p>
         </div>
 
         <?php if (!empty($error)): ?>
@@ -540,7 +544,7 @@ if (!empty($_SESSION['login_error'])) {
                 mb.post('?api=auth', dataObject)
                     .then(data => {
 
-                    if (data && data.success) {
+                        if (data && data.success) {
                             // 🎷 Success! Play the "Genuine" Signal
                             play('audio/star trek sounds/computer_work_beep.mp3');
 
