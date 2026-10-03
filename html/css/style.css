@@ -259,6 +259,9 @@ body {
 body {
   font-family: var(--rhino-font);
 }
+.login-header h3 {
+  font-size: 2em;
+}
 /* Base Layout Sizing */
 /* Add an 'open' class to your icon/button when the menu is active */
 /* Main CloudEats branding */

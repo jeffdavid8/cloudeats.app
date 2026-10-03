@@ -28,7 +28,7 @@ function neighborhub_info(&$app)
 
   return array(
     'db_type' => 'mysql',
-    'title' => "Cloud Eats",
+    'title' => "CloudEats.app",
     'description' => "Local food, local products, local services, local businesses, local people.",
     'image' => $app->config['base_url'] . '/apps/neighborhub/images/neighborhub-app-index-logo-lg.png',
     'image_height' => '752',
@@ -603,7 +603,7 @@ function neighborhub_init_customer_context(&$app)
   }
 
   $meta = array(
-    'title' => 'Cloud Eats',
+    'title' => 'CloudEats.app',
     'type' => 'article',
     'og:type' => 'article',
     'image' => config('base_url') . '/images/android-chrome-512x512.png',

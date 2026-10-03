@@ -73,7 +73,7 @@ h6 {
   font-family: "Orbitron", monospace;
   font-weight: 500;
   color: var(--text-dark);
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   letter-spacing: 1px;
   text-shadow: none;
 }
