@@ -97,8 +97,9 @@ try {
                 if (!$redirectUrl || $redirectUrl === "null" || $redirectUrl === "undefined") {
                     $redirectUrl = '/index.php?p=dashboard&oauth_success=1';
                 }
+                $redirectUrl = get_base_url() . $redirectUrl;
                 error_log('Redirecting to: ' . $redirectUrl);
-                header("Location: " . get_base_url() . $redirectUrl);
+                header("Location: " . $redirectUrl);
                 exit;
             } else {
                 // Handle registration or errors as needed
