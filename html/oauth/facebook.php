@@ -66,6 +66,7 @@ try {
             if ($loginResult['success']) {
                 // Successful login            
                 // Store session data
+                error_log('OAuth Login Successful - Storing session data');
                 $_SESSION['user'] = [
                     'id' => $loginResult['user']['id'],
                     'username' => $userInfo['name'],
@@ -81,7 +82,7 @@ try {
                 $_SESSION['oauth_user'] = $userInfo;
                 $_SESSION['oauth_success'] = true;
                 $_SESSION['access_token'] = $accessToken;
-error_log(print_r($_SESSION, true));
+error_log('OAuth Session Data: ' . print_r($_SESSION, true));
                 $redirectUrl = null;
                 if (isset($_SESSION['oauth_return_url'])) {
                     $redirectUrl = $_SESSION['oauth_return_url'];
