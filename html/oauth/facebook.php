@@ -62,7 +62,7 @@ try {
             //$loginResult = processOAuthLogin($userManager, $userInfo);
             $loginResult = $oauthHandler->processOAuthLogin($userInfo);
 
-            //error_log('OAuth Login Result: ' . print_r($loginResult, true));
+            error_log('OAuth Login Result: ' . print_r($loginResult, true));
             if ($loginResult['success']) {
                 // Successful login            
                 // Store session data
