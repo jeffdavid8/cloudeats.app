@@ -54,7 +54,7 @@ try {
 
             // Get user information
             $userInfo = $oauthHandler->getFacebookUserInfo($accessToken);
-
+            error_log('---------------------------------------------------------------------------------');
             error_log('Facebook OAuth User Info: ' . print_r($userInfo, true));
             $userInfo['provider'] = 'facebook';
 
@@ -81,7 +81,7 @@ try {
                 $_SESSION['oauth_user'] = $userInfo;
                 $_SESSION['oauth_success'] = true;
                 $_SESSION['access_token'] = $accessToken;
-
+error_log(print_r($_SESSION, true));
                 $redirectUrl = null;
                 if (isset($_SESSION['oauth_return_url'])) {
                     $redirectUrl = $_SESSION['oauth_return_url'];
