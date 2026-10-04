@@ -69,6 +69,7 @@ try {
             // Set session
             $_SESSION['mb_user'] = $loginResult['user']['username'];
             $_SESSION['mb_user_data'] = $loginResult['user'];
+            $_SESSION['oauth_provider'] = 'apple';
 
             // Redirect to appropriate page
             if ($loginResult['user']['is_admin']) {

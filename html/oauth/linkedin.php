@@ -119,6 +119,7 @@ try {
                         'is_oauth' => true,
                         'profilePicture' => $userInfo['picture'] ?? '',
                     ];
+                    $_SESSION['oauth_provider'] = 'linkedin';
                     $_SESSION['mb_user'] = $loginResult['user']['username'];
                     $_SESSION['mb_user_data'] = $loginResult['user'];
 

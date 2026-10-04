@@ -55,18 +55,18 @@ try {
             // Get user information
             $userInfo = $oauthHandler->getFacebookUserInfo($accessToken);
             error_log('---------------------------------------------------------------------------------');
-            error_log('Facebook OAuth User Info: ' . print_r($userInfo, true));
+            //error_log('Facebook OAuth User Info: ' . print_r($userInfo, true));
             $userInfo['provider'] = 'facebook';
 
 
             //$loginResult = processOAuthLogin($userManager, $userInfo);
             $loginResult = $oauthHandler->processOAuthLogin($userInfo);
 
-            error_log('OAuth Login Result: ' . print_r($loginResult, true));
+            //error_log('OAuth Login Result: ' . print_r($loginResult, true));
             if ($loginResult['success']) {
                 // Successful login            
                 // Store session data
-                error_log('OAuth Login Successful - Storing session data');
+                //error_log('OAuth Login Successful - Storing session data');
                 $_SESSION['user'] = [
                     'id' => $loginResult['user']['id'],
                     'username' => $userInfo['name'],
@@ -79,10 +79,15 @@ try {
                     'profilePicture' => $userInfo['picture'] ?? '',
                 ];
 
+                $_SESSION['oauth_provider'] = 'facebook';
+                // legacy session variable for backward compatibility
+                $_SESSION['mb_user'] = $loginResult['user']['username'];
+                $_SESSION['mb_user_data'] = $loginResult['user'];
+
                 $_SESSION['oauth_user'] = $userInfo;
                 $_SESSION['oauth_success'] = true;
                 $_SESSION['access_token'] = $accessToken;
-error_log('OAuth Session Data: ' . print_r($_SESSION, true));
+                //error_log('OAuth Session Data: ' . print_r($_SESSION, true));
                 $redirectUrl = null;
                 if (isset($_SESSION['oauth_return_url'])) {
                     $redirectUrl = $_SESSION['oauth_return_url'];
@@ -92,7 +97,7 @@ error_log('OAuth Session Data: ' . print_r($_SESSION, true));
                 if (!$redirectUrl || $redirectUrl === "null" || $redirectUrl === "undefined") {
                     $redirectUrl = '/index.php?p=dashboard&oauth_success=1';
                 }
-
+                error_log('Redirecting to: ' . $redirectUrl);
                 header("Location: {$redirectUrl}");
 
                 exit;
@@ -134,4 +139,3 @@ error_log('OAuth Session Data: ' . print_r($_SESSION, true));
     http_response_code(400);
     echo json_encode($errorResponse);
 }
-
