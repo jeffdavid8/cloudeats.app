@@ -86,7 +86,6 @@ try {
             }
 
             header("Location: {$redirectUrl}");
-            error_log('Redirecting to: ' . $redirectUrl);
             exit;
         } else {
             // Generic error handling based on app parameter

@@ -20,7 +20,6 @@ try {
 
     switch ($action) {
         case 'login':
-            $_SESSION['oauth_error'] = null; // Clear any previous error
             $oauthHandler = new OAuthHandler();
             $userManager = new UserManager();
             // Start OAuth flow - redirect to Facebook
@@ -100,7 +99,7 @@ try {
                 }
                 error_log('Redirecting to: ' . $redirectUrl);
                 header("Location: {$redirectUrl}");
-
+error_log('Redirected to2: ' . $redirectUrl);
                 exit;
             } else {
                 // Handle registration or errors as needed
