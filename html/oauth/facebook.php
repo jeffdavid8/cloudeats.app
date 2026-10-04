@@ -20,6 +20,7 @@ try {
 
     switch ($action) {
         case 'login':
+            $_SESSION['oauth_error'] = null; // Clear any previous error
             $oauthHandler = new OAuthHandler();
             $userManager = new UserManager();
             // Start OAuth flow - redirect to Facebook
