@@ -18,7 +18,7 @@ class SecurityHeaders
         'worker-src' => "'self' blob:",
         
         // 🖼️ UPDATED: Kept your rules, and validated data: blob: and openstreetmap are supported
-        'img-src' => "'self' data: blob: https://i.ytimg.com https://storage.googleapis.com https://api.weather.gov https://radar.weather.gov https://*.googleusercontent.com https://*.openstreetmap.org https://images.unsplash.com https://plus.unsplash.com", 
+        'img-src' => "'self' data: blob: https://i.ytimg.com https://storage.googleapis.com https://api.weather.gov https://radar.weather.gov https://*.googleusercontent.com https://*.openstreetmap.org https://images.unsplash.com https://plus.unsplash.com https://*.fbsbx.com", 
         
         // 🔌 UPDATED: Appended the Nominatim geocoding engine to prevent fetch() breaks
         'connect-src' => "'self' https://www.youtube.com https://apis.google.com https://www.facebook.com https://api.weather.gov https://ipapi.co https://www.google-analytics.com https://stats.g.doubleclick.net https://nominatim.openstreetmap.org",

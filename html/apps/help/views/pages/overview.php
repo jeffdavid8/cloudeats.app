@@ -3,7 +3,7 @@
 ?>
 
 <div class="help-breadcrumb">
-    <a href="?app=help">Help Center</a> &gt; Customer How-To
+    <a href="?app=help">Help Center</a> &gt; Overview
 </div>
 
 <h1>CloudEats.app Help Center</h1>
@@ -80,10 +80,3 @@
     </ul>
 </div>
 
-<div style="margin-top: 40px; text-align: center;">
-    <h3>Ready to Get Started?</h3>
-    <p>Choose an application to begin exploring CloudEats.app's features!</p>
-    <div style="margin: 20px 0;">
-        <a href="?app=bibleBot" class="btn">Try CloudEats.app</a>
-    </div>
-</div>

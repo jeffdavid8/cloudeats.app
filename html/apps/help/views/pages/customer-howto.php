@@ -2,7 +2,7 @@
 
 ?>
 <div class="help-breadcrumb">
-    <a href="?app=help">Help Center</a> &gt; Overview
+    <a href="?app=help">Help Center</a> &gt; Customer How-To
 </div>
 
 <h3>Customer How-To</h3>
