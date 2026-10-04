@@ -669,7 +669,7 @@ class OAuthHandler
         } catch (Exception $e) {
             return [
                 'success' => false,
-                'error' => 'OAuth login failed: ' . $e->getMessage()
+                'error' => 'OAuth login failed: ' . $e->getMessage() . ' file: ' . $e->getFile() . ' line: ' . $e->getLine()
             ];
         }
     }
