@@ -1,11 +1,11 @@
-<div class="container prose dark:prose-invert w-full break-words dark markdown-new-styling">
+<div class="container prose dark:prose-invert w-full break-words dark markdown-new-styling" style="padding-top: 3rem;">
   
   <hr data-start="364" data-end="367">
-  <h4 data-start="369" data-end="402">Privacy Policy for Mediabrain</h4>
-  <p data-start="404" data-end="473"><strong data-start="404" data-end="423">Effective Date:</strong> 10-05-2025<br data-start="437" data-end="440">
-    <strong data-start="440" data-end="457">Last Updated:</strong> 10-05-2025
+  <h4 data-start="369" data-end="402">Privacy Policy for CloudEats.app</h4>
+  <p data-start="404" data-end="473"><strong data-start="404" data-end="423">Effective Date:</strong> 10-04-2026<br data-start="437" data-end="440">
+    <strong data-start="440" data-end="457">Last Updated:</strong> 10-04-2026
   </p>
-  <p data-start="475" data-end="695">Mediabrain (“we,” “our,” or “us”) operates the website <a data-start="530" data-end="578" rel="noopener" target="_new" class="decorated-link" href="https://mediabrain.app">https://mediabrain.app<span aria-hidden="true" class="ms-0.5 inline-block align-middle leading-none"><svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" data-rtl-flip="" class="block h-[0.75em] w-[0.75em] stroke-current stroke-[0.75]">
+  <p data-start="475" data-end="695">Mediabrain llc (“we,” “our,” or “us”) operates the website <a data-start="530" data-end="578" rel="noopener" target="_new" class="decorated-link" href="https://cloudeats.app">https://cloudeats.app<span aria-hidden="true" class="ms-0.5 inline-block align-middle leading-none"><svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" data-rtl-flip="" class="block h-[0.75em] w-[0.75em] stroke-current stroke-[0.75]">
           <path d="M14.3349 13.3301V6.60645L5.47065 15.4707C5.21095 15.7304 4.78895 15.7304 4.52925 15.4707C4.26955 15.211 4.26955 14.789 4.52925 14.5293L13.3935 5.66504H6.66011C6.29284 5.66504 5.99507 5.36727 5.99507 5C5.99507 4.63273 6.29284 4.33496 6.66011 4.33496h44.9999L15.1337 4.34863C15.4369 4.41057 15.665 4.67857 15.665 5V13.3301C15.6649 13.6973 15.3672 13.9951 14.9999 13.9951C14.6327 13.9951 14.335 13.6973 14.3349 13.3301Z"></path>
         </svg></span></a>. Your privacy is important to us. This Privacy Policy explains how we handle information when you use our Service.</p>
   <hr data-start="697" data-end="700">

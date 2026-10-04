@@ -13,7 +13,7 @@ class PageController
         'search' => 'default',
         'search_results' => 'default',
         'home' => 'default',
-        'privacy-policy' => 'minimal',
+        //'privacy-policy' => 'minimal',
         'data-deletion-notice' => 'minimal',
         'thank-you' => 'minimal'
     ];
@@ -21,7 +21,7 @@ class PageController
     public function __construct($page)
     {
         $this->page = $page;
-        $this->app = App::getInstance();
+        $this->app = App::getInstance('neighborhub');
     }
 
     public function handleRequest()
@@ -41,13 +41,15 @@ class PageController
             $this->checkAuthentication();
         }
 
-        $redirectUrl = get_var('return', '?p=dashboard');
+        /*
+        $redirectUrl = get_var('return', '/');
 
         // Detect if logged in already, and redirect to dashboard
         if ($this->app->getAuthManager()::isUserLoggedIn()) {
             header('Location: ' . $redirectUrl, true, 302);
             exit();
         }
+        */
 
         // Now it's safe to render with appropriate layout
         $this->render();
