@@ -480,6 +480,7 @@ if (!empty($_SESSION['login_error'])) {
                 // get return URL from query param if exists
                 const urlParams = new URLSearchParams(window.location.search);
                 let returnUrl = getQueryParam('return') || '/?p=dashboard';
+                loading(4);
                 window.location.href = `oauth/google.php?action=login&state=${state}&return_url=${encodeURIComponent(returnUrl)}`;
             }
 
@@ -489,6 +490,7 @@ if (!empty($_SESSION['login_error'])) {
                 sessionStorage.setItem("oauth_state", state);
                 const urlParams = new URLSearchParams(window.location.search);
                 let returnUrl = getQueryParam('return') || '/?p=dashboard';
+                loading(4);
                 window.location.href = `oauth/apple.php?action=login&state=${state}&return_url=${encodeURIComponent(returnUrl)}`;
             }
 
@@ -498,6 +500,7 @@ if (!empty($_SESSION['login_error'])) {
                 sessionStorage.setItem("oauth_state", state);
                 const urlParams = new URLSearchParams(window.location.search);
                 let returnUrl = getQueryParam('return') || '/?p=dashboard';
+                loading(4);
                 window.location.href = `oauth/facebook.php?action=login&state=${state}&return_url=${encodeURIComponent(returnUrl)}`;
             }
 
@@ -507,6 +510,7 @@ if (!empty($_SESSION['login_error'])) {
                 sessionStorage.setItem("oauth_state", state);
                 const urlParams = new URLSearchParams(window.location.search);
                 let returnUrl = getQueryParam('return') || '/?p=dashboard';
+                loading(4);
                 window.location.href = `oauth/linkedin.php?action=login&state=${state}&return_url=${encodeURIComponent(returnUrl)}`;
             }
 

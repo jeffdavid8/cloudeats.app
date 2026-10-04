@@ -98,8 +98,7 @@ try {
                     $redirectUrl = '/index.php?p=dashboard&oauth_success=1';
                 }
                 error_log('Redirecting to: ' . $redirectUrl);
-                header("Location: {$redirectUrl}");
-error_log('Redirected to2: ' . $redirectUrl);
+                header("Location: " . get_base_url() . $redirectUrl);
                 exit;
             } else {
                 // Handle registration or errors as needed
