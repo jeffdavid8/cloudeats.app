@@ -21,48 +21,7 @@ class OAuthHandler
 
     public function __construct()
     {
-        // Decide whether to use Secret Manager
-        $forceSM = false;
-        $forceEnv = getenv('FORCE_SECRET_MANAGER');
-        if ($forceEnv !== false) {
-            $forceSM = in_array(strtolower($forceEnv), ['1', 'true', 'yes'], true);
-        }
-
-        $useSecretManager = (function_exists('isCloudRun') && isCloudRun()) || $forceSM;
-
-        if ($useSecretManager) {
-            // Try to load from Secret Manager. On local dev this can be forced with FORCE_SECRET_MANAGER=1
-            try {
-
-                $projectId = getenv('GOOGLE_CLOUD_PROJECT') ?: getenv('GCLOUD_PROJECT');
-                if (!$projectId) throw new Exception('GOOGLE_CLOUD_PROJECT not set for Secret Manager access');
-
-                $client = new \Google\Cloud\SecretManager\V1\Client\SecretManagerServiceClient();
-                $name = "projects/$projectId/secrets/kammys_kafe_oauth_config/versions/latest";
-                $request = new \Google\Cloud\SecretManager\V1\AccessSecretVersionRequest();
-                $request->setName($name);
-                $response = $client->accessSecretVersion($request);
-                $secretJson = $response->getPayload()->getData();
-                //error_log(json_decode($secretJson, true));
-                if ($secretJson) {
-                    $this->config = json_decode($secretJson, true);
-                    if (json_last_error() !== JSON_ERROR_NONE) {
-                        throw new Exception('Invalid OAuth configuration format from Secret Manager');
-                    }
-                    return;
-                }
-            } catch (Exception $e) {
-                // Don't hard-fail for dev; log and fall back to file-based config
-                error_log('OAuthHandler Secret Manager fetch failed: ' . $e->getMessage());
-            }
-        }
-
-        // Local/dev: prefer canonical data directory but try several candidate paths
-        $this->configPath = '/var/data/mediabrain/oauth_config.json';
-        if (file_exists('C:\\var\\data\\mediabrain\\')) {
-            $this->configPath = 'C:\\var\\data\\mediabrain\\oauth_config.json';
-        }
-        $this->loadConfig();
+        $this->config = getenv('OAUTH_CONFIG_JSON') ? json_decode(getenv('OAUTH_CONFIG_JSON'), true) : null;
     }
 
     /**
