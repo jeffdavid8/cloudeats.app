@@ -50,6 +50,9 @@ class PageController
             exit();
         }
         */
+        $this->setMeta();
+
+        app_invoke('neighborhub', 'init', $this->app);
 
         // Now it's safe to render with appropriate layout
         $this->render();
@@ -58,6 +61,20 @@ class PageController
         if (ob_get_level()) {
             ob_end_flush();
         }
+    }
+
+    private function setMeta()
+    {
+        $meta = [
+            'title' => $this->config['title'],
+            'description' => $this->config['description'],
+            'type' => 'article',
+            'image' => $this->config['imageUrl'] ?? ($this->config['base_url'] . '/images/mb-logo-black-circle-2020-600.png'),
+            'image_width' => $this->config['imageWidth'] ?? '1200',
+            'image_height' => $this->config['imageHeight'] ?? '630',
+        ];
+
+        $this->app->set('meta', $meta);
     }
 
     private function checkAuthentication()
@@ -177,7 +194,7 @@ class PageController
 
     private function renderWithDefaultLayout()
     {
-        render('components/header/header.php');
+        $this->app->render('components/header/header.php');
         $this->renderPageContent();
     }
 

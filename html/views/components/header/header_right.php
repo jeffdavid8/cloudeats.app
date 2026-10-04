@@ -7,17 +7,15 @@ if (!defined('MB_RUNNING')) exit;
  * active merchant staff or courier badges, and dynamically renders role
  * switching links in the profile dropdown menu.
  */
-$db = $this->db;
-
+$nh = App::getInstance('neighborhub');
 // Initialize role badges
 $userMerchantBadges = array();
 $userCourierBadge = false;
-$currentView = $this->get('view');
-$merchant = $this->get('merchant', false);
+$currentView = $nh->get('view');
+$merchant = $nh->get('merchant', false);
 if (!$merchant) {
-   $nh = App::getInstance('neighborhub');
-   $nh->includeModel('merchant');
-   $merchant = Merchant::getMerchantById(1);
+    $nh->includeModel('merchant');
+    $merchant = Merchant::getMerchantById(1);
 }
 $merchant_id = $merchant->id;
 
@@ -64,9 +62,9 @@ if ($isUserLoggedIn) {
 }
 ?>
 
-<ul class="right" data-component="header-right">
+<ul class="header-right" data-component="header-right">
 
-    <? if (($this->get('view') == 'customer') && ($merchant) && ($merchant->status == 'online')) { ?>
+    <? if (($nh->get('view') == 'customer') && ($merchant) && ($merchant->status == 'online')) { ?>
         <li><a href="#" style="display: block; overflow: visible; " data-target="nh-shopping-cart-sidenav" class="waves-effect waves-light shopping-cart-sidenav-trigger accent-4 shadow-lift round-header-action">
                 <i class="fas fa-shopping-basket"></i>
                 <span class="nh-cart-count-badge badge red white-text circle" style="position: absolute; top: 0; right: 0px; font-size: 11px; font-weight:700; display:none; min-width:20px; height:20px; line-height:20px; padding:0;">0</span>
@@ -77,15 +75,15 @@ if ($isUserLoggedIn) {
         <!-- User Profile Dropdown -->
         <li>
             <!-- Dropdown Trigger -->
-            <a class="dropdown-trigger user-badge" title="Logged in (<?= htmlspecialchars($username) ?>)" href="#!" data-target="user-dropdown" style="color: inherit; display: flex; min-width: auto; margin: 4px 0 0; padding: 5px 0 0 10px;">
+            <a class="dropdown-trigger user-badge" title="Logged in (<?= htmlspecialchars($username) ?>)" href="#!" data-target="user-dropdown" style="color: inherit; min-width: auto; position: relative;">
                 <?php if (!empty($_SESSION['user']['profilePicture'])): ?>
                     <img src="<?= htmlspecialchars($_SESSION['user']['profilePicture']) ?>" alt="Profile Picture" class="circle responsive-img" style="width: 32px; height: 32px; margin-top: 9px;">
                     <i class="material-icons right hide-on-small-only" style="margin-right: 0; margin-left: 0; position: relative; right: 10px; top: 13px;">arrow_drop_down</i>
                 <?php else: ?>
                     <i class="material-icons">account_circle</i>
-                    <i class="material-icons right hide-on-small-only" style="margin-right: 0; margin-left: 0; position: relative; right: 8px; top: 13px;">arrow_drop_down</i>
-               <?php endif; ?>
-                <i class="material-icons right hide-on-small-only" style="margin-right: 0; margin-left: 0; position: relative; right: 8px; top: 13px;">arrow_drop_down</i>
+                    <i class="material-icons right hide-on-small-only" style="margin-right: 0; margin-left: 0; position: absolute;
+  right: 0px; top: 10px; font-size: 1.3rem;">arrow_drop_down</i>
+                <?php endif; ?>
             </a>
 
             <!-- Dropdown Structure -->
@@ -178,7 +176,7 @@ if ($isUserLoggedIn) {
 
 
                 <!-- Logout Link -->
-                <li><a href="/?app=auth&action=logout&redirect=<?=  $_SERVER['REQUEST_URI'] ?>" class="logout-btn" title="Log out (<?= htmlspecialchars($username) ?>)"><i class="material-icons">exit_to_app</i>Logout</a></li>
+                <li><a href="/?app=auth&action=logout&redirect=<?= $_SERVER['REQUEST_URI'] ?>" class="logout-btn" title="Log out (<?= htmlspecialchars($username) ?>)"><i class="material-icons">exit_to_app</i>Logout</a></li>
 
             </ul>
         </li>
@@ -194,6 +192,10 @@ if ($isUserLoggedIn) {
             </a>
         </li>
     <?php endif; ?>
+
+    <li class="hide-on-small-only">
+        <a class="page_link waves-effect waves-light" href="<?= $this->config['base_url'] . $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ?>"><i class="material-icons">share</i></a>
+    </li>
 
     <li class="hide-on-small-only"><a href="javascript: void(0);" onclick="mb.toggleNightMode();"><i class="fas fa-lightbulb"></i></a></li>
 

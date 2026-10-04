@@ -48,7 +48,7 @@ function neighborhub_info(&$app)
     ),
     'styles' => array(
       './css/leaflet.css',
-      'apps/neighborhub/css/neighborhub.css',
+      //'apps/neighborhub/css/neighborhub.css',
     ),
     'scripts' => array(
       'apps/neighborhub/js/neighborhub.init.js',

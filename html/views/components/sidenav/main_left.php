@@ -74,6 +74,9 @@ $merchant = $this->get('merchant');
   <li>
     <a href="/?app=neighborhub&p=terms-and-conditions" target="_blank"><i class="fas fa-file-contract"></i>Terms & Conditions</a>
   </li>
+  <li>
+    <a href="/?p=privacy-policy" target="_blank"><i class="fas fa-file-contract"></i>Privacy Policy</a>
+  </li>
 </ul>
 
 

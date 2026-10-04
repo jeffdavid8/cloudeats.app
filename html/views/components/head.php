@@ -108,6 +108,8 @@ if (!empty($share_image_name)) {
   <link rel="stylesheet" href="css/jquery.json-viewer.css">
   <!--Import night mode css-->
   <link rel="stylesheet" href="css/nightmode.css" />
+  <link rel="stylesheet" href="apps/neighborhub/css/neighborhub.css" />
+  
   <script>
     var mb = {
       dialogs: [],
