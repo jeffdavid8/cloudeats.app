@@ -4,7 +4,7 @@ function help_info()
 {
     return array(
         'title' => "Help Center",
-        'description' => "Comprehensive help and documentation for MediaBrain applications",
+        'description' => "Comprehensive help and documentation for CloudEats.app applications",
         'image' => config('base_url') . '/apps/help/images/help-logo.png',
         'image_width' => '1200',
         'image_height' => '630',
@@ -22,14 +22,11 @@ function help_info()
     );
 }
 
-function help_init()
+function help_init(&$app)
 {
-    $app = App::getInstance('help');
-
-
     $meta = array(
-        'title' => 'MediaBrain Help Center',
-        'description' => 'Get help with MediaBrain applications and features',
+        'title' => 'CloudEats.app Help Center',
+        'description' => 'Get help with CloudEats.app applications and features',
         'type' => 'website',
         'url' => config('base_url') . '/?app=help',
         'image' => config('base_url') . '/apps/help/images/help-social.png',
@@ -37,24 +34,10 @@ function help_init()
     $app->set('meta', $meta);
 }
 
-function help_render_body()
+function help_render_body(&$app)
 {
-    $app = App::getInstance();
     $currentUser = null;
     $userRole = 'guest';
-
-    // Get current user and role for context-sensitive help
-    if (isset($_SESSION['user'])) {
-        $currentUser = is_array($_SESSION['user']) ? $_SESSION['user']['username'] : $_SESSION['user'];
-
-        // Determine user role using AuthManager
-        require_once __DIR__ . '/../../includes/AuthManager.php';
-        if (AuthManager::userIsAdmin($_SESSION['user'])) {
-            $userRole = 'admin';
-        } else {
-            $userRole = 'user';
-        }
-    }
 
     $section = get_var('section', 'overview');
     $topic = get_var('topic', '');
@@ -71,26 +54,9 @@ function help_render_body()
                         <a href="?app=help&section=overview" class="collection-item <?php echo $section === 'overview' ? 'active' : ''; ?>">
                             <i class="material-icons">home</i> Overview
                         </a>
-                        <a href="?app=help&section=setup" class="collection-item <?php echo $section === 'setup' ? 'active' : ''; ?>">
-                            <i class="material-icons">settings</i> Setup & Configuration
+                        <a href="?app=help&section=customer-howto" class="collection-item <?php echo $section === 'customer-howto' ? 'active' : ''; ?>">
+                            <i class="material-icons">person</i> Customer How-To
                         </a>
-                        <a href="?app=help&section=biblebot" class="collection-item <?php echo $section === 'biblebot' ? 'active' : ''; ?>">
-                            <i class="fa fa-robot"></i> BibleBot
-                        </a>
-                        <a href="?app=help&section=recipes" class="collection-item <?php echo $section === 'recipes' ? 'active' : ''; ?>">
-                            <i class="material-icons">restaurant</i> Recipes
-                        </a>
-                        <a href="?app=help&section=weather" class="collection-item <?php echo $section === 'weather' ? 'active' : ''; ?>">
-                            <i class="material-icons">wb_sunny</i> Weather
-                        </a>
-                        <a href="?app=help&section=ancestry" class="collection-item <?php echo $section === 'ancestry' ? 'active' : ''; ?>">
-                            <i class="fas fa-tree"></i> Ancestry
-                        </a>
-                        <?php if ($userRole === 'admin'): ?>
-                            <a href="?app=help&section=admin" class="collection-item <?php echo $section === 'admin' ? 'active' : ''; ?>">
-                                <i class="fas fa-users-cog"></i> Admin Panel
-                            </a>
-                        <?php endif; ?>
                         <a href="?app=help&section=troubleshooting" class="collection-item <?php echo $section === 'troubleshooting' ? 'active' : ''; ?>">
                             <i class="material-icons">help_outline</i> Troubleshooting
                         </a>

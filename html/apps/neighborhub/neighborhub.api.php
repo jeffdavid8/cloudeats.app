@@ -1394,6 +1394,50 @@ try {
       }
       break;
 
+    case 'delete_user_data':
+      authenticate_user($request);
+      $app = App::getInstance('neighborhub');
+      $userId = $app->user->id ?? 0;
+
+      if ($app->user->is_admin) {
+        send_json_response([
+          'success' => false,
+          'error' => 'Admin users cannot delete their own data.'
+        ]);
+      }
+
+      if ($userId <= 0) {
+        send_json_response([
+          'success' => false,
+          'message' => 'Valid user ID is required.'
+        ], 400);
+      }
+
+      try {
+        $app = App::getInstance();
+        $app->includeModel('user');
+
+        $deleted = User::deleteUserData($userId);
+
+        if (!$deleted) {
+          send_json_response([
+            'success' => false,
+            'message' => 'User not found or data could not be deleted.'
+          ], 404);
+        }
+
+        send_json_response([
+          'success' => true,
+          'message' => 'User data deleted successfully.'
+        ]);
+      } catch (Exception $e) {
+        send_json_response([
+          'success' => false,
+          'message' => 'An error occurred while deleting user data.'
+        ], 500);
+      }
+      break;
+      
     case 'export_data':
       handle_export_data($request);
       break;

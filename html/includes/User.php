@@ -233,4 +233,22 @@ class User
     }
 
     
+    public static function deleteUserData($userId)
+    {
+        $app = App::getInstance();
+        try {
+            // Delete user data from the users table
+            $stmt = $app->db->prepare("DELETE FROM users WHERE id = ?");
+            $stmt->execute([$userId]);
+
+            // Optionally, delete related data from other tables (e.g., orders, profiles)
+            // $stmt = $app->db->prepare("DELETE FROM orders WHERE user_id = ?");
+            // $stmt->execute([$userId]);
+
+            return true;
+        } catch (Exception $e) {
+            error_log("User::deleteUserData Error: " . $e->getMessage());
+            return false;
+        }
+    }
 }

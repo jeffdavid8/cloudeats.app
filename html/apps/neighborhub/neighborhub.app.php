@@ -380,8 +380,13 @@ function neighborhub_render_body(&$app)
         case 'order_detail':
           $templatePath = $customerDir . 'order_detail.php';
           break;
+
         case 'dashboard':
           $templatePath = $customerDir . 'customer_dashboard.php';
+          break;
+
+        case 'settings':
+          $templatePath = $customerDir . 'customer_settings.php';
           break;
 
         default:
