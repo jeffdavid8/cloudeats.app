@@ -1,0 +1,1041 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="google" value="notranslate">
+
+  <meta name="title" content="Admin Center">
+  <meta name="description" content="Centralized user management and authentication for all applications">
+  <meta name="author" content="Mediabrain">
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Admin Center" />
+  <meta property="og:description" content="Centralized user management and authentication for all applications" />
+  <meta property="og:url" content="https://cloudeats.app.local/?app=admin&p=download_db&type=json" />
+  <meta property="fb:app_id" content="561081350692034" />
+    <meta name="csrf-token" content="cfe3a69499034f177501e4a1cc58e8ec" />
+      <meta property="image" content="/images/mb-logo-black-circle-2020-600.png" />
+    <meta property="og:image" content="/images/mb-logo-black-circle-2020-600.png" />
+        <meta property="og:image:type" content="">
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+  
+  <title>Admin Center</title>
+    <!-- Standard Icons -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyBjbGFzcz0ibmF2LXRyaWdnZXItZmF2aWNvbiIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPHN0eWxlPgogICAgLmZhdi1iZyB7IHRyYW5zaXRpb246IGZpbGwgMC4zcyBlYXNlOyB9CiAgICAuZmF2LWxldHRlcnMgeyBmaWxsOiBub25lOyBzdHJva2Utd2lkdGg6IDE0OyBzdHJva2UtbGluZWNhcDogcm91bmQ7IHN0cm9rZS1saW5lam9pbjogcm91bmQ7IHRyYW5zaXRpb246IHN0cm9rZSAwLjNzIGVhc2U7IH0KICAgIEBtZWRpYSAocHJlZmVycy1jb2xvci1zY2hlbWU6IGxpZ2h0KSB7IC5mYXYtYmcgeyBmaWxsOiAjMUE3M0U4OyB9IC5mYXYtbGV0dGVycyB7IHN0cm9rZTogI0ZGRkZGRjsgfSB9CiAgICBAbWVkaWEgKHByZWZlcnMtY29sb3Itc2NoZW1lOiBkYXJrKSB7IC5mYXYtYmcgeyBmaWxsOiAjMzAzMTM0OyB9IC5mYXYtbGV0dGVycyB7IHN0cm9rZTogIzhBQjRGODsgfSB9CiAgPC9zdHlsZT4KICA8Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0NiIgY2xhc3M9ImZhdi1iZyIgLz4KICA8cGF0aCBkPSJNIDcyLDI2IEggNDQgQSAyNCwyNCAwIDAgMCA0NCw3NCBIIDcyIE0gNDQsNTAgSCA2NiIgY2xhc3M9ImZhdi1sZXR0ZXJzIiAvPgo8L3N2Zz4=">
+
+
+  <!-- Android / Chrome -->
+  <link rel="icon" type="image/png" sizes="192x192" href="https://cloudeats.app.local/android-chrome-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="https://cloudeats.app.local/android-chrome-512x512.png">
+
+  <!-- Apple iOS -->
+  <link rel="apple-touch-icon" sizes="180x180" href="https://cloudeats.app.local/apple-touch-icon-180x180.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <!-- CSS  -->
+  <!--Import Google Icon Font-->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!--<link rel="stylesheet" href="/cdn/materializecss/1.0/css/materialize-icons.css"/>-->
+  <link rel="stylesheet" href="css/icons.css" />
+  <!-- Add Material Symbols font for newer icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+  <!--Import materialize.css-->
+  <link rel="stylesheet" href="css/materialize.min.css" />
+  <!--Import font-awesome.css-->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/brands.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" />
+  <!--Import primary css-->
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/respond.css" />
+  <link rel="stylesheet" href="css/jquery.json-viewer.css">
+  <!--Import night mode css-->
+  <link rel="stylesheet" href="css/nightmode.css" />
+  <link rel="stylesheet" href="apps/neighborhub/css/neighborhub.css" />
+      <script src="https://www.google.com/recaptcha/api.js?render=6LcrhuAtAAAAALYP1aVODI5goyyfDn6Q6_K6eGwk" async defer></script>
+    
+  <script>
+    var mb = {
+      dialogs: [],
+      isDevelopment: true,
+      isProduction: false,
+    };
+    // Initialize CSRF token from meta tag 
+    (function() {
+      mb.meta = document.querySelector('meta[name="csrf-token"]');
+      mb.csrf_token = mb.meta ? mb.meta.getAttribute('content') : null;
+    })();
+  </script>
+
+  <!-- jQuery with CDN fallback to local -->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@2.1.1/dist/jquery.min.js"></script>
+  <script>
+    // Fallback to local jQuery if CDN fails
+    if (typeof jQuery == 'undefined') {
+      document.write('<script src="js/jquery-2.1.1.min.js"><\/script>');
+    }
+  </script>
+
+  <script src="js/mediabrain.js"></script>
+
+  <!-- jQuery Ready Utility - Load after jQuery for dependency management -->
+  <script src="js/jquery-ready.js"></script>
+
+  <!-- Materialize JavaScript - Load after jQuery -->
+  <script src="js/materialize.min.js"></script>
+
+  <!-- Wait for jQuery to be fully loaded before loading dependent scripts -->
+  <script>
+    $(document).ready(function() {
+      // Ensure jQuery is available globally
+      if (typeof $ === 'undefined') {
+        window.$ = jQuery;
+      }
+    });
+  </script>
+  <script src="js/Sortable.min.js" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+  <!-- Load jQuery-dependent scripts in order -->
+  <script>
+          mb.user = {"id":2,"username":"virtualimmortal","password":"$2y$12$cgjWKDMZZRsOVfv48NrHc.vUq7xp4GVWDdxEX5x.xSvXfbUBdsd52","email":"virtualimmortal@gmail.com","stripe_connect_id":null,"role":"admin","is_admin":true,"active":true,"picture":null,"created_at":"2025-10-25 18:06:33","last_login":"2026-10-05 16:41:04","oauth_provider":null};
+      mb.isCommander = true;
+        // Function to load scripts sequentially after jQuery is ready
+    function loadScriptsSequentially() {
+      var components = [
+        'js/init.js', // Load init.js first as it initializes UI components
+        'js/jquery.json-viewer.js',
+        'js/cycle.js',
+        'js/json2.js',
+        'js/overlay.js',
+        //'js/mediabrain.js',
+        'js/component-registry.js', // Load component registry after mediabrain.js to extend mb object
+        'js/component-loader.js', // Load component auto-loader after registry
+        'js/auto-components.js',
+        'js/commands.js'
+      ];
+
+      // Add app-specific scripts to the queue
+      mb.log('No app components found');
+        
+      var loadScript = function(index) {
+        if (index >= components.length) {
+          mb.log('All scripts loaded successfully');
+          return;
+        }
+
+        mb.log('Loading script: ' + components[index]);
+        var script = document.createElement('script');
+        var cacheBuster = '?v=' + new Date().getTime();
+        script.src = components[index] + cacheBuster;
+        script.onload = function() {
+          mb.log('Loaded: ' + components[index]);
+          loadScript(index + 1);
+        };
+        script.onerror = function() {
+          console.warn('Failed to load script: ' + components[index]);
+          loadScript(index + 1); // Continue loading other scripts
+        };
+        document.head.appendChild(script);
+      };
+
+      loadScript(0);
+    }
+
+    // Ensure jQuery is loaded before dependent scripts
+    $(document).ready(function() {
+      loadScriptsSequentially();
+    });
+  </script>
+  <!--<script src="/js/dialogs/create_new_bookmark.js"></script>-->
+
+  
+
+</head>
+<body class="loading-preloader  ce-home ">
+        
+<div id="cloudeats-preloader" class="preloader-overlay">
+  <div class="cloudeats-preloader-wrap">
+    <svg class="nav-trigger-favicon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="46" class="fav-bg"></circle>
+      <path d="M 72,26 H 44 A 24,24 0 0,0 44,74 H 72 M 44,50 H 66" class="fav-letters"></path>
+    </svg>
+    <div class="preloader-text">Loading CloudEats...</div>
+  </div>
+</div>
+        <audio id="audio-player" style="display:none;"></audio>
+<audio id="tts-audio" style="display: none;"></audio>
+        
+        <div id="loadingIndicator">
+            <div class="loader">
+   <div class="preloader-wrapper small active">
+      <div class="spinner-layer spinner-blue">
+         <div class="circle-clipper left">
+            <div class="circle"></div>
+         </div>
+         <div class="gap-patch">
+            <div class="circle"></div>
+         </div>
+         <div class="circle-clipper right">
+            <div class="circle"></div>
+         </div>
+      </div>
+
+      <div class="spinner-layer spinner-red">
+         <div class="circle-clipper left">
+            <div class="circle"></div>
+         </div><div class="gap-patch">
+            <div class="circle"></div>
+         </div><div class="circle-clipper right">
+            <div class="circle"></div>
+         </div>
+      </div>
+
+      <div class="spinner-layer spinner-yellow">
+         <div class="circle-clipper left">
+            <div class="circle"></div>
+         </div><div class="gap-patch">
+            <div class="circle"></div>
+         </div><div class="circle-clipper right">
+            <div class="circle"></div>
+         </div>
+      </div>
+
+      <div class="spinner-layer spinner-green">
+         <div class="circle-clipper left">
+            <div class="circle"></div>
+         </div><div class="gap-patch">
+            <div class="circle"></div>
+         </div><div class="circle-clipper right">
+            <div class="circle"></div>
+         </div>
+      </div>
+   </div>
+</div>
+        </div>
+
+        <header class="header">
+
+   <nav>
+      <div class="nav-wrapper ">
+
+         <ul class="header-left">
+   <li>
+      <div style="margin-top: 15px; margin-left: 5px; display: inline-flex; align-items: center; gap: 8px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 1.25rem; letter-spacing: -0.02em;">
+         <a href="?app=neighborhub" data-target="slide-out" class="header-sidenav-trigger main-menu-btn show-on-large waves-effect waves-light" style="border-radius: 50%; padding: 0;">
+
+                        <img src="images/android-chrome-192x192.png" height="40" style="margin-top: 5px">
+
+         </a>
+         <a class="header-ce-logo-home-link hover-grow hide-on-small-only" style="width: auto; margin-left: 0; padding: 0 5px; font-size: 1.3rem;border-radius: 10px;" href="/"><span class="brand-cloud">Cloud</span><span class="brand-eats">Eats</span><span class="brand-extension">.app</span></a>
+      </div>
+   </li>
+
+   
+</ul>
+         
+
+
+         
+<ul class="header-right" data-component="header-right">
+
+    
+            <!-- User Profile Dropdown -->
+        <li>
+            <!-- Dropdown Trigger -->
+            <a class="dropdown-trigger user-badge" title="Logged in (virtualimmortal)" href="#!" data-target="user-dropdown" style="color: inherit; min-width: auto; position: relative;">
+                                    <i class="material-icons">account_circle</i>
+                    <i class="material-icons right hide-on-small-only" style="margin-right: 0; margin-left: 0; position: absolute;
+  right: 0px; top: 10px; font-size: 1.3rem;">arrow_drop_down</i>
+                            </a>
+
+            <!-- Dropdown Structure -->
+            <ul id="user-dropdown" class="dropdown-content" style="top: 60px !important;">
+
+                <!-- ============================================================================
+                     NEIGHBORHUB DYNAMIC ROLE SWITCHING MATRIX
+                     ============================================================================ -->
+
+                                <!-- Dashboard Link -->
+                <li><a href="?p=dashboard" title="Dashboard (virtualimmortal)"><i class="material-icons">dashboard</i>Dashboard</a></li>
+
+                <!-- Admin Link (if user is admin) -->
+                                    <li><a href="?app=neighborhub&p=dashboard&view=admin" title="Admin Dashboard (virtualimmortal)"><i class="material-icons">settings</i>Admin</a></li>
+                
+
+                <!-- Logout Link -->
+                <li><a href="/?app=auth&action=logout&redirect=/?app=admin&p=download_db&type=json" class="logout-btn" title="Log out (virtualimmortal)"><i class="material-icons">exit_to_app</i>Logout</a></li>
+
+            </ul>
+        </li>
+
+        <!-- Fullscreen Button -->
+        <!--<li><a class="fullscreen-btn"><i class="fas fa-expand"></i></a></li>-->
+
+    
+    <li class="hide-on-small-only">
+        <a class="page_link waves-effect waves-light" href="https://cloudeats.app.local/index.php?app=admin&p=download_db&type=json"><i class="material-icons">share</i></a>
+    </li>
+
+    <li class="hide-on-small-only"><a href="javascript: void(0);" onclick="mb.toggleNightMode();"><i class="fas fa-lightbulb"></i></a></li>
+
+</ul>
+
+<!-- Inline Styles for Dropdown Enhancement -->
+<style>
+    /*
+    #user-dropdown {
+        width: 280px !important;
+    }
+    */
+
+    #user-dropdown li.header {
+        display: list-item;
+        cursor: default;
+        padding: 0.75rem 1rem !important;
+    }
+
+    #user-dropdown li.divider {
+        margin: 0.5rem 0;
+    }
+
+    #user-dropdown a {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        transition: all 150ms ease-in-out;
+    }
+
+    #user-dropdown a:hover {
+        background-color: rgba(37, 99, 235, 0.05);
+    }
+
+    #user-dropdown a i.material-icons {
+        font-size: 1.25rem;
+        min-width: 24px;
+    }
+
+    #user-dropdown a[style*="border-left"] {
+        padding-left: 1rem !important;
+    }
+</style>
+
+      </div>
+      <div class="progress"><div class="indeterminate"></div></div>
+   </nav>
+
+</header>
+
+<ul id="slide-out" class="sidenav show-on-large">
+  <li style="padding: 0; margin: 0; display: flex; justify-content: flex-end; align-items: center; background-color: var(--icon-bg-color);">
+    <a href="#" data-target="slide-out" class="sidenav-trigger main-menu-btn"><i class="fas fa-times fa-lg"></i></a>
+  </li>
+  <li>
+    <li>
+  <a href="?app=admin">
+    <i class="material-icons">home</i>
+    Home
+  </a>
+</li>
+<li>
+  <a href="/?p=about-us"><i class="fas fa-info-circle"></i>About Us</a>
+</li>  </li>
+    <li class="no-padding">
+    
+                    <li>
+                <a href="?app=admin">
+                    <i class="material-icons">settings</i>
+                    Admin
+                </a>
+            </li>
+                <li>
+            <a href="#" class="logout-btn" onclick="mb.userLogout(); return false;">
+                <i class="material-icons">exit_to_app</i>
+                Logout (virtualimmortal)
+            </a>
+        </li>
+  </li>
+
+  
+  <li>
+    <hr />
+  </li>
+
+  <li class="no-padding">
+    <a class="nightModeTrigger" style="display: flex;" href="javascript:void(0);" title="Toggle Night Mode">
+    Display Mode
+    <div class="switch right">
+        <label>
+            <i class="fa fa-sun"></i>
+            <input class="checkbox-blue filled-in" type="checkbox" >
+            <span class="lever "></span>
+            <i class="fa fa-moon"></i>
+        </label>
+    </div>
+</a>
+  </li>
+
+  <li>
+    <hr />
+  </li>
+  
+      <li>
+    <a href="/?app=help"><i class="fas fa-info-circle"></i>Help</a>
+  </li>
+  <li>
+    <a href="/?app=neighborhub&view=public&p=public.splash" target="_blank"><i class="fas fa-info-circle"></i>About Cloud Eats</a>
+  </li>
+  <li>
+    <a href="/?app=neighborhub&p=terms-and-conditions" target="_blank"><i class="fas fa-file-contract"></i>Terms & Conditions</a>
+  </li>
+  <li>
+    <a href="/?p=privacy-policy" target="_blank"><i class="fas fa-file-contract"></i>Privacy Policy</a>
+  </li>
+</ul>
+
+
+<link rel="stylesheet" href="apps/admin/css/admin.css"><div class="admin-app">
+
+<!-- Theme Styles -->
+<link rel="stylesheet" type="text/css" href="/css/themes/utilities.css">
+
+<style>
+    /* Base Dashboard Styles - Enhanced by theme system */
+    .dashboard-stat-card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .dashboard-stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .stat-icon {
+        font-size: 3rem !important;
+        opacity: 0.8;
+    }
+
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: 300;
+        margin: 10px 0 5px 0;
+    }
+
+    .quick-action-item {
+        transition: all 0.2s ease;
+        border-left: 3px solid transparent;
+    }
+
+    .quick-action-item:hover {
+        background-color: rgba(33, 150, 243, 0.05);
+        border-left-color: #2196F3;
+    }
+
+    .widget-container {
+        margin: 20px 0;
+    }
+
+    .system-health-good {
+        color: #4CAF50;
+    }
+
+    .system-health-warning {
+        color: #FF9800;
+    }
+
+    .system-health-error {
+        color: #F44336;
+    }
+
+    /* Theme indicator */
+    .theme-indicator {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 15px;
+        font-size: 0.8em;
+        z-index: 1000;
+    }
+</style>
+<div class="row">
+    <div class="col s12">
+        <nav class="admin-breadcrumb">
+            <div class="nav-wrapper">
+                <div class="col s12">
+                    <a href="?app=admin" class="breadcrumb">Admin</a>
+                    <a href="?app=admin&p=dashboard" class="breadcrumb">Dashboard</a>
+                    <div class="grey-text right" style="white-space: nowrap;">
+                        <a href="?p=dashboard">
+                            <span>
+                                Signed in as: <strong>virtualimmortal</strong>
+                                                                    <i style="display: inline-block;" class="material-icons tiny">account_circle</i>
+                                                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <h4><i class="material-icons left">dashboard</i>Admin Dashboard</h4>
+        <p class="grey-text">Manage users, system settings, and monitor platform health</p>
+    </div>
+</div>
+
+<!-- Enhanced Statistics Cards -->
+<div class="row">
+    <div class="col s12 m6 l3">
+        <div class="card dashboard-stat-card blue lighten-5">
+            <div class="card-content center">
+                <i class="material-icons blue-text stat-icon">people</i>
+                <div class="stat-number blue-text">11</div>
+                <p class="grey-text">Total Users</p>
+            </div>
+        </div>
+    </div>
+    <div class="col s12 m6 l3">
+        <div class="card dashboard-stat-card green lighten-5">
+            <div class="card-content center">
+                <i class="material-icons green-text stat-icon">login</i>
+                <div class="stat-number green-text">9</div>
+                <p class="grey-text">Recent Logins (24h)</p>
+            </div>
+        </div>
+    </div>
+    <div class="col s12 m6 l3">
+        <div class="card dashboard-stat-card orange lighten-5">
+            <div class="card-content center">
+                <i class="material-icons orange-text stat-icon">storage</i>
+                <div class="stat-number orange-text" style="font-size: 1.5rem;">182536.11 MB free</div>
+                <p class="grey-text">Storage</p>
+            </div>
+        </div>
+    </div>
+    <div class="col s12 m6 l3">
+        <div class="card dashboard-stat-card purple lighten-5">
+            <div class="card-content center">
+                <i class="material-icons purple-text stat-icon">favorite</i>
+                <div class="stat-number system-health-good">Good</div>
+                <p class="grey-text">System Health</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content Row -->
+<div class="row">
+    <!-- Quick Actions - Enhanced -->
+    <div class="col s12 m6 l4">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">
+                    <i class="material-icons left">flash_on</i>Quick Actions
+                </span>
+                <div class="collection">
+                    <a href="?app=admin&p=users" class="collection-item quick-action-item">
+                        <i class="material-icons left blue-text">people</i>
+                        <span class="title">Manage Users</span>
+                        <p class="grey-text">View, edit, and manage user accounts</p>
+                    </a>
+                    <a href="?app=admin&p=users&action=add" class="collection-item quick-action-item">
+                        <i class="material-icons left green-text">person_add</i>
+                        <span class="title">Add New User</span>
+                        <p class="grey-text">Create a new user account</p>
+                    </a>
+                    <a href="?app=admin&p=permissions" class="collection-item quick-action-item">
+                        <i class="material-icons left orange-text">security</i>
+                        <span class="title">Permissions</span>
+                        <p class="grey-text">Manage user permissions and access</p>
+                    </a>
+                    <a href="?app=admin&p=analytics" class="collection-item quick-action-item">
+                        <i class="fas fa-chart-bar left teal-text"></i>
+                        <span class="title">Analytics</span>
+                        <p class="grey-text">View visitor statistics and traffic insights</p>
+                    </a>
+                    <a href="?app=admin&p=backup_db&type=json" class="collection-item">
+                        <i class="material-icons left blue-text">backup</i>
+                        <span class="title">Create Cloud Backup</span>
+                        <p class="grey-text">Create a JSON Backup in the Cloud Bucket</p>
+                    </a>
+                    <a href="?app=admin&p=download_db&type=json" class="collection-item">
+                        <i class="material-icons left blue-text">cloud_download</i>
+                        <span class="title">Download Backup</span>
+                        <p class="grey-text">Download MySQL Database -> JSON file Backup</p>
+                    </a>
+                    <a href="?app=admin&p=restore_db" class="collection-item">
+                        <i class="material-icons left blue-text">restore</i>
+                        <span class="title">Restore DB</span>
+                        <p class="grey-text">Import JSON file -> MySQL Database</p>
+                    </a>
+                    <a href="?app=admin&p=install_db" class="collection-item">
+                        <i class="material-icons left blue-text">restore</i>
+                        <span class="title">Install DB</span>
+                        <p class="grey-text">Import JSON file -> MySQL Database</p>
+                    </a>
+
+                    <a href="?app=admin&p=settings" class="collection-item quick-action-item">
+                        <i class="material-icons left purple-text">settings</i>
+                        <span class="title">System Settings</span>
+                        <p class="grey-text">Configure platform settings</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Information - Enhanced -->
+    <div class="col s12 m6 l4">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">
+                    <i class="material-icons left">info</i>System Information
+                </span>
+                <ul class="collection">
+                    <li class="collection-item">
+                        <div class="row valign-wrapper" style="margin-bottom: 0;">
+                            <div class="col s2">
+                                <i class="material-icons blue-text">code</i>
+                            </div>
+                            <div class="col s10">
+                                <strong>PHP Version:</strong><br>
+                                <span class="grey-text">8.4.13</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="collection-item">
+                        <div class="row valign-wrapper" style="margin-bottom: 0;">
+                            <div class="col s2">
+                                <i class="material-icons green-text">dns</i>
+                            </div>
+                            <div class="col s10">
+                                <strong>Server:</strong><br>
+                                <span class="grey-text">nginx/1.29.2</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="collection-item">
+                        <div class="row valign-wrapper" style="margin-bottom: 0;">
+                            <div class="col s2">
+                                <i class="material-icons orange-text">memory</i>
+                            </div>
+                            <div class="col s10">
+                                <strong>Memory Limit:</strong><br>
+                                <span class="grey-text">1G</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="collection-item">
+                        <div class="row valign-wrapper" style="margin-bottom: 0;">
+                            <div class="col s2">
+                                <i class="material-icons purple-text">schedule</i>
+                            </div>
+                            <div class="col s10">
+                                <strong>Uptime:</strong><br>
+                                <span class="grey-text">4d 10h</span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Tools - New Section -->
+    <div class="col s12 m12 l4">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">
+                    <i class="material-icons left">build</i>Admin Tools
+                </span>
+                <div class="collection">
+                    <a href="?app=admin&p=roles" class="collection-item quick-action-item">
+                        <i class="material-icons left indigo-text">group</i>
+                        <span class="title">Role Management</span>
+                    </a>
+                    <a href="?app=admin&p=tests" class="collection-item quick-action-item">
+                        <i class="material-icons left red-text">bug_report</i>
+                        <span class="title">Legacy Tests</span>
+                    </a>
+                    <a href="?app=admin&p=phpunit-tests" class="collection-item quick-action-item">
+                        <i class="material-icons left teal-text">verified_user</i>
+                        <span class="title">PHPUnit Suite</span>
+                    </a>
+                    <a href="?app=admin&p=profile" class="collection-item quick-action-item">
+                        <i class="material-icons left cyan-text">account_circle</i>
+                        <span class="title">My Profile</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- App-contributed Dashboard Widgets with Enhanced Error Handling -->
+<div class="row widget-container">
+    <div class="col s12">
+        <div class="card blue-grey lighten-5">
+            <div class="card-content">
+                <span class="card-title">
+                    <i class="material-icons left">extension</i>App Widgets
+                </span>&nbsp;
+                <div class="widget-item" style="margin: 15px 0;">
+  <div class="card">
+    <div class="widget-title"><i class="material-icons left">record_voice_over</i> Text-to-Speech Management</div>    <div class="card-content">
+          <div class="card">
+        <div class="card-content">
+
+            <div class="row">
+                <div class="col s6">
+                    <div class="statistic">
+                        <h4 class="blue-text">0</h4>
+                        <p class="grey-text">Users with TTS Preferences</p>
+                    </div>
+                </div>
+                <div class="col s6">
+                    <div class="statistic">
+                        <h4 class="orange-text">
+                            17                        </h4>
+                        <p class="grey-text">Available Voices</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col s12">
+                    <div class="chip orange lighten-4">
+                        <i class="material-icons tiny">settings</i>
+                        Admin Config: Not Configured                    </div>
+                                    </div>
+            </div>
+
+            <div class="card-action">
+                <a href="?app=admin&p=settings#tts-config" class="blue-text">
+                    <i class="material-icons tiny left">settings</i>
+                    Admin TTS Settings
+                </a>
+                <a href="?app=admin&p=profile#tts-preferences" class="blue-text">
+                    <i class="material-icons tiny left">account_circle</i>
+                    My TTS Preferences
+                </a>
+                <a href="?app=admin&p=users" class="blue-text">
+                    <i class="material-icons tiny left">people</i>
+                    Manage Users
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .statistic {
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .statistic h4 {
+            margin: 0 0 5px 0;
+            font-size: 2rem;
+            font-weight: 300;
+        }
+
+        .statistic p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        .chip {
+            margin: 2px;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .chip i {
+            margin-right: 5px;
+        }
+    </style>
+    </div>
+  </div>
+</div>            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activity Timeline - New Feature -->
+<div class="row">
+    <div class="col s12">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">
+                    <i class="material-icons left">timeline</i>Recent Activity
+                </span>
+                <div class="collection">
+                    <div class="collection-item">
+                        <div class="row valign-wrapper" style="margin-bottom: 0;">
+                            <div class="col s1">
+                                <i class="material-icons blue-text">login</i>
+                            </div>
+                            <div class="col s11">
+                                <span class="title">Admin Login</span>
+                                <p class="grey-text">You logged in at 6:06 PM</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="collection-item">
+                        <div class="row valign-wrapper" style="margin-bottom: 0;">
+                            <div class="col s1">
+                                <i class="material-icons green-text">dashboard</i>
+                            </div>
+                            <div class="col s11">
+                                <span class="title">Dashboard Accessed</span>
+                                <p class="grey-text">Viewing admin dashboard with enhanced features</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-action">
+                <a href="?app=admin&p=logs" class="blue-text">
+                    <i class="material-icons tiny left">history</i>View Full Activity Log
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Enhanced Dashboard JavaScript
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize tooltips
+        var tooltips = document.querySelectorAll('.tooltipped');
+        M.Tooltip.init(tooltips);
+
+        // Add hover effects to stat cards
+        const statCards = document.querySelectorAll('.dashboard-stat-card');
+        statCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-3px)';
+            });
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Auto-refresh stats every 5 minutes
+        setInterval(function() {
+            // You could implement AJAX stats refresh here
+            console.log('Stats refresh interval - implement AJAX call if needed');
+        }, 300000); // 5 minutes
+    });
+</script>
+
+<!-- Enhanced System Information Section -->
+<div class="row">
+    <div class="col s12 m6">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">
+                    <i class="material-icons left">info</i>System Information
+                </span>
+                <div class="collection">
+                    <div class="collection-item">
+                        <strong>PHP Version:</strong> 8.4.13                    </div>
+                    <div class="collection-item">
+                        <strong>Server:</strong> nginx/1.29.2                    </div>
+                    <div class="collection-item">
+                        <strong>Current User:</strong> virtualimmortal                    </div>
+                    <div class="collection-item">
+                        <strong>Login Time:</strong> 2026-10-05 18:06:04                    </div>
+                    <div class="collection-item">
+                        <strong>Database Path:</strong>
+                        <span class="green-text"></span>
+                    </div>
+                    <div class="collection-item">
+                        <strong>Database File Exists:</strong>
+                        <span class="green-text"></span>
+                    </div>
+                    <div class="collection-item">
+                        <strong>Database File Writable:</strong>
+                        <span class="green-text"></span>
+                    </div>
+                    <div class="collection-item">
+                        <strong>Server Load:</strong>
+                        <span class="green-text">Optimal</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col s12 m6">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">
+                    <i class="material-icons left">build</i>Admin Tools
+                </span>
+                <div class="collection">
+                    <a href="?app=admin&p=clear-cache" class="collection-item">
+                        <i class="material-icons left orange-text">cached</i>Clear System Cache
+                    </a>
+                    <a href="?app=admin&p=backup_db" class="collection-item">
+                        <i class="material-icons left blue-text">backup</i>Backup To Cloud Bucket
+                    </a>
+                    <a href="?app=admin&p=restore_db" class="collection-item">
+                        <i class="material-icons left blue-text">restore</i>Restore DB
+                    </a>
+                    <a href="?app=admin&p=logs" class="collection-item">
+                        <i class="material-icons left red-text">description</i>View System Logs
+                    </a>
+                    <a href="?app=admin&p=maintenance" class="collection-item">
+                        <i class="material-icons left purple-text">settings</i>Maintenance Mode
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer Section -->
+<div class="row">
+    <div class="col s12">
+        <div class="card blue-grey lighten-5">
+            <div class="card-content center">
+                <p class="grey-text">
+                    MediaBrain Admin Dashboard v2.0 |
+                    Enhanced with TTS Management & Theme System |
+                    Theme: Default |
+                    Last Updated: 2026-10-05 18:06:04                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Theme JavaScript -->
+
+<script>
+    // Theme system integration
+    document.addEventListener('DOMContentLoaded', function() {
+        // Theme switching functionality
+        window.ThemeSystem = {
+            currentTheme: 'default',
+
+            // Switch theme function
+            switchTheme: function(themeName) {
+                fetch('?app=admin&api=switch-theme', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        body: JSON.stringify({
+                            theme: themeName
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Reload page to apply new theme
+                            location.reload();
+                        } else {
+                            console.error('Theme switch failed:', data.error);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Theme switch error:', error);
+                    });
+            },
+
+            // Get available themes
+            getAvailableThemes: function() {
+                return fetch('?app=admin&api=themes')
+                    .then(response => response.json())
+                    .then(data => data.themes || []);
+            }
+        };
+
+        // Add theme switching keyboard shortcut (Ctrl+Alt+T)
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.altKey && e.key === 't') {
+                e.preventDefault();
+                showThemeSelector();
+            }
+        });
+
+        // Theme selector modal
+        function showThemeSelector() {
+            window.ThemeSystem.getAvailableThemes().then(themes => {
+                const themeOptions = Object.keys(themes).map(themeName => {
+                    const isActive = themeName === window.ThemeSystem.currentTheme ? 'active' : '';
+                    return `
+                    <div class="theme-option ${isActive}" data-theme="${themeName}" 
+                         style="display: flex; align-items: center; padding: 15px; cursor: pointer; 
+                                border: 2px solid ${isActive ? '#2196F3' : 'transparent'}; 
+                                margin: 10px; border-radius: 8px; background: #f5f5f5;">
+                        <div style="flex: 1;">
+                            <h6 style="margin: 0 0 5px 0;">${themes[themeName].name}</h6>
+                            <p style="margin: 0; color: #666; font-size: 0.9em;">${themes[themeName].description}</p>
+                        </div>
+                        ${isActive ? '<i class="material-icons" style="color: #2196F3;">check_circle</i>' : ''}
+                    </div>
+                `;
+                }).join('');
+
+                const modalHtml = `
+                <div id="theme-selector-modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                     background: rgba(0,0,0,0.5); z-index: 10000; display: flex; align-items: center; justify-content: center;">
+                    <div style="background: white; max-width: 600px; width: 90%; max-height: 80%; overflow-y: auto; 
+                         border-radius: 8px; padding: 20px;">
+                        <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 20px;">
+                            <h4 style="margin: 0;">Select Theme</h4>
+                            <button onclick="closeThemeSelector()" style="background: none; border: none; font-size: 1.5em; cursor: pointer;">×</button>
+                        </div>
+                        <div id="theme-options">
+                            ${themeOptions}
+                        </div>
+                        <div style="text-align: center; margin-top: 20px; color: #666;">
+                            Press <kbd>Ctrl+Alt+T</kbd> to open theme selector
+                        </div>
+                    </div>
+                </div>
+            `;
+
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+                // Add click handlers
+                document.querySelectorAll('.theme-option').forEach(option => {
+                    option.addEventListener('click', function() {
+                        const themeName = this.dataset.theme;
+                        if (themeName !== window.ThemeSystem.currentTheme) {
+                            window.ThemeSystem.switchTheme(themeName);
+                        }
+                    });
+                });
+            });
+        }
+
+        // Close theme selector
+        window.closeThemeSelector = function() {
+            const modal = document.getElementById('theme-selector-modal');
+            if (modal) {
+                modal.remove();
+            }
+        };
+
+        // Console message about theme system
+        console.log(`🎨 Theme System Active! Current theme: ${window.ThemeSystem.currentTheme}`);
+        console.log('Press Ctrl+Alt+T to open theme selector');
+    });
+</script></div><footer class="bodyImageBgOverlay">
+</footer>
+
+<div data-component="runtime-errors" 
+     data-errors="[]"
+     data-is-development="true">
+</div>
+
+        </body>
+
+        </html>
