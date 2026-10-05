@@ -1,5 +1,7 @@
 /* CloudEats typography */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&display=swap");
 @font-face {
   font-family: "Source Sans Pro";
   src: url("/css/webfonts/SourceSans/SourceSans3-Regular.ttf")
@@ -1671,6 +1673,9 @@ nav ul a {
 nav ul a:hover {
   background-color: #e4e7ed;
 }
+header nav ul a:hover {
+  background-color: #dfd6d6;
+}
 nav ul a,
 nav ul a.sidenav-trigger {
   margin: 0;
@@ -1823,7 +1828,7 @@ body.loading #loadingIndicator {
 }
 
 .nightMode nav ul a:hover {
-  background-color: #222;
+  background-color: #2e2e34;
 }
 
 /* Modal Overlay and Container */

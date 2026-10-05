@@ -188,12 +188,12 @@ if ($isUserLoggedIn) {
 
         <!-- Login Link (Not Logged In) -->
         <li style="">
-            <div class="hide-on-med-and-up">
+            <div class="small-links <?= (get_var('p') !== 'merchant_products') ? 'hide-on-med-and-up' : '' ?>">
                 <a class="user-badge" href="?p=login&return=<?php echo urlencode($_SERVER['REQUEST_URI']); ?>" title="Login">
                     <i class="material-icons">account_circle</i>
                 </a>
             </div>
-            <div class="hide-on-small-only" style="display: flex; align-items: center; justify-content: flex-end; gap: 1.1rem; margin-right: 1rem;">
+            <div class="large-links <?= (get_var('p') !== 'merchant_products') ? 'hide-on-small-only' : 'hide' ?>" style="display: flex; align-items: center; justify-content: flex-end; gap: 1.1rem; margin-right: 1rem;">
                 <button
                     type="button"
                     onclick="window.location.href='/?p=login&return=<?= urlencode($_SERVER['REQUEST_URI']) ?>';"

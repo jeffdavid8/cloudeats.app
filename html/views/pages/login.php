@@ -36,7 +36,7 @@ if (!empty($_SESSION['login_error'])) {
 <!-- Font Awesome for OAuth icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
 
-<? include_theme_css('startrek', ['components.css', 'lcars-base.css']); ?>
+<? include_theme_css('startrek', ['components.css']); ?>
 
 <style>
     /* Override main site styles for login page */
@@ -56,6 +56,30 @@ if (!empty($_SESSION['login_error'])) {
         width: 100%;
         max-width: 475px;
         margin: 20px auto;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: "Orbitron", monospace;
+        font-weight: 500;
+        color: var(--text-dark);
+        /* text-transform: uppercase; */
+        letter-spacing: 1px;
+        text-shadow: none;
+    }
+
+    .oauth-buttons .btn,
+    .oauth-buttons .btn-flat,
+    .oauth-buttons .btn-large {
+        color: var(--space-black);
+        font-family: 'Orbitron', monospace;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
     }
 
     .login-header {
@@ -424,10 +448,12 @@ if (!empty($_SESSION['login_error'])) {
                 <i class="fab fa-facebook-f"></i>
                 <span class="hide-on-small-only">Facebook</span>
             </button>
+            <? /* 
             <button onclick="loginWithLinkedin()" class="btn-flat oauth-btn linkedin-btn waves-effect">
                 <i class="fab fa-linkedin-in"></i>
                 <span class="hide-on-small-only">LinkedIn</span>
             </button>
+            */ ?>
         </div>
 
         <? /*
@@ -524,7 +550,7 @@ if (!empty($_SESSION['login_error'])) {
             // 1. Initialize the Facebook JS SDK
             window.fbAsyncInit = function() {
                 FB.init({
-                    appId: '<?= $fbAppId ?>', 
+                    appId: '<?= $fbAppId ?>',
                     cookie: true,
                     xfbml: true,
                     version: 'v21.0'
@@ -537,7 +563,7 @@ if (!empty($_SESSION['login_error'])) {
                 if (d.getElementById(id)) return;
                 js = d.createElement(s);
                 js.id = id;
-                js.src = "https://connect.facebook.net/en_US/sdk.js";
+                js.src = "https://connect.facebook.net/en_US/sdk.js/";
                 fjs.parentNode.insertBefore(js, fjs);
             }(document, 'script', 'facebook-jssdk'));
 

@@ -49,6 +49,8 @@ function neighborhub_info(&$app)
     'styles' => array(
       './css/leaflet.css',
       //'apps/neighborhub/css/neighborhub.css',
+      /*'themes/startrek/lcars-base.css', */
+      'themes/startrek/components.css',
     ),
     'scripts' => array(
       'apps/neighborhub/js/neighborhub.init.js',

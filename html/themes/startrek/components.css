@@ -217,9 +217,9 @@
     border: none;
     border-radius: var(--border-radius-lcars);
     color: var(--space-black);
-    font-family: 'Orbitron', monospace;
+    /* font-family: 'Orbitron', monospace; */
     font-weight: 600;
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
     letter-spacing: 1px;
     transition: all var(--transition-speed) ease;
     box-shadow: none;
@@ -340,7 +340,7 @@ input.valid:not([type]), input.valid:not([type]):focus, input.valid[type="text"]
     color: var(--text-primary);
     font-family: 'Exo 2', sans-serif;
     font-weight: 400;
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
     letter-spacing: 1px;
     transition: all var(--transition-speed) ease;
     border-radius: 15px;
