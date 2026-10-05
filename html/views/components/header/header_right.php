@@ -207,7 +207,7 @@ if ($isUserLoggedIn) {
                 <button
                     type="button"
                     id="btn-header-signup"
-                    class="btn btn-primary bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-lg shadow-sm hover:shadow transition-all"
+                    class="btn btn-signup btn-primary bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-lg shadow-sm hover:shadow transition-all"
                     data-action="open-signup-modal">
                     Sign Up
                 </button>

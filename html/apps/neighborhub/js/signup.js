@@ -13,9 +13,17 @@
     var submitButton = document.getElementById("neighborhub-signup-submit");
     var siteKey = modalElement.getAttribute("data-recaptcha-site-key");
 
-    signupButton.addEventListener("click", function () {
+    $('.btn-signup').on("click", function (e) {
       message.textContent = "";
       modal.open();
+    });
+
+    window.grecaptcha.ready(function () {
+      recaptchaWidgetId = grecaptcha.render("recaptcha-inline-container", {
+        sitekey: "6LcrhuAtAAAAALYP1aVODI5goyyfDn6Q6_K6eGwk",
+        badge: "inline",
+        size: "invisible",
+      });
     });
 
     form.addEventListener("submit", function (event) {
@@ -25,21 +33,25 @@
       if (!form.reportValidity()) {
         return;
       }
-      if (form.elements.password.value !== form.elements.password_confirmation.value) {
+      if (
+        form.elements.password.value !==
+        form.elements.password_confirmation.value
+      ) {
         message.textContent = "The passwords do not match.";
         form.elements.password_confirmation.focus();
         return;
       }
       if (!siteKey || !window.grecaptcha) {
-        message.textContent = "Signup verification is temporarily unavailable. Please try again later.";
+        message.textContent =
+          "Signup verification is temporarily unavailable. Please try again later.";
         return;
       }
 
       //submitButton.disabled = true;
       submitButton.textContent = "Sending verification email...";
-
       window.grecaptcha.ready(function () {
-        window.grecaptcha.execute(siteKey, { action: "neighborhub_signup" })
+        window.grecaptcha
+          .execute(siteKey, { action: "neighborhub_signup" })
           .then(function (recaptchaToken) {
             return new Promise(function (resolve, reject) {
               mb.ajax({
@@ -49,7 +61,8 @@
                   name: form.elements.name.value.trim(),
                   email: form.elements.email.value.trim(),
                   password: form.elements.password.value,
-                  password_confirmation: form.elements.password_confirmation.value,
+                  password_confirmation:
+                    form.elements.password_confirmation.value,
                   recaptcha_token: recaptchaToken,
                 }),
                 dataType: "json",
@@ -62,18 +75,22 @@
             });
           })
           .then(function (response) {
-            message.textContent = response.message || "Check your email for an account verification link.";
+            message.textContent =
+              response.message ||
+              "Check your email for an account verification link.";
             form.reset();
             submitButton.disabled = false;
             submitButton.textContent = "Create account";
           })
           .then(null, function (xhr) {
             var response = xhr && xhr.responseJSON;
-            message.textContent = (response && (response.error || response.message))
-              || "We could not complete signup. Please try again.";
+            message.textContent =
+              (response && (response.error || response.message)) ||
+              "We could not complete signup. Please try again.";
             submitButton.disabled = false;
             submitButton.textContent = "Create account";
-          });
+          })
+          .then(null, function (xhr) {});
       });
     });
   }

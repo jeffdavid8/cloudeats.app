@@ -1024,6 +1024,8 @@ DROP TABLE IF EXISTS neighborhub_menu_items;
 DROP TABLE IF EXISTS neighborhub_merchant_users;
 DROP TABLE IF EXISTS neighborhub_merchants;
 DROP TABLE IF EXISTS neighborhub_customers;
+DROP TABLE IF EXISTS neighborhub_registration_tokens;
+DROP TABLE IF EXISTS neighborhub_registration_attempts;
 DROP TABLE IF EXISTS neighborhub_webrtc_sessions;
 SET FOREIGN_KEY_CHECKS = 1;
 
@@ -1075,6 +1077,25 @@ CREATE TABLE neighborhub_customers (
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE neighborhub_registration_tokens (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      email VARCHAR(255) NOT NULL UNIQUE,
+      user_id INT NOT NULL,
+      token_hash CHAR(64) NULL UNIQUE,
+      expires_at DATETIME NOT NULL,
+      verified_at DATETIME NULL,
+      created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      INDEX idx_neighborhub_registration_user (user_id),
+      CONSTRAINT fk_neighborhub_registration_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+
+CREATE TABLE IF NOT EXISTS neighborhub_registration_attempts (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  ip_hash CHAR(64) NOT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_neighborhub_registration_attempt_ip_created (ip_hash, created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 
 CREATE TABLE neighborhub_merchant_users (
   id INT AUTO_INCREMENT PRIMARY KEY,

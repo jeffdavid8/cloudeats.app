@@ -414,9 +414,9 @@ if (!empty($_SESSION['login_error'])) {
         <div class="left" style="position: relative; top: -10px;">
             <a class="go-back-btn" href="javascript:history.back()"></a>
         </div>
-        <button class="theme-toggle" title="Toggle theme">
-            <i class="material-icons">dark_mode</i>
-        </button>
+        <div class="right" style="position: relative; top: -10px;">
+            <a href="/" class="grey-text"><i class="fas fa-home"></i> Home</a>
+        </div>
         <div class="login-header">
             <? /*
             <h4><?php echo $requestedApp 
@@ -473,32 +473,36 @@ if (!empty($_SESSION['login_error'])) {
             <input type="hidden" name="return" value="<?php echo htmlspecialchars($redirectUrl); ?>">
             <input type="hidden" name="action" value="login">
 
-            <? if ((is_development() || is_production() || $_GET['login_form'] === 1)) { ?>
 
-                <div class="input-field">
-                    <i class="material-icons prefix">account_circle</i>
-                    <input id="username" name="username" type="text" class="validate" required>
-                    <label for="username">Username or email</label>
-                </div>
-
-                <div class="input-field">
-                    <i class="material-icons prefix">lock</i>
-                    <input id="password" name="password" type="password" class="validate" required>
-                    <label for="password">Password</label>
-                </div>
-
-                <button class="btn waves-effect waves-light btn-login" type="submit" id="submitBtn">
-                    Sign In
-                    <i class="material-icons right">send</i>
-                </button>
-
-            <? } ?>
-
-            <div class="center-align" style="margin-top: 20px;">
-                <a href="/" class="grey-text"><i class="fas fa-home"></i> Home</a>
+            <div class="input-field">
+                <i class="material-icons prefix">account_circle</i>
+                <input id="username" name="username" type="text" class="validate" required>
+                <label for="username">Username or email</label>
             </div>
+
+            <div class="input-field">
+                <i class="material-icons prefix">lock</i>
+                <input id="password" name="password" type="password" class="validate" required>
+                <label for="password">Password</label>
+            </div>
+
+            <button class="btn waves-effect waves-light btn-login" type="submit" id="submitBtn">
+                Sign In
+                <i class="material-icons right">send</i>
+            </button>
+
+
         </form>
 
+        <div class="center-align" style="margin-top: 20px;">
+            <div>
+                <button type="button" id="btn-header-signup" class="btn btn-signup btn-primary bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-lg shadow-sm hover:shadow transition-all" data-action="open-signup-modal">
+                    Create a new account
+                </button>
+            </div>
+
+
+        </div>
         <script>
             function loginWithGoogle() {
                 const state = generateRandomString(32);
