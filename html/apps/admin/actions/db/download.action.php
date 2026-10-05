@@ -42,7 +42,6 @@ switch ($type) {
      */
     try {
 
-      $data = readfile('/var/www/storage/default_db.json');
       $app->includeClass('BackupManager');
 
       $tables = array();
@@ -53,6 +52,35 @@ switch ($type) {
       $table_index = array();
       $exportData = array();
 
+      /**
+       * Returns a SELECT column list that converts spatial/binary columns to
+       * human-readable text so json_encode never chokes on raw WKB bytes.
+       * MySQL POINT, GEOMETRY, etc. are returned as ST_AsText(col) AS col.
+       */
+      $safe_select = function(string $table) use ($db): string {
+        $cols = [];
+        $meta = $db->query("
+          SELECT COLUMN_NAME, DATA_TYPE
+          FROM information_schema.COLUMNS
+          WHERE TABLE_SCHEMA = DATABASE()
+            AND TABLE_NAME   = '{$table}'
+          ORDER BY ORDINAL_POSITION
+        ");
+        foreach ($meta->fetchAll(PDO::FETCH_ASSOC) as $col) {
+          $name     = $col['COLUMN_NAME'];
+          $dataType = strtolower($col['DATA_TYPE']);
+          // Spatial and binary types that break json_encode
+          if (in_array($dataType, ['point','geometry','linestring','polygon',
+                                   'multipoint','multilinestring','multipolygon',
+                                   'geometrycollection','blob','mediumblob','longblob'])) {
+            $cols[] = "ST_AsText(`{$name}`) AS `{$name}`";
+          } else {
+            $cols[] = "`{$name}`";
+          }
+        }
+        return empty($cols) ? '*' : implode(', ', $cols);
+      };
+
       // Traverse down each module layer to fetch corresponding database tables
       foreach ($tables as $appName => $tables) {
         if (!is_array($tables)) continue;
@@ -61,7 +89,7 @@ switch ($type) {
           $table = trim($table);
           if (empty($table)) continue;
 
-          // check if the table exists in the mariadb database
+          // Check if the table exists in the database
           $stmt = $db->query("SELECT 1 FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = '{$table}' LIMIT 1");
           if ($stmt->fetchColumn() === false) {
             error_log("Warning: Table '{$table}' does not exist in the database. Skipping.");
@@ -69,12 +97,15 @@ switch ($type) {
           }
 
           $table_index[] = $table;
-          // Fetch rows from current table iteration
-          $stmt = $db->query("SELECT * FROM {$table}");
+          error_log("Exporting table: {$table}");
+
+          // Use spatial-safe column list to avoid WKB binary data in json_encode
+          $selectCols = $safe_select($table);
+          $stmt = $db->query("SELECT {$selectCols} FROM `{$table}`");
           $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-          $exportData[$table] = $rows ? $rows : [];
-          
+          error_log("Fetched " . count($rows) . " rows from table: {$table}");
+          $exportData[$table] = $rows ?: [];
         }
       }
 
@@ -88,15 +119,33 @@ switch ($type) {
         ],
         'tables' => $exportData,
       ];
+
       // 🚀 STREAM THE DOWNLOAD
+      // Build JSON first so we can set an accurate Content-Length before
+      // any output reaches the buffer — prevents "headers already sent" errors.
       $filename = "cloudeats".((is_development())?'_dev':'_prod')."_full_export_" . date('Ymd_His') . ".json";
+
+      // Primary encode; fallback substitutes any remaining bad bytes rather
+      // than silently returning false and producing a 0-byte download.
+      $json = json_encode($export, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+      if ($json === false) {
+        error_log("json_encode primary FAILED (error " . json_last_error() . ": " . json_last_error_msg() . ") — retrying with UTF-8 substitution");
+        $json = json_encode($export, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE);
+      }
+      if ($json === false) {
+        die("❌ EXPORT_CRITICAL_FAILURE: json_encode failed — " . json_last_error_msg());
+      }
 
       header('Content-Type: application/json');
       header('Content-Disposition: attachment; filename="' . $filename . '"');
+      header('Content-Length: ' . strlen($json));
+      header('Cache-Control: no-store, no-cache, must-revalidate');
       header('Pragma: no-cache');
       header('Expires: 0');
 
-      echo json_encode($export, JSON_PRETTY_PRINT);
+      echo $json;
+
+      exit;
     } catch (Exception $e) {
       die("❌ EXPORT_CRITICAL_FAILURE: " . $e->getMessage());
     }
