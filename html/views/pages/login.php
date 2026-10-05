@@ -5,7 +5,8 @@
 $app = App::getInstance();
 $error = [];
 $redirectUrl = get_var('return', '/');
-
+$oauthHandler = new OAuthHandler();
+$fbAppId = $oauthHandler->getConfig('facebook')['client_id'] ?? '';
 // Handle app-specific access requests
 $requestedApp = $_GET['app'] ?? null;
 $appDisplayName = $requestedApp ? ucfirst($requestedApp) : 'Cloud Eats';
@@ -401,8 +402,8 @@ if (!empty($_SESSION['login_error'])) {
             <img src="images/android-chrome-192x192.png" width="100"><br />
             <h3 class="cloudeats-brand">
                 <span class="brand-cloud">Cloud</span><span class="brand-eats">Eats</span><span class="brand-extension">.app</span>
-            </h4>
-            <p><?php echo $appMessage ?: 'Sign in to your account'; ?></p>
+                </h4>
+                <p><?php echo $appMessage ?: 'Sign in to your account'; ?></p>
         </div>
 
         <?php if (!empty($error)): ?>
@@ -494,15 +495,6 @@ if (!empty($_SESSION['login_error'])) {
                 window.location.href = `oauth/apple.php?action=login&state=${state}&return_url=${encodeURIComponent(returnUrl)}`;
             }
 
-            function loginWithFacebook() {
-                const state = generateRandomString(32);
-                //play('audio/star trek sounds/computerbeep_18.mp3');
-                sessionStorage.setItem("oauth_state", state);
-                const urlParams = new URLSearchParams(window.location.search);
-                let returnUrl = getQueryParam('return') || '/?p=dashboard';
-                loading(4);
-                window.location.href = `oauth/facebook.php?action=login&state=${state}&return_url=${encodeURIComponent(returnUrl)}`;
-            }
 
             function loginWithLinkedin() {
                 const state = generateRandomString(32);
@@ -527,6 +519,62 @@ if (!empty($_SESSION['login_error'])) {
                     result += charset.charAt(Math.floor(Math.random() * charset.length));
                 }
                 return result;
+            }
+
+            // 1. Initialize the Facebook JS SDK
+            window.fbAsyncInit = function() {
+                FB.init({
+                    appId: '<?= $fbAppId ?>', 
+                    cookie: true,
+                    xfbml: true,
+                    version: 'v21.0'
+                });
+            };
+
+            // 2. Load the SDK asynchronously
+            (function(d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) return;
+                js = d.createElement(s);
+                js.id = id;
+                js.src = "https://connect.facebook.net/en_US/sdk.js";
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+
+            // 3. Trigger Facebook Popup Login
+            function loginWithFacebook() {
+                FB.login(function(response) {
+                    if (response.authResponse) {
+                        // User logged in successfully. Send the token to PHP backend.
+                        sendTokenToBackend(response.authResponse.accessToken);
+                    } else {
+                        alert('User cancelled login or did not fully authorize.');
+                    }
+                }, {
+                    scope: 'public_profile,email'
+                }); // Request profile and email permissions
+            }
+
+            // 4. Securely pass the short-lived access token to your PHP backend
+            function sendTokenToBackend(accessToken) {
+                fetch('oauth/facebook.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            token: accessToken
+                        })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            window.location.href = "<?= urldecode(get_var('return')) ?>"; // Redirect after logi
+                        } else {
+                            alert('Login failed: ' + data.message);
+                        }
+                    })
+                    .catch(err => console.error('Error:', err));
             }
 
             document.getElementById('loginForm').addEventListener('submit', function(e) {
