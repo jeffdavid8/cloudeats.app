@@ -46,9 +46,6 @@ switch ($type) {
       $app->includeClass('BackupManager');
 
       $tables = array();
-      $tables['stitch'] = app_invoke('stitch', 'db_tables');
-      $tables['neighborhub'] = app_invoke('neighborhub', 'db_tables');
-      $tables = array();
       $tables['neighborhub'] = app_invoke('neighborhub', 'db_tables');
       $tables['stitch'] = app_invoke('stitch', 'db_tables');
       $tables['admin'] = app_invoke('admin', 'db_tables');
@@ -62,14 +59,22 @@ switch ($type) {
 
         foreach ($tables as $table) {
           $table = trim($table);
-          $table_index[] = $table;
           if (empty($table)) continue;
 
+          // check if the table exists in the mariadb database
+          $stmt = $db->query("SELECT 1 FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = '{$table}' LIMIT 1");
+          if ($stmt->fetchColumn() === false) {
+            error_log("Warning: Table '{$table}' does not exist in the database. Skipping.");
+            continue;
+          }
+
+          $table_index[] = $table;
           // Fetch rows from current table iteration
           $stmt = $db->query("SELECT * FROM {$table}");
           $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
           $exportData[$table] = $rows ? $rows : [];
+          
         }
       }
 
@@ -84,7 +89,7 @@ switch ($type) {
         'tables' => $exportData,
       ];
       // 🚀 STREAM THE DOWNLOAD
-      $filename = "cloudeats".(is_development()?'_dev':'_prod')."_full_export_" . date('Ymd_His') . ".json";
+      $filename = "cloudeats".((is_development())?'_dev':'_prod')."_full_export_" . date('Ymd_His') . ".json";
 
       header('Content-Type: application/json');
       header('Content-Disposition: attachment; filename="' . $filename . '"');
@@ -92,7 +97,6 @@ switch ($type) {
       header('Expires: 0');
 
       echo json_encode($export, JSON_PRETTY_PRINT);
-      exit;
     } catch (Exception $e) {
       die("❌ EXPORT_CRITICAL_FAILURE: " . $e->getMessage());
     }

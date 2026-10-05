@@ -1092,7 +1092,7 @@ CREATE TABLE neighborhub_registration_tokens (
       CONSTRAINT fk_neighborhub_registration_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 
-CREATE TABLE IF NOT EXISTS neighborhub_registration_attempts (
+CREATE TABLE neighborhub_registration_attempts (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
   ip_hash CHAR(64) NOT NULL,
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,

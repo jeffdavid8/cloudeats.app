@@ -30,6 +30,7 @@ class App
   private $_structure = null;
 
   private static $_instance = null;
+  private static $_instances = [];
 
   private function __construct($app = '')
   {
@@ -170,9 +171,10 @@ class App
     }
     // If an instance exists but the requested app is different, update the singleton tracking
     else if (!empty($app) && (self::$_instance->appName !== $app)) {
-      $instance = new App($app);
-      $instance->handleInternalErrors();
-      return $instance;
+      if (!isset(self::$_instances[$app])) {
+        self::$_instances[$app] = new App($app);
+      }
+      return self::$_instances[$app];
     }
 
     return self::$_instance;
