@@ -27,6 +27,15 @@ if (!empty($api_app)) {
     $api_file = __DIR__ . "/apps/{$api_app}/{$api_app}.api.php";
 
     if (file_exists($api_file)) {
+        $isEmailVerification = $api_app === 'neighborhub'
+            && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'GET'
+            && ($_GET['action'] ?? '') === 'verify_registration';
+
+        if ($isEmailVerification) {
+            include $api_file;
+            exit;
+        }
+
         // Set basic headers for API response
         //setJsonHeader();
         //$csrf_token = $params['data']['csrf_token'] ?? $_POST['csrf_token'] ?? $_GET['csrf_token'] ?? $_REQUEST['csrf_token'] ?? '';
