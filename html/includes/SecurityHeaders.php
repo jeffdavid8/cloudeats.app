@@ -10,7 +10,7 @@ class SecurityHeaders
 {
 
     private static $cspDirectives = [
-        'default-src' => "'self'",
+        'default-src' => "'self' https://www.google.com",
         
         'script-src' => "'self' 'unsafe-inline' 'unsafe-eval' https://recaptcha.net https://www.google.com https://apis.google.com https://accounts.google.com https://www.gstatic.com https://www.youtube.com https://s.ytimg.com https://facebook.net https://www.googletagmanager.com https://www.google-analytics.com https://connect.facebook.net https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://www.paypalobjects.com blob:",
         'style-src' => "'self' 'unsafe-inline' https://fonts.googleapis.com https://googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net",
