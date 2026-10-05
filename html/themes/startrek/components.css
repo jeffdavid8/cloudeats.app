@@ -376,7 +376,7 @@ input.valid:not([type]), input.valid:not([type]):focus, input.valid[type="text"]
 
 .modal .modal-footer {
     padding: 20px 30px;
-    background: rgba(255, 153, 0, 0.05);
+    background: rgba(123, 99, 64, 0.05);
     border-top: 1px solid var(--lcars-orange);
 }
 

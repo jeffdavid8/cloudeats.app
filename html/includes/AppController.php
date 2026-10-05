@@ -10,6 +10,7 @@ class AppController
     public function __construct($appName)
     {
         $this->appName = (!empty($appName)) ? $appName : 'neighborhub';
+        logger("AppController appName: ". $this->appName);
         $this->app = App::getInstance($this->appName);
         $this->config = $this->getAppConfig();
         $this->app->app_config = $this->config;

@@ -170,8 +170,9 @@ class App
     }
     // If an instance exists but the requested app is different, update the singleton tracking
     else if (!empty($app) && (self::$_instance->appName !== $app)) {
-      self::$_instance = new App($app);
-      self::$_instance->handleInternalErrors();
+      $instance = new App($app);
+      $instance->handleInternalErrors();
+      return $instance;
     }
 
     return self::$_instance;

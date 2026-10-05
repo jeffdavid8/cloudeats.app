@@ -991,6 +991,8 @@ function neighborhub_db_tables()
     'neighborhub_merchants',
     'neighborhub_merchant_users',
     'neighborhub_customers',
+    'neighborhub_registration_tokens',
+    'neighborhub_registration_attempts',
     'neighborhub_products',
     'neighborhub_menus',
     'neighborhub_menu_categories',

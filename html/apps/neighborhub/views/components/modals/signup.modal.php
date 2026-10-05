@@ -7,7 +7,7 @@ if (!isset($_SESSION['user'])): ?>
     <div id="neighborhub-signup-modal" class="modal mb-modal-fixed" role="dialog" aria-labelledby="neighborhub-signup-title" aria-modal="true"
         data-recaptcha-site-key="<?= htmlspecialchars($this->config['recaptcha_site_key'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
         <div class="modal-content">
-            <h3><span class="brand-cloud">Cloud</span><span class="brand-eats">Eats</span><span class="brand-extension">.app</span></h3>
+            <h3 class="center-align"><span class="brand-cloud">Cloud</span><span class="brand-eats">Eats</span><span class="brand-extension">.app</span></h3>
             <h4 id="neighborhub-signup-title">Create your account</h4>
             <p>Sign up to order from your neighborhood.</p>
             <form id="neighborhub-signup-form" novalidate>

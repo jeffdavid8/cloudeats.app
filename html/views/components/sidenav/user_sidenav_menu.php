@@ -31,12 +31,6 @@ try {
 ?>
 
 <?php if ($isLoggedIn): ?>
-        <li>
-            <a href="<?php echo $isAdmin ? '?app=admin&page=dashboard' : '?p=dashboard'; ?>" class="dashboard-btn">
-                <i class="material-icons">dashboard</i>
-                Dashboard (<?php echo htmlspecialchars($username); ?>)
-            </a>
-        </li>
         <? // if user is admin, show link to admin /?app=admin 
         if (App::getInstance()->user->is_admin): ?>
             <li>

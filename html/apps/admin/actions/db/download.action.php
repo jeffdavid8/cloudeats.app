@@ -84,7 +84,7 @@ switch ($type) {
         'tables' => $exportData,
       ];
       // 🚀 STREAM THE DOWNLOAD
-      $filename = "mediabrain_full_export_" . date('Ymd_His') . ".json";
+      $filename = "cloudeats".(is_development()?'_dev':'_prod')."_full_export_" . date('Ymd_His') . ".json";
 
       header('Content-Type: application/json');
       header('Content-Disposition: attachment; filename="' . $filename . '"');
