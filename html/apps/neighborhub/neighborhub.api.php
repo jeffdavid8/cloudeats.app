@@ -1532,9 +1532,9 @@ function handle_register_customer(array $request)
 
     if ($pendingRegistration && empty($pendingRegistration['verified_at'])) {
       if ((int)$pendingRegistration['expired'] === 1) {
-        //$db->prepare('DELETE FROM neighborhub_registration_tokens WHERE email = ?')->execute([$email]);
-        //$db->prepare('DELETE FROM neighborhub_customers WHERE user_id = ?')->execute([$pendingRegistration['user_id']]);
-        //$db->prepare('DELETE FROM users WHERE id = ? AND active = 0')->execute([$pendingRegistration['user_id']]);
+        $db->prepare('DELETE FROM neighborhub_registration_tokens WHERE email = ?')->execute([$email]);
+        $db->prepare('DELETE FROM neighborhub_customers WHERE user_id = ?')->execute([$pendingRegistration['user_id']]);
+        $db->prepare('DELETE FROM users WHERE id = ? AND active = 0')->execute([$pendingRegistration['user_id']]);
       } else {
         $db->commit();
         send_json_response([
@@ -1552,6 +1552,7 @@ function handle_register_customer(array $request)
     $existingUser = $db->prepare('SELECT id FROM users WHERE email = ? LIMIT 1');
     $existingUser->execute([$email]);
     /*
+    */
     if ($existingUser->fetchColumn()) {
       $db->commit();
       send_json_response([
@@ -1559,7 +1560,6 @@ function handle_register_customer(array $request)
         'message' => 'If the address can be registered, a verification email has been sent.'
       ]);
     }
-    */
 
     $localPart = strstr($email, '@', true);
     $usernameBase = trim(substr((string)preg_replace('/[^a-z0-9_-]/i', '-', $localPart), 0, 150), '-_');
@@ -1577,6 +1577,7 @@ function handle_register_customer(array $request)
        VALUES (?, ?, ?, NULL, ?, ?, 0, 0, ?, ?)'
     );
     /*
+    */
     $insertUser->execute([
       $username,
       password_hash($password, PASSWORD_DEFAULT),
@@ -1586,20 +1587,19 @@ function handle_register_customer(array $request)
       $now,
       $now
     ]);
-    */
     $userId = (int)$db->lastInsertId();
 
     $insertCustomer = $db->prepare(
       "INSERT INTO neighborhub_customers (user_id, display_name, delivery_locations, status, meta, created_at, updated_at)
        VALUES (?, ?, '{}', 'active', '{}', NOW(), NOW())"
     );
-    //$insertCustomer->execute([$userId, $name]);
+    $insertCustomer->execute([$userId, $name]);
 
     $insertRegistration = $db->prepare(
       'INSERT INTO neighborhub_registration_tokens (email, user_id, token_hash, expires_at, created_at)
        VALUES (?, ?, ?, DATE_ADD(NOW(), INTERVAL 24 HOUR), NOW())'
     );
-    //$insertRegistration->execute([$email, $userId, $tokenHash]);
+    $insertRegistration->execute([$email, $userId, $tokenHash]);
 
     send_registration_email($email, $name, $verificationToken, $app);
     $db->commit();
