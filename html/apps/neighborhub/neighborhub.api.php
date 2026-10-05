@@ -53,6 +53,8 @@ if (!in_array($action, array(
   'list_customer_orders',
   'get_order',
   'get_product_builder_view',
+  'register_customer',
+  'verify_registration',
 ))) {
   if (!isset($_SESSION['user']) || empty($_SESSION['user']['id'])) {
     http_response_code(401);
@@ -70,9 +72,15 @@ App::getInstance('neighborhub')->includeClass('HubSignalingEngine');
 // Route to appropriate handler
 try {
   switch ($action) {
+    case 'register_customer':
+      handle_register_customer($request);
+      break;
+    case 'verify_registration':
+      handle_verify_registration($request);
+      break;
     case 'search_merchants':
-        handle_search_merchants($request);
-        break;
+      handle_search_merchants($request);
+      break;
     case 'geocode_proxy':
       handle_geocode_proxy($request);
       break;
@@ -476,12 +484,12 @@ try {
       $app->includeModel('customer');
       $app->includeModel('order');
       $results = array();
-      $checkout_return_url = (!empty($request['return_url'])) 
-      ? $request['return_url'] 
-      : config('base_url') . '/?app=neighborhub&view=customer&p=dashboard';
-      $checkout_cancel_url = (!empty($request['cancel_url'])) 
-      ? $request['cancel_url'] 
-      : config('base_url') . '/?app=neighborhub&view=customer&p=dashboard';
+      $checkout_return_url = (!empty($request['return_url']))
+        ? $request['return_url']
+        : config('base_url') . '/?app=neighborhub&view=customer&p=dashboard';
+      $checkout_cancel_url = (!empty($request['cancel_url']))
+        ? $request['cancel_url']
+        : config('base_url') . '/?app=neighborhub&view=customer&p=dashboard';
 
       $basket = $request['basket'] ?? null;
       if (!$basket || empty($basket['items'])) {
@@ -1093,7 +1101,7 @@ try {
         ], 500);
       }
       break;
-      
+
     case 'update_menu_category_status':
       authenticate_user($request);
       $app = App::getInstance('neighborhub');
@@ -1124,7 +1132,7 @@ try {
           'message' => 'An error occurred while updating the category status.'
         ], 500);
       }
-      break;       
+      break;
 
 
     case 'rename_menu':
@@ -1437,7 +1445,7 @@ try {
         ], 500);
       }
       break;
-      
+
     case 'export_data':
       handle_export_data($request);
       break;
@@ -1460,42 +1468,372 @@ try {
 
 
 
+function handle_register_customer(array $request)
+{
+  $app = App::getInstance('neighborhub');
+  $db = $app->db;
+
+  $headers = function_exists('getallheaders') ? getallheaders() : [];
+  $csrfToken = $headers['X-CSRF-TOKEN'] ?? $headers['x-csrf-token'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
+  if (!AuthManager::validateCsrf($csrfToken)) {
+    send_json_response(['success' => false, 'error' => 'The request could not be verified. Refresh the page and try again.'], 403);
+  }
+
+  $name = trim(strip_tags((string)($request['name'] ?? '')));
+  $email = strtolower(trim((string)($request['email'] ?? '')));
+  $password = (string)($request['password'] ?? '');
+  $passwordConfirmation = (string)($request['password_confirmation'] ?? '');
+  $recaptchaToken = trim((string)($request['recaptcha_token'] ?? ''));
+
+  if ($name === '' || strlen($name) > 255 || !filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > 255) {
+    send_json_response(['success' => false, 'error' => 'Enter a valid name and email address.'], 400);
+  }
+  if (strlen($password) < 12 || strlen($password) > 4096 || !hash_equals($password, $passwordConfirmation)) {
+    send_json_response(['success' => false, 'error' => 'Use a password of at least 12 characters and make sure both password fields match.'], 400);
+  }
+  if ($recaptchaToken === '') {
+    send_json_response(['success' => false, 'error' => 'Please complete the anti-abuse check and try again.'], 400);
+  }
+  if (
+    empty($app->config['public_base_url'])
+    || empty($app->config['recaptcha_site_key'])
+    || empty($app->config['recaptcha_secret_key'])
+  ) {
+    error_log('NeighborHub registration is unavailable because reCAPTCHA is not configured.');
+    send_json_response(['success' => false, 'error' => 'Registration is temporarily unavailable. Please try again later.'], 503);
+  }
+  if (empty($app->config['mail_host']) || empty($app->config['mail_user']) || empty($app->config['mail_pass'])) {
+    error_log('NeighborHub registration is unavailable because SMTP is not configured.');
+    send_json_response(['success' => false, 'error' => 'Registration is temporarily unavailable. Please try again later.'], 503);
+  }
+
+  try {
+    ensure_registration_tables($db);
+
+    $clientIp = get_neighborhub_client_ip();
+    $ipHash = hash_hmac('sha256', $clientIp, (string)($app->config['app_key'] ?: $app->config['session_secret']));
+    $rateLimit = $db->prepare('SELECT COUNT(*) FROM neighborhub_registration_attempts WHERE ip_hash = ? AND created_at >= DATE_SUB(NOW(), INTERVAL 1 HOUR)');
+    $rateLimit->execute([$ipHash]);
+    if ((int)$rateLimit->fetchColumn() >= 10) {
+      send_json_response(['success' => false, 'error' => 'Too many signup attempts. Please wait and try again.'], 429);
+    }
+    $attempt = $db->prepare('INSERT INTO neighborhub_registration_attempts (ip_hash, created_at) VALUES (?, NOW())');
+    $attempt->execute([$ipHash]);
+    $db->exec('DELETE FROM neighborhub_registration_attempts WHERE created_at < DATE_SUB(NOW(), INTERVAL 1 DAY)');
+
+    if (!verify_neighborhub_recaptcha($recaptchaToken, $app)) {
+      send_json_response(['success' => false, 'error' => 'The anti-abuse check did not pass. Please try again.'], 400);
+    }
+
+    $db->beginTransaction();
+    $pendingQuery = $db->prepare('SELECT user_id, expires_at <= NOW() AS expired, verified_at FROM neighborhub_registration_tokens WHERE email = ? FOR UPDATE');
+    $pendingQuery->execute([$email]);
+    $pendingRegistration = $pendingQuery->fetch(PDO::FETCH_ASSOC);
+
+    if ($pendingRegistration && empty($pendingRegistration['verified_at'])) {
+      if ((int)$pendingRegistration['expired'] === 1) {
+        //$db->prepare('DELETE FROM neighborhub_registration_tokens WHERE email = ?')->execute([$email]);
+        //$db->prepare('DELETE FROM neighborhub_customers WHERE user_id = ?')->execute([$pendingRegistration['user_id']]);
+        //$db->prepare('DELETE FROM users WHERE id = ? AND active = 0')->execute([$pendingRegistration['user_id']]);
+      } else {
+        $db->commit();
+        send_json_response([
+          'success' => true,
+          'message' => 'If the address can be registered, a verification email has been sent.'
+        ]);
+      }
+    } elseif ($pendingRegistration && !empty($pendingRegistration['verified_at'])) {
+      $db->commit();
+      send_json_response([
+        'success' => true,
+        'message' => 'If the address can be registered, a verification email has been sent.'
+      ]);
+    }
+    $existingUser = $db->prepare('SELECT id FROM users WHERE email = ? LIMIT 1');
+    $existingUser->execute([$email]);
+    /*
+    if ($existingUser->fetchColumn()) {
+      $db->commit();
+      send_json_response([
+        'success' => true,
+        'message' => 'If the address can be registered, a verification email has been sent.'
+      ]);
+    }
+    */
+
+    $localPart = strstr($email, '@', true);
+    $usernameBase = trim(substr((string)preg_replace('/[^a-z0-9_-]/i', '-', $localPart), 0, 150), '-_');
+    if ($usernameBase === '') {
+      $usernameBase = 'customer';
+    }
+    $username = $usernameBase . '-' . bin2hex(random_bytes(4));
+
+    $verificationToken = bin2hex(random_bytes(32));
+    $tokenHash = hash('sha256', $verificationToken);
+    $now = date('Y-m-d H:i:s');
+
+    $insertUser = $db->prepare(
+      'INSERT INTO users (username, password, email, oauth_provider, oauth_providers, role, is_admin, active, created_at, modified_at)
+       VALUES (?, ?, ?, NULL, ?, ?, 0, 0, ?, ?)'
+    );
+    /*
+    $insertUser->execute([
+      $username,
+      password_hash($password, PASSWORD_DEFAULT),
+      $email,
+      '{}',
+      'user',
+      $now,
+      $now
+    ]);
+    */
+    $userId = (int)$db->lastInsertId();
+
+    $insertCustomer = $db->prepare(
+      "INSERT INTO neighborhub_customers (user_id, display_name, delivery_locations, status, meta, created_at, updated_at)
+       VALUES (?, ?, '{}', 'active', '{}', NOW(), NOW())"
+    );
+    //$insertCustomer->execute([$userId, $name]);
+
+    $insertRegistration = $db->prepare(
+      'INSERT INTO neighborhub_registration_tokens (email, user_id, token_hash, expires_at, created_at)
+       VALUES (?, ?, ?, DATE_ADD(NOW(), INTERVAL 24 HOUR), NOW())'
+    );
+    //$insertRegistration->execute([$email, $userId, $tokenHash]);
+
+    send_registration_email($email, $name, $verificationToken, $app);
+    $db->commit();
+
+    send_json_response([
+      'success' => true,
+      'message' => 'If the address can be registered, a verification email has been sent.'
+    ]);
+  } catch (Throwable $e) {
+    if ($db->inTransaction()) {
+      $db->rollBack();
+    }
+    error_log('NeighborHub customer registration failed: ' . $e->getMessage());
+    send_json_response(['success' => false, 'error' => 'Registration could not be completed. Please try again later.'], 500);
+  }
+}
+
+function handle_verify_registration(array $request)
+{
+  $app = App::getInstance('neighborhub');
+  $token = (string)($request['token'] ?? '');
+  if (!preg_match('/\A[a-f0-9]{64}\z/i', $token)) {
+    render_registration_verification_result(false);
+  }
+
+  $db = $app->db;
+  try {
+    ensure_registration_tables($db);
+    $db->beginTransaction();
+    $lookup = $db->prepare(
+      'SELECT user_id, expires_at > NOW() AS valid FROM neighborhub_registration_tokens
+       WHERE token_hash = ? AND verified_at IS NULL LIMIT 1 FOR UPDATE'
+    );
+    $lookup->execute([hash('sha256', $token)]);
+    $registration = $lookup->fetch(PDO::FETCH_ASSOC);
+
+    if (!$registration || (int)$registration['valid'] !== 1) {
+      $db->rollBack();
+      render_registration_verification_result(false);
+    }
+
+    $activate = $db->prepare('UPDATE users SET active = 1, modified_at = NOW() WHERE id = ? AND active = 0');
+    $activate->execute([$registration['user_id']]);
+    if ($activate->rowCount() !== 1) {
+      $db->rollBack();
+      render_registration_verification_result(false);
+    }
+
+    $consume = $db->prepare('UPDATE neighborhub_registration_tokens SET verified_at = NOW(), token_hash = NULL WHERE user_id = ?');
+    $consume->execute([$registration['user_id']]);
+    $db->commit();
+    render_registration_verification_result(true);
+  } catch (Throwable $e) {
+    if ($db->inTransaction()) {
+      $db->rollBack();
+    }
+    error_log('NeighborHub email verification failed: ' . $e->getMessage());
+    render_registration_verification_result(false, true);
+  }
+}
+
+function ensure_registration_tables(PDO $db)
+{
+  $db->exec(
+    "CREATE TABLE IF NOT EXISTS neighborhub_registration_tokens (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      email VARCHAR(255) NOT NULL UNIQUE,
+      user_id INT NOT NULL,
+      token_hash CHAR(64) NULL UNIQUE,
+      expires_at DATETIME NOT NULL,
+      verified_at DATETIME NULL,
+      created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      INDEX idx_neighborhub_registration_user (user_id),
+      CONSTRAINT fk_neighborhub_registration_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4"
+  );
+  $db->exec(
+    "CREATE TABLE IF NOT EXISTS neighborhub_registration_attempts (
+      id BIGINT AUTO_INCREMENT PRIMARY KEY,
+      ip_hash CHAR(64) NOT NULL,
+      created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      INDEX idx_neighborhub_registration_attempt_ip_created (ip_hash, created_at)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4"
+  );
+}
+
+function verify_neighborhub_recaptcha(string $token, App $app): bool
+{
+  $curl = curl_init();
+  if ($curl === false) {
+    throw new RuntimeException('Could not initialize reCAPTCHA verification request.');
+  }
+  curl_setopt($curl, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
+  curl_setopt($curl, CURLOPT_POST, true);
+  curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query([
+    'secret'   => $app->config['recaptcha_secret_key'],
+    'response' => $token
+  ]));
+  curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+  curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 5);
+  curl_setopt($curl, CURLOPT_TIMEOUT, 10);
+
+  $response = curl_exec($curl);
+  $curlError = curl_error($curl);
+  $statusCode = (int)curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
+  curl_close($curl);
+
+  if ($response === false || $statusCode !== 200) {
+    throw new RuntimeException('reCAPTCHA verification request failed: ' . $curlError);
+  }
+
+  $result = json_decode($response, true);
+  if (!is_array($result)) {
+    throw new RuntimeException('reCAPTCHA returned an invalid response.');
+  }
+
+  $expectedHost = parse_url($app->config['public_base_url'], PHP_URL_HOST);
+  $failureReasons = [];
+  if (empty($result['success'])) {
+    $errorCodes = array_map(
+      static fn($code) => preg_replace('/[^a-z0-9-]/i', '', (string)$code),
+      $result['error-codes'] ?? []
+    );
+    $failureReasons[] = 'google_rejected:' . implode(',', $errorCodes);
+  } else {
+    if (($result['action'] ?? '') !== 'neighborhub_signup') {
+      $failureReasons[] = 'action_mismatch';
+    }
+    if ((float)($result['score'] ?? 0) < $app->config['recaptcha_min_score']) {
+      $failureReasons[] = 'score_below_threshold';
+    }
+    if (strcasecmp((string)($result['hostname'] ?? ''), (string)$expectedHost) !== 0) {
+      $failureReasons[] = 'hostname_mismatch';
+    }
+  }
+
+  if ($failureReasons) {
+    error_log('NeighborHub reCAPTCHA rejected signup: ' . implode(';', $failureReasons));
+    return false;
+  }
+
+  return true;
+}
+
+function get_neighborhub_client_ip(): string
+{
+  $ip = $_SERVER['HTTP_X_REAL_IP'] ?? $_SERVER['REMOTE_ADDR'] ?? '';
+  return filter_var($ip, FILTER_VALIDATE_IP) ? $ip : '';
+}
+
+function send_registration_email(string $email, string $name, string $token, App $app)
+{
+  $mailer = new \PHPMailer\PHPMailer\PHPMailer(true);
+  $mailer->isSMTP();
+  $mailer->Host = $app->config['mail_host'];
+  $mailer->SMTPAuth = true;
+  $mailer->Username = $app->config['mail_user'];
+  $mailer->Password = $app->config['mail_pass'];
+  $mailer->Port = $app->config['mail_port'];
+  $mailer->SMTPSecure = $app->config['mail_encryption'] === 'ssl'
+    ? \PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_SMTPS
+    : \PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
+  $mailer->CharSet = 'UTF-8';
+  $mailer->setFrom($app->config['mail_from_email'], $app->config['site_name']);
+  $mailer->addAddress($email, $name);
+  $mailer->isHTML(true);
+
+  $verificationUrl = $app->config['public_base_url'] . '/?api=neighborhub&action=verify_registration&token=' . rawurlencode($token);
+  $safeName = htmlspecialchars($name, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+  $safeUrl = htmlspecialchars($verificationUrl, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+  $mailer->Subject = 'Verify your Cloud Eats account';
+  $mailer->Body = "<p>Hi {$safeName},</p><p>Verify your email address to activate your Cloud Eats account:</p><p><a href=\"{$safeUrl}\">Verify my email address</a></p><p>This link expires in 24 hours. If you did not create this account, you can ignore this message.</p>";
+  $mailer->AltBody = "Hi {$name},\n\nVerify your email address to activate your Cloud Eats account: {$verificationUrl}\n\nThis link expires in 24 hours. If you did not create this account, you can ignore this message.";
+  $mailer->send();
+}
+
+function render_registration_verification_result(bool $verified, bool $temporarilyUnavailable = false)
+{
+  http_response_code($verified ? 200 : ($temporarilyUnavailable ? 503 : 400));
+  header('Content-Type: text/html; charset=utf-8');
+  header('X-Content-Type-Options: nosniff');
+  $heading = $verified
+    ? 'Email verified'
+    : ($temporarilyUnavailable ? 'Verification temporarily unavailable' : 'Verification link unavailable');
+  $message = $verified
+    ? 'Your account is active. You can now sign in.'
+    : ($temporarilyUnavailable
+      ? 'We could not verify this link right now. Please try again later.'
+      : 'This link is invalid, expired, or has already been used. You can try signing up again to request a new link.');
+  echo '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="referrer" content="no-referrer"><title>'
+    . htmlspecialchars($heading, ENT_QUOTES, 'UTF-8')
+    . '</title></head><body><main><h1>'
+    . htmlspecialchars($heading, ENT_QUOTES, 'UTF-8')
+    . '</h1><p>'
+    . htmlspecialchars($message, ENT_QUOTES, 'UTF-8')
+    . '</p><p><a href="/?p=login">Sign in</a> · <a href="/">Return to Cloud Eats</a></p></main></body></html>';
+  exit;
+}
 
 function handle_search_merchants($request)
 {
-    $lat = isset($request['lat']) ? floatval($request['lat']) : null;
-    $lng = isset($request['lng']) ? floatval($request['lng']) : null;
-    $q   = isset($request['q']) ? trim($request['q']) : '';
+  $lat = isset($request['lat']) ? floatval($request['lat']) : null;
+  $lng = isset($request['lng']) ? floatval($request['lng']) : null;
+  $q   = isset($request['q']) ? trim($request['q']) : '';
 
-    if ($lat === null || $lng === null) {
-        http_response_code(400);
-        exit(json_encode([
-            'success' => false,
-            'error'   => 'Latitude (lat) and Longitude (lng) are required'
-        ]));
-    }
-
-    App::getInstance('neighborhub')->includeModel('merchant');
-    $merchants = Merchant::searchNearby($lat, $lng, $q);
-    App::getInstance('neighborhub')->includeModel('order');
-
-    foreach ($merchants as &$merchant) {
-      $fee = Order::calculateDeliveryFee(
-        $merchant['latitude'],
-        $merchant['longitude'],
-        $lat,
-        $lng
-      );
-      $merchant['delivery_fee'] = $fee['fee'];
-    }
-    unset($merchant);
-
-    http_response_code(200);
+  if ($lat === null || $lng === null) {
+    http_response_code(400);
     exit(json_encode([
-        'success'   => true,
-        'count'     => count($merchants),
-        'merchants' => $merchants
+      'success' => false,
+      'error'   => 'Latitude (lat) and Longitude (lng) are required'
     ]));
+  }
+
+  App::getInstance('neighborhub')->includeModel('merchant');
+  $merchants = Merchant::searchNearby($lat, $lng, $q);
+  App::getInstance('neighborhub')->includeModel('order');
+
+  foreach ($merchants as &$merchant) {
+    $fee = Order::calculateDeliveryFee(
+      $merchant['latitude'],
+      $merchant['longitude'],
+      $lat,
+      $lng
+    );
+    $merchant['delivery_fee'] = $fee['fee'];
+  }
+  unset($merchant);
+
+  http_response_code(200);
+  exit(json_encode([
+    'success'   => true,
+    'count'     => count($merchants),
+    'merchants' => $merchants
+  ]));
 }
 
 function handle_geocode_proxy($request)

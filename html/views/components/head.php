@@ -109,6 +109,9 @@ if (!empty($share_image_name)) {
   <!--Import night mode css-->
   <link rel="stylesheet" href="css/nightmode.css" />
   <link rel="stylesheet" href="apps/neighborhub/css/neighborhub.css" />
+  <?php if (!empty($this->config['recaptcha_site_key'])): ?>
+    <script src="https://www.google.com/recaptcha/api.js?render=<?= htmlspecialchars($this->config['recaptcha_site_key'], ENT_QUOTES, 'UTF-8') ?>" async defer></script>
+  <?php endif; ?>
   
   <script>
     var mb = {

@@ -55,6 +55,7 @@ function neighborhub_info(&$app)
     'scripts' => array(
       'apps/neighborhub/js/neighborhub.init.js',
       'apps/neighborhub/js/nh.audio.js',
+      'apps/neighborhub/js/signup.js',
       //'./js/vis-network.min.js',
       './js/leaflet.js',
       //'https://www.youtube.com/iframe_api',

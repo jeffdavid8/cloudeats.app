@@ -274,7 +274,7 @@
 .input-field input[type="email"],
 .input-field textarea {
     background: var(--panel-day);
-    border: 2px solid var(--lcars-orange);
+    border: 2px solid var(--gray-400);
     border-radius: 10px;
     color: var(--text-dark);
     padding: 15px 0;
@@ -369,8 +369,8 @@ input.valid:not([type]), input.valid:not([type]):focus, input.valid[type="text"]
 }
 
 .modal .modal-content h4 {
-    color: var(--lcars-orange);
-    font-family: 'Orbitron', monospace;
+    color: var(--gray-400);
+    /* font-family: 'Orbitron', monospace; */
     text-shadow: var(--glow-intensity) var(--lcars-orange);
 }
 

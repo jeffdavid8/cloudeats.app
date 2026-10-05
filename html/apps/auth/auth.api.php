@@ -66,15 +66,16 @@ function handleLogin($data)
     $app = App::getInstance();
     $auth = $app->getAuthManager();
     if ($auth->checkCredentials($username, $password)) {
-        $isAdmin = $auth->userIsAdmin($username);
+        $authenticatedUsername = $_SESSION['user']['username'] ?? $username;
+        $isAdmin = $auth->userIsAdmin($authenticatedUsername);
 
         // Clear rate limiting on success
         RateLimiter::clearAttempts('login');
         
         $stmt = $app->db->prepare("SELECT * FROM users WHERE username = ? LIMIT 1");
-        $stmt->execute([$username]);
+        $stmt->execute([$authenticatedUsername]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
-        $_SESSION['mb_user'] = $username;
+        $_SESSION['mb_user'] = $authenticatedUsername;
         $_SESSION['user'] = $user;
         
 
@@ -83,7 +84,7 @@ function handleLogin($data)
         // Log successful login
         if ($app->getEventLogger()) {
             $app->getEventLogger()->log('INFO', 'login', 'User logged in successfully', [
-                'username' => $username,
+                'username' => $authenticatedUsername,
                 'is_admin' => $isAdmin
             ]);
         }

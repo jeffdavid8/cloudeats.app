@@ -206,6 +206,8 @@ class AppController
 
         <?php $this->app->render('components/audio_interfaces.php'); ?>
 
+        <?php $this->app->render('components/modals/signup.modal.php'); ?>
+
         <div id="loadingIndicator">
             <?php $this->app->render('components/loading_indicator.php'); ?>
         </div>

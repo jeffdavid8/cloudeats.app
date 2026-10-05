@@ -478,7 +478,7 @@ if (!empty($_SESSION['login_error'])) {
                 <div class="input-field">
                     <i class="material-icons prefix">account_circle</i>
                     <input id="username" name="username" type="text" class="validate" required>
-                    <label for="username">Username</label>
+                    <label for="username">Username or email</label>
                 </div>
 
                 <div class="input-field">

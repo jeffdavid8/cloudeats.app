@@ -86,6 +86,19 @@ class AuthManagerTest extends TestCase
         $this->assertIsBool($result);
     }
 
+    public function testCheckCredentialsAcceptsEmailAddress()
+    {
+        $db = new \PDO('sqlite::memory:');
+        $db->exec('CREATE TABLE users (id INTEGER PRIMARY KEY, username TEXT, email TEXT, password TEXT, active INTEGER, last_login TEXT)');
+        $insert = $db->prepare('INSERT INTO users (id, username, email, password, active) VALUES (1, ?, ?, ?, 1)');
+        $insert->execute(['neighbor-customer', 'customer@example.com', password_hash('correct horse battery staple', PASSWORD_DEFAULT)]);
+
+        $auth = new \AuthManager($db);
+
+        $this->assertTrue($auth->checkCredentials('customer@example.com', 'correct horse battery staple'));
+        $this->assertSame('neighbor-customer', $_SESSION['user']['username']);
+    }
+
     public function testSessionManagement()
     {
         // Test session starting

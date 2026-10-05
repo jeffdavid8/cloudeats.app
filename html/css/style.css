@@ -48,6 +48,7 @@ h6 {
   --primary-light: #3b82f6;
   --primary-dark: #1e40af;
 
+  
   /* Status Colors */
   --status-pending-bg: #fbbf24;
   --status-pending-text: #78350f;
@@ -1197,6 +1198,7 @@ body.header-announcement .app-container {
 /**
 * Inputs 
 */
+
 input:not([type]),
 input[type="text"]:not(.browser-default),
 input[type="password"]:not(.browser-default),
@@ -2285,4 +2287,23 @@ header.header nav .header-ce-logo-home-link:hover {
 .cloudeats-muted {
   color: var(--cloudeats-muted);
   font-weight: 400;
+}
+
+
+.grecaptcha-badge {
+  visibility: hidden !important;
+}
+
+/* 1. Hide the fixed/floating layout box that attaches to the screen body */
+body > .grecaptcha-badge {
+  visibility: hidden !important;
+}
+
+/* 2. Keep it visible specifically when it lives inside your form layout div */
+#recaptcha-inline-container .grecaptcha-badge {
+  visibility: visible !important;
+  position: relative !important;
+  right: auto !important;
+  bottom: auto !important;
+  box-shadow: none !important; /* Removes the floating card shadow */
 }

@@ -82,6 +82,7 @@ class App
       'coords' => '40.4211,-85.6538',
       'nws_station_id' => '',
       'base_url' => protocol() . '://' . $_SERVER["HTTP_HOST"],
+      'public_base_url' => get_base_url(),
       // Database
         'mysql' => array(
           'host' => $_ENV['DB_HOST'] ?? 'localhost',
@@ -102,7 +103,14 @@ class App
         // Mail
         'mail_host' => $_ENV['MAIL_HOST'] ?? '',
         'mail_user' => $_ENV['MAIL_USER'] ?? '',
-        'mail_pass' => $_ENV['MAIL_PASS'] ?? '',      // Logging
+        'mail_pass' => $_ENV['MAIL_PASS'] ?? '',
+        'mail_port' => (int)($_ENV['MAIL_PORT'] ?? 587),
+        'mail_encryption' => strtolower($_ENV['MAIL_ENCRYPTION'] ?? 'tls'),
+        'mail_from_email' => $_ENV['MAIL_FROM_EMAIL'] ?? ($_ENV['MAIL_USER'] ?? ''),
+        'recaptcha_site_key' => $_ENV['RECAPTCHA_SITE_KEY'] ?? '',
+        'recaptcha_secret_key' => $_ENV['RECAPTCHA_SECRET_KEY'] ?? '',
+        'recaptcha_min_score' => (float)($_ENV['RECAPTCHA_MIN_SCORE'] ?? 0.5),
+      // Logging
       'log_level' => 'debug',
     );
 

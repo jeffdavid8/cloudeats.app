@@ -223,6 +223,7 @@ if ($isUserLoggedIn) {
 
 </ul>
 
+
 <!-- Inline Styles for Dropdown Enhancement -->
 <style>
     /*

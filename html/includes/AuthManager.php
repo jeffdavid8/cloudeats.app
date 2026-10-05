@@ -167,6 +167,11 @@ class AuthManager
         $stmt = $this->db->prepare("SELECT id, username, password, active FROM users WHERE username = ? LIMIT 1");
         $stmt->execute([$user]);
         $userData = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$userData) {
+            $stmt = $this->db->prepare("SELECT id, username, password, active FROM users WHERE email = ? LIMIT 1");
+            $stmt->execute([$user]);
+            $userData = $stmt->fetch(PDO::FETCH_ASSOC);
+        }
 
         // 🛡️ Step 2: Validation Gate
         if (!$userData) {

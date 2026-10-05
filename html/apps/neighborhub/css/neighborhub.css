@@ -1957,7 +1957,9 @@ body.scrolled .my-cloudeats-link {
 .nightMode .mb-modal-fixed {
   background: rgba(0, 0, 0, 0.95);
 }
-
+.dayMode .mb-modal-fixed {
+  background: rgba(238, 238, 238, 0.95);
+}
 .mb-modal-fixed .open {
   display: flex !important;
   top: 0 !important;
