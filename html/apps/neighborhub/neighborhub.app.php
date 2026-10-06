@@ -1312,7 +1312,7 @@ function neighborhub_install_db()
     ";
 
 
-  $log = [];
+    $log = [];
   foreach (explode(';', $tableSql) as $q) {
     $q = trim($q);
     $cleaned = str_replace("\r\n", "\n", $q);
@@ -1323,7 +1323,12 @@ function neighborhub_install_db()
         error_log('Running Neighborhub Query - ');
         error_log($cleanSQL);
         error_log('-----------------------------------------------------');
+        
+        // 1. Execute the query
         $app->db->exec($q);
+        
+        // 2. FORCE a tiny sleep break (10ms) to allow the thread lock to release
+        usleep(10000); 
 
         $log[] = '-----------------------------------------------------';
         $log[] = "Running Neighborhub Query - ";
@@ -1345,6 +1350,7 @@ function neighborhub_install_db()
     'log'     => $log
   ];
 }
+
 
 
 function neighborhub_restore_db()
