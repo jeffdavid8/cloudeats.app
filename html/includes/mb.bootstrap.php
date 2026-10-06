@@ -52,12 +52,12 @@ if (file_exists('./json/default_db.json') && !$is_development) {
     //include './apps/admin/actions/db/init_users.action.php';
     //include './apps/admin/actions/db/init_db.action.php';
     $result = [];
-    //$result['install']['admin '] = app_invoke('admin', 'install_db');
-    //$result['install']['stitch '] = app_invoke('stitch', 'install_db');
+    $result['install']['admin '] = app_invoke('admin', 'install_db');
+    $result['install']['stitch '] = app_invoke('stitch', 'install_db');
     $result['install']['neighborhub'] = app_invoke('neighborhub', 'install_db');
 
-    //$result['restore']['admin '] = app_invoke('admin', 'restore_db');
-    //$result['restore']['stitch '] = app_invoke('stitch', 'restore_db');
+    $result['restore']['admin '] = app_invoke('admin', 'restore_db');
+    $result['restore']['stitch '] = app_invoke('stitch', 'restore_db');
     $result['restore']['neighborhub'] = app_invoke('neighborhub', 'restore_db');
 
     error_log('-------------------FULL DEPLOYMENT RESULTS----------------------------------');
