@@ -1868,6 +1868,7 @@ body.loading #loadingIndicator {
 .modal .modal-header {
   position: sticky;
   display: flex;
+  margin-bottom: 1rem;
   justify-content: space-between;
   align-items: center;
   padding: 20px 20px 0;
@@ -1967,16 +1968,17 @@ body.loading #loadingIndicator {
 .modal-header .modal-close {
   font-size: 28px;
   cursor: pointer;
-  transition: all 0.3s;
+  /* transition: all 0.3s; */
   position: absolute;
   top: 0px;
   width: 45px;
+  height: 30px;
+  right: 0px;
+  border-radius: 7px;
   text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
-  right: 0px;
-  height: 30px;
   padding-bottom: 5px;
 }
 

@@ -1981,7 +1981,7 @@ body.scrolled .my-cloudeats-link {
 .mb-modal-fixed .modal-header {
   width: 100%;
   flex: 0 0 auto; /* Don't grow, don't shrink */
-  padding: 20px;
+  /* padding: 20px; */
 }
 .mb-modal-fixed .modal-header h5 {
   margin: 0;
