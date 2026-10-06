@@ -47,7 +47,9 @@ if (!empty($_SESSION['login_error'])) {
         justify-content: center;
         margin: 0;
     }
-
+    #nh-terms-banner {
+        display: none;
+    }
     .login-container {
         background: white;
         border-radius: 10px;

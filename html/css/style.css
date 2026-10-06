@@ -586,7 +586,7 @@ body.loading-progress nav .progress {
   display: block;
 }
 .nightMode nav .progress {
-  background-color: #ffb300;
+  /* background-color: #ffb300; */
 }
 .nightMode nav .progress .indeterminate {
   background-color: #e65100;
