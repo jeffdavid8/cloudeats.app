@@ -55,7 +55,7 @@ class BackupManager
             ];
 
             // Helper for spatial/binary columns in SELECT
-            $safe_select = function(string $table) use ($db): string {
+            $safe_select = function (string $table) use ($db): string {
                 $cols = [];
                 try {
                     $meta = $db->query("
@@ -66,7 +66,7 @@ class BackupManager
                     ");
                     while ($col = $meta->fetch(PDO::FETCH_ASSOC)) {
                         $name = $col['COLUMN_NAME'];
-                        if (in_array($col['data_type'], ['point','geometry','linestring','polygon','multipoint','multilinestring','multipolygon','geometrycollection','blob','mediumblob','longblob'])) {
+                        if (in_array($col['data_type'], ['point', 'geometry', 'linestring', 'polygon', 'multipoint', 'multilinestring', 'multipolygon', 'geometrycollection', 'blob', 'mediumblob', 'longblob'])) {
                             $cols[] = "ST_AsText(`{$name}`) AS `{$name}`";
                         } else {
                             $cols[] = "`{$name}`";
@@ -183,7 +183,7 @@ class BackupManager
                             WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = '{$table}'
                         ");
                         while ($col = $colStmt->fetch(PDO::FETCH_ASSOC)) {
-                            if (in_array($col['data_type'], ['point','geometry','linestring','polygon','multipoint','multilinestring','multipolygon','geometrycollection'])) {
+                            if (in_array($col['data_type'], ['point', 'geometry', 'linestring', 'polygon', 'multipoint', 'multilinestring', 'multipolygon', 'geometrycollection'])) {
                                 $spatialColumns[] = $col['COLUMN_NAME'];
                             }
                         }
@@ -207,6 +207,7 @@ class BackupManager
                             $placeholders[] = ":{$col}";
                         }
                     }
+                    $columnList = '`' . implode('`, `', $columns) . '`';
                     $placeholderList = implode(', ', $placeholders);
 
                     $sql = "INSERT INTO `{$table}` ({$columnList}) VALUES ({$placeholderList})";
@@ -218,7 +219,7 @@ class BackupManager
                         foreach ($row as $columnName => $value) {
                             if (in_array($columnName, $spatialColumns)) {
                                 if (empty($value) || !is_string($value) || !preg_match('/^point\s*\(/i', trim($value))) {
-                                    $bindArray[':' . $columnName] = null;
+                                    $bindArray[':' . $columnName] = 'POINT(0 0)';
                                 } else {
                                     $bindArray[':' . $columnName] = trim($value);
                                 }
@@ -231,17 +232,13 @@ class BackupManager
                         $stmt->execute($bindArray);
                         $rowCount++;
                     }
-
                     $log[] = "Successfully restored {$rowCount} record segments into [{$table}].";
                 }
             }
-
             // 3. SECURELY COMMIT TRANSFERS DOCKING CHUNKS TO PERMANENT DISK STORAGE
             $db->commit();
-
             // 4. REACTIVATE INTEGRITY LAYER ENFORCEMENT RULES
             $db->exec("SET FOREIGN_KEY_CHECKS = 1;");
-
             return [
                 'success' => true,
                 'log'     => $log
@@ -254,7 +251,6 @@ class BackupManager
             if (isset($db)) {
                 $db->exec("SET FOREIGN_KEY_CHECKS = 1;");
             }
-
             error_log("BackupManager::importFromJsonFile Exception: " . $e->getMessage());
             return [
                 'success' => false,
