@@ -1090,14 +1090,14 @@ CREATE TABLE neighborhub_registration_tokens (
       created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
       INDEX idx_neighborhub_registration_user (user_id),
       CONSTRAINT fk_neighborhub_registration_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE neighborhub_registration_attempts (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
   ip_hash CHAR(64) NOT NULL,
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   INDEX idx_neighborhub_registration_attempt_ip_created (ip_hash, created_at)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE neighborhub_merchant_users (
   id INT AUTO_INCREMENT PRIMARY KEY,
