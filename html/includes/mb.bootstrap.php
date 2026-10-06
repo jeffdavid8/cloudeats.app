@@ -42,7 +42,7 @@ require_once __DIR__ . '/models/storage.model.php';
 $host = $_SERVER['HTTP_HOST'] ?? '';
 $is_development = (bool)preg_match('/localhost|127\\.0\\.0\\.1|\\.local|:8080|:3000|:8000/', $host);
 
-if (file_exists('./json/default_db.json') && !$is_development) {
+if (file_exists('../storage/_install_db.json') && !$is_development) {
     $_SESSION['bypass_admin_key'] = true;
 
     // Start the shield
@@ -68,7 +68,7 @@ if (file_exists('./json/default_db.json') && !$is_development) {
     error_log(' ');
     error_log(' ');
 
-    unlink('./json/default_db.json');
+    unlink('../storage/_install_db.json');
     unset($_SESSION['bypass_admin_key']);
     
     // Redirect so the user never sees the "init" output residue
