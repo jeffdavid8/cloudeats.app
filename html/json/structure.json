@@ -20,24 +20,6 @@
       "description": "Track income, expenses, bills, and financial accounts with the Ledger app—simple, secure, and powerful financial management for individuals and small businesses"
     },
     {
-      "machine-name": "bibleBot",
-      "title": "BibleBot",
-      "icon": "<i class=\"fa fa-robot\"></i>",
-      "app_icon": "📚",
-      "index-logo": "apps/bibleBot/images/BibleBot-app-index-logo-lg.png",
-      "href": "?app=bibleBot",
-      "description": "Search, share, bookmark, import, export, save, and study scripture references"
-    },
-    {
-      "machine-name": "researcher",
-      "title": "AI Research Assistant",
-      "icon": "<i class=\"fas fa-flask\"></i>",
-      "app_icon": "🔬",
-      "index-logo": "apps/researcher/images/researcher-app-index-logo-lg.png",
-      "href": "?app=researcher",
-      "description": "An AI Research Assistant 🙂"
-    },
-    {
       "machine-name": "stitch",
       "title": "Stitch",
       "icon": "<i class=\"material-icons\">add</i>",
@@ -66,15 +48,6 @@
       "description": "Visual website builder and code editor"
     },
     {
-      "machine-name": "ancestry",
-      "title": "Ancestry",
-      "icon": "<i class=\"fas fa-tree\"></i>",
-      "app_icon": "🌳",
-      "index-logo": "apps/ancestry/images/ancestry-logo.png",
-      "href": "?app=ancestry",
-      "description": "Family tree, map and timeline"
-    },
-    {
       "machine-name": "recipes",
       "title": "Recipes",
       "icon": "<i class=\"fas fa-utensils\"></i>",
@@ -100,15 +73,6 @@
       "index-logo": "apps/vault/images/vault-app-index-logo-lg.png",
       "href": "?app=vault",
       "description": "Secure storage and management of memory anchors, nexus links, and personal architectural data"
-    },
-    {
-      "machine-name": "audioLibrary",
-      "title": "Audio Library",
-      "icon": "<i class=\"fas fa-file-audio\"></i>",
-      "app_icon": "🎵",
-      "index-logo": "apps/audioLibrary/images/audioLibrary-app-index-logo-lg.png",
-      "href": "?app=audioLibrary",
-      "description": "Browse and sample audio files."
     },
     {
       "machine-name": "admin",
