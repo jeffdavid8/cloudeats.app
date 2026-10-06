@@ -1039,7 +1039,7 @@ function neighborhub_install_db()
       address TEXT,
       latitude DOUBLE,
       longitude DOUBLE,
-      location POINT NOT NULL,
+      location POINT NOT NULL DEFAULT (ST_PointFromText('POINT(0 0)')),
       phone VARCHAR(50),
       email VARCHAR(255),
       messenger VARCHAR(255),
@@ -1187,7 +1187,7 @@ function neighborhub_install_db()
       status VARCHAR(20) DEFAULT 'offline' CHECK(status IN ('available', 'on_delivery', 'offline')),
       latitude DOUBLE,
       longitude DOUBLE,
-      location POINT NOT NULL,
+      location POINT NOT NULL DEFAULT (ST_PointFromText('POINT(0 0)')),
       last_location_update DATETIME,
       total_deliveries INT DEFAULT 0,
       rating DECIMAL(3,2),
@@ -1259,13 +1259,14 @@ function neighborhub_install_db()
       sort_order INT DEFAULT 0,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-      CREATE TABLE neighborhub_delivery_tracking (
+
+    CREATE TABLE neighborhub_delivery_tracking (
       id INT AUTO_INCREMENT PRIMARY KEY,
       order_id INT NOT NULL,
       courier_id INT NOT NULL,
       latitude DOUBLE,
       longitude DOUBLE,
-      location POINT NOT NULL,
+      location POINT NOT NULL DEFAULT (ST_PointFromText('POINT(0 0)')),
       status_update VARCHAR(255),
       details JSON NOT NULL,
       type VARCHAR(50) DEFAULT 'default',
