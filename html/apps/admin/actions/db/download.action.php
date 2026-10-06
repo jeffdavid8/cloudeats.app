@@ -82,10 +82,10 @@ switch ($type) {
       };
 
       // Traverse down each module layer to fetch corresponding database tables
-      foreach ($tables as $appName => $tables) {
-        if (!is_array($tables)) continue;
+      foreach ($tables as $appName => $tableList) {
+        if (!is_array($tableList)) continue;
 
-        foreach ($tables as $table) {
+        foreach ($tableList as $table) {
           $table = trim($table);
           if (empty($table)) continue;
 

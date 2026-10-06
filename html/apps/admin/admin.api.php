@@ -155,94 +155,152 @@ switch ($action) {
     case 'restore_db':
         $db = $app->db;
         $results = [];
-        $uploadedFile = $_FILES['db_file']['tmp_name'];
+        $uploadedFile = $_FILES['db_file']['tmp_name'] ?? '';
         $targetTables = $_POST['target_tables'] ?? [];
 
         if (empty($targetTables) || !is_array($targetTables)) {
             http_response_code(400);
-            echo "ERROR: Restructure matrix failure. Zero explicit table elements specified.";
+            echo json_encode(['success' => false, 'error' => 'Restructure matrix failure. Zero explicit table elements specified.']);
             exit;
         }
 
-        // 3. Extract and Verify Payload Contents
+        if (empty($uploadedFile) || !file_exists($uploadedFile)) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'error' => 'No database backup file uploaded or upload failed.']);
+            exit;
+        }
+
+        // Extract and Verify Payload Contents
         $payloadContent = file_get_contents($uploadedFile);
         $data = json_decode($payloadContent, true);
 
-        // 1. DEACTIVATE CONSTRAINTS TO ALLOW OUT-OF-ORDER SEEDING
-        $db->exec("SET FOREIGN_KEY_CHECKS = 0;");
-
-        // 2. BEGIN ATOMIC ISOLATION TRANSACTION BLOCK
-        $db->exec("START TRANSACTION;");
-
-        // Drop and Re-Create Tables
-        /*
-        $results['install']['admin '] = app_invoke('admin', 'install_db');
-        $results['install']['stitch '] = app_invoke('stitch', 'install_db');
-        $results['install']['neighborhub'] = app_invoke('neighborhub', 'install_db');
-        */
-
-        foreach ($targetTables as $table) {
-            try {
-                // Clear existing table content to prevent UNIQUE key/PKey constraint collisons
-                $db->exec("DELETE FROM {$table};");
-            } catch (PDOException $e) {
-                // Table doesn't exist, do nothing or log the error
-                $results['restore'][$table][] = "Table [{$table}] does not exist";
-            }
-
-            if (!isset($data['tables'][$table]) || empty($data['tables'][$table])) {
-                $results['restore'][$table][] = "Table [{$table}] cleared, no backup dataset rows to ingest.";
-                continue;
-            }
-
-            $rows = $data['tables'][$table];
-
-            // Grab array columns dynamically from the first payload chunk element
-            $sampleRow = $rows[0];
-            $columns = array_keys($sampleRow);
-
-            // Construct statement strings mapping query variables safely
-            $columnList = implode(', ', $columns);
-            $placeholderList = ':' . implode(', :', $columns);
-
-            $sql = "INSERT INTO {$table} ({$columnList}) VALUES ({$placeholderList})";
-            $stmt = $db->prepare($sql);
-
-            $rowCount = 0;
-            foreach ($rows as $row) {
-                $bindArray = [];
-                foreach ($row as $columnName => $value) {
-                    $bindArray[':' . $columnName] = $value;
-                }
-                $stmt->execute($bindArray);
-                $rowCount++;
-            }
-
-            $results['restore'][$table][] = "Successfully restored {$rowCount} record segments into [{$table}].";
+        if (!$data || !isset($data['tables']) || !is_array($data['tables'])) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'error' => 'Invalid backup JSON payload. Missing or corrupt "tables" object.']);
+            exit;
         }
 
-        // 3. SECURELY COMMIT TRANSFERS DOCKING CHUNKS TO PERMANENT DISK STORAGE
-        $db->exec("COMMIT;");
+        try {
+            // 1. DEACTIVATE CONSTRAINTS TO ALLOW OUT-OF-ORDER SEEDING
+            $db->exec("SET FOREIGN_KEY_CHECKS = 0;");
 
-        // 4. REACTIVATE INTEGRITY LAYER ENFORCEMENT RULES
-        $db->exec("SET FOREIGN_KEY_CHECKS = 1;");
+            // 2. BEGIN ATOMIC ISOLATION TRANSACTION BLOCK
+            $db->beginTransaction();
 
+            foreach ($targetTables as $table) {
+                $table = trim($table);
+                if (empty($table)) continue;
 
-        error_log('-------------------FULL DEPLOYMENT RESULTS----------------------------------');
-        error_log(print_r($results, true));
-        error_log('------------------------------------------------------------------------------------');
-        error_log('------------------------------------------------------------------------------------');
-        error_log(' ');
-        error_log(' ');
-        error_log(' ');
+                // Check if table exists in database
+                $tableCheck = $db->query("SELECT 1 FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = '{$table}' LIMIT 1");
+                if ($tableCheck->fetchColumn() === false) {
+                    $results['restore'][$table][] = "Table [{$table}] does not exist in database. Skipping.";
+                    continue;
+                }
 
-        echo json_encode([
-            'success' => true,
-            'data' => array(
-                'tables_restored' => $targetTables,
+                // Check if backup has data for this table
+                if (!isset($data['tables'][$table])) {
+                    $results['restore'][$table][] = "Table [{$table}] not present in backup dataset. Skipped.";
+                    continue;
+                }
+
+                $rows = $data['tables'][$table];
+                if (empty($rows)) {
+                    $db->exec("DELETE FROM `{$table}`;");
+                    $results['restore'][$table][] = "Table [{$table}] cleared (backup dataset contained 0 rows).";
+                    continue;
+                }
+
+                // Detect spatial/geometry columns (e.g. location POINT) so we wrap them in ST_PointFromText()
+                $spatialColumns = [];
+                try {
+                    $colStmt = $db->query("
+                        SELECT COLUMN_NAME, LOWER(DATA_TYPE) as data_type
+                        FROM information_schema.COLUMNS
+                        WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = '{$table}'
+                    ");
+                    while ($col = $colStmt->fetch(PDO::FETCH_ASSOC)) {
+                        if (in_array($col['data_type'], ['point','geometry','linestring','polygon','multipoint','multilinestring','multipolygon','geometrycollection'])) {
+                            $spatialColumns[] = $col['COLUMN_NAME'];
+                        }
+                    }
+                } catch (Exception $e) {
+                    $spatialColumns = [];
+                }
+
+                // Clear existing table content to prevent UNIQUE key/PKey constraint collisions
+                $db->exec("DELETE FROM `{$table}`;");
+
+                // Grab array columns dynamically from the first payload chunk element
+                $sampleRow = $rows[0];
+                $columns = array_keys($sampleRow);
+
+                // Construct statement strings mapping query variables safely
+                $columnList = '`' . implode('`, `', $columns) . '`';
+                $placeholders = [];
+                foreach ($columns as $col) {
+                    if (in_array($col, $spatialColumns)) {
+                        $placeholders[] = "ST_PointFromText(:{$col})";
+                    } else {
+                        $placeholders[] = ":{$col}";
+                    }
+                }
+                $placeholderList = implode(', ', $placeholders);
+
+                $sql = "INSERT INTO `{$table}` ({$columnList}) VALUES ({$placeholderList})";
+                $stmt = $db->prepare($sql);
+
+                $rowCount = 0;
+                foreach ($rows as $row) {
+                    $bindArray = [];
+                    foreach ($row as $columnName => $value) {
+                        if (in_array($columnName, $spatialColumns)) {
+                            // ST_PointFromText expects valid WKT (e.g. 'POINT(x y)') or NULL
+                            if (empty($value) || !is_string($value) || !preg_match('/^point\s*\(/i', trim($value))) {
+                                $bindArray[':' . $columnName] = null;
+                            } else {
+                                $bindArray[':' . $columnName] = trim($value);
+                            }
+                        } elseif (is_array($value) || is_object($value)) {
+                            $bindArray[':' . $columnName] = json_encode($value, JSON_UNESCAPED_UNICODE);
+                        } else {
+                            $bindArray[':' . $columnName] = $value;
+                        }
+                    }
+                    $stmt->execute($bindArray);
+                    $rowCount++;
+                }
+
+                $results['restore'][$table][] = "Successfully restored {$rowCount} record segments into [{$table}].";
+            }
+
+            // Commit transaction
+            $db->commit();
+
+            // Reactivate constraints
+            $db->exec("SET FOREIGN_KEY_CHECKS = 1;");
+
+            echo json_encode([
+                'success' => true,
+                'data' => [
+                    'tables_restored' => $targetTables,
+                    'results' => $results,
+                ],
+            ]);
+        } catch (Exception $e) {
+            if ($db->inTransaction()) {
+                $db->rollBack();
+            }
+            $db->exec("SET FOREIGN_KEY_CHECKS = 1;");
+
+            error_log("restore_db Exception: " . $e->getMessage());
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'error' => $e->getMessage(),
                 'results' => $results,
-            ),
-        ]);
+            ]);
+        }
         break;
 
     case 'users':
