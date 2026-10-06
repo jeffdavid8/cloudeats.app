@@ -879,7 +879,7 @@ header.header nav {
   border-bottom: 4px solid var(--brand-nav-border);
 }
 .nightMode .header.header nav {
-  border-bottom: 2px solid #63424b;
+  border-bottom: 2px solid #c26f86;
 }
 .dayMode .header.header nav {
   border-bottom: 2px solid #f1e8eb;

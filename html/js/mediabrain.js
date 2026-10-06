@@ -997,8 +997,10 @@ $(document).ready(function () {
  * The "Lush" Confetti Launcher
  */
 function launchSovereignConfetti() {
-  const $container = $("#confetti-cannon");
+  // --- FIXED: Restored jQuery \$ selector ---
+  const container = $("#confetti-cannon"); 
   const pieceCount = 150; // Total "Integrity" particles
+
   // Sovereign Color Palette: Warp Green, Tech Gold, Lush Magenta, Blackout Grey
   const colors = ["#00ff41", "#FFD700", "#FF00FF", "#333"];
 
@@ -1006,12 +1008,12 @@ function launchSovereignConfetti() {
   for (let i = 0; i < pieceCount; i++) {
     // Random properties for that "Lush" feel
     const randomX = Math.random() * 100; // Start across the screen width (%)
-    const randomY = Math.random() * 20 + 100; // Start slightly below the screen (vh)
+    const randomY = Math.random() * -20; // Start slightly ABOVE the screen
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
     const randomRotation = Math.random() * 360; // Random starting spin
     const randomScale = Math.random() * 0.8 + 1.2; // Random size
 
-    // Stitch the particle together
+    // --- FIXED: Restored jQuery \$ for element creation ---
     const $piece = $('<div class="confetti-piece"></div>').css({
       "background-color": randomColor,
       left: randomX + "%",
@@ -1021,18 +1023,17 @@ function launchSovereignConfetti() {
     });
 
     // Add to the container
-    $container.append($piece);
+    container.append($piece);
 
-    // Define a random, explosive trajectory
+    // Define a random trajectory falling downwards
     const finalX = (randomX - 50) * (Math.random() * 1.5 + 0.5) + 50; // Spread out from the center
-    const finalY = Math.random() * -120 - 20; // Boom! (Target vertical destination)
+    const finalY = Math.random() * 20 + 100; // Fall DOWN past the bottom of the screen
     const finalRotation = randomRotation + (Math.random() * 1000 - 500); // Rapid spin
 
     // Animate the particle using jQuery
-    // This is the manual "Warp Drive" animation flow
     $piece.animate(
       {
-        top: finalY + "vh", // Go UP
+        top: finalY + "vh", // Go DOWN
         left: finalX + "%", // Spread out
         opacity: 0, // Fade away as it lands
       },
@@ -1045,15 +1046,15 @@ function launchSovereignConfetti() {
             // Update rotation continuously as it moves
             $(this).css(
               "transform",
-              `rotate(${finalRotation * fx.pos}deg) scale(${randomScale})`,
+              `rotate(${finalRotation * fx.pos}deg) scale(${randomScale})`
             );
           }
         },
         complete: function () {
-          // Optionally remove individual pieces as they finish
+          // Remove individual pieces as they finish
           $(this).remove();
         },
-      },
+      }
     );
   }
 }
