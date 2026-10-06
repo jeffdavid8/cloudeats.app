@@ -1539,14 +1539,14 @@ function handle_register_customer(array $request)
         $db->commit();
         send_json_response([
           'success' => true,
-          'message' => 'If the address can be registered, a verification email has been sent.'
+          'message' => 'If the address can be registered, a verification email has been sent.  Please locate the email, and click on the verification link to activate your account.'
         ]);
       }
     } elseif ($pendingRegistration && !empty($pendingRegistration['verified_at'])) {
       $db->commit();
       send_json_response([
         'success' => true,
-        'message' => 'If the address can be registered, a verification email has been sent.'
+        'message' => 'If the address can be registered, a verification email has been sent.  Please locate the email, and click on the verification link to activate your account.'
       ]);
     }
     $existingUser = $db->prepare('SELECT id FROM users WHERE email = ? LIMIT 1');
@@ -1557,7 +1557,7 @@ function handle_register_customer(array $request)
       $db->commit();
       send_json_response([
         'success' => true,
-        'message' => 'If the address can be registered, a verification email has been sent.'
+        'message' => 'If the address can be registered, a verification email has been sent.  Please locate the email, and click on the verification link to activate your account.'
       ]);
     }
 
@@ -1606,7 +1606,7 @@ function handle_register_customer(array $request)
 
     send_json_response([
       'success' => true,
-      'message' => 'If the address can be registered, a verification email has been sent.'
+      'message' => 'If the address can be registered, a verification email has been sent.  Please locate the email, and click on the verification link to activate your account.'
     ]);
   } catch (Throwable $e) {
     if ($db->inTransaction()) {

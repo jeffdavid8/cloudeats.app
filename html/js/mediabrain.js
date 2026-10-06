@@ -38,7 +38,7 @@ function storage_init() {
   if (!localStorage.getItem("mediabrain")) {
     mb.storage = {
       apps: {},
-      dayNightMode: 'dayMode',
+      dayNightMode: "dayMode",
     };
     storage_set();
   }
@@ -51,15 +51,15 @@ function storage_init() {
   }
 
   if (!mb.storage.dayNightMode) {
-    mb.storage.dayNightMode = 'dayMode';
-    document.documentElement.classList.add('dayMode');
+    mb.storage.dayNightMode = "dayMode";
+    document.documentElement.classList.add("dayMode");
     storage_set();
   }
-  
-  if (mb.storage.dayNightMode == 'nightMode') {
-    document.documentElement.classList.add('nightMode');
+
+  if (mb.storage.dayNightMode == "nightMode") {
+    document.documentElement.classList.add("nightMode");
   } else {
-    document.documentElement.classList.add('dayMode');
+    document.documentElement.classList.add("dayMode");
   }
 }
 
@@ -280,7 +280,7 @@ mb.play = play;
 /*
  *  Loading Indicator
  */
-function loading(loading, on=true) {
+function loading(loading, on = true) {
   if (loading && on) {
     if (loading == 1) {
       $("body").addClass("loading-bg");
@@ -310,7 +310,10 @@ function loading(loading, on=true) {
       $("body").removeClass("loading-progress");
     }
 
-    if (on) $("body").removeClass("loading loading-bg loading-progress loading-preloader loading-nav-trigger");
+    if (on)
+      $("body").removeClass(
+        "loading loading-bg loading-progress loading-preloader loading-nav-trigger",
+      );
   }
 }
 
@@ -989,3 +992,68 @@ $(document).ready(function () {
     }
   });
 });
+
+/**
+ * The "Lush" Confetti Launcher
+ */
+function launchSovereignConfetti() {
+  const $container = $("#confetti-cannon");
+  const pieceCount = 150; // Total "Integrity" particles
+  // Sovereign Color Palette: Warp Green, Tech Gold, Lush Magenta, Blackout Grey
+  const colors = ["#00ff41", "#FFD700", "#FF00FF", "#333"];
+
+  // Create particles
+  for (let i = 0; i < pieceCount; i++) {
+    // Random properties for that "Lush" feel
+    const randomX = Math.random() * 100; // Start across the screen width (%)
+    const randomY = Math.random() * 20 + 100; // Start slightly below the screen (vh)
+    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    const randomRotation = Math.random() * 360; // Random starting spin
+    const randomScale = Math.random() * 0.8 + 1.2; // Random size
+
+    // Stitch the particle together
+    const $piece = $('<div class="confetti-piece"></div>').css({
+      "background-color": randomColor,
+      left: randomX + "%",
+      top: randomY + "vh",
+      transform: `rotate(${randomRotation}deg) scale(${randomScale})`,
+      opacity: 1, // Start fully visible
+    });
+
+    // Add to the container
+    $container.append($piece);
+
+    // Define a random, explosive trajectory
+    const finalX = (randomX - 50) * (Math.random() * 1.5 + 0.5) + 50; // Spread out from the center
+    const finalY = Math.random() * -120 - 20; // Boom! (Target vertical destination)
+    const finalRotation = randomRotation + (Math.random() * 1000 - 500); // Rapid spin
+
+    // Animate the particle using jQuery
+    // This is the manual "Warp Drive" animation flow
+    $piece.animate(
+      {
+        top: finalY + "vh", // Go UP
+        left: finalX + "%", // Spread out
+        opacity: 0, // Fade away as it lands
+      },
+      {
+        duration: Math.random() * 3000 + 1500, // Duration (Randomized for variety)
+        easing: "linear", // Consistent speed
+        step: function (now, fx) {
+          // We have to step manually to get the rotation working with .animate()
+          if (fx.prop === "top") {
+            // Update rotation continuously as it moves
+            $(this).css(
+              "transform",
+              `rotate(${finalRotation * fx.pos}deg) scale(${randomScale})`,
+            );
+          }
+        },
+        complete: function () {
+          // Optionally remove individual pieces as they finish
+          $(this).remove();
+        },
+      },
+    );
+  }
+}

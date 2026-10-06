@@ -13,7 +13,7 @@
     var submitButton = document.getElementById("neighborhub-signup-submit");
     var siteKey = modalElement.getAttribute("data-recaptcha-site-key");
 
-    $('.btn-signup').on("click", function (e) {
+    $(".btn-signup").on("click", function (e) {
       message.textContent = "";
       modal.open();
     });
@@ -46,8 +46,8 @@
           "Signup verification is temporarily unavailable. Please try again later.";
         return;
       }
-
-      //submitButton.disabled = true;
+      loading(2)
+      submitButton.disabled = true;
       submitButton.textContent = "Sending verification email...";
       window.grecaptcha.ready(function () {
         window.grecaptcha
@@ -81,6 +81,14 @@
             form.reset();
             submitButton.disabled = false;
             submitButton.textContent = "Create account";
+            loading(0);
+            launchSovereignConfetti();
+            M.toast({
+              html:
+                response.message ||
+                "Check your email for an account verification link.",
+              displayLength: 7000,
+            });
           })
           .then(null, function (xhr) {
             var response = xhr && xhr.responseJSON;
