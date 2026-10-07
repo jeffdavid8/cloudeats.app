@@ -1,6 +1,9 @@
 <?php
 if (!defined('MB_RUNNING')) exit;
 
+if (!defined('STORAGE_PATH')) {
+    define('STORAGE_PATH', realpath(__DIR__ . '/../../storage') ?: '/var/www/storage');
+}
 
 // Set error log location is handled by PHP-FPM container configuration
 // ini_set('error_log', 'php://stderr');
@@ -42,6 +45,7 @@ require_once __DIR__ . '/models/storage.model.php';
 $host = $_SERVER['HTTP_HOST'] ?? '';
 $is_development = (bool)preg_match('/localhost|127\\.0\\.0\\.1|\\.local|:8080|:3000|:8000/', $host);
 
+
 if (file_exists('../storage/_install_db.json') && !$is_development) {
     $_SESSION['bypass_admin_key'] = true;
 
@@ -68,7 +72,7 @@ if (file_exists('../storage/_install_db.json') && !$is_development) {
     error_log(' ');
     error_log(' ');
 
-    unlink('../storage/_install_db.json');
+    unlink(STORAGE_PATH . '/_install_db.json');
     unset($_SESSION['bypass_admin_key']);
     
     // Redirect so the user never sees the "init" output residue

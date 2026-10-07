@@ -194,7 +194,7 @@ function admin_restore_db()
 {
     $targetMap = array('admin' => admin_db_tables());
 
-    $result = BackupManager::importFromJsonFile('./json/default_db.json', $targetMap);
+    $result = BackupManager::importFromJsonFile(STORAGE_PATH . '/default_db.json', $targetMap);
 
     return $result;
 }

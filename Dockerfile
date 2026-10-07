@@ -112,9 +112,9 @@ RUN set -ex; \
 RUN mkdir -p /var/www/storage
 RUN mkdir -p /var/www/storage/data
 RUN mkdir -p /var/www/storage/backups
+COPY ./storage /var/www/storage
 RUN chown -R www-data:www-data /var/www/storage/data
 
-COPY ./storage/default_db.json /var/www/storage/backups/default_db.json
 
 # Copy in custom code from the host machine.
 

@@ -1359,7 +1359,7 @@ function neighborhub_restore_db()
   $db = $app->db;
   $targetMap = array('neighborhub' => neighborhub_db_tables());
 
-  $result = BackupManager::importFromJsonFile('./json/default_db.json', $targetMap);
+  $result = BackupManager::importFromJsonFile(STORAGE_PATH . '/default_db.json', $targetMap);
 
   return $result;
 }

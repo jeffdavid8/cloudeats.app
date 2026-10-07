@@ -101,7 +101,7 @@ class BackupManager
             }
 
             // Construct full system destination path string pointing to the targeted location
-            $storageDir = '/var/www/storage/';
+            $storageDir = STORAGE_PATH;
             if (!file_exists($storageDir)) {
                 mkdir($storageDir, 0755, true);
             }

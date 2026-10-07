@@ -14,7 +14,7 @@ services:
       - ./vendor:/var/www/html/vendor
       - ./local-dev.crt:/etc/ssl/certs/local-dev.crt:ro
       - ./local-dev.key:/etc/ssl/private/local-dev.key:ro
-      - ./storage:/var/www/cloudeats.app.local/storage
+      - ./storage:/var/www/storage
       - ./secrets/tts-sa-key.json:/tmp/mediabrain-secret-sa-key.json:ro
       - ./secrets/service-account-key.json:/tmp/service-account-key.json:ro
     environment:
