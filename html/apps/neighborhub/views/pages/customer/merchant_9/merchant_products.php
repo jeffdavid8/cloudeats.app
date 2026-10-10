@@ -666,7 +666,7 @@ if ($spotlightProductId && isset($menus[$activeMenuId]['categories'])) {
   <!-- Menu Divider -->
   <hr class="kc-gold-divider">
 
-  <div class="row" style="margin-bottom: 20rem">
+  <div class="row">
     <div class="col s12 m4 l3 sticky-column hide-on-small-only">
       <div class="card secondary-category-menu">
         <div class="menu-title"><i class="fas fa-utensils"></i> Cafe Menu</div>
