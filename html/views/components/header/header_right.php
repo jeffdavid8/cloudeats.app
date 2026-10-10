@@ -249,7 +249,7 @@ if ($isUserLoggedIn) {
     }
 
     #user-dropdown a:hover {
-        background-color: rgba(37, 99, 235, 0.05);
+        /* background-color: rgba(37, 99, 235, 0.05);* /
     }
 
     #user-dropdown a i.material-icons {

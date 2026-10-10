@@ -564,7 +564,7 @@ header.header nav ul li button {
 .suggestions_container .collapsible-body,
 body .tts_player_menu_container nav {
   color: rgb(44, 44, 46);
-  /* background-color: rgba(236, 236, 236, 0.9) !important; */
+  background-color: rgba(236, 236, 236, 1) !important; /* front page header user dropdown background - removing this make the user menu background transparend so you can see the hero section through it */
   backdrop-filter: blur(3px);
   border-bottom: 1px solid #fff;
   box-shadow: 0 19px 17px rgba(0, 0, 0, 0.25);
@@ -1457,7 +1457,7 @@ table th {
 }
 
 .bottom-fade {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
@@ -1468,21 +1468,56 @@ table th {
   /* Prevents the fade overlay from blocking mouse clicks/scrolls on the table rows underneath */
   pointer-events: none;
 }
+.nh-orders-scroll-container {
+  position: relative;
+  max-height: 520px;
+  overflow-y: auto;
+}
+.bottom-fade {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 110px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #fff 100%);
+  pointer-events: none;
+  z-index: 10;
+}
 .dayMode .bottom-fade {
-  background: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0),
-    rgba(255, 255, 255, 1)
-  );
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #fff 100%);
 }
 .nightMode .bottom-fade {
-  background: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0),
-    var(--gray-100)
-  );
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #0f0f0f 100%);
+}
+.nh-order-card {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+.nh-order-card:hover {
+  transform: translateY(-2px);
+}
+/* Fix Materialize Badge Overrides in Order Cards */
+.nh-order-card .order-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
 }
 
+.nh-order-card span.new.badge {
+  float: none !important;          /* Stop Materialize float layout */
+  margin: 0 !important;            /* Clear Materialize default margins */
+  height: auto !important;         /* Allow height to adjust dynamically */
+  line-height: 1.2 !important;     /* Clean line-height for wrapped text */
+  padding: 4px 8px !important;    /* Comfortable padding */
+  font-size: 0.72rem !important;  /* Slightly smaller readable typography */
+  font-weight: 600;
+  text-transform: uppercase;
+  border-radius: 4px;              /* Subtle rounded corners */
+  white-space: nowrap;            /* Prevent text wrapping inside the badge */
+  flex-shrink: 0;                  /* Keep badge from shrinking when title is long */
+}
 /**
 * Pages
 */
@@ -1871,7 +1906,7 @@ body.loading #loadingIndicator {
   margin-bottom: 1rem;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 20px 0;
+  padding: 20px 20px;
   text-align: center;
   border-bottom: 2px solid #00ccff;
   border-bottom: 1px solid #0077b6;

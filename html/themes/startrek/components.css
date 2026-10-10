@@ -526,9 +526,9 @@ input.valid:not([type]), input.valid:not([type]):focus, input.valid[type="text"]
 
 .dropdown-content li:hover,
 .dropdown-content li.optgroup:hover {
-    background: linear-gradient(90deg, 
+    /* background: linear-gradient(90deg, 
         rgba(153, 153, 255, 0.2) 0%, 
-        transparent 100%);
+        transparent 100%); */
 }
 
 /* Tabs */

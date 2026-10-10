@@ -3,61 +3,49 @@ if (!defined('MB_RUNNING')) exit;
 /**
  * Neighborhub Customer Dashboard
  * 
- * Displays merchant browser, product selection, and order tracking ledger
- * with live polling for real-time order status updates.
- * 
- * Context variables available:
- * @var Object $app
- * - $_SESSION['user']['id'] - authenticated customer ID
- * - $app->get('available_merchants') - active merchant list
- * - $app->get('customer_orders') - recent customer orders
+ * Orders Ledger with search, status filtering, pagination, and instant reordering.
  */
 $customer = $this->get('customer');
 $customerId = $customer->id ?? 0;
 $userName = isset($_SESSION['user']['username']) ? htmlspecialchars($_SESSION['user']['username']) : 'Customer';
-$availableMerchants = $this->get('available_merchants', array());
 $customerOrders = $this->get('customer_orders', array());
-if (isset($_SESSION[get_var('session_key')]) && get_var('action', false) == 'checkout_success') {
-  $pendingOrder = $_SESSION[get_var('session_key')];
-  $merchant_id = $pendingOrder['merchant_id'];
-  unset($_SESSION[get_var('session_key')]);
-  $merchant = Merchant::getMerchantById($merchant_id);
-?>
-  <script>
-    $(document).ready(function() {
-      if (typeof NHCart === 'undefined') {
-        window.NHCart = new ShoppingCart(<?= json_encode($merchant) ?>);
-      }
-      NHCart.activeMerchantId = <?= ($merchant_id) ? $merchant_id : 'null' ?>;
-      NHCart.clear();
-    });
-  </script>
-<?
-}
 
-// Display any session notifications
+// Display session notifications
 $notification = isset($_SESSION['notification']) ? $_SESSION['notification'] : null;
 if ($notification) {
   unset($_SESSION['notification']);
 }
 ?>
 
-<div class="nh-wrapper">
-<? /* 
-  <!-- Sticky Role Header with Navigation -->
-  <header class="nh-role-header">
-    <div class="nh-container">
-      <div class="nh-role-header-content">`
-        <div>
-          <h1 style="margin: 0; font-size: 1.875rem;">Neighborhub</h1>
-          <p style="margin: 0; color: var(--gray-500); font-size: 0.875rem;">Welcome<?= (isset($app->user->id)) ? ' back' : '' ?>, <?php echo $userName; ?>!</p>
-        </div>
-      </div>
-    </div>
-  </header>
- */ ?>
+<style>
+  .nh-order-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
 
-  <!-- Main Content Area -->
+  .nh-order-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  .filter-bar {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+</style>
+
+<div class="nh-wrapper">
   <main class="nh-main">
     <div class="nh-container">
 
@@ -65,15 +53,7 @@ if ($notification) {
       <?php if ($notification): ?>
         <div class="nh-alert nh-alert-<?php echo htmlspecialchars($notification['type']); ?>" style="margin-bottom: 2rem;">
           <div class="nh-alert-icon">
-            <?php if ($notification['type'] === 'success'): ?>
-              ✓
-            <?php elseif ($notification['type'] === 'error'): ?>
-              ✕
-            <?php elseif ($notification['type'] === 'warning'): ?>
-              ⚠
-            <?php else: ?>
-              ℹ
-            <?php endif; ?>
+            <?= $notification['type'] === 'success' ? '✓' : ($notification['type'] === 'error' ? '✕' : 'ℹ') ?>
           </div>
           <div class="nh-alert-content">
             <p class="nh-alert-message"><?php echo htmlspecialchars($notification['message']); ?></p>
@@ -81,208 +61,59 @@ if ($notification) {
         </div>
       <?php endif; ?>
 
-      <!-- Product Selection Panel (Hidden by Default) -->
-      <section id="product-panel" class="nh-content" style="margin-bottom: 4rem; display: none; padding: 2rem;">
-
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-          <div>
-            <h2 id="merchant-name-display" style="margin: 0 0 0.5rem 0;">Merchant Products</h2>
-            <p id="merchant-address-display" style="margin: 0; color: var(--gray-500); font-size: 0.875rem;"></p>
-          </div>
-          <button type="button" class="nh-btn nh-btn-secondary" onclick="closeMerchantPanel()">Close</button>
-        </div>
-
-        <div class="nh-grid nh-grid-4" id="product-grid">
-          <!-- Products will be loaded here via AJAX -->
-        </div>
-
-        <!-- Checkout Form (Appears when products are selected) -->
-        <div id="checkout-form-container" style="display: none; margin-top: 3rem; padding-top: 3rem; border-top: 2px solid var(--border-color);">
-
-          <h3>Order Summary</h3>
-
-          <div id="checkout-items-summary" style="background: var(--gray-50); border-radius: var(--border-radius-base); padding: 1.5rem; margin-bottom: 2rem;">
-            <table class="nh-table" style="margin: 0;">
-              <thead>
-                <tr>
-                  <th>Product</th>
-                  <th>Quantity</th>
-                  <th>Price</th>
-                  <th>Subtotal</th>
-                </tr>
-              </thead>
-              <tbody id="checkout-items-list">
-                <!-- Items will be populated here -->
-              </tbody>
-            </table>
-          </div>
-
-          <div style="background: var(--gray-50); border-radius: var(--border-radius-base); padding: 1.5rem; margin-bottom: 2rem;">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
-              <span style="font-weight: 600;">Subtotal:</span>
-              <span id="checkout-subtotal">$0.00</span>
-            </div>
-            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
-              <span style="font-weight: 600;">Tax:</span>
-              <span id="checkout-tax">$0.00</span>
-            </div>
-            <div style="display: flex; justify-content: space-between; border-top: 1px solid var(--border-color); padding-top: 1rem;">
-              <span style="font-weight: 700; font-size: 1.125rem;">Total:</span>
-              <span id="checkout-total" style="font-weight: 700; font-size: 1.125rem;">$0.00</span>
-            </div>
-          </div>
-
-          <div class="nh-form-group">
-            <label for="delivery-address" class="nh-form-label">Delivery Address</label>
-            <textarea id="delivery-address" class="nh-form-input" placeholder="Enter your delivery address..." style="min-height: 80px;"></textarea>
-          </div>
-
-          <div class="nh-form-group">
-            <label for="order-notes" class="nh-form-label">Special Instructions (Optional)</label>
-            <textarea id="order-notes" class="nh-form-input" placeholder="Any special requests or instructions..." style="min-height: 80px;"></textarea>
-          </div>
-
-          <div style="display: flex; gap: 1rem;">
-            <button type="button" class="nh-btn nh-btn-danger" onclick="clearCart()" style="flex: 1;">Clear Cart</button>
-            <button type="button" class="nh-btn" onclick="submitOrder()" style="flex: 1;">Place Order</button>
-          </div>
-
-        </div>
-
-      </section>
-
-      <?
-      if (!empty($customerOrders)): ?>
-
-      <!-- Active Tracking Ledger Section -->
       <section class="nh-tracking-ledger">
-        <h2 style="margin-bottom: 2rem;">Your Order History</h2>
-
-        <div class="nh-alert nh-alert-info<?= (!empty($customerOrders)) ? ' hide' : ''; ?>" style="">
-          <div class="nh-alert-icon">ℹ</div>
-          <div class="nh-alert-content">
-            <p class="nh-alert-message"><?= (!$customerId) ? 'You are not logged in.  Please <a href="?p=login&return=' . $_SERVER['REQUEST_URI'] . '" />login</a> to save and review your orders.' : "You haven't placed any orders yet. Browse merchants above to get started!" ?></p>
-          </div>
-        </div>
-        
-        <!-- CHANGED: Added 'nh-orders-scroll-container' class to the wrapper div below -->
-        <div class="nh-content nh-orders-scroll-container <?= (empty($customerOrders)) ? ' hide' : ''; ?>">
-          <table class="nh-table" id="orders-table">
-            <thead>
-              <tr>
-                <th>Order Number</th>
-                <th>Merchant</th>
-                <th>Amount</th>
-                <th>Status</th>
-                <th>Placed</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="orders-list">
-              <? if (!empty($customerOrders)) :
-                foreach ($customerOrders as $order):  ?>
-                  <tr>
-                    <td>
-                      <span style="font-family: monospace; font-size: 0.875rem; color: var(--gray-500);">
-                        <a href="javascript: void(0);" onclick="viewOrderDetail(<?= intval($order['id']) ?>)"><?php echo htmlspecialchars($order['order_number']); ?></a>
-                      </span>
-                    </td>
-                    <td>
-                      <?php
-                      echo $order['business_name'] ? htmlspecialchars($order['business_name']) : 'Unknown';
-                      ?>
-                    </td>
-                    <td>
-                      $<?php echo number_format($order['total_amount'], 2); ?>
-                    </td>
-                    <td>
-                      <span class="nh-badge badge-<?php echo strtolower(str_replace('_', '_', $order['state'])); ?>">
-                        <?php echo htmlspecialchars(str_replace('_', ' ', $order['state'])); ?>
-                      </span>
-                    </td>
-                    <td>
-                      <?php echo date('M j, Y g:i A', strtotime($order['created_at'])); ?>
-                    </td>
-                    <td>
-                      <button type="button" class="nh-btn nh-btn-sm" onclick="viewOrderDetail(<?php echo intval($order['id']); ?>)">
-                        View
-                      </button>
-                    </td>
-                  </tr>
-                <?php endforeach; ?>
-              <?php endif; ?>
-            </tbody>
-          </table>
-          <div class="bottom-fade"></div>
+        <div class="valign-wrapper" style="justify-content: space-between; margin-bottom: 1.5rem;">
+          <h2 style="margin: 0;">Your Order History</h2>
         </div>
 
-      </section>
-      <? endif; ?>
-      <? /*
-      */ ?>
-      <!-- Merchant Browser Section -->
-      <section class="nh-merchant-browser" style="margin-bottom: 4rem;">
-        <h2 style="margin-bottom: 2rem;">Browse Local Merchants</h2>
-
-        <?php if (empty($availableMerchants)): ?>
-          <div class="nh-alert nh-alert-info">
-            <div class="nh-alert-icon">ℹ</div>
-            <div class="nh-alert-content">
-              <p class="nh-alert-message">No merchants are currently available in your area. Check back soon!</p>
+        <!-- Filter & Search Bar -->
+        <div class="filter-bar">
+          <div class="row" style="margin-bottom: 0;">
+            <div class="col s12 m6 l4 input-field" style="margin-top: 0;">
+              <input type="text" id="order-search" placeholder="Search merchant or order #..." onkeyup="filterOrders()" style="color: #fff;">
+            </div>
+            <div class="col s12 m6 l4 input-field" style="margin-top: 0;">
+              <select id="status-filter" onchange="filterOrders()" class="browser-default" style="background: #222; color: #fff; border: 1px solid #444; padding: 8px; border-radius: 4px;">
+                <option value="ALL">All Order Statuses</option>
+                <option value="ACTIVE">In Progress / Active</option>
+                <option value="DELIVERED">Delivered / Completed</option>
+                <option value="CANCELLED">Cancelled</option>
+              </select>
             </div>
           </div>
-        <?php else: ?>
-          <div class="nh-grid nh-grid-3" id="merchant-grid">
-            <?php foreach ($availableMerchants as $merchant):
-              if ($merchant->status !== 'disabled'):
-            ?>
-                <div class="nh-card nh-merchant-card hover-grow"
-                  data-merchant-id="<?php echo intval($merchant->id); ?>"
-                  data-merchant-name="<?php echo $merchant->business_name; ?>"
-                  style="cursor: pointer; transition: all 200ms ease-in-out;">
+        </div>
 
-                  <div class="nh-merchant-card-image">
-                    <?= (!empty($merchant->image_url)) ? '<img class="circle" style="max-width: 150px; max-height: 150px;" src="' . $merchant->image_url . '" />' : '🏪' ?>
-                  </div>
-
-                  <div class="nh-card-header" style="margin-bottom: 1rem; padding-bottom: 1rem;">
-                    <div>
-                      <h3 class="nh-merchant-name" style="margin: 0 0 0.5rem 0;"><?php echo $merchant->business_name; ?></h3>
-                      <p class="nh-merchant-address" style="margin: 0 0 0.5rem 0;"><?php echo htmlspecialchars($merchant->address ?? 'Address not provided'); ?></p>
-                      <p class="nh-merchant-phone" style="margin: 0;"><?php echo htmlspecialchars($merchant->phone ?? 'Phone not provided'); ?></p>
-                    </div>
-                  </div>
-
-                  <div class="nh-card-footer">
-                    <a href="?app=neighborhub&view=customer&p=merchant_products&merchant_id=<?= $merchant->id ?>" class="nh-btn nh-btn-sm" style="margin: auto; display: block;">
-                      Browse
-                    </a>
-                  </div>
-
-                </div>
-              <?php endif; ?>
-            <?php endforeach; ?>
+        <!-- Orders Container -->
+        <div class="nh-content">
+          <div class="row" id="orders-list" style="overflow-x: hidden;">
+            <!-- Rendered dynamically via JS or PHP initial load -->
           </div>
-        <?php endif; ?>
-      </section>
 
+          <!-- Pagination Controls -->
+          <div class="pagination-container" id="pagination-controls" style="display: none;">
+            <button type="button" class="btn btn-small grey darken-3" id="prev-page-btn" onclick="changePage(-1)">
+              <i class="fas fa-chevron-left left"></i> Prev
+            </button>
+            <span id="page-indicator" class="grey-text text-lighten-1" style="font-size: 0.9rem;">Page 1 of 1</span>
+            <button type="button" class="btn btn-small grey darken-3" id="next-page-btn" onclick="changePage(1)">
+              Next <i class="fas fa-chevron-right right"></i>
+            </button>
+          </div>
+        </div>
+      </section>
 
     </div>
   </main>
-
 </div>
 
-<!-- Hidden modal for order detail view -->
+<!-- Modal for order detail view -->
 <div id="order-detail-modal" class="modal mb-modal-fixed">
   <div class="modal-header">
     <h3 style="margin: 0;">Order Details</h3>
-    <button type="button" onclick="closeOrderDetail()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;position: absolute; right: 1rem; margin: 0; padding: 0;">✕</button>
-
+    <button type="button" onclick="closeOrderDetail()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; position: absolute; right: 1rem; margin: 0; padding: 0;">✕</button>
   </div>
   <div class="modal-content" style="max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto;">
-    <div id="order-detail-content">
-      <!-- Order details will be loaded here -->
-    </div>
+    <div id="order-detail-content"></div>
   </div>
   <div class="modal-footer">
     <button class="btn red" onclick="closeOrderDetail()">Close</button>
@@ -290,46 +121,191 @@ if ($notification) {
 </div>
 
 <script>
-  // ============================================================================
-  // NEIGHBORHUB CUSTOMER DASHBOARD - CLIENT-SIDE LOGIC
-  // ============================================================================
-
-  // Global state for cart management
-  var currentMerchantId = null;
-  var currentMerchantName = null;
-  var currentMerchantAddress = null;
-  var cartItems = {};
+  // Initial Server State
+  var allOrders = <?= json_encode($customerOrders) ?>;
+  var filteredOrders = [];
+  var currentPage = 1;
+  var itemsPerPage = 9;
   var pollingInterval = null;
 
-  /**
-   * Select a merchant and load its products
-   */
-  function toggleTrackingLedger() {
-    var ledgerSection = document.querySelector('.nh-tracking-ledger');
-    if (ledgerSection.style.display === 'none' || ledgerSection.style.display === '') {
-      ledgerSection.style.display = 'block';
-      document.getElementById('floating-tracking-ledger-toggle').innerHTML = '<i class="fas fa-receipt"></i> Hide Orders';
+  function getBadgeColor(state) {
+    switch (state) {
+      case 'DELIVERED':
+        return '#2e7d32';
+      case 'CANCELLED':
+        return '#616161';
+      case 'PENDING':
+      case 'PENDING_CONFIRMATION':
+      case 'PREPARING':
+        return '#f57c00';
+      default:
+        return '#1e88e5';
+    }
+  }
+
+  // Filter & Search Logic
+  function filterOrders() {
+    var searchTerm = document.getElementById('order-search').value.toLowerCase().trim();
+    var statusTerm = document.getElementById('status-filter').value;
+
+    filteredOrders = allOrders.filter(function(order) {
+      var matchesSearch = (order.business_name || '').toLowerCase().includes(searchTerm) ||
+        (order.order_number || '').toLowerCase().includes(searchTerm);
+
+      var isPending = ['PENDING', 'PENDING_CONFIRMATION', 'PREPARING', 'IN_TRANSIT'].includes(order.state);
+      var matchesStatus = true;
+
+      if (statusTerm === 'ACTIVE') matchesStatus = isPending;
+      else if (statusTerm === 'DELIVERED') matchesStatus = (order.state === 'DELIVERED');
+      else if (statusTerm === 'CANCELLED') matchesStatus = (order.state === 'CANCELLED');
+
+      return matchesSearch && matchesStatus;
+    });
+
+    currentPage = 1;
+    renderOrders();
+  }
+
+  // Paginated Rendering
+  function renderOrders() {
+    var ordersList = document.getElementById('orders-list');
+    var paginationControls = document.getElementById('pagination-controls');
+    if (!ordersList) return;
+
+    if (filteredOrders.length === 0) {
+      ordersList.innerHTML = '<div class="col s12 center-align grey-text" style="padding: 3rem;">No matching orders found.</div>';
+      paginationControls.style.display = 'none';
+      return;
+    }
+
+    var totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
+    var startIdx = (currentPage - 1) * itemsPerPage;
+    var pageOrders = filteredOrders.slice(startIdx, startIdx + itemsPerPage);
+
+    var newHtml = '';
+    pageOrders.forEach(function(order) {
+      var isPending = ['PENDING', 'PENDING_CONFIRMATION', 'PREPARING'].includes(order.state);
+      var badgeBg = getBadgeColor(order.state);
+      var dateObj = new Date(order.created_at);
+      var dateStr = dateObj.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+      });
+      var timeStr = dateObj.toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+      });
+
+      newHtml += `
+    <div class="col s12 m6 l4">
+      <div class="card hoverable nh-order-card ${isPending ? 'active-order' : ''}">
+        <div class="card-content">
+          <!-- Stacked Card Header -->
+          <div class="order-header" style="display: flex; flex-direction: column; align-items: flex-start; gap: 6px; margin-bottom: 10px;">
+            <span class="new badge ${isPending ? 'pulse' : ''}" style="background-color: ${badgeBg}; margin: 0;" data-badge-caption="">
+              ${escapeHtml(order.state.replace(/_/g, ' '))}
+            </span>
+            <span class="card-title truncate" style="font-weight: 600; font-size: 1.15rem; margin: 0; color: #fff; width: 100%;" title="${escapeHtml(order.business_name || 'Unknown')}">
+              ${escapeHtml(order.business_name || 'Unknown')}
+            </span>
+          </div>
+
+          <!-- Meta Details -->
+          <p class="grey-text text-lighten-1" style="font-size: 0.82rem; margin: 6px 0;">
+            Order #${escapeHtml(order.order_number)}
+          </p>
+          <p class="grey-text text-lighten-1" style="font-size: 0.82rem; margin: 0;">
+            <i class="far fa-clock"></i> ${dateStr} at ${timeStr}
+          </p>
+
+          <div class="divider" style="margin: 12px 0; opacity: 0.2;"></div>
+
+          <!-- Price Row -->
+          <div style="margin-bottom: 12px; text-align: left;">
+            <span style="font-size: 1.25rem; font-weight: bold; color: #81c784;">
+              $${parseFloat(order.total_amount).toFixed(2)}
+            </span>
+          </div>
+
+          <!-- 50/50 Split Action Buttons -->
+          <div style="display: flex; gap: 8px; width: 100%;">
+            <button type="button" 
+                    class="btn-flat waves-effect waves-light green-text text-accent-3" 
+                    style="flex: 1; text-align: center; padding: 0 4px; border: 1px solid rgba(129, 199, 132, 0.3); border-radius: 4px;" 
+                    title="Reorder these items" 
+                    onclick="reorderItems(${order.id})">
+              <i class="fas fa-redo"></i> Reorder
+            </button>
+            <button type="button" 
+                    class="btn-flat waves-effect waves-teal red-text text-lighten-2" 
+                    style="flex: 1; text-align: center; padding: 0 4px; border: 1px solid rgba(239, 83, 80, 0.3); border-radius: 4px;" 
+                    onclick="viewOrderDetail(${order.id})">
+              Details <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+    });
+
+    ordersList.innerHTML = newHtml;
+
+    // Update pagination controls
+    if (totalPages > 1) {
+      paginationControls.style.display = 'flex';
+      document.getElementById('page-indicator').innerText = `Page ${currentPage} of ${totalPages}`;
+      document.getElementById('prev-page-btn').disabled = (currentPage === 1);
+      document.getElementById('next-page-btn').disabled = (currentPage === totalPages);
     } else {
-      ledgerSection.style.display = 'none';
-      document.getElementById('floating-tracking-ledger-toggle').innerHTML = '<i class="fas fa-receipt"></i> Your Orders';
+      paginationControls.style.display = 'none';
+    }
+  }
+
+  function changePage(direction) {
+    var totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
+    var newPage = currentPage + direction;
+    if (newPage >= 1 && newPage <= totalPages) {
+      currentPage = newPage;
+      renderOrders();
     }
   }
 
   /**
-   * Close merchant product panel
+   * Reorder Handler: Loads previous order items and routes to merchant catalog
    */
-  function closeMerchantPanel() {
-    document.getElementById('product-panel').style.display = 'none';
-    clearCart();
-    currentMerchantId = null;
-    currentMerchantName = null;
+  function reorderItems(orderId) {
+    loading(4);
+
+    mb.ajax({
+      type: 'GET',
+      url: '/?api=neighborhub',
+      data: {
+        action: 'reorder_items',
+        order_id: orderId
+      },
+      dataType: 'json',
+      success: function(response) {
+        if (typeof loading === 'function') loading(0);
+        if (response.success && response.merchant_id) {
+          // Redirect directly to the merchant product storefront to complete/adjust the basket
+          window.location.href = `?app=neighborhub&view=customer&p=merchant_products&merchant_id=${response.merchant_id}&reorder_from=${orderId}`;
+        } else {
+          alert('Unable to process reorder: ' + (response.error || 'Unknown error'));
+        }
+      },
+      error: function() {
+        if (typeof loading === 'function') loading(0);
+        alert('Failed to connect to reorder service.');
+      }
+    });
   }
 
   /**
    * View detailed order information
    */
   function viewOrderDetail(orderId) {
-
     loading(1);
 
     mb.ajax({
@@ -343,7 +319,7 @@ if ($notification) {
       success: function(response) {
         if (response.success && response.order) {
           displayOrderDetail(response);
-          loading(0);
+          if (typeof loading === 'function') loading(0);
           document.getElementById('order-detail-modal').style.display = 'flex';
         } else {
           alert('Failed to load order details');
@@ -356,9 +332,6 @@ if ($notification) {
     });
   }
 
-  /**
-   * Display order detail in modal
-   */
   function displayOrderDetail(response) {
     var order = response.order;
     var merchant = response.merchant;
@@ -427,11 +400,7 @@ if ($notification) {
       html += '<tr><td colspan="4" style="text-align: center; color: var(--gray-500);">No items</td></tr>';
     }
 
-    html += `
-                </tbody>
-            </table>
-        </div>
-    `;
+    html += `</tbody></table></div>`;
 
     if (order.order_notes) {
       html += `
@@ -442,21 +411,16 @@ if ($notification) {
         `;
     }
 
-    // Append this near the bottom of displayOrderDetail(response) function before setting innerHTML:
     if (order.state === 'PENDING' || order.state === 'PENDING_CONFIRMATION') {
-      //$('#order-detail-modal .modal-footer').html(`
       html += `
         <button type="button" class="btn red" onclick="showContactMerchantAndCancel(${order.id})" style="margin-top: 1rem; width: 100%;">
             Cancel Order & Request Refund
         </button>
         <div id="order-cancelation-container" style="margin-top: 3rem; color: var(--gray-500); font-size: 0.875rem;">
             <div class="cancellation-choice" style="display: none; flex-direction: column; align-items: center; text-align: center;">
-              <p><i class="fas fa-exclamation fa-2x"></i> Sometimes merchants may not be able to accept your order immediately due to checking stock or increased order volume.  You can call the merchant directly to confirm if they can fulfill your order.</p>
-              <p style="margin-top: 1rem;">
-                If you are sure you want to cancel this order, click the button below to confirm cancellation.  Your payment authorization will be released since the merchant has not accepted your order yet.
-              </p>
+              <p><i class="fas fa-exclamation fa-2x"></i> Sometimes merchants may not be able to accept your order immediately. You can call the merchant directly to confirm if they can fulfill your order.</p>
               <div style="margin-top: 1rem;">
-                <a class="btn call-merchant-link green" href="tel:${escapeHtml(merchant.phone)}" style="margin-left: 1rem; text-decoration: none; color: var(--primary-color);">
+                <a class="btn call-merchant-link green" href="tel:${escapeHtml(merchant ? merchant.phone : '')}" style="margin-left: 1rem; text-decoration: none;">
                   <i class="fas fa-phone fa-2x"></i> Call Merchant
                 </a>
                 <button type="button" class="btn red" onclick="cancelCustomerOrder(${order.id})">
@@ -464,203 +428,33 @@ if ($notification) {
                 </button>
               </div>
             </div>
-          </div>
         </div>
-  `;
+      `;
     }
 
     document.getElementById('order-detail-content').innerHTML = html;
   }
 
-  function showContactMerchantAndCancel(orderId) {
-    const cancelationContainer = document.getElementById('order-cancelation-container');
-    const choiceDiv = cancelationContainer.querySelector('.cancellation-choice');
-
-    if (choiceDiv) {
-      choiceDiv.style.display = 'flex';
-    }
-
-  }
-
-  function cancelCustomerOrder(orderId) {
-    if (!confirm('Are you sure you want to cancel this order? Since it has not been accepted by the merchant yet, your payment authorization will be released.')) {
-      return;
-    }
-    // append loading indicator to order-detail-content
-    document.getElementById('order-cancelation-container').innerHTML = `
-      
-      <div class="" style="margin-top: 15px; width: 100%; display: flex; justify-content: center; align-items: center;">
-        <div class="quantum-spinner" style="height: 75px; margin: 0 auto;"></div>
-      </div>
-      <div class="center-align gold-text" style="margin-bottom: 15px;">
-          [ Processing cancellation... ]
-      </div>`;
-
-    mb.ajax({
-      type: 'POST',
-      url: '/?api=neighborhub&action=cancel_order',
-      data: JSON.stringify({
-        order_id: orderId
-      }),
-      contentType: 'application/json',
-      dataType: 'json',
-      success: function(response) {
-        if (response.success) {
-          notify('Your order has been canceled and your payment authorization was released.', 'success');
-          closeOrderDetail();
-          // Refresh customer orders list
-          if (typeof pollOrderUpdates === 'function') pollOrderUpdates();
-        } else {
-          alert('Unable to cancel order: ' + (response.error || 'Merchant may have already accepted it.'));
-        }
-      },
-      error: function(xhr, status, error) {
-        console.error('Cancellation error:', error);
-        alert('Error processing cancellation request.');
-      }
-    });
-  }
-
-  /**
-   * Close order detail modal
-   */
   function closeOrderDetail() {
     document.getElementById('order-detail-modal').style.display = 'none';
   }
 
-  /**
-   * Poll for order updates every 8 seconds
-   */
-  function pollOrderUpdates() {
-    let customerId = <?= $customerId ?>;
-
-    if (pollingInterval) {
-      clearInterval(pollingInterval);
-    }
-
-    pollingInterval = setInterval(function() {
-      mb.ajax({
-        type: 'GET',
-        url: '/?api=neighborhub', // Or ?app=neighborhub depending on your framework's module router key
-        data: {
-          action: 'list_customer_orders',
-          customer_id: customerId,
-        },
-        dataType: 'json',
-        success: function(response) {
-          if (response.success && response.orders) {
-            $('section.nh-tracking-ledger .nh-alert').addClass('hide');
-            $('section.nh-tracking-ledger .nh-content').removeClass('hide');
-
-            updateOrdersTable(response.orders);
-          }
-
-          if (!response.orders.length) {
-            $('section.nh-tracking-ledger .nh-alert').removeClass('hide');
-            $('section.nh-tracking-ledger .nh-content').addClass('hide');
-          }
-        },
-        error: function(xhr, status, error) {
-          console.error('Polling error:', error);
-        }
-      });
-    }, 8000); // Poll every 8 seconds
-  }
-
-  /**
-   * Update orders table with latest data
-   */
-  function updateOrdersTable(orders) {
-    var ordersList = document.getElementById('orders-list');
-    if (!ordersList) return;
-
-    var newHtml = '';
-
-    if (orders.length === 0) {
-      newHtml = '<tr><td colspan="6" style="text-align: center; color: var(--gray-500);">No orders</td></tr>';
-    } else {
-      orders.forEach(function(order) {
-        var statusBadgeClass = 'badge-' + order.state.toLowerCase();
-        // 1. Create the date object
-        const dateObj = new Date(order.created_at);
-        // 2. Format the date part (Jul 22, 2026)
-        const dateStr = dateObj.toLocaleDateString('en-US', {
-          month: 'short',
-          day: 'numeric',
-          year: 'numeric',
-          // timeZone: 'America/New_York' // <-- Optional: Explicitly force your server/business timezone if needed
-        });
-        // 3. Format the time part (10:20 PM)
-        const timeStr = dateObj.toLocaleTimeString('en-US', {
-          hour: 'numeric',
-          minute: '2-digit',
-          hour12: true,
-          // timeZone: 'America/New_York' // <-- Match the timezone chosen above
-        });
-        newHtml += `
-                <tr>
-                    <td>
-                        <span style="font-family: monospace; font-size: 0.875rem; color: var(--gray-500);">
-                            <a href="javascript: void(0);" onclick="viewOrderDetail(${order.id})">${escapeHtml(order.order_number)}</a>
-                        </span>
-                    </td>
-                    <td>${order.business_name}</td>
-                    <td>$${parseFloat(order.total_amount).toFixed(2)}</td>
-                    <td>
-                        <span class="nh-badge ${statusBadgeClass}">
-                            ${escapeHtml(order.state.replace(/_/g, ' '))}
-                        </span>
-                    </td>
-                    <td>${dateStr} ${timeStr}</td>
-                    <td>
-                        <button type="button" class="nh-btn nh-btn-sm" onclick="viewOrderDetail(${order.id})">
-                            View
-                        </button>
-                    </td>
-                </tr>
-            `;
-      });
-
-      $(ordersList).show();
-    }
-
-    ordersList.innerHTML = newHtml;
-  }
-
-  /**
-   * Escape HTML special characters
-   */
   function escapeHtml(text) {
-    // Convert text to string first to prevent TypeError
-    if (text == null) return ''; // Handles null and undefined safely
+    if (text == null) return '';
     var str = String(text);
-
     var map = {
       '&': '&amp;',
       '<': '&lt;',
       '>': '&gt;',
       '"': '&quot;',
-      "'": '&#39;' // Fixed unclosed quote syntax
+      "'": '&#39;'
     };
-
     return str.replace(/[&<>"']/g, function(m) {
       return map[m];
     });
   }
 
-  /**
-   * Initialize polling when document is ready
-   */
   document.addEventListener('DOMContentLoaded', function() {
-    //pollOrderUpdates();
-  });
-
-  /**
-   * Clean up polling when page unloads
-   */
-  window.addEventListener('unload', function() {
-    if (pollingInterval) {
-      clearInterval(pollingInterval);
-    }
+    filterOrders();
   });
 </script>

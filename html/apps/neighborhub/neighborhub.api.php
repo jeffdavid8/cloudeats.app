@@ -1446,6 +1446,27 @@ try {
       }
       break;
 
+    case 'reorder_items':
+      authenticate_user($request);
+      $app = App::getInstance('neighborhub');
+      $app->includeModel('order');
+      $app->includeModel('product');
+
+      $orderId = intval($request['order_id'] ?? 0);
+      $order = Order::getOrderById($orderId);
+
+      if (!$order || ($order['customer_id'] != $_SESSION['customer_id'] && !($app->user->is_admin ?? false))) {
+        send_json_response(['success' => false, 'error' => 'Order not found or access denied.'], 403);
+      }
+
+      // Return order items & merchant ID so the frontend cart JS can load them
+      send_json_response([
+        'success' => true,
+        'merchant_id' => $order['merchant_id'],
+        'items' => $order['items']
+      ]);
+      break;
+
     case 'export_data':
       handle_export_data($request);
       break;
