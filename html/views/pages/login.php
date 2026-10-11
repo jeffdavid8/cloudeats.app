@@ -104,9 +104,11 @@ if (!empty($_SESSION['login_error'])) {
         margin: 1.5em 0;
     }
 
+    /* 
     .input-field input {
         height: 1.75em !important;
     }
+    */
 
     .input-field input:focus+label {
         color: #667eea !important;

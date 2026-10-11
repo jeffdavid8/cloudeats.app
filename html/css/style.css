@@ -1198,22 +1198,6 @@ body.header-announcement .app-container {
 * Inputs 
 */
 
-input:not([type]),
-input[type="text"]:not(.browser-default),
-input[type="password"]:not(.browser-default),
-input[type="email"]:not(.browser-default),
-input[type="url"]:not(.browser-default),
-input[type="time"]:not(.browser-default),
-input[type="date"]:not(.browser-default),
-input[type="datetime"]:not(.browser-default),
-input[type="datetime-local"]:not(.browser-default),
-input[type="tel"]:not(.browser-default),
-input[type="number"]:not(.browser-default),
-input[type="search"]:not(.browser-default),
-textarea.materialize-textarea {
-  padding-left: 3px;
-  height: 1rem;
-}
 
 .input-field input[type="text"],
 .input-field textarea[type="text"] {
