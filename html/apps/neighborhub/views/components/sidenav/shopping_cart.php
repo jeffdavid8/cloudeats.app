@@ -16,6 +16,14 @@ if (!isset($merchant->stripe_flat_fee)) {
   $merchant->stripe_flat_fee = floatval(getenv('STRIPE_FEE_FLAT'));
 }
 ?>
+<style>
+  #toast-container {
+  top: auto !important;
+  bottom: 10% !important; /* Adjust percentage or pixel value as needed */
+  left: 7%;               /* Optional: adjust horizontal alignment */
+  right: auto !important;
+}
+</style>
 
 <ul id="nh-shopping-cart-sidenav" class="<?= $classList ?>" style="width: 360px; padding: 0 10px; display: flex; flex-direction: column; z-index: 1001;">
 
