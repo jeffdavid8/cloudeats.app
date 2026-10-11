@@ -48,7 +48,12 @@ $menu_items = [
         'href' => '#data-export-modal',
         'icon' => 'fas fa-file-download left',
         'title' => 'Export Data',
-        'class' => 'modal-trigger'
+        'class' => 'modal-trigger',
+        'url_conditions' => [
+            'view' => 'merchant',
+            'merchant_id' => $merchant->id,
+            'p' => 'dashboard'
+        ],
     ],
     [
         'href' => '/?app=neighborhub&view=merchant&merchant_id=' . $merchant->id . '&p=products',
@@ -63,18 +68,18 @@ $menu_items = [
     [
         'href' => '/?app=neighborhub&view=merchant&p=merchant_management&merchant_id=' . $merchant->id,
         'icon' => 'fas fa-cog',
-        'title' => 'Manage'
+        'title' => 'Store Settings & Staff'
     ],
     [
         'href' => '/?app=neighborhub&view=admin&p=edit_merchant&merchant_id=' . $merchant->id,
         'icon' => 'fas fa-user-edit',
-        'title' => 'Edit Profile',
+        'title' => 'Edit Merchant Profile',
         'admin_only' => true
     ],
     [
         'href' => '/?app=neighborhub&view=admin&merchant_id=' . $merchant->id,
         'icon' => 'fas fa-user-shield',
-        'title' => 'Admin',
+        'title' => 'Neighborhub Admin',
         'style' => 'text-transform: capitalize;',
         'admin_only' => true
     ]
@@ -85,6 +90,19 @@ foreach ($menu_items as $item):
     // Skip rendering if the item is admin-only and the user is not an admin
     if (!empty($item['admin_only']) && !$this->user->is_admin) {
         continue;
+    }
+
+    if (!empty($item['url_conditions'])) {
+        $conditions_met = true;
+        foreach ($item['url_conditions'] as $key => $value) {
+            if (get_var($key) != $value) {
+                $conditions_met = false;
+                break;
+            }
+        }
+        if (!$conditions_met) {
+            continue; // Skip this item if conditions are not met
+        }
     }
     
     // Render divider item
@@ -107,15 +125,13 @@ foreach ($menu_items as $item):
         </a>
     </li>
 <?php endforeach; ?>
-
-<? if ($this->user->is_admin) : ?>
-  <li><a href="/?app=neighborhub&view=admin&p=edit_merchant&merchant_id=<?= $merchant->id ?>"><i class="fas fa-user-edit"></i> Edit Profile</a></li>
-  <li><a href="/?app=neighborhub&view=admin&merchant_id=<?= $merchant->id ?>" style="text-transform: capitalize;"><i class="fas fa-user-shield"></i> Admin</a></li>
-<? endif; ?>
-<li class="divider" tabindex="-1"></li>
+<? /* 
 <li>
   <a href="#!" class="store-status-option" data-status="<?= $isShopOnline ? 'offline' : 'online' ?>">
     <span class="status-dot-indicator <?= $isShopOnline ? 'online' : 'offline' ?>"></span>
     <?= $isShopOnline ? 'Go Offline' : 'Go Online'; ?>
   </a>
 </li>
+*/ ?>
+
+<li class="divider" tabindex="-1"></li>

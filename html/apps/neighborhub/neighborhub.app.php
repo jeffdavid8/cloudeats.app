@@ -119,6 +119,10 @@ function neighborhub_init(&$app)
   $app->set('current_view', $view);
   $app->set('user_id', $_SESSION['user']['id'] ?? null);
   $app->set('merchant_id', $merchantId);
+  if ($merchantId) {
+    $merchant = Merchant::getMerchantWithGallery($merchantId, 'object');
+    $app->set('merchant', $merchant);
+  }
   $meta = array(
     'image' => config('base_url') . '/images/android-chrome-512x512.png',
     'image_width' => '600',

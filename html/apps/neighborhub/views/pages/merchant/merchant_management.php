@@ -65,11 +65,19 @@ if (!defined('MB_RUNNING')) exit;
     margin-bottom: 2rem;
   }
 </style>
+<nav class="clean-nav breadcrumb-nav">
+    <div class="">
+        <div class="col s12">
+            <a href="?&view=merchant&merchant_id=<?= $current_merchant_id ?>&p=dashboard" class="breadcrumb">Store Dashboard</a>
+            <a href="#!" class="breadcrumb">Store Management</a>
+        </div>
+    </div>
+</nav>
 
 <div class="container" style="margin-top: 2rem; margin-bottom: 5rem;">
   <input type="hidden" id="merchant_id" value="<?php echo $current_merchant_id; ?>">
 
-  <h1>Store Management Panel
+  <h1>Store Management
     <span class="right" style="margin-bottom: 1rem;">
       <a href="/?app=neighborhub&view=admin&p=dashboard&merchant_id=<?= $current_merchant_id ?>"
         class="btn-small btn-flat waves-effect blue-text"

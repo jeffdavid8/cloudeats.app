@@ -33,7 +33,7 @@ try {
             <li>
                 <a href="?app=admin">
                     <i class="material-icons">settings</i>
-                    Admin
+                    Mediabrain Admin
                 </a>
             </li>
         <?

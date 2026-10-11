@@ -503,7 +503,7 @@ input.valid:not([type]), input.valid:not([type]):focus, input.valid[type="text"]
     border: 2px solid var(--lcars-orange);
     border-radius: 10px;
     color: var(--text-primary);
-    padding: 15px;
+    /* padding: 15px; */
 }
 
 .select-wrapper input.select-dropdown:focus {

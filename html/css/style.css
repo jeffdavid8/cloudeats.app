@@ -2353,3 +2353,15 @@ body > .grecaptcha-badge {
   will-change: transform, opacity;
   /* Keep it "Lush" and efficient */
 }
+
+.breadcrumb-nav {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  padding-left: 1rem;
+}
+.breadcrumb-nav a {
+  text-decoration: none;
+  margin-right: 0.5rem;
+}

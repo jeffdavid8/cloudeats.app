@@ -577,3 +577,11 @@ body .tts_player_menu_container nav {
 .nightMode a.grey-text:hover {
     color: #b0b0b0 !important;
 }
+
+.nightMode .input-field .helper-text {
+  color: rgba(224, 224, 224, 0.54);
+}
+
+.nightMode .breadcrumb-nav a:hover {
+    color: #b0b0b0 !important;
+}

@@ -180,7 +180,7 @@ $merchantsList = $app->get('admin_merchants_list', array());
                 <?php foreach ($merchantsList as $m): ?>
                   <tr style="border-bottom: 1px solid #e0e0e0;">
                     <td style="font-weight: 600; color: #777;">#<?= intval($m['id']) ?></td>
-                    <td style="font-weight: 600; font-size: 15px;"><a href="?app=neighborhub&view=merchant&p=dashboard&merchant_id=<?= intval($m['id']) ?>" title="Edit <?= htmlspecialchars($m['business_name']) ?>"><?= htmlspecialchars($m['business_name']) ?></a></td>
+                    <td style="font-weight: 600; font-size: 15px;"><a href="?app=neighborhub&view=merchant&p=dashboard&merchant_id=<?= intval($m['id']) ?>" title="Merchant Dashboard for <?= htmlspecialchars($m['business_name']) ?>"><?= htmlspecialchars($m['business_name']) ?></a></td>
                     <td style=" font-size: 13px; max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><?= htmlspecialchars($m['address']) ?></td>
                     <td style=" font-family: monospace;"><?= !empty($m['phone']) ? htmlspecialchars($m['phone']) : '<span class="grey-text">None</span>' ?></td>
                     <td class="center-align">

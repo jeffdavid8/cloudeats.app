@@ -24,19 +24,19 @@ if (!$this->user->is_admin) {
                 <div class="row">
                     <div class="input-field col s12 m6">
                         <input id="user_email" name="user_email" type="email" required class="validate">
-                        <label for="user_email">Account Owner Email Address</label>
+                        <label for="user_email">Email Address</label>
                         <span class="helper-text" data-error="Please enter a valid email format">Enter the registered account email for this courier.</span>
                     </div>
                     <div class="input-field col s12 m6">
                         <input id="business_name" name="business_name" type="text" required>
-                        <label for="business_name">Courier Operating / Display Name</label>
+                        <label for="business_name">Display Name</label>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="input-field col s12 m4">
                         <input id="phone" name="phone" type="tel" required>
-                        <label for="phone">Phone Contact</label>
+                        <label for="phone">Phone Number</label>
                     </div>
                     <div class="input-field col s12 m4">
                         <label style="position:static;">Vehicle System Profile</label>
@@ -60,7 +60,7 @@ if (!$this->user->is_admin) {
                     <button type="submit" class="btn blue waves-effect waves-light">
                         <i class="material-icons left">save</i> Save Courier Profile
                     </button>
-                    <a href="?app=neighborhub&view=dashboard" class="btn-flat waves-effect" style="margin-left:10px;">Cancel</a>
+                    <a href="javascript:void(0)" onclick="window.history.back();" class="btn-flat waves-effect" style="margin-left:10px;">Cancel</a>
                 </div>
             </form>
         </div>

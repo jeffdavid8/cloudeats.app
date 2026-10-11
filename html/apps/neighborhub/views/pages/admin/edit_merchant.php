@@ -20,7 +20,20 @@ if (!isset($_SESSION['user']) || empty($_SESSION['user']['id'])) {
   header('Location: ?p=dashboard');
   exit;
 }
+$page_title = ($merchant->id ?? -1) === -1
+  ? 'Add New Merchant'
+  : 'Edit Merchant - ' . htmlspecialchars($merchant->business_name);
+?>
+<nav class="clean-nav breadcrumb-nav">
+    <div class="">
+        <div class="col s12">
+            <a href="?&view=merchant&merchant_id=<?= $merchant_id ?>&p=dashboard" class="breadcrumb">Store Dashboard</a>
+            <a href="#!" class="breadcrumb">Edit <?= $merchant->business_name ?></a>
+        </div>
+    </div>
+</nav>
 
+<?
 if (!$this->user->is_admin) {
   // Not an administrator - render 403 Forbidden card
 ?>
@@ -390,9 +403,7 @@ if (!$this->user->is_admin) {
 
   <div class="provisioning-header">
     <h1>
-      <?= ($merchant->id ?? -1) === -1
-        ? 'Add New Merchant'
-        : 'Edit - ' . htmlspecialchars($merchant->business_name); ?>
+      <?= $page_title; ?>
     </h1>
     <div class="right">
       <a href="/?app=neighborhub&view=admin&p=dashboard&merchant_id=<?= intval($merchant->id) ?>"
