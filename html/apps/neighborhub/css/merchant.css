@@ -85,7 +85,7 @@ body.scrolled header.header nav {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 }
 .merchant-header-image .online-status-dot {
-  bottom: 3px;
+  bottom: 17px;
   right: 0px;
   width: 20px;
   height: 20px;

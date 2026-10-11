@@ -122,6 +122,7 @@ function neighborhub_init(&$app)
   if ($merchantId) {
     $merchant = Merchant::getMerchantWithGallery($merchantId, 'object');
     $app->set('merchant', $merchant);
+    neighborhub_init_merchant($app);
   }
   $meta = array(
     'image' => config('base_url') . '/images/android-chrome-512x512.png',
@@ -252,10 +253,7 @@ function neighborhub_render_body(&$app)
         case 'edit_merchant':
           $app->includeModel('merchant');
           $merchantId = get_var('merchant_id', -1);
-          $merchant = Merchant::getMerchantWithGallery($merchantId, 'object');
-          if (!$merchant) {
-            $merchant = new Merchant();
-          }
+          $merchant = $app->get('merchant', null);
           //error_log(print_r($merchant, true));
           $templatePath = $adminDir . 'edit_merchant.php';
           $owner_email = User::getById($merchant->user_id)->email;
@@ -633,7 +631,7 @@ function neighborhub_init_customer_context(&$app)
     $merchantId = get_var('merchant_id', false);
     $merchant = Merchant::getMerchantById($merchantId);
     $app->set('merchant', $merchant);
-    
+
     // Check if reorder parameter is passed
     $reorderFromId = get_var('reorder_from', false);
     if ($reorderFromId) {
@@ -819,6 +817,7 @@ function neighborhub_init_merchant_context(&$app, $merchantId = null)
     // Cache verified staff context in session
     $_SESSION['user']['active_merchant_id'] = $merchant_id;
     $_SESSION['user']['merchant_staff_role'] = ($app->user->is_admin) ? 'Admin' : $staffRecord['staff_role'];
+    $app->set('merchant_staff_role', $_SESSION['user']['merchant_staff_role']);
 
     // Load pending orders (CONFIRMED and READY_FOR_PICKUP states)
     $pendingOrders = Order::getOrdersByMerchantId($merchantId, 'PENDING_CONFIRMATION', 50, 0, true, 'components/cards/pending_order_card.php');
@@ -857,6 +856,72 @@ function neighborhub_init_merchant_context(&$app, $merchantId = null)
     $app->set('current_view', 'customer');
     neighborhub_init_customer_context($app);
   }
+}
+
+function neighborhub_init_merchant(&$app)
+{
+  $db = $app->db;
+  $user_id = $app->user->id;
+  $app->includeModel('merchant');
+
+  // Get target merchant ID from parameter or session
+  $merchant_id = $app->get('merchant_id') ? intval($app->get('merchant_id')) : (
+    isset($_SESSION['user']['active_merchant_id']) ? $_SESSION['user']['active_merchant_id'] : null
+  );
+
+  // If no merchant_id available, query for first active merchant relationship
+  if (!$merchant_id) {
+    $merchantListStmt = $db->prepare(
+      "SELECT nm.id FROM neighborhub_merchants nm
+                JOIN neighborhub_merchant_users nmu ON nm.id = nmu.merchant_id
+                WHERE nmu.user_id = ? AND nmu.status = 'active' AND nm.status = 'active'
+                LIMIT 1"
+    );
+    $merchantListStmt->execute([$user_id]);
+    $merchantRecord = $merchantListStmt->fetch(PDO::FETCH_ASSOC);
+    $merchant = Merchant::getMerchantById($merchantRecord['id'], 'object');
+    $merchant_id = $merchantRecord['id'] ?? null;
+  } else {
+    $merchant = Merchant::getMerchantById($merchant_id, 'object');
+  }
+  $app->set('merchant', $merchant);
+
+  // Query staff relationship from neighborhub_merchant_users
+  $staffStmt = $db->prepare(
+    "SELECT DISTINCT 
+                    nm.id, nm.business_name, nmu.staff_role
+                FROM neighborhub_merchants nm
+                JOIN neighborhub_merchant_users nmu ON nm.id = nmu.merchant_id
+                WHERE nm.user_id = ? AND nmu.merchant_id = ? AND nmu.status = 'active' AND nm.status = 'active'
+                ORDER BY nm.business_name ASC LIMIT 1"
+
+  );
+  $staffStmt->execute([$user_id, $merchant_id]);
+  $staffRecord = $staffStmt->fetch(PDO::FETCH_ASSOC);
+
+  // Verify staff relationship exists and is active
+  if ((!$staffRecord) && (!$app->user->is_admin)) {
+    // Clear invalid context and display error
+    if (isset($_SESSION['user']['active_merchant_id'])) {
+      unset($_SESSION['user']['active_merchant_id']);
+    }
+    if (isset($_SESSION['user']['merchant_staff_role'])) {
+      unset($_SESSION['user']['merchant_staff_role']);
+    }
+
+    $_SESSION['notification'] = array(
+      'type' => 'error',
+      'message' => 'Access Denied: You do not hold active staff clearance for this merchant storefront. Returning to customer view.'
+    );
+    $app->set('current_view', 'customer');
+    neighborhub_init_customer_context($app);
+    return;
+  }
+
+  // Cache verified staff context in session
+  $_SESSION['user']['active_merchant_id'] = $merchant_id;
+  $_SESSION['user']['merchant_staff_role'] = ($app->user->is_admin) ? 'Admin' : $staffRecord['staff_role'];
+  $app->set('merchant_staff_role', $_SESSION['user']['merchant_staff_role']);
 }
 
 /**

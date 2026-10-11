@@ -261,6 +261,14 @@ body {
 body {
   font-family: var(--rhino-font);
 }
+header nav .merchant-header-image {
+  display: flex;
+  align-items: center;
+}
+header nav .merchant-header-image img {
+  width: 100%;
+  object-fit: cover;
+}
 .login-header h3 {
   font-size: 2em;
 }

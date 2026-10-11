@@ -36,7 +36,8 @@ if ($this->user->is_admin):
   </script>
 <?
 endif;
-if ($this->get('merchant')) {
+
+if ($this->get('merchant') && $this->get('merchant_staff_role')) {
  render('components/sidenav/merchant_menu.php');
 }
 ?>

@@ -808,7 +808,7 @@ $isShopOnline = ($rawStatus === 'active' || $rawStatus === 'online' || $rawStatu
     const $btn = $('#store-status-toggle');
     // Optimistically set loading/updating state
     $btn.css('opacity', '0.6');
-
+    loading(4);
     mb.ajax({
       url: '/?api=neighborhub&action=update_merchant_status', // Replace with your actual merchant backend controller route
       method: 'POST',
@@ -820,6 +820,7 @@ $isShopOnline = ($rawStatus === 'active' || $rawStatus === 'online' || $rawStatu
         if (response && response.success) {
           // Toggle active button attributes & classes based on return status
           if (status === 'online') {
+            $('header .merchant-header-image .online-status-dot').show();
             $btn.removeClass('is-offline').addClass('is-online');
             $btn.attr('data-status', 'active');
             $btn.find('.kds-status-label').text('STORE ONLINE');
@@ -829,6 +830,7 @@ $isShopOnline = ($rawStatus === 'active' || $rawStatus === 'online' || $rawStatu
             });
           } else {
             $btn.removeClass('is-online').addClass('is-offline');
+            $('header .merchant-header-image .online-status-dot').hide();
             $btn.attr('data-status', 'inactive');
             $btn.find('.kds-status-label').text('STORE OFFLINE');
             M.toast({
@@ -851,6 +853,7 @@ $isShopOnline = ($rawStatus === 'active' || $rawStatus === 'online' || $rawStatu
       },
       complete: function() {
         $btn.css('opacity', '1');
+        loading(0); // Stop loading indicator
       }
     });
   }

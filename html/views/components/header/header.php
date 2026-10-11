@@ -28,11 +28,11 @@ if ($this->get('view') === 'customer' && !$customer->terms_accepted_at):
                <div class="merchant-header-image">
                   <? if ($this->get('view') === 'merchant'): ?>
                      <a href="?app=neighborhub&view=merchant&p=dashboard&merchant_id=<?= $merchant->id ?>" title="Merchant Dashboard for <?= htmlspecialchars($merchant->business_name) ?>">
-                        <img class="responsive-img circle" src="<?php echo htmlspecialchars($merchant->image_url); ?>" style="">
+                        <img class="circle" src="<?php echo htmlspecialchars($merchant->image_url); ?>" style="">
                         <?= ($merchant->status == 'online') ? '<span class="online-status-dot"></span>' : '' ?>
                      </a>
                   <? else: ?>
-                        <img class="materialboxed responsive-img circle" src="<?php echo htmlspecialchars($merchant->image_url); ?>" style="">
+                        <img class="materialboxed circle" src="<?php echo htmlspecialchars($merchant->image_url); ?>" style="">
                         <?= ($merchant->status == 'online') ? '<span class="online-status-dot"></span>' : '' ?>
                   <? endif; ?>
                </div>
