@@ -56,27 +56,33 @@ class CustomOrderBuilder {
   restoreSelections(choices) {
     const self = this;
     $.each(choices, function (key, value) {
+      // Escape the key to make it safe for CSS/jQuery selectors
+      const safeKey = CSS.escape(key);
+
       if (typeof value === "object" && !Array.isArray(value)) {
         // Quantity widgets
         $.each(value, function (itemName, qty) {
+          const safeItemName = CSS.escape(itemName);
           const input = self.viewport.find(
-            `.nh-builder-qty-input[data-name="${itemName}"]`,
+            `.nh-builder-qty-input[data-name="${safeItemName}"]`,
           );
           if (input.length) input.val(qty);
         });
       } else if (Array.isArray(value)) {
         // Checkboxes
         value.forEach(function (val) {
+          const safeVal = CSS.escape(val);
           self.viewport
             .find(
-              `input[name="${key}[]"][value="${val}"], input[name="${key}"][value="${val}"]`,
+              `input[name="${safeKey}[]"][value="${safeVal}"], input[name="${safeKey}"][value="${safeVal}"]`,
             )
             .prop("checked", true);
         });
       } else {
         // Radios
+        const safeValue = CSS.escape(value);
         self.viewport
-          .find(`input[name="${key}"][value="${value}"]`)
+          .find(`input[name="${safeKey}"][value="${safeValue}"]`)
           .prop("checked", true);
       }
     });
@@ -202,10 +208,12 @@ class CustomOrderBuilder {
     });
 
     return {
-      line_id: this.editingState ? this.editingState.lineId : "line_" + Date.now() + "_" + Math.random().toString(36).substr(2, 5),
+      line_id: this.editingState
+        ? this.editingState.lineId
+        : "line_" + Date.now() + "_" + Math.random().toString(36).substr(2, 5),
       base_price: this.basePrice,
       final_price: this.currentPrice,
-      choices: selections
+      choices: selections,
     };
   }
 }

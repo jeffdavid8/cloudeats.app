@@ -227,6 +227,10 @@ function neighborhub_render_body(&$app)
     render('components/sidenav/shopping_cart.php', array('classList' => 'sidenav right-aligned'));
   }
 
+  if ($app->get('reorder_items', null)) {
+    render('components/actions/reorder_previous_order.php');
+  }
+
   echo '<div class="app-container neighborhub-app-container">';
 
   // Determine template path based on view and page
@@ -625,6 +629,19 @@ function neighborhub_init_customer_context(&$app)
     $merchantId = get_var('merchant_id', false);
     $merchant = Merchant::getMerchantById($merchantId);
     $app->set('merchant', $merchant);
+    
+    // Check if reorder parameter is passed
+    $reorderFromId = get_var('reorder_from', false);
+    if ($reorderFromId) {
+      $app->includeModel('order');
+      $reorderOrder = Order::getOrderById($reorderFromId);
+
+      // Safety check: ensure order exists and belongs to the current merchant
+      if ($reorderOrder && $reorderOrder['merchant_id'] == $merchantId) {
+        $app->set('reorder_items', $reorderOrder['items']);
+      }
+    }
+
     $menus = Menu::getMenusWithProductsByMerchantId($merchantId);
     //error_log(print_r($menus, true));
     $app->set('menus', $menus);
@@ -1012,7 +1029,7 @@ function neighborhub_db_tables()
 function neighborhub_install_db()
 {
   $app = App::getInstance('neighborhub');
-    $tableSql = "
+  $tableSql = "
     SET FOREIGN_KEY_CHECKS = 0;
     DROP TABLE IF EXISTS neighborhub_delivery_tracking;
     DROP TABLE IF EXISTS neighborhub_images;
@@ -1312,7 +1329,7 @@ function neighborhub_install_db()
     ";
 
 
-    $log = [];
+  $log = [];
   foreach (explode(';', $tableSql) as $q) {
     $q = trim($q);
     $cleaned = str_replace("\r\n", "\n", $q);
@@ -1323,12 +1340,12 @@ function neighborhub_install_db()
         error_log('Running Neighborhub Query - ');
         error_log($cleanSQL);
         error_log('-----------------------------------------------------');
-        
+
         // 1. Execute the query
         $app->db->exec($q);
-        
+
         // 2. FORCE a tiny sleep break (10ms) to allow the thread lock to release
-        usleep(10000); 
+        usleep(10000);
 
         $log[] = '-----------------------------------------------------';
         $log[] = "Running Neighborhub Query - ";

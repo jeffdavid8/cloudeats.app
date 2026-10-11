@@ -204,7 +204,8 @@ class MerchantStorefront {
           merchantName: btn.data('merchant-name'),
           merchantAddress: btn.data('merchant-address'),
           merchantLat: btn.data('merchant-lat'),
-          merchantLon: btn.data('merchant-lon')
+          merchantLon: btn.data('merchant-lon'),
+          customizable: btn.data('customizable') === 1
         };
       }
 
@@ -263,6 +264,7 @@ class MerchantStorefront {
             html: `<i class="fas ${self.options.toastIcon}"></i> Updated ${nh.cart.activeCustomProductMetadata.name} in ${self.options.toastVerb}!`
           });
         } else if (NHCart) {
+          
           NHCart.addItem(
             nh.cart.activeCustomProductMetadata.merchantId,
             nh.cart.activeCustomProductMetadata,

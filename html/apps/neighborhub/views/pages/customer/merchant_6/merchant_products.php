@@ -543,6 +543,7 @@ if ($spotlightProductId) {
                   data-merchant-lat="<?php echo $merchant->latitude; ?>"
                   data-merchant-lon="<?php echo $merchant->longitude; ?>"
                   data-type="<?php echo htmlspecialchars($spotlightProduct['type']); ?>"
+                  data-customizable="<?= $isSpotCustom ? '1' : '0' ?>"
                   data-price="<?php echo $spotlightProduct['price']; ?>">
                   Customize <i class="fas fa-sliders-h right"></i>
                 </button>
@@ -555,6 +556,7 @@ if ($spotlightProductId) {
                 data-merchant-lat="<?php echo $merchant->latitude; ?>"
                 data-merchant-lon="<?php echo $merchant->longitude; ?>"
                 data-name="<?php echo htmlspecialchars($spotlightProduct['name']); ?>"
+                data-customizable="<?= $isSpotCustom ? '1' : '0' ?>"
                 data-price="<?php echo $spotlightProduct['price']; ?>">
                 Add to Basket <i class="fas fa-shopping-basket right"></i>
               </button>

@@ -102,6 +102,7 @@ if ($spotlightProductId) {
     background-color: var(--brand-nav-bg) !important;
     border-bottom: 5px solid var(--brand-nav-border);
   }
+
   .dayMode .header nav {
     background-color: #D6C9C6 !important;
   }
@@ -556,6 +557,7 @@ if ($spotlightProductId) {
                     data-merchant-lat="<?php echo $merchant->latitude; ?>"
                     data-merchant-lon="<?php echo $merchant->longitude; ?>"
                     data-type="<?php echo htmlspecialchars($spotlightProduct['type']); ?>"
+                    data-customizable="<?= $isSpotCustom ? '1' : '0' ?>"
                     data-price="<?php echo $spotlightProduct['price']; ?>">
                     Customize <i class="fas fa-sliders-h right"></i>
                   </button>
@@ -569,6 +571,7 @@ if ($spotlightProductId) {
                   data-merchant-lat="<?php echo $merchant->latitude; ?>"
                   data-merchant-lon="<?php echo $merchant->longitude; ?>"
                   data-name="<?php echo htmlspecialchars($spotlightProduct['name']); ?>"
+                  data-customizable="<?= $isSpotCustom ? '1' : '0' ?>"
                   data-price="<?php echo $spotlightProduct['price']; ?>">
                   Add to Order <i class="fas fa-shopping-basket right"></i>
                 </button>

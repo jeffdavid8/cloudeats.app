@@ -91,6 +91,7 @@
                     data-price="<?php echo $prod['price']; ?>"
                     data-merchant-image="<?php echo $merchant->image_url; ?>"
                     data-merchant-id="<?php echo $merchant->id; ?>"
+                    data-customizable="<?php echo $isCustomizable ? '1' : '0'; ?>"
                     data-merchant-name="<?php echo $merchant->business_name; ?>"
                     data-merchant-address="<?php echo $merchant->address; ?>"
                     data-merchant-lat="<?php echo $merchant->latitude; ?>"

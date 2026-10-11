@@ -434,6 +434,7 @@ if ($spotlightProductId) {
                     data-merchant-lat="<?php echo $merchant->latitude; ?>"
                     data-merchant-lon="<?php echo $merchant->longitude; ?>"
                     data-type="<?php echo htmlspecialchars($spotlightProduct['type']); ?>"
+                    data-customizable="<?= $isSpotCustom ? '1' : '0' ?>"
                     data-price="<?php echo $spotlightProduct['price']; ?>">
                     Customize <i class="fas fa-sliders-h right"></i>
                   </button>
@@ -446,6 +447,7 @@ if ($spotlightProductId) {
                   data-merchant-lat="<?php echo $merchant->latitude; ?>"
                   data-merchant-lon="<?php echo $merchant->longitude; ?>"
                   data-name="<?php echo htmlspecialchars($spotlightProduct['name']); ?>"
+                  data-customizable="<?= $isSpotCustom ? '1' : '0' ?>"
                   data-price="<?php echo $spotlightProduct['price']; ?>">
                   Add to Basket <i class="fas fa-shopping-basket right"></i>
                 </button>
@@ -581,6 +583,20 @@ if ($spotlightProductId) {
   <div class="modal-content" style="padding: 10px 24px 24px 24px; max-width: 700px;">
     <p class="grey-text text-darken-1" style="margin-bottom: 20px;">Personalize your recipe modifiers below.</p>
     <div id="builder-widget-mount-viewport"></div>
+  </div>
+
+  <div class="row" style="width:100%; margin: 0; padding: 0 24px 15px; background-color: var(--brand-card-bg);">
+    <div class="input-field col s12" style="margin-top: 10px; margin-bottom: 0;">
+      <i class="fas fa-edit prefix pk-icon" style="top: 0.8rem; font-size: 1.2rem;"></i>
+      <textarea id="builder-customer-notes"
+        class="materialize-textarea nh-card-customer-notes-input pk-text-main"
+        data-length="200"
+        maxlength="200"
+        placeholder="E.g., Dressing on the side, well done, extra crispy..."
+        style="min-height: 45px; padding-bottom: 0; margin-bottom: 5px;"></textarea>
+      <label for="builder-customer-notes" class="active" style="color: var(--brand-gold); font-weight: 600;">Special Instructions / Customer Notes</label>
+      <span class="helper-text pk-text-muted" style="font-size: 11px;">Add any custom requests or prep preferences for the kitchen.</span>
+    </div>
   </div>
 
   <div class="modal-footer" style="padding: 15px 24px; background: #fafafa; border-top: 1px solid #eee;">
@@ -774,6 +790,7 @@ if ($spotlightProductId) {
       const merchantAddress = btn.data('merchant-address');
       const merchantLat = btn.data('merchant-lat');
       const merchantLon = btn.data('merchant-lon');
+      const isCustomizable = btn.data('customizable') === 1;
 
       const initialCardQty = parseInt(btn.closest('.card-action').find('.nh-card-qty-input').val() || 1);
 
@@ -787,6 +804,7 @@ if ($spotlightProductId) {
         merchantAddress: merchantAddress,
         merchantLat: merchantLat,
         merchantLon: merchantLon,
+        customizable: isCustomizable
       };
       $('#builder-modal-title').text('Customize Your ' + productName);
       $('#nh-custom-builder-modal .nh-card-qty-input').val(initialCardQty);

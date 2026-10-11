@@ -259,7 +259,8 @@ if (!isset($merchant->stripe_flat_fee)) {
       merchantName: cartItem.merchant_name,
       merchantAddress: cartItem.merchant_address,
       merchantLat: cartItem.merchant_lat,
-      merchantLon: cartItem.merchant_lon
+      merchantLon: cartItem.merchant_lon,
+      customizable: cartItem.customizable
     };
 
     // 2. Set Modal Titles and Inputs
