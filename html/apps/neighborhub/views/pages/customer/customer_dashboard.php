@@ -208,7 +208,9 @@ if ($notification) {
               ${escapeHtml(order.state.replace(/_/g, ' '))}
             </span>
             <span class="card-title truncate" style="font-weight: 600; font-size: 1.15rem; margin: 0; color: #fff; width: 100%;" title="${escapeHtml(order.business_name || 'Unknown')}">
-              ${escapeHtml(order.business_name || 'Unknown')}
+              <a target="_blank" href="/?p=merchant_products&merchant_id=${escapeHtml(order.merchant_id || '')}" rel="noopener noreferrer">
+                ${escapeHtml(order.business_name || 'Unknown')}
+              </a>
             </span>
           </div>
 
