@@ -85,23 +85,23 @@ if ($isUserLoggedIn) {
 
             <!-- Dropdown Structure -->
             <ul id="user-dropdown" class="dropdown-content" style="top: 60px !important;">
+                <?
+                if (($currentView == 'customer') && (!empty($customerOrders))): ?>
+                    <li>
+                        <a href="/?app=neighborhub&view=customer&p=dashboard" class="" style="color: var(--primary-color);">
+                            <i class="fas fa-receipt"></i> My CloudEats
+                        </a>
+                    </li>
+                <? endif; ?>
                 <!-- Customer Marketplace (Always Available) -->
                 <li>
                     <a href="/"
                         title="Switch to Customer view"
                         style="">
-                        <i class="material-icons" style="color: #FF6B6B;">shopping_cart</i>
+                        <i class="material-icons" style="">shopping_cart</i>
                         Customer Marketplace
                     </a>
                 </li>
-                <?
-                if (($currentView == 'customer') && (!empty($customerOrders))): ?>
-                    <li>
-                        <a href="/?app=neighborhub&view=customer&p=dashboard" class="" style="">
-                            <i class="fas fa-receipt"></i> My CloudEats
-                        </a>
-                    </li>
-                <? endif; ?>
 
                 <!-- ============================================================================
                      NEIGHBORHUB DYNAMIC ROLE SWITCHING MATRIX
