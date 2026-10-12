@@ -74,7 +74,7 @@ if (!defined('MB_RUNNING')) exit;
 
   <footer class="ce-footer">
     <span>Made for the places that make a neighborhood.</span>
-    <span><a href="https://www.openstreetmap.org/copyright" rel="noreferrer">© OpenStreetMap contributors</a> · <a href="/?p=login">Own a local business? <strong>Join Cloud Eats</strong></a></span>
+    <span><a href="https://www.openstreetmap.org/copyright" rel="noreferrer">© OpenStreetMap contributors</a> · <a href="/?app=neighborhub&view=customer&p=merchant_onboarding">Own a local business? <strong>Join Cloud Eats</strong></a></span>
   </footer>
 
 </main>

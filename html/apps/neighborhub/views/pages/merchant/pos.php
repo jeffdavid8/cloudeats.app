@@ -914,7 +914,7 @@ if ($notification) {
 
     const catelogPanel = $('section.pos-catalog-panel')[0];
     catelogPanel.addEventListener('scroll', () => {
-      console.log(catelogPanel);
+      //console.log(catelogPanel);
       if (catelogPanel.scrollTop > 40) {
         document.body.classList.add('scrolled');
       } else {

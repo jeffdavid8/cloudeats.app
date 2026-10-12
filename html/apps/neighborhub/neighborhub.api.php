@@ -280,6 +280,10 @@ try {
       handle_lookup_user_by_email($request);
       break;
 
+    case 'submit_merchant_application':
+      handle_submit_merchant_application($request);
+      break;
+
     case 'provision_merchant':
       handle_provision_merchant($request);
       break;
@@ -2908,6 +2912,96 @@ function handle_lookup_user_by_email($request)
       'success' => false,
       'error' => 'An error occurred during user lookup'
     )));
+  }
+}
+
+function handle_submit_merchant_application(array $request)
+{
+  $app = App::getInstance('neighborhub');
+
+  // 1. Verify Authentication & reCAPTCHA security
+  if (!isset($_SESSION['user']) || empty($_SESSION['user']['id'])) {
+    send_json_response(['success' => false, 'error' => 'Authentication required to submit an application.'], 401);
+  }
+
+  $recaptchaToken = trim((string)($request['recaptcha_token'] ?? ''));
+  if (!empty($app->config['recaptcha_secret_key']) && $recaptchaToken !== '') {
+    if (!verify_neighborhub_recaptcha($recaptchaToken, $app)) {
+      send_json_response(['success' => false, 'error' => 'The security anti-abuse check did not pass.'], 400);
+    }
+  }
+
+  // 2. Extract Data
+  $businessName = trim(strip_tags((string)($request['business_name'] ?? '')));
+  $phone = trim(strip_tags((string)($request['phone'] ?? '')));
+  $type = trim(strip_tags((string)($request['type'] ?? '')));
+  $address = trim(strip_tags((string)($request['address'] ?? '')));
+  $lat = floatval($request['latitude'] ?? 0);
+  $lng = floatval($request['longitude'] ?? 0);
+  $maxDistance = floatval($request['delivery_max_distance'] ?? 7.0);
+  $storeHours = trim(strip_tags((string)($request['store_hours'] ?? '')));
+  $assignmentMode = trim(strip_tags((string)($request['delivery_assignment_mode'] ?? 'auto')));
+
+  $userEmail = $_SESSION['user']['email'] ?? '';
+  $userName = $_SESSION['user']['username'] ?? 'Partner';
+  $userId = $_SESSION['user']['id'];
+
+  if ($businessName === '' || $address === '') {
+    send_json_response(['success' => false, 'error' => 'Business name and address are required.'], 400);
+  }
+
+  try {
+    // 3. Send Email via PHPMailer (matching your existing mail configuration pattern)[cite: 4]
+    $mailer = new \PHPMailer\PHPMailer\PHPMailer(true);
+    $mailer->isSMTP();
+    $mailer->Host = $app->config['mail_host'];
+    $mailer->SMTPAuth = true;
+    $mailer->Username = $app->config['mail_user'];
+    $mailer->Password = $app->config['mail_pass'];
+    $mailer->Port = $app->config['mail_port'];
+    $mailer->SMTPSecure = $app->config['mail_encryption'] === 'ssl'
+      ? \PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_SMTPS
+      : \PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
+    $mailer->CharSet = 'UTF-8';
+
+    // Sender & Recipients
+    $mailer->setFrom($app->config['mail_from_email'], $app->config['site_name']);
+    $mailer->addAddress('cloudeats.app@gmail.com', 'Cloud Eats Admin');
+    if (!empty($userEmail)) {
+      $mailer->addBCC($userEmail, $userName); // Send confirmation copy to user
+    }
+
+    $mailer->isHTML(true);
+    $mailer->Subject = 'New Merchant Partner Application: ' . $businessName;
+
+    $mailer->Body = "
+      <h2>New Merchant Onboarding Submission</h2>
+      <p>A new partner has submitted an application to join Cloud Eats:</p>
+      <ul>
+        <li><strong>Business Name:</strong> {$businessName}</li>
+        <li><strong>Category:</strong> {$type}</li>
+        <li><strong>Phone:</strong> {$phone}</li>
+        <li><strong>Address:</strong> {$address}</li>
+        <li><strong>Coordinates:</strong> {$lat}, {$lng}</li>
+        <li><strong>Delivery Radius:</strong> {$maxDistance} miles</li>
+        <li><strong>Hours:</strong> {$storeHours}</li>
+        <li><strong>Assignment Mode:</strong> {$assignmentMode}</li>
+        <li><strong>Owner User ID:</strong> {$userId} ({$userEmail})</li>
+      </ul>
+      <p>You can now manually provision and review this merchant in the system.</p>
+    ";
+
+    $mailer->AltBody = "New Merchant Application:\nBusiness: {$businessName}\nAddress: {$address}\nPhone: {$phone}\nOwner User ID: {$userId}";
+
+    $mailer->send();
+
+    send_json_response([
+      'success' => true,
+      'message' => 'Application submitted successfully! Our team will review your details and set up your account.'
+    ]);
+  } catch (Throwable $e) {
+    error_log('Merchant application email failed: ' . $e->getMessage());
+    send_json_response(['success' => false, 'error' => 'Failed to transmit application. Please try again later.'], 500);
   }
 }
 
