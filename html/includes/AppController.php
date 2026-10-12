@@ -180,12 +180,12 @@ class AppController
         $nightModeClass =  $this->app->get('night_mode_class', $day_night_mode_class);
         $bg_image = $this->app->get('bg_image');
         $base_url = $this->app->config['base_url'];
-        $app_title = (!empty($app_meta['title'])) ? $app_meta['title'] : (isset($this->app->app_info['title']) ? $this->app->app_info['title'] : '');
+        $app_title = (isset($this->app->app_info['title']) ? $this->app->app_info['title'] : '');
         $page_title = get_var('page_title', $app_title);
-        $page_title = (!empty($page_title)) ? ucwords(strtolower($page_title)) : '';
+        //$page_title = (!empty($page_title)) ? ucwords(strtolower($page_title)) : '';
         $site_meta = array(
-            'title' => (!empty($page_title)) ? $page_title : (isset($this->app->config['site_title']) ? $this->app->config['site_title'] : 'MediaBrain'),
-            'site_name' => isset($this->app->config['site_name']) ? $this->app->config['site_name'] : 'MediaBrain',
+            'title' => (!empty($page_title)) ? $page_title : (isset($this->app->config['site_title']) ? $this->app->config['site_title'] : 'CloudEats.app'),
+            'site_name' => isset($this->app->config['site_name']) ? $this->app->config['site_name'] : 'CloudEats.app',
             'description' => (isset($this->app->config['site_description']) ? $this->app->config['site_description'] : ''),
             'url' => $this->app->config['base_url'],
             'type' => 'website',

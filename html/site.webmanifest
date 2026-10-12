@@ -1,7 +1,7 @@
 {
   "name": "CloudEats.app",
-  "short_name": "CloudEats",
-  "description": "CloudEats is a platform that connects local food, products, services, and businesses with the community. Our mission is to support local economies and promote sustainable practices by providing a convenient and user-friendly platform for discovering and engaging with local offerings.",
+  "short_name": "CloudEats.app",
+  "description": "CloudEats.app is a platform that connects local food, products, services, and businesses with the community. Our mission is to support local economies and promote sustainable practices by providing a convenient and user-friendly platform for discovering and engaging with local offerings.",
   "start_url": "https://cloudeats.app",
   "display": "standalone",
   "background_color": "#000000",
@@ -22,7 +22,7 @@
   "shortcuts": [
     {
       "name": "CloudEats.app",
-      "short_name": "CloudEats",
+      "short_name": "CloudEats.app",
       "description": "Local food, products, services, and businesses.",
       "url": "/",
       "icons": [{ "src": "/images/android-chrome-192x192.png", "sizes": "192x192" }]

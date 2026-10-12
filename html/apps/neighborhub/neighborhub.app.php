@@ -124,10 +124,15 @@ function neighborhub_init(&$app)
     $app->set('merchant', $merchant);
     neighborhub_init_merchant($app);
   }
-  $meta = array(
-    'image' => config('base_url') . '/images/android-chrome-512x512.png',
-    'image_width' => '600',
-    'image_height' => '600',
+  $site_meta = array(
+      'title' => 'CloudEats.app',
+      'site_name' => isset($app->config['site_name']) ? $app->config['site_name'] : 'CloudEats.app',
+      'description' => (isset($app->config['site_description']) ? $app->config['site_description'] : ''),
+      'url' => $app->config['base_url'],
+      'type' => 'website',
+      'image' => config('base_url') . '/images/android-chrome-512x512.png',
+      'image_width' => '600',
+      'image_height' => '600',
   );
   $day_night_mode = (isset($_COOKIE['day_night_mode'])) ? $_COOKIE['day_night_mode'] : 'day';
   $app->set('day_night_mode', $day_night_mode);
@@ -202,6 +207,7 @@ function neighborhub_init(&$app)
         $scripts[] = 'apps/neighborhub/js/landing.js';
       }
       if ($page === 'merchant_onboarding') {
+        $site_meta['title'] = 'Join Cloud Eats - Partner Onboarding';
         if (!$app->isUserLoggedIn()) {
           $returnUrl = $_SERVER['REQUEST_URI'];
           header('Location: ?p=login&return=' . urlencode($returnUrl), true, 302);
@@ -211,7 +217,7 @@ function neighborhub_init(&$app)
       neighborhub_init_customer_context($app);
       break;
   }
-
+  $app->set('meta', $site_meta);
   $app->app_info['scripts'] = array_merge($app->app_info['scripts'], $scripts);
   $app->app_info['styles'] = array_merge($app->app_info['styles'], $styles);
 }

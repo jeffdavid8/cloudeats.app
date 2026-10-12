@@ -7,10 +7,11 @@ if (!defined('MB_RUNNING')) exit;
     <div class="card-content p-4 sm:p-6">
 
       <!-- Wizard Header -->
-      <div class="center-align mb-4">
-        <span class="badge orange lighten-4 orange-text text-darken-3 px-3 py-1 rounded-pill font-weight-bold">Partner Onboarding</span>
+      <div class="mb-4">
+        <span class="badge orange lighten-4 orange-text text-darken-3 px-3 py-1 rounded-pill font-weight-bold" style="position: absolute;
+  right: 0;">Partner Onboarding</span>
         <h3 class="font-serif font-bold mt-2">Join Cloud Eats</h3>
-        <p style="padding: 20px;" class="">Set up your local shop and start reaching neighbors in minutes.</p>
+        <p style="padding: 20px;" class="center-align ">Set up your local shop and start reaching neighbors in minutes.</p>
       </div>
 
       <!-- Step Indicator Bar -->
