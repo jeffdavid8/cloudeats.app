@@ -201,6 +201,13 @@ function neighborhub_init(&$app)
         $styles[] = 'apps/neighborhub/css/landing.css';
         $scripts[] = 'apps/neighborhub/js/landing.js';
       }
+      if ($page === 'merchant_onboarding') {
+        if (!$app->isUserLoggedIn()) {
+          $returnUrl = $_SERVER['REQUEST_URI'];
+          header('Location: ?p=login&return=' . urlencode($returnUrl), true, 302);
+          exit();
+        }
+      }
       neighborhub_init_customer_context($app);
       break;
   }
