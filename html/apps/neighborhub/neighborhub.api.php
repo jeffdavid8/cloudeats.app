@@ -294,10 +294,12 @@ try {
     case 'update_merchant_settings':
       authenticate_user($request);
 
+      $app = App::getInstance('neighborhub');
+      $app->includeModel('merchant');
       $merchant_id = isset($request['merchant_id']) ? intval($request['merchant_id']) : 0;
 
       // Authorization: Validate the user is an owner or staff member with access
-      ensure_merchant_access($request['user_id'], $merchant_id, ['owner', 'staff']);
+      ensure_merchant_access($app->user->id, $merchant_id, ['owner', 'staff']);
 
       // Map fields directly to your table schema
       $update_data = [];

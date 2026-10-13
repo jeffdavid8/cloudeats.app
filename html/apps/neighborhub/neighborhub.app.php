@@ -119,16 +119,18 @@ function neighborhub_init(&$app)
   $app->set('current_view', $view);
   $app->set('user_id', $_SESSION['user']['id'] ?? null);
   $app->set('merchant_id', $merchantId);
+  $merchant = null;
   if ($merchantId) {
     $merchant = Merchant::getMerchantWithGallery($merchantId, 'object');
     $app->set('merchant', $merchant);
     neighborhub_init_merchant($app);
   }
+  $default_site_name = isset($app->config['site_name']) ? $app->config['site_name'] : 'CloudEats.app';
 
   $site_meta = array(
       'title' => 'CloudEats.app',
-      'site_name' => isset($app->config['site_name']) ? $app->config['site_name'] : 'CloudEats.app',
-      'description' => (isset($app->config['site_description'])) ? $app->config['site_description'] : '',
+      'site_name' => ($merchant && isset($merchant->business_name)) ? $merchant->business_name . ' | ' . $default_site_name : $default_site_name,
+      'description' => ($merchant && isset($merchant->description)) ? $merchant->description : (($merchant) ? 'Discover the best local food delivery options.' : $app->config['site_description']),
       'url' => $app->config['base_url'],
       'type' => 'website',
       'image' => config('base_url') . '/images/android-chrome-512x512.png',
@@ -203,7 +205,6 @@ function neighborhub_init(&$app)
         'apps/neighborhub/js/customOrderBuilder.js',
         'js/HubMeshNode.js'
       );
-      $site_meta['description'] = ($merchant && isset($merchant->description)) ? $merchant->description : 'Discover the best local food delivery options.';
       if ($page === 'onboarding') {
         $styles[] = 'apps/neighborhub/css/landing.css';
         $scripts[] = 'apps/neighborhub/js/landing.js';
@@ -336,6 +337,7 @@ function neighborhub_render_body(&$app)
 
           $vars = array(
             'merchant' => $merchant,
+            'merchant_id' => $merchantId,
             'staff_roster' => $staff_roster,
           );
 

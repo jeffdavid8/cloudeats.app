@@ -199,7 +199,7 @@
    });
    */
 
-  $(".tabs").tabs({ swipeable: true });
+  //$(".tabs").tabs({ swipeable: true });
 
   $(".collapsible").not(".expandable").collapsible();
   $(".collapsible.expandable").collapsible({

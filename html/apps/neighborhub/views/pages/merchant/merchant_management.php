@@ -5,7 +5,7 @@ if (!defined('MB_RUNNING')) exit;
  * @var Object $customer
  * @var Object $merchant
  * @var array $products
- * @var int $current_merchant_id
+ * @var int $merchant_id
  */
 
 ?>
@@ -66,20 +66,20 @@ if (!defined('MB_RUNNING')) exit;
   }
 </style>
 <nav class="clean-nav breadcrumb-nav">
-    <div class="">
-        <div class="col s12">
-            <a href="?&view=merchant&merchant_id=<?= $current_merchant_id ?>&p=dashboard" class="breadcrumb">Store Dashboard</a>
-            <a href="#!" class="breadcrumb">Store Management</a>
-        </div>
+  <div class="">
+    <div class="col s12">
+      <a href="?&view=merchant&merchant_id=<?= $merchant_id ?>&p=dashboard" class="breadcrumb">Store Dashboard</a>
+      <a href="#!" class="breadcrumb">Store Management</a>
     </div>
+  </div>
 </nav>
 
 <div class="container" style="margin-top: 2rem; margin-bottom: 5rem;">
-  <input type="hidden" id="merchant_id" value="<?php echo $current_merchant_id; ?>">
+  <input type="hidden" id="merchant_id" value="<?php echo $merchant_id; ?>">
 
   <h1>Store Management
     <span class="right" style="margin-bottom: 1rem;">
-      <a href="/?app=neighborhub&view=admin&p=dashboard&merchant_id=<?= $current_merchant_id ?>"
+      <a href="/?app=neighborhub&view=admin&p=dashboard&merchant_id=<?= $merchant_id ?>"
         class="btn-small btn-flat waves-effect blue-text"
         title="Admin Dashboard"
         style="padding: 0 8px; margin-right: 5px;">
@@ -103,6 +103,10 @@ if (!defined('MB_RUNNING')) exit;
       <div class="form-group">
         <label for="business_name">Business Name</label>
         <input type="text" id="business_name" required value="<?php echo htmlspecialchars($merchant['business_name'] ?? ''); ?>">
+      </div>
+      <div class="form-group">
+        <label for="description">Business Description</label>
+        <textarea id="description" placeholder="Describe your business..."><?php echo htmlspecialchars($merchant['description'] ?? ''); ?></textarea>
       </div>
       <div class="form-group">
         <label for="store_hours">Store Hours</label>
@@ -205,7 +209,10 @@ if (!defined('MB_RUNNING')) exit;
 
   document.addEventListener('DOMContentLoaded', function() {
     M.FormSelect.init(document.querySelectorAll('select'));
-    M.Tabs.init(document.querySelectorAll('.tabs'));
+    var instances = M.Tabs.init(document.querySelectorAll('.tabs'), {
+      swipeable: false
+    });
+
     // Make sure populated Materialize labels don't visually overlap prefilled text inputs
     M.updateTextFields();
   });
@@ -213,13 +220,13 @@ if (!defined('MB_RUNNING')) exit;
   function saveSettings(e) {
     e.preventDefault();
     e.stopPropagation();
-    console.log('here');
     mb.ajax({
       url: API_PATH,
       method: 'POST',
       data: JSON.stringify({
         merchant_id: merchantId,
         business_name: document.getElementById('business_name').value,
+        description: document.getElementById('description').value,
         store_hours: document.getElementById('store_hours').value,
         address: document.getElementById('address').value,
         delivery_max_distance: document.getElementById('delivery_max_distance').value,
