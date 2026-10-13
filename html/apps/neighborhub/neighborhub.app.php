@@ -648,9 +648,9 @@ function neighborhub_init_customer_context(&$app)
   if ($page == 'merchant_products') {
 
     $app->includeModel('product');
-    $merchantId = get_var('merchant_id', false);
-    $merchant = Merchant::getMerchantById($merchantId);
-    $app->set('merchant', $merchant);
+    //$merchantId = get_var('merchant_id', false);
+    //$merchant = Merchant::getMerchantById($merchantId);
+    //$app->set('merchant', $merchant);
 
     // Check if reorder parameter is passed
     $reorderFromId = get_var('reorder_from', false);

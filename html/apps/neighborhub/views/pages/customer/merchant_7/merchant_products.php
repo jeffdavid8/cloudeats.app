@@ -430,7 +430,7 @@ if ($spotlightProductId) {
                     data-id="<?php echo $spotlightProduct['id']; ?>"
                     data-merchant-id="<?php echo $merchant->id; ?>"
                     data-name="<?php echo htmlspecialchars($spotlightProduct['name']); ?>"
-                    data-merchant-address="<?php echo $merchant->address; ?>"
+                    data-merchant-address="<?php echo $merchant->address . ', ' . htmlspecialchars($merchant->city) . ', ' . htmlspecialchars($merchant->state) . ' ' . htmlspecialchars($merchant->zip_code); ?>"
                     data-merchant-lat="<?php echo $merchant->latitude; ?>"
                     data-merchant-lon="<?php echo $merchant->longitude; ?>"
                     data-type="<?php echo htmlspecialchars($spotlightProduct['type']); ?>"
@@ -443,7 +443,7 @@ if ($spotlightProductId) {
                   style="margin-bottom: 5px;background-color:#2E5A27 !important;"
                   data-id="<?php echo $spotlightProduct['id']; ?>"
                   data-merchant-id="<?php echo $merchant->id; ?>"
-                  data-merchant-address="<?php echo $merchant->address; ?>"
+                  data-merchant-address="<?php echo $merchant->address . ', ' . htmlspecialchars($merchant->city) . ', ' . htmlspecialchars($merchant->state) . ' ' . htmlspecialchars($merchant->zip_code); ?>"
                   data-merchant-lat="<?php echo $merchant->latitude; ?>"
                   data-merchant-lon="<?php echo $merchant->longitude; ?>"
                   data-name="<?php echo htmlspecialchars($spotlightProduct['name']); ?>"
@@ -511,7 +511,10 @@ if ($spotlightProductId) {
           <span style="margin-right: 1rem; width: 1.5rem; text-align: center;">
             <i class="fas fa-map-marker-alt" style="color: #F5A623;"></i>
           </span>
-          <span style="word-break: break-word;"><?php echo htmlspecialchars($merchant->address); ?></span>
+          <?
+          $map_link = "https://www.google.com/maps/search/?api=1&query=" . urlencode($merchant->address . ', ' . $merchant->city . ', ' . $merchant->state . ' ' . $merchant->zip_code);
+          ?>
+          <span class="pk-text-main" style="word-break: break-word; font-weight: 600;"><?php echo htmlspecialchars($merchant->address . ', ' . $merchant->city . ', ' . $merchant->state . ' ' . $merchant->zip_code); ?> <a href="<?php echo $map_link; ?>" target="_blank" class="btn btn-small btn-outline waves-effect waves-light" style="margin-left: 10px;"><i class="fas fa-map-marked-alt"></i></a></span>
         </p>
 
         <!-- Phone -->
