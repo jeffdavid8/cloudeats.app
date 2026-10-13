@@ -191,7 +191,7 @@ if (!defined('MB_RUNNING')) exit;
 </div>
 
 <!-- OpenStreetMap Leaflet Modal -->
-<div id="map-picker-modal" class="modal modal-fixed-footer" style="width: 90%; max-width: 700px; height: 85vh; max-height: 650px; border-radius: 12px;">
+<div id="map-picker-modal" class="modal mb-modal-fixed" style="width: 90%; max-width: 700px; height: 85vh; max-height: 650px; border-radius: 12px;">
   <div class="modal-content" style="padding: 20px; height: calc(100% - 64px); display: flex; flex-direction: column;">
     <h5 class="font-serif font-bold mb-1">Pin Business Location</h5>
     <p class="text-slate-600 text-sm mb-3">Click anywhere on the map to drop a pin at your exact storefront location.</p>

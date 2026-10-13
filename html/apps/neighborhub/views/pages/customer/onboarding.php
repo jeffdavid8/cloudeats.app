@@ -1,6 +1,14 @@
 <?
 if (!defined('MB_RUNNING')) exit;
 ?>
+<style>
+  .mb-modal-fixed .modal-content {
+  flex: 0 1 auto;
+}
+.nightMode .modal .modal-footer {
+  background-color: initial;
+}
+</style>
 
 <main class="ce-landing" id="ce-landing">
 
