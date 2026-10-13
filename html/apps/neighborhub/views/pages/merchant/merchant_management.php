@@ -119,8 +119,52 @@ if (!defined('MB_RUNNING')) exit;
         <input type="text" id="address" value="<?php echo htmlspecialchars($merchant['address'] ?? ''); ?>">
       </div>
       <div class="form-group">
-        <label for="delivery_max_distance">Max Delivery Distance (Miles)</label>
-        <input type="number" step="0.1" id="delivery_max_distance" value="<?php echo htmlspecialchars($merchant['delivery_max_distance'] ?? ''); ?>">
+        <label for="city">City</label>
+        <input type="text" id="city" value="<?php echo htmlspecialchars($merchant['city'] ?? ''); ?>">
+      </div>
+      <div class="form-group">
+        <label for="state">State</label>
+        <select id="state" name="state">
+          <option value="">Select State</option>
+          <?php
+          $states = [
+            'AL' => 'Alabama',
+            'AK' => 'Alaska',
+            'AZ' => 'Arizona',
+            'AR' => 'Arkansas',
+            'CA' => 'California',
+            'CO' => 'Colorado',
+            'CT' => 'Connecticut',
+            'DE' => 'Delaware',
+            'FL' => 'Florida',
+            'GA' => 'Georgia',
+            'HI' => 'Hawaii',
+            'ID' => 'Idaho',
+            'IL' => 'Illinois',
+            'IN' => 'Indiana',
+            'IA' => 'Iowa',
+            'KS' => 'Kansas',
+            'KY' => 'Kentucky',
+            'LA' => 'Louisiana',
+            'ME' => 'Maine',
+            'MD' => 'Maryland',
+            'MA' => 'Massachusetts',
+            'MI' => 'Michigan',
+            'MN' => 'Minnesota',
+            'MS' => 'Mississippi',
+            'MO' => 'Missouri',
+            'MT' => 'Montana',
+            'NE' => 'Nebraska',
+            'NV' => 'Nevada',
+            'NH' => 'New Hampshire',
+            'NJ' => 'New Jersey',
+            'NM' => 'New Mexico',
+          ];
+          foreach ($states as $code => $name) {
+            echo "<option value=\"$code\"" . ($merchant['state'] === $code ? " selected" : "") . ">$name</option>";
+          }
+          ?>
+        </select>
       </div>
       <div class="form-group">
         <label for="delivery_assignment_mode">Delivery Assignment Mode</label>
@@ -229,6 +273,9 @@ if (!defined('MB_RUNNING')) exit;
         description: document.getElementById('description').value,
         store_hours: document.getElementById('store_hours').value,
         address: document.getElementById('address').value,
+        city: document.getElementById('city').value,
+        state: document.getElementById('state').value,
+        zip_code: document.getElementById('zip-code').value,
         delivery_max_distance: document.getElementById('delivery_max_distance').value,
         delivery_assignment_mode: document.getElementById('delivery_assignment_mode').value,
         status: document.getElementById('status').value

@@ -126,9 +126,11 @@ function neighborhub_init(&$app)
     neighborhub_init_merchant($app);
   }
   $default_site_name = isset($app->config['site_name']) ? $app->config['site_name'] : 'CloudEats.app';
+  $title_city_state_location = ($merchant && isset($merchant->city) && isset($merchant->state)) ? $merchant->city . ', ' . $merchant->state : '';
+  $merchant_title = ($merchant && isset($merchant->business_name)) ? $merchant->business_name . ' | ' . $title_city_state_location : $default_site_name;
 
   $site_meta = array(
-      'title' => ($merchant && isset($merchant->business_name)) ? $merchant->business_name . ' | ' . $default_site_name : $default_site_name,
+      'title' => $merchant_title,
       'description' => ($merchant && isset($merchant->description)) ? $merchant->description : (($merchant) ? 'Discover the best local food delivery options.' : $app->config['site_description']),
       'url' => $app->config['base_url'],
       'type' => 'website',
@@ -1142,6 +1144,9 @@ function neighborhub_install_db()
       description TEXT,
       store_hours TEXT,
       address TEXT,
+      city VARCHAR(100),
+      state VARCHAR(100),
+      zip_code VARCHAR(20),
       latitude DOUBLE,
       longitude DOUBLE,
       location POINT NOT NULL DEFAULT (ST_PointFromText('POINT(0 0)')),

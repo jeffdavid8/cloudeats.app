@@ -17,6 +17,9 @@ class Merchant
     public $business_name;
     public $description;
     public $address;
+    public $city;
+    public $state;
+    public $zip_code;
     public $latitude;
     public $longitude;
     public $phone;
@@ -59,6 +62,9 @@ class Merchant
                 'business_name' => $this->business_name,
                 'description' => $this->description,
                 'address' => $this->address,
+                'city' => $this->city,
+                'state' => $this->state,
+                'zip_code' => $this->zip_code,
                 'latitude' => $this->latitude,
                 'longitude' => $this->longitude,
                 'phone' => $this->phone,
@@ -86,6 +92,9 @@ class Merchant
             $this->business_name = $data['business_name'] ?? null;
             $this->description = $data['description'] ?? null;
             $this->address = $data['address'] ?? null;
+            $this->city = $data['city'] ?? null;
+            $this->state = $data['state'] ?? null;
+            $this->zip_code = $data['zip_code'] ?? null;
             $this->latitude = $data['latitude'] ?? null;
             $this->longitude = $data['longitude'] ?? null;
             $this->phone = $data['phone'] ?? null;
@@ -123,7 +132,7 @@ class Merchant
             $app->includeClass('assetmanager');
             $stmt = $db->prepare(
                 "SELECT 
-                    id, user_id, business_name, description, address, latitude, longitude, phone, image_url, status, type, website, facebook, platform_fee_rate, platform_flat_fee, store_hours, menus, delivery_assignment_mode, delivery_max_distance, stripe_api_key, stripe_percent_fee, stripe_flat_fee, meta, created_at, updated_at
+                    id, user_id, business_name, description, address, city, state, zip_code, latitude, longitude, phone, image_url, status, type, website, facebook, platform_fee_rate, platform_flat_fee, store_hours, menus, delivery_assignment_mode, delivery_max_distance, stripe_api_key, stripe_percent_fee, stripe_flat_fee, meta, created_at, updated_at
                 FROM neighborhub_merchants
                 WHERE id = ?"
             );
@@ -158,7 +167,7 @@ class Merchant
             $app->includeClass('assetmanager');
             $stmt = $db->prepare(
                 "SELECT 
-                    id, user_id, business_name, description, address, latitude, longitude, phone, image_url, status, type, website, facebook, platform_fee_rate, platform_flat_fee, store_hours, menus, delivery_assignment_mode, delivery_max_distance, stripe_api_key, stripe_percent_fee, stripe_flat_fee, meta, created_at, updated_at
+                    id, user_id, business_name, description, address, city, state, zip_code, latitude, longitude, phone, image_url, status, type, website, facebook, platform_fee_rate, platform_flat_fee, store_hours, menus, delivery_assignment_mode, delivery_max_distance, stripe_api_key, stripe_percent_fee, stripe_flat_fee, meta, created_at, updated_at
                 FROM neighborhub_merchants
                 WHERE user_id = ?
                 LIMIT 1"
@@ -313,6 +322,9 @@ class Merchant
             $businessName = trim($data['business_name']);
             $description = isset($data['description']) ? trim($data['description']) : null;
             $address = isset($data['address']) ? trim($data['address']) : null;
+            $city = isset($data['city']) ? trim($data['city']) : null;
+            $state = isset($data['state']) ? trim($data['state']) : null;
+            $zipCode = isset($data['zip_code']) ? trim($data['zip_code']) : null;
             $latitude = isset($data['latitude']) && $data['latitude'] !== '' ? floatval($data['latitude']) : null;
             $longitude = isset($data['longitude']) && $data['longitude'] !== '' ? floatval($data['longitude']) : null;
             $phone = isset($data['phone']) ? trim($data['phone']) : null;
@@ -338,12 +350,12 @@ class Merchant
                 : "NULL";
 
             $sql = "INSERT INTO neighborhub_merchants
-            (user_id, business_name, description, address, latitude, longitude, location, phone, status, website, facebook, 
+            (user_id, business_name, description, address, city, state, zip_code, latitude, longitude, location, phone, status, website, facebook, 
              platform_fee_rate, platform_flat_fee, store_hours, menus, delivery_assignment_mode, 
              delivery_max_distance, stripe_api_key, stripe_percent_fee, stripe_flat_fee, type, meta, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, ?, {$locationSql}, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, {$locationSql}, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
 
-            $params = [$userId, $businessName, $description, $address, $latitude, $longitude];
+            $params = [$userId, $businessName, $description, $address, $city, $state, $zipCode, $latitude, $longitude];
 
             // Append lat/lng again for ST_PointFromText if coordinates exist
             if ($latitude !== null && $longitude !== null) {
@@ -424,6 +436,21 @@ class Merchant
             if (isset($data['address'])) {
                 $updates[] = "address = ?";
                 $params[] = trim($data['address']);
+            }
+
+            if (isset($data['city'])) {
+                $updates[] = "city = ?";
+                $params[] = trim($data['city']);
+            }
+
+            if (isset($data['state'])) {
+                $updates[] = "state = ?";
+                $params[] = trim($data['state']);
+            }
+
+            if (isset($data['zip_code'])) {
+                $updates[] = "zip_code = ?";
+                $params[] = trim($data['zip_code']);
             }
 
             if (isset($data['latitude'])) {
@@ -613,6 +640,9 @@ class Merchant
                     m.business_name,
                     m.description,
                     m.address,
+                    m.city,
+                    m.state,
+                    m.zip_code,
                     m.latitude,
                     m.longitude,
                     m.phone,
@@ -888,7 +918,7 @@ class Merchant
             $status = ($status !== null && $status !== '') ? $status : null;
 
             $query = "SELECT 
-        id, user_id, business_name, description, address, latitude, longitude, phone, image_url, status, type, meta, created_at, updated_at
+        id, user_id, business_name, description, address, city, state, zip_code, latitude, longitude, phone, image_url, status, type, meta, created_at, updated_at
         FROM neighborhub_merchants";
 
             // Build conditions dynamically

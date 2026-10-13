@@ -494,6 +494,76 @@ if (!$this->user->is_admin) {
       </div>
 
       <div class="nh-form-group input-field col s12">
+        <i class="fas fa-city prefix"></i>
+        <label for="city">City *</label>
+        <input
+          type="text"
+          id="city"
+          name="city"
+          placeholder="City"
+          value="<?php echo htmlspecialchars($merchant->city); ?>"
+          required />
+      </div>
+
+      <div class="nh-form-group input-field col s12">
+        <i class="fas fa-map-marker-alt prefix"></i>
+        <label for="state">State *</label>
+        <select id="state" name="state" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 14px; background-color: var(--input-bg, #fff); color: var(--text-primary); box-sizing: border-box;">
+          <option value="">Select State</option>
+          <?php
+          $states = [
+            'AL' => 'Alabama',
+            'AK' => 'Alaska',
+            'AZ' => 'Arizona',
+            'AR' => 'Arkansas',
+            'CA' => 'California',
+            'CO' => 'Colorado',
+            'CT' => 'Connecticut',
+            'DE' => 'Delaware',
+            'FL' => 'Florida',
+            'GA' => 'Georgia',
+            'HI' => 'Hawaii',
+            'ID' => 'Idaho',
+            'IL' => 'Illinois',
+            'IN' => 'Indiana',
+            'IA' => 'Iowa',
+            'KS' => 'Kansas',
+            'KY' => 'Kentucky',
+            'LA' => 'Louisiana',
+            'ME' => 'Maine',
+            'MD' => 'Maryland',
+            'MA' => 'Massachusetts',
+            'MI' => 'Michigan',
+            'MN' => 'Minnesota',
+            'MS' => 'Mississippi',
+            'MO' => 'Missouri',
+            'MT' => 'Montana',
+            'NE' => 'Nebraska',
+            'NV' => 'Nevada',
+            'NH' => 'New Hampshire',
+            'NJ' => 'New Jersey',
+            'NM' => 'New Mexico',
+          ];
+          foreach ($states as $code => $name) {
+            echo "<option value=\"$code\"" . ($merchant->state === $code ? " selected" : "") . ">$name</option>";
+          }
+          ?>
+        </select>
+      </div>
+
+      <div class="nh-form-group input-field col s12">
+        <i class="fas fa-map-pin prefix"></i>
+        <label for="zip-code">Zip Code *</label>
+        <input
+          type="text"
+          id="zip-code"
+          name="zip_code"
+          placeholder="12345"
+          value="<?php echo htmlspecialchars($merchant->zip_code); ?>"
+          required />
+      </div>
+
+      <div class="nh-form-group input-field col s12">
         <i class="fas fa-compass prefix"></i>
         <label for="latitude">Latitude Coordinate *</label>
         <input
@@ -1157,6 +1227,9 @@ if (!$this->user->is_admin) {
       const merchantId = document.getElementById('merchant-id').value;
       const businessName = document.getElementById('business-name').value.trim();
       const address = document.getElementById('address').value.trim();
+      const city = document.getElementById('city').value.trim();
+      const state = document.getElementById('state').value.trim();
+      const zipCode = document.getElementById('zip-code').value.trim();
       const latitude = parseFloat(document.getElementById('latitude').value);
       const longitude = parseFloat(document.getElementById('longitude').value);
       const phone = document.getElementById('phone').value.trim();
@@ -1207,6 +1280,9 @@ if (!$this->user->is_admin) {
           submissionPayload.append('business_name', businessName);
           submissionPayload.append('description', document.getElementById('description').value.trim());
           submissionPayload.append('address', address);
+          submissionPayload.append('city', city);
+          submissionPayload.append('state', state);
+          submissionPayload.append('zip_code', zipCode);
           submissionPayload.append('latitude', latitude);
           submissionPayload.append('longitude', longitude);
           submissionPayload.append('phone', phone);
