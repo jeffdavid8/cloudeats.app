@@ -3021,6 +3021,7 @@ function handle_provision_merchant($request = null)
 
   $merchantId = isset($request['merchant_id']) ? sanitize_text_field($request['merchant_id']) : null;
   $businessName = isset($request['business_name']) ? $request['business_name'] : null;
+  $description = isset($request['description']) ? $request['description'] : null;
   $address = isset($request['address']) ? sanitize_text_field($request['address']) : null;
   $latitude = isset($request['latitude']) ? floatval($request['latitude']) : null;
   $longitude = isset($request['longitude']) ? floatval($request['longitude']) : null;
@@ -3052,6 +3053,7 @@ function handle_provision_merchant($request = null)
 
     $merchantData = array(
       'business_name' => $businessName,
+      'description' => $description,
       'address' => $address,
       'latitude' => $latitude,
       'longitude' => $longitude,

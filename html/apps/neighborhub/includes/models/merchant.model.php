@@ -15,6 +15,7 @@ class Merchant
     public $id;
     public $user_id;
     public $business_name;
+    public $description;
     public $address;
     public $latitude;
     public $longitude;
@@ -56,6 +57,7 @@ class Merchant
                 'id' => $this->id,
                 'user_id' => $this->user_id,
                 'business_name' => $this->business_name,
+                'description' => $this->description,
                 'address' => $this->address,
                 'latitude' => $this->latitude,
                 'longitude' => $this->longitude,
@@ -82,6 +84,7 @@ class Merchant
             $this->id = $data['id'] ?? null;
             $this->user_id = $data['user_id'] ?? null;
             $this->business_name = $data['business_name'] ?? null;
+            $this->description = $data['description'] ?? null;
             $this->address = $data['address'] ?? null;
             $this->latitude = $data['latitude'] ?? null;
             $this->longitude = $data['longitude'] ?? null;
@@ -120,7 +123,7 @@ class Merchant
             $app->includeClass('assetmanager');
             $stmt = $db->prepare(
                 "SELECT 
-                    id, user_id, business_name, address, latitude, longitude, phone, image_url, status, type, website, facebook, platform_fee_rate, platform_flat_fee, store_hours, menus, delivery_assignment_mode, delivery_max_distance, stripe_api_key, stripe_percent_fee, stripe_flat_fee, meta, created_at, updated_at
+                    id, user_id, business_name, description, address, latitude, longitude, phone, image_url, status, type, website, facebook, platform_fee_rate, platform_flat_fee, store_hours, menus, delivery_assignment_mode, delivery_max_distance, stripe_api_key, stripe_percent_fee, stripe_flat_fee, meta, created_at, updated_at
                 FROM neighborhub_merchants
                 WHERE id = ?"
             );
@@ -155,7 +158,7 @@ class Merchant
             $app->includeClass('assetmanager');
             $stmt = $db->prepare(
                 "SELECT 
-                    id, user_id, business_name, address, latitude, longitude, phone, image_url, status, type, website, facebook, platform_fee_rate, platform_flat_fee, store_hours, menus, delivery_assignment_mode, delivery_max_distance, stripe_api_key, stripe_percent_fee, stripe_flat_fee, meta, created_at, updated_at
+                    id, user_id, business_name, description, address, latitude, longitude, phone, image_url, status, type, website, facebook, platform_fee_rate, platform_flat_fee, store_hours, menus, delivery_assignment_mode, delivery_max_distance, stripe_api_key, stripe_percent_fee, stripe_flat_fee, meta, created_at, updated_at
                 FROM neighborhub_merchants
                 WHERE user_id = ?
                 LIMIT 1"
@@ -308,6 +311,7 @@ class Merchant
             }
 
             $businessName = trim($data['business_name']);
+            $description = isset($data['description']) ? trim($data['description']) : null;
             $address = isset($data['address']) ? trim($data['address']) : null;
             $latitude = isset($data['latitude']) && $data['latitude'] !== '' ? floatval($data['latitude']) : null;
             $longitude = isset($data['longitude']) && $data['longitude'] !== '' ? floatval($data['longitude']) : null;
@@ -334,12 +338,12 @@ class Merchant
                 : "NULL";
 
             $sql = "INSERT INTO neighborhub_merchants
-            (user_id, business_name, address, latitude, longitude, location, phone, status, website, facebook, 
+            (user_id, business_name, description, address, latitude, longitude, location, phone, status, website, facebook, 
              platform_fee_rate, platform_flat_fee, store_hours, menus, delivery_assignment_mode, 
              delivery_max_distance, stripe_api_key, stripe_percent_fee, stripe_flat_fee, type, meta, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, {$locationSql}, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
+            VALUES (?, ?, ?, ?, ?, ?, {$locationSql}, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
 
-            $params = [$userId, $businessName, $address, $latitude, $longitude];
+            $params = [$userId, $businessName, $description, $address, $latitude, $longitude];
 
             // Append lat/lng again for ST_PointFromText if coordinates exist
             if ($latitude !== null && $longitude !== null) {
@@ -410,6 +414,11 @@ class Merchant
             if (isset($data['user_id'])) {
                 $updates[] = "user_id = ?";
                 $params[] = trim($data['user_id']);
+            }
+
+            if (isset($data['description'])) {
+                $updates[] = "description = ?";
+                $params[] = trim($data['description']);
             }
 
             if (isset($data['address'])) {
@@ -602,6 +611,7 @@ class Merchant
                     m.id,
                     m.user_id,
                     m.business_name,
+                    m.description,
                     m.address,
                     m.latitude,
                     m.longitude,
@@ -878,7 +888,7 @@ class Merchant
             $status = ($status !== null && $status !== '') ? $status : null;
 
             $query = "SELECT 
-        id, user_id, business_name, address, latitude, longitude, phone, image_url, status, type, meta, created_at, updated_at
+        id, user_id, business_name, description, address, latitude, longitude, phone, image_url, status, type, meta, created_at, updated_at
         FROM neighborhub_merchants";
 
             // Build conditions dynamically
@@ -1008,7 +1018,6 @@ class Merchant
         if (!$merchantData) {
             return false;
         }
-        error_log('Getting ' . $merchantId);
         // 2. Fetch the related images from the AssetManager bridge table
         $app = App::getInstance('neighborhub');
         $app->includeClass('assetmanager'); // Make sure the asset model is included

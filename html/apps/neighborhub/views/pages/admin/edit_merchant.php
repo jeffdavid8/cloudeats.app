@@ -472,6 +472,16 @@ if (!$this->user->is_admin) {
       </div>
 
       <div class="nh-form-group input-field col s12">
+        <i class="fas fa-align-left prefix"></i>
+        <label for="description">Business Description</label>
+        <textarea
+          id="description"
+          name="description"
+          placeholder="Brief description of the business, products, or services offered."
+          style="min-height: 120px;"><?php echo htmlspecialchars($merchant->description); ?></textarea>
+      </div>
+
+      <div class="nh-form-group input-field col s12">
         <i class="fas fa-map-marked-alt prefix"></i>
         <label for="address">Physical Storefront Address *</label>
         <input
@@ -1195,6 +1205,7 @@ if (!$this->user->is_admin) {
           const submissionPayload = new FormData();
           submissionPayload.append('merchant_id', merchantId);
           submissionPayload.append('business_name', businessName);
+          submissionPayload.append('description', document.getElementById('description').value.trim());
           submissionPayload.append('address', address);
           submissionPayload.append('latitude', latitude);
           submissionPayload.append('longitude', longitude);

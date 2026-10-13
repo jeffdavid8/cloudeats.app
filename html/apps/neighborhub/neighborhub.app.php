@@ -124,10 +124,11 @@ function neighborhub_init(&$app)
     $app->set('merchant', $merchant);
     neighborhub_init_merchant($app);
   }
+
   $site_meta = array(
       'title' => 'CloudEats.app',
       'site_name' => isset($app->config['site_name']) ? $app->config['site_name'] : 'CloudEats.app',
-      'description' => (isset($app->config['site_description']) ? $app->config['site_description'] : ''),
+      'description' => (isset($app->config['site_description'])) ? $app->config['site_description'] : '',
       'url' => $app->config['base_url'],
       'type' => 'website',
       'image' => config('base_url') . '/images/android-chrome-512x512.png',
@@ -202,6 +203,7 @@ function neighborhub_init(&$app)
         'apps/neighborhub/js/customOrderBuilder.js',
         'js/HubMeshNode.js'
       );
+      $site_meta['description'] = ($merchant && isset($merchant->description)) ? $merchant->description : 'Discover the best local food delivery options.';
       if ($page === 'onboarding') {
         $styles[] = 'apps/neighborhub/css/landing.css';
         $scripts[] = 'apps/neighborhub/js/landing.js';
@@ -587,6 +589,7 @@ function neighborhub_init_customer_context(&$app)
     $app->includeModel('order');
     $customer = $app->get('customer');
     $customer_id = ($customer) ? $customer->id : 0;
+    $merchant = $app->get('merchant', null);
 
     $app->set('show_header_shopping_basket', true);
     $app->set('shopping_basket_class_list', 'sidenav right-aligned');
@@ -632,6 +635,7 @@ function neighborhub_init_customer_context(&$app)
   $meta = array(
     'title' => 'CloudEats.app',
     'type' => 'article',
+    'description' => (isset($merchant->description)) ? $merchant->description : 'Discover the best local food delivery options.',
     'og:type' => 'article',
     'image' => config('base_url') . '/images/android-chrome-512x512.png',
     'image_width' => '600',
@@ -1134,6 +1138,7 @@ function neighborhub_install_db()
       id INT AUTO_INCREMENT PRIMARY KEY,
       user_id INT NOT NULL,
       business_name VARCHAR(255) NOT NULL,
+      description TEXT,
       store_hours TEXT,
       address TEXT,
       latitude DOUBLE,
