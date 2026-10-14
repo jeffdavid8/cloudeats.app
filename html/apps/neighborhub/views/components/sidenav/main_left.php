@@ -6,7 +6,7 @@ $merchant = $this->get('merchant');
 ?>
 <ul id="slide-out" class="sidenav show-on-large">
   <li style="padding: 0; margin: 0; display: flex; justify-content: flex-end; align-items: center; background-color: var(--icon-bg-color);">
-    <a href="#" data-target="slide-out" class="sidenav-trigger main-menu-btn"><i class="fas fa-times fa-lg"></i></a>
+    <a href="#" data-target="slide-out" class="sidenav-trigger main-menu-btn center-align"><i class="fas fa-times fa-lg" style="margin-right: 0;"></i></a>
   </li>
   <li>
     <? render('components/sidenav/app_menu.php'); ?>

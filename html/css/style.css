@@ -2373,3 +2373,8 @@ body > .grecaptcha-badge {
   text-decoration: none;
   margin-right: 0.5rem;
 }
+#wizard-steps-indicator span.badge {
+  float: none !important;          /* Stop Materialize float layout */
+  margin: 0 !important;            /* Clear Materialize default margins */
+  height: auto !important;         /* Allow height to adjust dynamically */
+}
