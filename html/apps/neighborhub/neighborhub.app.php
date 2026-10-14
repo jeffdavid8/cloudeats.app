@@ -648,7 +648,7 @@ function neighborhub_init_customer_context(&$app)
   if ($page == 'merchant_products') {
 
     $app->includeModel('product');
-    //$merchantId = get_var('merchant_id', false);
+    $merchantId = $app->get('merchant_id');
     //$merchant = Merchant::getMerchantById($merchantId);
     //$app->set('merchant', $merchant);
 
