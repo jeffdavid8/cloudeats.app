@@ -55,12 +55,13 @@ if ($spotlightProductId) {
     padding-top: 4rem;
   }
   #nh-terms-banner {
-    margin-top: 2rem !important;
+    margin-top: 0 !important;
   }
 
-  <? /* Header image with scroll animation */ ?>header.header {
+  <? /* Header image with scroll animation */ ?>
+  header.header {
     z-index: 997;
-    top: 4rem;
+    top: 5rem;
     border-bottom: none;
   }
 
@@ -388,6 +389,9 @@ if ($spotlightProductId) {
   }
 
   @media (min-width: 992px) {
+    header.header {
+      top: 4rem;
+    }
     .container {
       width: 970px;
     }
