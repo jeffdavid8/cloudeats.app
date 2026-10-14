@@ -51,8 +51,11 @@ if ($spotlightProductId) {
     color: var(--gray-900);
   }
 
+  .header-announcement .app-container {
+    padding-top: 4rem;
+  }
   #nh-terms-banner {
-    margin-top: 4rem !important;
+    margin-top: 2rem !important;
   }
 
   <? /* Header image with scroll animation */ ?>header.header {
