@@ -32,18 +32,83 @@ if ($spotlightProductId) {
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=Source+Sans+3:wght@300;400;600;700&display=swap');
 
+  :root {
+    --tyd-red-primary: #9E1B1B;
+    --tyd-red-secondary: #7A1212;
+    --tyd-green-primary: #2E5A27;
+    --tyd-green-secondary: #1E3D19;
+  }
+
   body {
     padding-top: 0;
     background-color: #FFFDF9;
     color: #2c2c2c;
   }
 
-  #nh-terms-banner {
-    margin-top: 4rem !important;
-
+  .dayMode body {
+    --brand-nav-bg: #f4f4f4;
+    background-color: #e7e7e7;
+    color: var(--gray-900);
   }
 
-  .app-container {
+  #nh-terms-banner {
+    margin-top: 4rem !important;
+  }
+
+  <? /* Header image with scroll animation */ ?>header.header {
+    z-index: 997;
+    top: 4rem;
+    border-bottom: none;
+  }
+
+  header.header nav {
+    height: 65px;
+    transition: all 0.3s;
+    box-shadow: none;
+    background-color: var(--brand-nav-bg) !important;
+    border-bottom: none;
+  }
+
+  body.scrolled header.header {
+    top: 0;
+    border-bottom: 2px solid var(--brand-primary);
+  }
+
+  body.scrolled header.header nav {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Floating Branding Logo */
+  .merchant-header-image {
+    position: fixed;
+    transition: all 0.3s;
+    top: 3rem;
+    display: flex;
+    align-items: center;
+    width: 180px;
+    right: calc(50% - 90px);
+    z-index: 999;
+  }
+
+  .merchant-header-image img {
+    margin: 0 auto;
+    border: 4px solid var(--brand-gold);
+    border-radius: 50%;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    transition: all 0.4s;
+  }
+
+  body.scrolled .merchant-header-image {
+    top: 2px;
+    width: 100px;
+    right: calc(50% - 50px);
+  }
+
+  body.scrolled .merchant-header-image img {
+    border: none;
+  }
+
+  <? /* End of -- Header image with scroll animation */ ?>.app-container {
     font-family: 'Source Sans 3', sans-serif;
     font-size: 18px;
   }
@@ -97,29 +162,6 @@ if ($spotlightProductId) {
     border-bottom: 3px solid #ffffff;
   }
 
-  .merchant-header-image {
-    position: fixed;
-    transition: all 0.3s;
-    top: 3rem;
-    display: none;
-    align-items: center;
-    width: 80px;
-    right: calc(50% - 80px);
-    z-index: 999;
-  }
-
-  body.scrolled .merchant-header-image {
-    right: calc(50% - 40px);
-    display: block;
-    top: -5px;
-  }
-
-  .merchant-header-image img {
-    max-height: 80px;
-    border: 2px solid #FFFDF9;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-    border-radius: 50%;
-  }
 
   /* Beautiful modern-retro card styles */
   .spotlight-card {
@@ -192,6 +234,15 @@ if ($spotlightProductId) {
   .top-right-dropdown-wrapper a.dropdown-trigger {
     background-color: #9E1B1B !important;
     box-shadow: 0 4px 15px rgba(158, 27, 27, 0.4);
+    border-radius: 50%;
+    transition: all 0.2s ease-in-out;
+  }
+  .top-right-dropdown-wrapper a.dropdown-trigger:hover {
+    transform: scale(1.1);
+  }
+
+  .dayMode .top-right-dropdown-wrapper a.dropdown-trigger {
+    color: #eee;
   }
 
   .top-right-dropdown-wrapper a:hover {
@@ -204,7 +255,7 @@ if ($spotlightProductId) {
 
   /* Pizzeria Box footer info design */
   .pizzeria-box-footer {
-    background-color: #2E5A27;
+    /* background-color: #2E5A27; */
     border: 4px dashed #F5A623 !important;
     border-radius: 16px;
     padding: 2rem;
@@ -377,10 +428,75 @@ if ($spotlightProductId) {
 </style>
 
 <!-- Top Hero Header Section -->
-<div class="green-section" style="<?= ($customer->terms_accepted_at) ? 'margin-top: 3rem;' : '' ?> padding: 2rem 0 4rem 0; border-bottom: 6px double #F5A623;">
+<div class="green-section" style="<?= ($customer->terms_accepted_at) ? 'margin-top: 8rem;' : '' ?> padding: 10rem 0 4rem 0; border-bottom: 6px double #F5A623;">
   <div class="container">
     <div class="tyd-header-image">
       <img class="tyd-header" src="https://storage.googleapis.com/mediabrain-system-data/apps/neighborhub/merchants/7/12108840-768w.png" alt="Tu Your Door Pizza" />
+    </div>
+  </div>
+  <div class="container">
+    <div class="row pizzeria-box-footer red-section">
+      <div class="col s12 m7">
+        <h4 style="font-family: 'Playfair Display', serif; font-weight: 800; margin-top: 0; color: #F5A623;">Tu Your Door Pizza</h4>
+        <p style="font-size: 16px; margin-bottom: 1.5rem; opacity: 0.95;">Serving up Marion's favorite authentic recipes. Hot, fresh, and straight to your door!</p>
+
+        <!-- Address -->
+        <p style="display: flex; align-items: center; margin-bottom: 0.75rem;">
+          <span style="margin-right: 1rem; width: 1.5rem; text-align: center;">
+            <i class="fas fa-map-marker-alt" style="color: #F5A623;"></i>
+          </span>
+          <?
+          $map_link = "https://www.google.com/maps/search/?api=1&query=" . urlencode($merchant->address . ', ' . $merchant->city . ', ' . $merchant->state . ' ' . $merchant->zip_code);
+          ?>
+          <span class="pk-text-main" style="word-break: break-word; font-weight: 600;"><?php echo htmlspecialchars($merchant->address . ', ' . $merchant->city . ', ' . $merchant->state . ' ' . $merchant->zip_code); ?> <a href="<?php echo $map_link; ?>" target="_blank" class="btn btn-small btn-outline waves-effect waves-light" style="margin-left: 10px;"><i class="fas fa-map-marked-alt"></i></a></span>
+        </p>
+
+        <!-- Phone -->
+        <p style="display: flex; align-items: center; margin-bottom: 0.75rem;">
+          <span style="margin-right: 1rem; width: 1.5rem; text-align: center;">
+            <i class="fas fa-phone" style="color: #F5A623;"></i>
+          </span>
+          <span style="font-weight: 600;"><?php echo htmlspecialchars($merchant->phone); ?></span>
+        </p>
+
+        <!-- Facebook -->
+        <?php if (!empty($merchant->facebook)): ?>
+          <p style="display: flex; align-items: center; margin-bottom: 0.75rem;">
+            <span style="margin-right: 1rem; width: 1.5rem; text-align: center;">
+              <i class="fab fa-facebook" style="color: #F5A623;"></i>
+            </span>
+            <a href="<?php echo htmlspecialchars($merchant->facebook); ?>" target="_blank" rel="noopener noreferrer" style="color: #FFFDF9; text-decoration: none; border-bottom: 1px dashed #fff;">
+              Follow Us on Facebook
+            </a>
+          </p>
+        <?php endif; ?>
+
+        <!-- Website -->
+        <?php if (!empty($merchant->website)): ?>
+          <p style="display: flex; align-items: center; margin-bottom: 0.75rem;">
+            <span style="margin-right: 1rem; width: 1.5rem; text-align: center;">
+              <i class="fas fa-globe" style="color: #F5A623;"></i>
+            </span>
+            <a href="<?php echo htmlspecialchars($merchant->website); ?>" target="_blank" rel="noopener noreferrer" style="color: #FFFDF9;">
+              <?php echo str_replace('https://www.', '', htmlspecialchars($merchant->website)); ?>
+            </a>
+          </p>
+        <?php endif; ?>
+
+        <!-- Store Hours -->
+        <?php if (!empty($merchant->store_hours)): ?>
+          <p style="display: flex; align-items: flex-start; margin-top: 1rem;">
+            <span style="margin-right: 1rem; width: 1.5rem; text-align: center; margin-top: 2px;">
+              <i class="fas fa-clock" style="color: #F5A623;"></i>
+            </span>
+            <span><?php echo nl2br(htmlspecialchars($merchant->store_hours)); ?></span>
+          </p>
+        <?php endif; ?>
+      </div>
+
+      <div class="col s12 m5 center-align" style="margin-top: 1.5rem;">
+        <img class="responsive-img circle z-depth-2" style="border: 5px solid #F5A623; max-width: 220px;" src="https://storage.googleapis.com/mediabrain-system-data/apps/neighborhub/merchants/7/12108230-232h.png" />
+      </div>
     </div>
   </div>
 </div>
@@ -461,7 +577,7 @@ if ($spotlightProductId) {
 <?php endif; ?>
 
 <!-- Products Category Catalog -->
-<div class="red-section" style="padding: 3rem 0; margin-top: 2rem; border-top: 4px solid #F5A623;">
+<div class="" style="padding: 3rem 0; margin-top: 2rem; border-top: 4px solid #F5A623;">
   <div class="container">
     <div class="category-heading center" style="margin-bottom: 2rem;">
       <h3 style="font-family: 'Playfair Display', serif; font-weight: 800; font-size: 2em; margin: 0;">Our Menu</h3>
@@ -499,72 +615,8 @@ if ($spotlightProductId) {
 </div>
 
 <!-- Creative Info Footer Section ("The Pizza Box" theme) -->
-<div class="" style="padding: 4rem 0;">
-  <div class="container">
-    <div class="row pizzeria-box-footer">
-      <div class="col s12 m7">
-        <h4 style="font-family: 'Playfair Display', serif; font-weight: 800; margin-top: 0; color: #F5A623;">Tu Your Door Pizza</h4>
-        <p style="font-size: 16px; margin-bottom: 1.5rem; opacity: 0.95;">Serving up Marion's favorite authentic recipes. Hot, fresh, and straight to your door!</p>
+<div class="red-section" style="padding: 4rem 0;">
 
-        <!-- Address -->
-        <p style="display: flex; align-items: center; margin-bottom: 0.75rem;">
-          <span style="margin-right: 1rem; width: 1.5rem; text-align: center;">
-            <i class="fas fa-map-marker-alt" style="color: #F5A623;"></i>
-          </span>
-          <?
-          $map_link = "https://www.google.com/maps/search/?api=1&query=" . urlencode($merchant->address . ', ' . $merchant->city . ', ' . $merchant->state . ' ' . $merchant->zip_code);
-          ?>
-          <span class="pk-text-main" style="word-break: break-word; font-weight: 600;"><?php echo htmlspecialchars($merchant->address . ', ' . $merchant->city . ', ' . $merchant->state . ' ' . $merchant->zip_code); ?> <a href="<?php echo $map_link; ?>" target="_blank" class="btn btn-small btn-outline waves-effect waves-light" style="margin-left: 10px;"><i class="fas fa-map-marked-alt"></i></a></span>
-        </p>
-
-        <!-- Phone -->
-        <p style="display: flex; align-items: center; margin-bottom: 0.75rem;">
-          <span style="margin-right: 1rem; width: 1.5rem; text-align: center;">
-            <i class="fas fa-phone" style="color: #F5A623;"></i>
-          </span>
-          <span style="font-weight: 600;"><?php echo htmlspecialchars($merchant->phone); ?></span>
-        </p>
-
-        <!-- Facebook -->
-        <?php if (!empty($merchant->facebook)): ?>
-          <p style="display: flex; align-items: center; margin-bottom: 0.75rem;">
-            <span style="margin-right: 1rem; width: 1.5rem; text-align: center;">
-              <i class="fab fa-facebook" style="color: #F5A623;"></i>
-            </span>
-            <a href="<?php echo htmlspecialchars($merchant->facebook); ?>" target="_blank" rel="noopener noreferrer" style="color: #FFFDF9; text-decoration: none; border-bottom: 1px dashed #fff;">
-              Follow Us on Facebook
-            </a>
-          </p>
-        <?php endif; ?>
-
-        <!-- Website -->
-        <?php if (!empty($merchant->website)): ?>
-          <p style="display: flex; align-items: center; margin-bottom: 0.75rem;">
-            <span style="margin-right: 1rem; width: 1.5rem; text-align: center;">
-              <i class="fas fa-globe" style="color: #F5A623;"></i>
-            </span>
-            <a href="<?php echo htmlspecialchars($merchant->website); ?>" target="_blank" rel="noopener noreferrer" style="color: #FFFDF9;">
-              <?php echo str_replace('https://www.', '', htmlspecialchars($merchant->website)); ?>
-            </a>
-          </p>
-        <?php endif; ?>
-
-        <!-- Store Hours -->
-        <?php if (!empty($merchant->store_hours)): ?>
-          <p style="display: flex; align-items: flex-start; margin-top: 1rem;">
-            <span style="margin-right: 1rem; width: 1.5rem; text-align: center; margin-top: 2px;">
-              <i class="fas fa-clock" style="color: #F5A623;"></i>
-            </span>
-            <span><?php echo nl2br(htmlspecialchars($merchant->store_hours)); ?></span>
-          </p>
-        <?php endif; ?>
-      </div>
-
-      <div class="col s12 m5 center-align" style="margin-top: 1.5rem;">
-        <img class="responsive-img circle z-depth-2" style="border: 5px solid #F5A623; max-width: 220px;" src="https://storage.googleapis.com/mediabrain-system-data/apps/neighborhub/merchants/7/12108230-232h.png" />
-      </div>
-    </div>
-  </div>
 </div>
 
 <!-- Modal Customization Builder Overlay -->

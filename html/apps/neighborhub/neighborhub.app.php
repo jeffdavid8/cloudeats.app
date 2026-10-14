@@ -126,8 +126,7 @@ function neighborhub_init(&$app)
     neighborhub_init_merchant($app);
   }
   $default_site_name = isset($app->config['site_name']) ? $app->config['site_name'] : 'CloudEats.app';
-  $title_city_state_location = ($merchant && isset($merchant->city) && isset($merchant->state)) ? $merchant->city . ', ' . $merchant->state : '';
-  $merchant_title = ($merchant && isset($merchant->business_name)) ? $merchant->business_name . ' | ' . $title_city_state_location : $default_site_name;
+  $merchant_title = ($merchant && isset($merchant->business_name)) ? $merchant->business_name . ' | ' . $merchant->address() : $default_site_name;
 
   $site_meta = array(
       'title' => $merchant_title,

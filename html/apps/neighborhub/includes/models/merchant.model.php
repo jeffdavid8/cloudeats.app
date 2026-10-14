@@ -118,6 +118,17 @@ class Merchant
         }
     }
 
+    public function address() {
+        $address = '';
+        if (isset($this->city)) {
+            $address .= $this->city;
+        }
+        if (isset($this->state)) {
+            $address .= ', ' . $this->state;
+        }
+        return (isset($this->city) && isset($this->state)) ? $this->city . ', ' . $this->state : $this->address;
+    }
+
     /**
      * Get merchant profile by ID
      * @param int $merchantId
