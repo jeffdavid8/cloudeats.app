@@ -691,11 +691,13 @@ function neighborhub_init_customer_context(&$app)
       }
     }
     $app->set('productCatalog', $productCatalog);
+
     $image = $merchant->image_url;
     $image_info = getimagesize($image);
     list($width, $height, $image_type, $attr) = $image_info;
     $meta = array(
       'title' => $merchant->business_name,
+      'description' => (isset($merchant->description)) ? $merchant->description : '',
       'keywords' => (isset($merchant->keywords)) ? $merchant->keywords : '',
       'type' => 'article',
       'og:type' => 'article',
@@ -717,6 +719,7 @@ function neighborhub_init_customer_context(&$app)
         'title' => htmlspecialchars($title, ENT_QUOTES, 'UTF-8'),
         //'title' => $product->name,
         'description' => $product->description,
+        'keywords' => (isset($merchant->keywords)) ? $merchant->keywords : '',
         'type' => 'article',
         'og:type' => 'article',
         'image' => $image,
@@ -785,6 +788,21 @@ function neighborhub_init_merchant_context(&$app, $merchantId = null)
     }
 
     $app->set('merchant', $merchant);
+
+    $image = $merchant->image_url;
+    $image_info = getimagesize($image);
+    list($width, $height, $image_type, $attr) = $image_info;
+    $meta = array(
+      'title' => $merchant->business_name,
+      'keywords' => (isset($merchant->keywords)) ? $merchant->keywords : '',
+      'type' => 'article',
+      'og:type' => 'article',
+      'image' => $image,
+      'image_width' => $width,
+      'image_height' => $height,
+      'image_type' => $image_info['mime'],
+    );
+    $app->set('meta', $meta);
 
     // Init POS
     if ($app->get('page') === 'pos') {
