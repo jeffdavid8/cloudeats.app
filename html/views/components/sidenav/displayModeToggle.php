@@ -2,7 +2,6 @@
 if (!defined('MB_RUNNING')) exit;
 /**
  * */ 
-logger($_COOKIE);
 ?>
 <a class="nightModeTrigger" style="display: flex;" href="javascript:void(0);" title="Toggle Night Mode">
     Display Mode
