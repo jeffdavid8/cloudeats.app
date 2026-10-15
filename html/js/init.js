@@ -89,11 +89,13 @@
           ? $(this)
           : $(this).find(".switch input");
 
-      $this.prop("checked", !$("body").hasClass("nightMode"));
+      $this.prop("checked", !$("html").hasClass("nightMode"));
       mb.toggleNightMode();
       return false;
     },
   );
+
+  $(".nightModeTrigger, .nightModeTrigger .switch input").prop('checked',  mb.storage.dayNightMode === 'nightMode');
 
   /*
    *  Primary Search Field
@@ -222,7 +224,7 @@
 
     mb.storage.dayNightMode = $("html").hasClass("nightMode") ? "nightMode" : "dayMode";
     storage_set();
-
+    $(".nightModeTrigger, .nightModeTrigger .switch input").prop('checked',  mb.storage.dayNightMode === 'nightMode');
     /*
     var package = {
       action: "toggle_night_mode",
