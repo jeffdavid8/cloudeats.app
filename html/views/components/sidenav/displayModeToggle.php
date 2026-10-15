@@ -9,7 +9,7 @@ logger($_COOKIE);
     <div class="switch right">
         <label>
             <i class="fa fa-sun"></i>
-            <input class="checkbox-blue filled-in" type="checkbox"  ?>>
+            <input class="checkbox-blue filled-in" type="checkbox"  ?>
             <span class="lever "></span>
             <i class="fa fa-moon"></i>
         </label>
