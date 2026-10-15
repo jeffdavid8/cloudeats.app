@@ -269,7 +269,7 @@ $(document).ready(function () {
     title.textContent = merchant.business_name || "Local store";
     const address = document.createElement("p");
     address.className = "ce-card-address";
-    address.textContent = merchant.address || "Your neighborhood";
+    address.textContent = merchant.full_address || merchant.address || "Your neighborhood";
     const details = document.createElement("div");
     details.className = "ce-card-details";
     const distance = document.createElement("span");

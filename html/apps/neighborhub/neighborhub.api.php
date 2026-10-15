@@ -1852,6 +1852,15 @@ function handle_search_merchants($request)
       $lng
     );
     $merchant['delivery_fee'] = $fee['fee'];
+    $full_address = $merchant['address'];
+    if (isset($merchant['city'])) {
+      $full_address .= ', ' . $merchant['city'];
+    }
+    if (isset($merchant['state'])) {
+      $full_address .= ', ' . $merchant['state'];
+    }
+
+    $merchant['full_address'] = $full_address;
   }
   unset($merchant);
 
