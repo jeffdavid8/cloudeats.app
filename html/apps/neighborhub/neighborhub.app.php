@@ -129,13 +129,13 @@ function neighborhub_init(&$app)
   $merchant_title = ($merchant && isset($merchant->business_name)) ? $merchant->business_name . ' | ' . $merchant->address() : $default_site_name;
 
   $site_meta = array(
-      'title' => $merchant_title,
-      'description' => ($merchant && isset($merchant->description)) ? $merchant->description : (($merchant) ? 'Discover the best local food delivery options.' : $app->config['site_description']),
-      'url' => $app->config['base_url'],
-      'type' => 'website',
-      'image' => config('base_url') . '/images/android-chrome-512x512.png',
-      'image_width' => '600',
-      'image_height' => '600',
+    'title' => $merchant_title,
+    'description' => ($merchant && isset($merchant->description)) ? $merchant->description : (($merchant) ? 'Discover the best local food delivery options.' : $app->config['site_description']),
+    'url' => $app->config['base_url'],
+    'type' => 'website',
+    'image' => config('base_url') . '/images/android-chrome-512x512.png',
+    'image_width' => '600',
+    'image_height' => '600',
   );
   $app->set('meta', $site_meta);
   $day_night_mode = (isset($_COOKIE['day_night_mode'])) ? $_COOKIE['day_night_mode'] : 'day';
@@ -695,8 +695,10 @@ function neighborhub_init_customer_context(&$app)
     $image = $merchant->image_url;
     $image_info = getimagesize($image);
     list($width, $height, $image_type, $attr) = $image_info;
+    $default_site_name = isset($app->config['site_name']) ? $app->config['site_name'] : 'CloudEats.app';
+    $merchant_title = ($merchant && isset($merchant->business_name)) ? $merchant->business_name . ' | ' . $merchant->address() : $default_site_name;
     $meta = array(
-      'title' => $merchant->business_name,
+      'title' => $merchant_title,
       'description' => (isset($merchant->description)) ? $merchant->description : '',
       'keywords' => (isset($merchant->keywords)) ? $merchant->keywords : '',
       'type' => 'article',
