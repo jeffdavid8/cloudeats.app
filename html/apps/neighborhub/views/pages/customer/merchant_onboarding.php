@@ -347,6 +347,7 @@ if (!defined('MB_RUNNING')) exit;
 
             submitBtn.textContent = 'Submitting Application...';
 
+            loading(4);
             mb.ajax({
               url: "?api=neighborhub&action=submit_merchant_application",
               method: "POST",
@@ -376,6 +377,9 @@ if (!defined('MB_RUNNING')) exit;
                   html: 'Failed to communicate with service pipeline.',
                   classes: 'red'
                 });
+              },
+              complete: function() {
+                loading(0);
               }
             });
           });
