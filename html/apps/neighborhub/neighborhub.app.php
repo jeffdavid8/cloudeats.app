@@ -740,7 +740,7 @@ function neighborhub_init_customer_context(&$app)
       'image_height' => $height,
     );
   }
-logger($meta);
+
   $app->set('meta', $meta);
 }
 
