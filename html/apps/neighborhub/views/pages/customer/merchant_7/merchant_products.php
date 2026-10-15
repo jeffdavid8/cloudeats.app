@@ -455,7 +455,7 @@ if ($spotlightProductId) {
           <?
           $map_link = "https://www.google.com/maps/search/?api=1&query=" . urlencode($merchant->address . ', ' . $merchant->city . ', ' . $merchant->state . ' ' . $merchant->zip_code);
           ?>
-          <span class="pk-text-main" style="word-break: break-word; font-weight: 600;"><?php echo htmlspecialchars($merchant->address . ', ' . $merchant->city . ', ' . $merchant->state . ' ' . $merchant->zip_code); ?> <a href="<?php echo $map_link; ?>" target="_blank" class="btn btn-small btn-outline waves-effect waves-light" style="margin-left: 10px;"><i class="fas fa-map-marked-alt"></i></a></span>
+          <span class="pk-text-main" style="word-break: break-word; font-weight: 600;"><a href="<?php echo $map_link; ?>" target="_blank" class="btn btn-small btn-outline waves-effect waves-light" style="margin-left: 10px;"><?php echo htmlspecialchars($merchant->address . ', ' . $merchant->city . ', ' . $merchant->state . ' ' . $merchant->zip_code); ?> </a></span>
         </p>
 
         <!-- Phone -->

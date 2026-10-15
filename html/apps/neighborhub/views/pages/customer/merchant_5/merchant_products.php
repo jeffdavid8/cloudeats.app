@@ -465,30 +465,36 @@ if ($spotlightProductId) {
           <div class="col s12 m6">
             <!-- Address -->
             <p style="display: flex; align-items: flex-start; margin-bottom: 1rem;">
-              <span class="sweets-icon" style="margin-right: 1rem; min-width: 1.25rem; text-align: center; font-size: 16px;">
-                <i class="fas fa-map-marker-alt"></i>
-              </span>
               <?
-              $map_link = "https://www.google.com/maps/search/?api=1&query=" . urlencode($merchant->address . ', ' . $merchant->city . ', ' . $merchant->state . ' ' . $merchant->zip_code); 
+              $map_link = "https://www.google.com/maps/search/?api=1&query=" . urlencode($merchant->address . ', ' . $merchant->city . ', ' . $merchant->state . ' ' . $merchant->zip_code);
               ?>
-              <span class="pk-text-main" style="word-break: break-word; font-weight: 600;"><?php echo htmlspecialchars($merchant->address . ', ' . $merchant->city . ', ' . $merchant->state . ' ' . $merchant->zip_code); ?> <a href="<?php echo $map_link; ?>" target="_blank" class="btn btn-small btn-outline waves-effect waves-light" style="margin-left: 10px;"><i class="fas fa-map-marked-alt"></i></a></span>
+              <a href="<?php echo $map_link; ?>" target="_blank" class="btn btn-small btn-outline waves-effect waves-light" style="margin-left: 10px;">
+                <span class="sweets-icon" style="margin-right: 1rem; min-width: 1.25rem; text-align: center; font-size: 16px;">
+                  <i class="fas fa-map-marker-alt"></i>
+                </span>
+                <span class="pk-text-main" style="word-break: break-word; font-weight: 600;">
+                  <?php echo htmlspecialchars($merchant->address . ', ' . $merchant->city . ', ' . $merchant->state . ' ' . $merchant->zip_code); ?>
+                </span>
+              </a>
             </p>
 
             <!-- Phone -->
             <p style="display: flex; align-items: flex-start; margin-bottom: 1rem;">
-              <span class="sweets-icon" style="margin-right: 1rem; min-width: 1.25rem; text-align: center; font-size: 16px;">
-                <i class="fas fa-phone"></i>
-              </span>
-              <span class="sweets-text-brown" style="font-weight: 600;"><?php echo htmlspecialchars($merchant->phone); ?></span>
+              <a href="tel: <?= $merchant->phone ?>" class="btn btn-small btn-outline waves-effect waves-light" style="margin-left: 10px;">
+                <span class="sweets-icon" style="margin-right: 1rem; min-width: 1.25rem; text-align: center; font-size: 16px;">
+                  <i class="fas fa-phone"></i>
+                </span>
+                <span class="sweets-text-brown" style="font-weight: 600;"><?php echo htmlspecialchars($merchant->phone); ?></span></a>
             </p>
 
             <!-- Website -->
             <?php if (!empty($merchant->website)): ?>
               <p style="display: flex; align-items: flex-start; margin-bottom: 1rem;">
-                <span class="sweets-icon" style="margin-right: 1rem; min-width: 1.25rem; text-align: center; font-size: 16px;">
-                  <i class="fas fa-globe"></i>
-                </span>
-                <a href="<?php echo htmlspecialchars($merchant->website); ?>" target="_blank" rel="noopener noreferrer" style="color: var(--brand-caramel); font-weight: 700;">
+                <a href="<?php echo htmlspecialchars($merchant->website); ?>" target="_blank" rel="noopener noreferrer" style="color: var(--brand-caramel); font-weight: 700; margin-left: 10px;" class="btn btn-small btn-outline waves-effect waves-light">
+                  <span class="sweets-icon" style="margin-right: 1rem; min-width: 1.25rem; text-align: center; font-size: 16px;">
+                    <i class="fas fa-globe"></i>
+                  </span>
+
                   Visit Website
                 </a>
               </p>

@@ -957,6 +957,20 @@ $(document).ready(function () {
     });
   });
 
+  $(".clipboard-link").each(function () {
+    var $this = $(this);
+    $this.css("position", "relative");
+    var textToCopy = $(this).data("clipboard-text");
+    var $copyButton = $(
+      '<button style="position: absolute; top: 10px; right: 10px;" class="btn-small btn-clipboard-link"><i class="material-icons">content_copy</i></button>',
+    );
+    $this.prepend($copyButton);
+    $copyButton.on("click", function () {
+      copyText(textToCopy);
+      //notify('Copied to clipboard: ' + textToCopy);
+    });
+  });
+
   // 1. Initialize the Sidenav first
   var slideOut = document.getElementById("slide-out");
   var instance = M.Sidenav.init(slideOut, {

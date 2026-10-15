@@ -481,6 +481,20 @@ if (!$this->user->is_admin) {
           style="min-height: 120px;"><?php echo htmlspecialchars($merchant->description); ?></textarea>
       </div>
 
+
+      <div class="nh-form-group input-field col s12">
+        <i class="fas fa-utensils prefix"></i>
+        <label for="keywords">Keywords</label>
+        <input
+          type="text"
+          id="keywords"
+          name="keywords"
+          placeholder="e.g., Food, Drinks, Hand Dipped Ice Cream, Sundaes"
+          value="<?php echo htmlspecialchars($merchant->keywords); ?>"
+           />
+      </div>
+
+
       <div class="nh-form-group input-field col s12">
         <i class="fas fa-map-marked-alt prefix"></i>
         <label for="address">Physical Storefront Address *</label>
@@ -698,20 +712,6 @@ if (!$this->user->is_admin) {
           placeholder=""
           value=""><?php echo htmlspecialchars($merchant->store_hours); ?></textarea>
       </div>
-
-<? //Pizza King, The Mason Jar, Food, Drinks, Hand Dipped Ice Cream, Sundaes ?>
-      <div class="nh-form-group input-field col s12">
-        <i class="fas fa-utensils prefix"></i>
-        <label for="menus">Menus</label>
-        <input
-          type="text"
-          id="menus"
-          name="menus"
-          placeholder="e.g., Food, Drinks, Hand Dipped Ice Cream, Sundaes"
-          value="<?php echo htmlspecialchars($merchant->menus); ?>"
-           />
-      </div>
-
 
       <div class="nh-form-group input-field col s12">
         <i class="fas fa-truck-loading prefix"></i>
@@ -1226,6 +1226,8 @@ if (!$this->user->is_admin) {
       // Get form values
       const merchantId = document.getElementById('merchant-id').value;
       const businessName = document.getElementById('business-name').value.trim();
+      const description = document.getElementById('description').value.trim();
+      const keywords = document.getElementById('keywords').value.trim();
       const address = document.getElementById('address').value.trim();
       const city = document.getElementById('city').value.trim();
       const state = document.getElementById('state').value.trim();
@@ -1239,7 +1241,6 @@ if (!$this->user->is_admin) {
       const platformFeeRate = document.getElementById('platform-fee-rate').value.trim();
       const platformFlatFee = document.getElementById('platform-flat-fee').value.trim();
       const storeHours = document.getElementById('store-hours').value.trim();
-      const menus = document.getElementById('menus').value.trim();
       const deliveryAssignmentMode = document.getElementById('delivery-assignment-mode').value.trim();
       const deliveryMaxDistance = document.getElementById('delivery-max-distance').value.trim();
       const stripeApiKey = document.getElementById('stripe-api-key').value.trim();
@@ -1279,6 +1280,7 @@ if (!$this->user->is_admin) {
           submissionPayload.append('merchant_id', merchantId);
           submissionPayload.append('business_name', businessName);
           submissionPayload.append('description', document.getElementById('description').value.trim());
+          submissionPayload.append('keywords', keywords);
           submissionPayload.append('address', address);
           submissionPayload.append('city', city);
           submissionPayload.append('state', state);
@@ -1295,7 +1297,6 @@ if (!$this->user->is_admin) {
           submissionPayload.append('platform_fee_rate', platformFeeRate);
           submissionPayload.append('platform_flat_fee', platformFlatFee);
           submissionPayload.append('store_hours', storeHours);
-          submissionPayload.append('menus', menus);
           submissionPayload.append('delivery_assignment_mode', deliveryAssignmentMode);
           submissionPayload.append('delivery_max_distance', deliveryMaxDistance);
           submissionPayload.append('status', status);

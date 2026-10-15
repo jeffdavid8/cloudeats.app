@@ -137,6 +137,7 @@ function neighborhub_init(&$app)
       'image_width' => '600',
       'image_height' => '600',
   );
+  $app->set('meta', $site_meta);
   $day_night_mode = (isset($_COOKIE['day_night_mode'])) ? $_COOKIE['day_night_mode'] : 'day';
   $app->set('day_night_mode', $day_night_mode);
   $app->set('night_mode_class', $day_night_mode . 'Mode');
@@ -220,7 +221,7 @@ function neighborhub_init(&$app)
       neighborhub_init_customer_context($app);
       break;
   }
-  $app->set('meta', $site_meta);
+
   $app->app_info['scripts'] = array_merge($app->app_info['scripts'], $scripts);
   $app->app_info['styles'] = array_merge($app->app_info['styles'], $styles);
 }
@@ -638,6 +639,7 @@ function neighborhub_init_customer_context(&$app)
     'title' => 'CloudEats.app',
     'type' => 'article',
     'description' => (isset($merchant->description)) ? $merchant->description : 'Discover the best local food delivery options.',
+    'keywords' => (isset($merchant->keywords)) ? $merchant->keywords : '',
     'og:type' => 'article',
     'image' => config('base_url') . '/images/android-chrome-512x512.png',
     'image_width' => '600',
@@ -689,12 +691,12 @@ function neighborhub_init_customer_context(&$app)
       }
     }
     $app->set('productCatalog', $productCatalog);
-
     $image = $merchant->image_url;
     $image_info = getimagesize($image);
     list($width, $height, $image_type, $attr) = $image_info;
     $meta = array(
       'title' => $merchant->business_name,
+      'keywords' => (isset($merchant->keywords)) ? $merchant->keywords : '',
       'type' => 'article',
       'og:type' => 'article',
       'image' => $image,
@@ -738,7 +740,7 @@ function neighborhub_init_customer_context(&$app)
       'image_height' => $height,
     );
   }
-
+logger($meta);
   $app->set('meta', $meta);
 }
 
@@ -1141,6 +1143,7 @@ function neighborhub_install_db()
       user_id INT NOT NULL,
       business_name VARCHAR(255) NOT NULL,
       description TEXT,
+      keywords TEXT,
       store_hours TEXT,
       address TEXT,
       city VARCHAR(100),
@@ -1156,7 +1159,6 @@ function neighborhub_install_db()
       facebook VARCHAR(255),
       google VARCHAR(255),
       image_url VARCHAR(2048),
-      menus TEXT,
       platform_flat_fee DECIMAL(10,2) NOT NULL DEFAULT 0.00,
       platform_fee_rate DECIMAL(10,2) NOT NULL DEFAULT 0.04,
       stripe_api_key TEXT,

@@ -572,7 +572,7 @@ header.header nav ul li button {
 .suggestions_container .collapsible-body,
 body .tts_player_menu_container nav {
   color: rgb(44, 44, 46);
-  background-color: rgba(236, 236, 236, 1) !important; /* front page header user dropdown background - removing this make the user menu background transparend so you can see the hero section through it */
+  background-color: rgb(253, 253, 253) !important; /* front page header user dropdown background - removing this make the user menu background transparend so you can see the hero section through it */
   backdrop-filter: blur(3px);
   border-bottom: 1px solid #fff;
   box-shadow: 0 19px 17px rgba(0, 0, 0, 0.25);

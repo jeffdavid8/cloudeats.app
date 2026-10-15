@@ -35,6 +35,7 @@ if (!empty($share_image_name)) {
 
   <meta name="title" content="<?= $meta['title']; ?>">
   <meta name="description" content="<?= $meta['description']; ?>">
+  <?= (isset($meta['keywords'])) ? '<meta name="keywords" content="'.$meta['keywords'].'">' : '' ?>
   <meta name="author" content="Mediabrain">
   <meta property="og:type" content="<?= $meta['type'] ? $meta['type'] : 'website'; ?>" />
   <meta property="og:title" content="<?= $meta['title']; ?>" />

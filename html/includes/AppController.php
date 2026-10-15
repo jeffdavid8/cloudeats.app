@@ -195,6 +195,8 @@ class AppController
         );
         //$site_meta = array_merge($site_meta, $app_meta);
         $app_meta = $this->app->get('meta', $site_meta);
+
+        
         $this->app->set('meta', $app_meta);
         // Render the complete page
         $this->app->render('components/head.php', array('meta' => $app_meta));

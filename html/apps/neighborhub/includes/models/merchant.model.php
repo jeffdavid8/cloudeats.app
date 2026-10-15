@@ -30,7 +30,7 @@ class Merchant
     public $platform_fee_rate;
     public $platform_flat_fee;
     public $store_hours;
-    public $menus;
+    public $keywords;
     public $delivery_assignment_mode;
     public $delivery_max_distance;
     public $stripe_api_key;
@@ -75,7 +75,7 @@ class Merchant
                 'platform_fee_rate' => $this->platform_fee_rate,
                 'platform_flat_fee' => $this->platform_flat_fee,
                 'store_hours' => $this->store_hours,
-                'menus' => $this->menus,
+                'keywords' => $this->keywords,
                 'delivery_assignment_mode' => $this->delivery_assignment_mode,
                 'delivery_max_distance' => $this->delivery_max_distance,
                 'stripe_api_key' => $this->stripe_api_key,
@@ -105,7 +105,7 @@ class Merchant
             $this->platform_fee_rate = $data['platform_fee_rate'] ?? null;
             $this->platform_flat_fee = $data['platform_flat_fee'] ?? null;
             $this->store_hours = $data['store_hours'] ?? null;
-            $this->menus = $data['menus'] ?? null;
+            $this->keywords = $data['keywords'] ?? null;
             $this->delivery_assignment_mode = $data['delivery_assignment_mode'] ?? null;
             $this->delivery_max_distance = $data['delivery_max_distance'] ?? null;
             $this->stripe_api_key = $data['stripe_api_key'] ?? null;
@@ -143,7 +143,7 @@ class Merchant
             $app->includeClass('assetmanager');
             $stmt = $db->prepare(
                 "SELECT 
-                    id, user_id, business_name, description, address, city, state, zip_code, latitude, longitude, phone, image_url, status, type, website, facebook, platform_fee_rate, platform_flat_fee, store_hours, menus, delivery_assignment_mode, delivery_max_distance, stripe_api_key, stripe_percent_fee, stripe_flat_fee, meta, created_at, updated_at
+                    id, user_id, business_name, description, address, city, state, zip_code, latitude, longitude, phone, image_url, status, type, website, facebook, platform_fee_rate, platform_flat_fee, store_hours, keywords, delivery_assignment_mode, delivery_max_distance, stripe_api_key, stripe_percent_fee, stripe_flat_fee, meta, created_at, updated_at
                 FROM neighborhub_merchants
                 WHERE id = ?"
             );
@@ -178,7 +178,7 @@ class Merchant
             $app->includeClass('assetmanager');
             $stmt = $db->prepare(
                 "SELECT 
-                    id, user_id, business_name, description, address, city, state, zip_code, latitude, longitude, phone, image_url, status, type, website, facebook, platform_fee_rate, platform_flat_fee, store_hours, menus, delivery_assignment_mode, delivery_max_distance, stripe_api_key, stripe_percent_fee, stripe_flat_fee, meta, created_at, updated_at
+                    id, user_id, business_name, description, address, city, state, zip_code, latitude, longitude, phone, image_url, status, type, website, facebook, platform_fee_rate, platform_flat_fee, store_hours, keywords, delivery_assignment_mode, delivery_max_distance, stripe_api_key, stripe_percent_fee, stripe_flat_fee, meta, created_at, updated_at
                 FROM neighborhub_merchants
                 WHERE user_id = ?
                 LIMIT 1"
@@ -345,7 +345,7 @@ class Merchant
             $platform_fee_rate = !empty($data['platform_fee_rate']) ? $data['platform_fee_rate'] : 0.04;
             $platform_flat_fee = !empty($data['platform_flat_fee']) ? $data['platform_flat_fee'] : 0.00;
             $store_hours = $data['store_hours'] ?? null;
-            $menus = $data['menus'] ?? null;
+            $keywords = $data['keywords'] ?? null;
             $delivery_assignment_mode = $data['delivery_assignment_mode'] ?? 'auto';
             $delivery_max_distance = $data['delivery_max_distance'] ?? 7.00;
             $stripeApiKey = $data['stripe_api_key'] ?? null;
@@ -362,7 +362,7 @@ class Merchant
 
             $sql = "INSERT INTO neighborhub_merchants
             (user_id, business_name, description, address, city, state, zip_code, latitude, longitude, location, phone, status, website, facebook, 
-             platform_fee_rate, platform_flat_fee, store_hours, menus, delivery_assignment_mode, 
+             platform_fee_rate, platform_flat_fee, store_hours, keywords, delivery_assignment_mode, 
              delivery_max_distance, stripe_api_key, stripe_percent_fee, stripe_flat_fee, type, meta, created_at, updated_at)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, {$locationSql}, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
 
@@ -383,7 +383,7 @@ class Merchant
                 $platform_fee_rate,
                 $platform_flat_fee,
                 $store_hours,
-                $menus,
+                $keywords,
                 $delivery_assignment_mode,
                 $delivery_max_distance,
                 $stripeApiKey,
@@ -525,9 +525,9 @@ class Merchant
                 $params[] = $data['store_hours'];
             }
 
-            if (isset($data['menus'])) {
-                $updates[] = "menus = ?";
-                $params[] = $data['menus'];
+            if (isset($data['keywords'])) {
+                $updates[] = "keywords = ?";
+                $params[] = $data['keywords'];
             }
 
             if (isset($data['delivery_assignment_mode'])) {
@@ -650,6 +650,7 @@ class Merchant
                     m.user_id,
                     m.business_name,
                     m.description,
+                    m.keywords,
                     m.address,
                     m.city,
                     m.state,
@@ -680,12 +681,13 @@ class Merchant
             if (!empty($query)) {
                 $sql .= " AND (m.business_name LIKE :q1 OR EXISTS (
                         SELECT 1 FROM neighborhub_products p 
-                        WHERE p.merchant_id = m.id AND (p.name LIKE :q2 OR p.tags LIKE :q3)
+                        WHERE p.merchant_id = m.id AND (p.name LIKE :q2 OR p.tags LIKE :q3 OR m.keywords LIKE :q4)
                     ))";
                 $searchTerm = '%' . trim($query) . '%';
                 $params['q1'] = $searchTerm;
                 $params['q2'] = $searchTerm;
                 $params['q3'] = $searchTerm;
+                $params['q4'] = $searchTerm;
             }
 
             $sql .= " HAVING distance_miles <= m.delivery_max_distance
