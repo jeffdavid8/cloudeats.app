@@ -52,7 +52,7 @@ $menu_items = [
         'url_conditions' => [
             'view' => 'merchant',
             'merchant_id' => $merchant->id,
-            'p' => 'dashboard'
+            'p' => 'merchant_management'
         ],
     ],
     [

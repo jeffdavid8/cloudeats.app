@@ -410,6 +410,30 @@ function handleKitchenHotkeys(e) {
     }
   }
 
+  // --- DENY / REJECT FOCUSED PENDING ORDER (Press Delete or Backspace) ---
+  if ((e.key === "Delete" || e.key === "Backspace") && !isLaneFs) {
+    if (activeFocusedElement && cards.includes(activeFocusedElement)) {
+      const isPending = activeFocusedElement.closest('[data-orders-section="pending"]');
+      if (isPending) {
+        e.preventDefault();
+        const orderId = activeFocusedElement.getAttribute("data-order-id");
+        
+        // Quick visual warning tint before denial
+        activeFocusedElement.style.transition = "all 100ms ease";
+        activeFocusedElement.style.borderColor = "#d32f2f";
+        activeFocusedElement.style.transform = "scale(0.95)";
+
+        // Prompt or directly trigger standard out-of-stock denial
+        if (confirm("Are you sure you want to deny and refund this order?")) {
+          denyOrder(orderId, "Hotkey Rejection");
+        } else {
+          resetCardVisuals(orderId);
+        }
+        return;
+      }
+    }
+  }
+
   // --- physical KB9000 BUMP command (Unified with activeFocusedElement) ---
   if (e.key === "Control") {
     e.preventDefault();
@@ -575,18 +599,19 @@ function toggleKdsFullscreen(container) {
   }
 }
 
-// KDS TICKING COUNTDOWN CLOCK ENGINE
+// Track already auto-timed-out orders to prevent looping requests
+const autoTimedOutOrders = new Set();
+
 function startKdsTimers() {
   setInterval(function() {
     const cards = document.querySelectorAll('.nh-order-card');
     const now = new Date();
 
     cards.forEach(card => {
-      // --- RESTORED AUTO-CREATE LOGIC ---
       let timerBadge = card.querySelector('.kds-timer-badge');
       if (!timerBadge) {
         timerBadge = document.createElement('span');
-        timerBadge.className = 'kds-timer-badge right'; // added 'right' to align nicely
+        timerBadge.className = 'kds-timer-badge right';
         timerBadge.style.cssText = 'font-weight: bold; font-size: 1.25rem; padding: 0.25rem 0.5rem; border-radius: 4px; margin-right: 8px;';
         
         const header = card.querySelector('.nh-card-header') || card.querySelector('div');
@@ -606,6 +631,16 @@ function startKdsTimers() {
       const mins = Math.floor(totalSecs / 60);
       const secs = totalSecs % 60;
       timerBadge.textContent = mins + ":" + (secs < 10 ? "0" : "") + secs;
+
+      const orderId = card.getAttribute('data-order-id');
+      const isPending = card.closest('[data-orders-section="pending"]');
+
+      // 🚨 AUTOMATIC TIMEOUT FAIL-SAFE (e.g., 5-minute unconfirmed threshold)
+      if (isPending && mins >= 5 && !autoTimedOutOrders.has(orderId)) {
+        autoTimedOutOrders.add(orderId);
+        console.warn(`[KDS Timeout] Order #${orderId} unconfirmed for 5+ minutes. Auto-cancelling.`);
+        denyOrder(orderId, 'Auto-cancelled: Unconfirmed timeout threshold exceeded');
+      }
 
       // Color code thresholds
       if (mins >= 20) {

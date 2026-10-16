@@ -71,7 +71,7 @@ $isShopOnline = ($rawStatus === 'active' || $rawStatus === 'online' || $rawStatu
         $menuId = intval($menu['id'] ?? $menu['menu_id'] ?? 0);
         $menuName = htmlspecialchars($menu['menu_name']);
         $categories = $menu['categories'] ?? [];
-        
+
         // Determine parent menu active status (1/0 or active/inactive)
         $isMenuRawStatus = $menu['status'] ?? $menu['is_active'] ?? 1;
         $isMenuActive = ($isMenuRawStatus === 1 || $isMenuRawStatus === '1' || strtolower((string)$isMenuRawStatus) === 'active');
@@ -84,10 +84,10 @@ $isShopOnline = ($rawStatus === 'active' || $rawStatus === 'online' || $rawStatu
             </strong>
             <div class="switch">
               <label style="font-weight: 600; color: #37474f;">
-                <input type="checkbox" 
-                       class="toggle-menu-status" 
-                       data-menu-id="<?= $menuId ?>" 
-                       <?= $isMenuActive ? 'checked' : '' ?>>
+                <input type="checkbox"
+                  class="toggle-menu-status"
+                  data-menu-id="<?= $menuId ?>"
+                  <?= $isMenuActive ? 'checked' : '' ?>>
                 <span class="lever" style="margin: 0 8px;"></span>
               </label>
             </div>
@@ -113,11 +113,11 @@ $isShopOnline = ($rawStatus === 'active' || $rawStatus === 'online' || $rawStatu
                   </span>
                   <div class="switch">
                     <label>
-                      <input type="checkbox" 
-                             class="toggle-category-status" 
-                             data-category-id="<?= $categoryId ?>" 
-                             <?= ($isCategoryActive && $isMenuActive) ? 'checked' : '' ?>
-                             <?= !$isMenuActive ? 'disabled' : '' ?>>
+                      <input type="checkbox"
+                        class="toggle-category-status"
+                        data-category-id="<?= $categoryId ?>"
+                        <?= ($isCategoryActive && $isMenuActive) ? 'checked' : '' ?>
+                        <?= !$isMenuActive ? 'disabled' : '' ?>>
                       <span class="lever" style="margin: 0;"></span>
                     </label>
                   </div>
@@ -176,7 +176,7 @@ $isShopOnline = ($rawStatus === 'active' || $rawStatus === 'online' || $rawStatu
           <button
             class="btn-floating btn-large waves-effect waves-light" id="toggle-sidenav-right-btn"
             data-target="sidenav-right"
-            style="background: #e65100;">
+            style="background: #e65100; border-radius: 50%;">
             <i class="material-icons">access_time</i>
           </button>
 
@@ -404,6 +404,52 @@ $isShopOnline = ($rawStatus === 'active' || $rawStatus === 'online' || $rawStatu
         }
       },
       error: function() {
+        resetCardVisuals(orderId);
+      }
+    });
+  }
+
+  // Instant execution denial/cancellation handler
+  function denyOrder(orderId, reason = 'Kitchen busy / Out of stock') {
+    // Track state for undo before clearing
+    trackOrderForUndo(orderId, 'PENDING_CONFIRMATION');
+
+    mb.ajax({
+      type: 'POST',
+      url: '/?api=neighborhub&action=deny_order', // Ensure your backend handles this route
+      data: JSON.stringify({
+        order_id: orderId,
+        merchant_id: <?php echo intval($merchantId); ?>,
+        cancellation_reason: reason
+      }),
+      success: function(response) {
+        if (response.success) {
+          M.toast({
+            html: 'Order denied & refunded. Press Z to undo.',
+            displayLength: 3000
+          });
+
+          // Smoothly fade out and remove the card from the pending queue
+          const card = document.querySelector(`[data-order-id="${orderId}"]`);
+          if (card) {
+            card.style.transition = 'all 300ms ease';
+            card.style.opacity = '0';
+            card.style.transform = 'scale(0.8)';
+            setTimeout(() => card.remove(), 300);
+          }
+        } else {
+          M.toast({
+            html: 'Error denying order',
+            classes: 'red'
+          });
+          resetCardVisuals(orderId);
+        }
+      },
+      error: function() {
+        M.toast({
+          html: 'Network connection error.',
+          classes: 'red'
+        });
         resetCardVisuals(orderId);
       }
     });

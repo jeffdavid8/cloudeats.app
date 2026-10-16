@@ -232,6 +232,10 @@ try {
       handle_confirm_order($request);
       break;
 
+    case 'deny_order':
+      handle_deny_order($request);
+      break;
+
     case 'admin_save_courier':
       handle_admin_save_courier($request);
       break;
@@ -2265,6 +2269,96 @@ function handle_confirm_order($request)
     'success' => true,
     'order_id' => $orderId,
     'message' => 'Order confirmed successfully'
+  )));
+}
+
+function handle_deny_order($request)
+{
+  $app = App::getInstance();
+  $app->includeModel('merchant');
+  $app->includeModel('order');
+
+  $orderId = isset($request['order_id']) ? intval($request['order_id']) : null;
+  $merchantId = isset($request['merchant_id']) ? intval($request['merchant_id']) : null;
+  $cancellationReason = isset($request['cancellation_reason']) ? trim($request['cancellation_reason']) : 'Denied by merchant';
+
+  $merchant = Merchant::getMerchantById($merchantId);
+
+  if (!$orderId || !$merchantId) {
+    http_response_code(400);
+    exit(json_encode(array(
+      'success' => false,
+      'error' => 'order_id and merchant_id parameters are required'
+    )));
+  }
+
+  $staffRecord = validateMerchantStaff($_SESSION['user']['id'], $merchantId);
+  if ((!$staffRecord) && (!$app->user->is_admin)) {
+    http_response_code(403);
+    exit(json_encode(array(
+      'success' => false,
+      'error' => 'Unauthorized: No active staff record for this merchant'
+    )));
+  }
+
+  $order = Order::getOrderById($orderId);
+  if (!$order) {
+    http_response_code(404);
+    exit(json_encode(array(
+      'success' => false,
+      'error' => 'Order not found'
+    )));
+  }
+
+  if ($order['merchant_id'] !== $merchantId) {
+    http_response_code(403);
+    exit(json_encode(array(
+      'success' => false,
+      'error' => 'Order does not belong to this merchant'
+    )));
+  }
+
+  // --- STRIPE PAYMENT CLEANUP (Cancel Authorization or Refund) ---
+  if (!empty($order['stripe_payment_intent_id']) && $order['stripe_payment_intent_id'] !== '{}') {
+    try {
+      $stripe_key = getenv('STRIPE_SECRET_KEY');
+      \Stripe\Stripe::setApiKey($stripe_key);
+
+      $intent = \Stripe\PaymentIntent::retrieve($order['stripe_payment_intent_id']);
+
+      if ($intent->status === 'requires_capture') {
+        $intent->cancel();
+      } elseif ($intent->status === 'succeeded') {
+        \Stripe\Refund::create([
+          'payment_intent' => $order['stripe_payment_intent_id']
+        ]);
+      }
+    } catch (\Exception $e) {
+      error_log("Stripe Cancellation/Refund Failed for Order {$orderId}: " . $e->getMessage());
+      http_response_code(500);
+      exit(json_encode(array(
+        'success' => false,
+        'error' => 'Payment release failed: ' . $e->getMessage()
+      )));
+    }
+  }
+
+  // Update order status in database
+  $result = Order::denyOrder($orderId, $cancellationReason);
+
+  if (!$result) {
+    http_response_code(500);
+    exit(json_encode(array(
+      'success' => false,
+      'error' => 'Failed to deny order'
+    )));
+  }
+
+  http_response_code(200);
+  exit(json_encode(array(
+    'success' => true,
+    'order_id' => $orderId,
+    'message' => 'Order denied successfully and funds released'
   )));
 }
 

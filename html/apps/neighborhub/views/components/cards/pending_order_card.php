@@ -67,9 +67,14 @@ if (!defined('MB_RUNNING')) exit;
   </div>
 
   <div class="nh-card-footer">
-    <button type="button" class="nh-btn nh-btn-secondary" onclick="confirmOrder(<?php echo intval($order['id']); ?>)" style="flex: 1;">
-      Confirm Order
-    </button>
+    <div class="card-action" style="display: flex; gap: 8px; justify-content: space-between;">
+      <button class="btn waves-effect waves-light green" onclick="confirmOrder('<?= $order['id'] ?>')">
+        <i class="fas fa-check left"></i> Confirm
+      </button>
+      <button class="btn waves-effect waves-light red lighten-1" onclick="denyOrder('<?= $order['id'] ?>')">
+        <i class="fas fa-times left"></i> Deny
+      </button>
+    </div>
   </div>
 
 </div>

@@ -327,6 +327,41 @@ class Order
             return false;
         }
     }
+    
+    /**
+     * Deny/reject a pending order from the merchant dashboard
+     * 
+     * @param int $orderId
+     * @param string $reason
+     * @return bool True on success, false on failure
+     */
+    public static function denyOrder($orderId, $reason = 'Denied by merchant')
+    {
+        try {
+            $db = App::getInstance()->db;
+
+            // Only allow denial if the order is still pending confirmation
+            $stmt = $db->prepare(
+                "UPDATE neighborhub_orders 
+                SET state = 'CANCELLED', 
+                    cancelled_at = NOW(),
+                    updated_at = NOW(),
+                    order_notes = CONCAT(COALESCE(order_notes, ''), ' [Denied: ', ?, ']')
+                WHERE id = ? AND state = 'PENDING_CONFIRMATION'"
+            );
+            $stmt->execute([$reason, $orderId]);
+
+            if ($stmt->rowCount() > 0) {
+                return true;
+            }
+
+            error_log("Order denial failed or order no longer pending: " . $orderId);
+            return false;
+        } catch (Exception $e) {
+            error_log("Failed to deny order: " . $e->getMessage());
+            return false;
+        }
+    }
 
     public static function revertOrderStatus($orderId, $targetState)
     {
