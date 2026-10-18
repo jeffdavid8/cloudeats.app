@@ -107,6 +107,11 @@ if ($spotlightProductId) {
     background-color: #473823 !important;
   }
 
+  .dayMode .brand-extension,
+  .dayMode .brand-cloud {
+    color: #efefef;
+  }
+
   body.scrolled header.header nav {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   }
