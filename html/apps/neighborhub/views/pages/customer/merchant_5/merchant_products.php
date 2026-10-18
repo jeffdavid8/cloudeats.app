@@ -104,7 +104,7 @@ if ($spotlightProductId) {
   }
 
   .dayMode .header nav {
-    background-color: #D6C9C6 !important;
+    background-color: #473823 !important;
   }
 
   body.scrolled header.header nav {
@@ -227,6 +227,10 @@ if ($spotlightProductId) {
     color: #FFDF30;
     margin-bottom: 0.75rem;
     padding-left: 0.75rem;
+  }
+
+  .dayMode .secondary-category-menu .menu-title {
+    color: #ff7c30;
   }
 
   /* Category List & Links */
@@ -402,7 +406,7 @@ if ($spotlightProductId) {
   }
 
   #nh-custom-builder-modal .modal-content {
-    box-shadow: none;
+    box-shadow: 0 0 40px rgba(228, 116, 72, 0.5), 0 0 80px rgba(0, 119, 182, 0.3);
   }
 
   .modal button {
@@ -673,13 +677,15 @@ if ($spotlightProductId) {
       <div class="right">
         <div class="top-right-dropdown-wrapper">
           <a class="dropdown-trigger btn-floating btn-large waves-effect waves-light" href="#" data-target="top-right-menu">
-            <i class="fas fa-ellipsis-v"></i>
+            <i class="fas fa-utensils"></i>
           </a>
 
-          <!-- Dropdown Structure -->
+          <!-- Dropdown Categories -->
           <ul id="top-right-menu" class="dropdown-content">
-            <?php foreach ($groupedProducts as $category => $products): ?>
-              <li><a class="category-menu-item" data-category-anchor="<?= strtolower($category) ?>" href="#!"> <?= $category ?> </a></li>
+            <?php foreach ($menus[$activeMenuId]['categories'] as $category):
+              $cleanId = preg_replace('/\s+/', '-', preg_replace('/[^a-z0-9\s-]/', '', str_replace('&', 'and', strtolower($category['name']))));
+            ?>
+              <li><a class="category-menu-item" data-category-anchor="<?= $cleanId ?>" href="#!"><?= htmlspecialchars($category['name']) ?></a></li>
             <?php endforeach; ?>
           </ul>
         </div>

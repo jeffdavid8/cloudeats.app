@@ -2207,10 +2207,10 @@ function handle_confirm_order($request)
   }
 
   // --- NEW: CAPTURE STRIPE AUTHORIZATION ---
-  if (!empty($order['stripe_payment_intent_id'])) {
+  if (!empty($order['stripe_payment_intent_id']) && $order['stripe_payment_intent_id'] !== '{}') {
     try {
       // Ensure API key is configured
-      $stripe_key = getenv('STRIPE_SECRET_KEY'); // or your key getter
+      $stripe_key = getenv('STRIPE_SECRET_KEY');
       \Stripe\Stripe::setApiKey($stripe_key);
 
       $intent = \Stripe\PaymentIntent::retrieve($order['stripe_payment_intent_id']);
@@ -2225,23 +2225,20 @@ function handle_confirm_order($request)
           // 📊 TRUSTED FINANCIAL SPLIT MANAGEMENT ENGINE
           // ============================================================================
 
-          // 🌟 FIX 1: Do not rely on the loop ($item['price_at_order'] is missing from decompression).
-          // Pull the catalog-verified item total straight from your secure session matrix.
           $merchantSubtotal = floatval($order['subtotal_amount']);
 
-          // 🌟 FIX 2: Calculate your 4% software app usage platform cut
+          // Calculate platform app fee cut
           $merchantAppFeePercent = $merchant->platform_fee_rate;
           $appFeeCutFromMerchant = round($merchantSubtotal * $merchantAppFeePercent, 2);
 
-          // Subtract your cut to find exactly what the merchant takes home
+          // Subtract cut to find final merchant payout
           $finalMerchantPayout = $merchantSubtotal - $appFeeCutFromMerchant;
 
-
-          // Add ALL funds from the Stripe transaction card swipe into the platform's central pool account (User ID: 1)
+          // Add ALL funds from the Stripe transaction into the platform's central pool account (User ID: 1)
           Vault::addFundsToUser(1, $order['total_amount'], "Customer Payment Deposit for Order #{$order['id']}");
 
-          // Transfer the merchant's final home-take share (Subtotal minus 4% fee) to their linked user wallet account
-          Vault::transfer(1, $merchant->user_id, $finalMerchantPayout, "Merchant Net Share Distribution for Order #{$order['id']} (4% App Fee Deducted)");
+          // Transfer merchant's final home-take share to their linked user wallet account
+          Vault::transfer(1, $merchant->user_id, $finalMerchantPayout, "Merchant Net Share Distribution for Order #{$order['id']} (App Fee Deducted)");
         }
       }
     } catch (\Exception $e) {

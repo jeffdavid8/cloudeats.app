@@ -216,6 +216,10 @@ if ($spotlightProductId && isset($menus[$activeMenuId]['categories'])) {
     border: none;
   }
 
+  body.scrolled .merchant-header-image .online-status-dot {
+    right: 4px;
+  }
+
   /* Card Styling */
   .merchant-info-card {
     border-top: 4px solid var(--brand-gold);
@@ -571,7 +575,7 @@ if ($spotlightProductId && isset($menus[$activeMenuId]['categories'])) {
                 <i class="fas fa-map-marker-alt"></i>
               </span>
               <?
-              $map_link = "https://www.google.com/maps/search/?api=1&query=" . urlencode($merchant->address . ', ' . $merchant->city . ', ' . $merchant->state . ' ' . $merchant->zip_code); 
+              $map_link = "https://www.google.com/maps/search/?api=1&query=" . urlencode($merchant->address . ', ' . $merchant->city . ', ' . $merchant->state . ' ' . $merchant->zip_code);
               ?>
               <span class="pk-text-main" style="word-break: break-word; font-weight: 600;"><?php echo htmlspecialchars($merchant->address . ', ' . $merchant->city . ', ' . $merchant->state . ' ' . $merchant->zip_code); ?> <a href="<?php echo $map_link; ?>" target="_blank" class="btn btn-small btn-outline waves-effect waves-light" style="margin-left: 10px;"><i class="fas fa-map-marked-alt"></i></a></span>
             </p>

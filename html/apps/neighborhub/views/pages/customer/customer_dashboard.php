@@ -10,6 +10,20 @@ $customerId = $customer->id ?? 0;
 $userName = isset($_SESSION['user']['username']) ? htmlspecialchars($_SESSION['user']['username']) : 'Customer';
 $customerOrders = $this->get('customer_orders', array());
 
+if (!isset($_SESSION[get_var('session_key')]) && get_var('action', false) == 'checkout_success') {
+  $pendingOrder = $_SESSION[get_var('session_key')];
+  $merchant_id = $pendingOrder['merchant_id'];
+  unset($_SESSION[get_var('session_key')]);
+?>
+  <script>
+    $(document).ready(function() {
+      NHCart.activeMerchantId = <?= ($merchant_id) ? $merchant_id : 'null' ?>;
+      NHCart.clear();
+    });
+  </script>
+<?
+}
+
 // Display session notifications
 $notification = isset($_SESSION['notification']) ? $_SESSION['notification'] : null;
 if ($notification) {
@@ -437,8 +451,201 @@ if ($notification) {
     document.getElementById('order-detail-content').innerHTML = html;
   }
 
+
+  function showContactMerchantAndCancel(orderId) {
+    const cancelationContainer = document.getElementById('order-cancelation-container');
+    const choiceDiv = cancelationContainer.querySelector('.cancellation-choice');
+
+    if (choiceDiv) {
+      choiceDiv.style.display = 'flex';
+    }
+
+  }
+
+  function cancelCustomerOrder(orderId) {
+    if (!confirm('Are you sure you want to cancel this order? Since it has not been accepted by the merchant yet, your payment authorization will be released.')) {
+      return;
+    }
+
+    document.getElementById('order-cancelation-container').innerHTML = `
+      <div class="" style="margin-top: 15px; width: 100%; display: flex; justify-content: center; align-items: center;">
+        <div class="quantum-spinner" style="height: 75px; margin: 0 auto;"></div>
+      </div>
+      <div class="center-align gold-text" style="margin-bottom: 15px;">
+          [ Processing cancellation... ]
+      </div>`;
+
+    mb.ajax({
+      type: 'POST',
+      url: '/?api=neighborhub&action=cancel_order',
+      data: JSON.stringify({
+        order_id: orderId
+      }),
+      contentType: 'application/json',
+      dataType: 'json',
+      success: function(response) {
+        if (response.success) {
+          notify('Your order has been canceled and your payment authorization was released.', 'success');
+          closeOrderDetail();
+
+          // Immediately fetch fresh orders and re-render card grid
+          pollOrderUpdates();
+        } else {
+          alert('Unable to cancel order: ' + (response.error || 'Merchant may have already accepted it.'));
+        }
+      },
+      error: function(xhr, status, error) {
+        console.error('Cancellation error:', error);
+        alert('Error processing cancellation request.');
+      }
+    });
+  }
+
+  /**
+   * Direct UI updates applied via incoming WebRTC data channel events
+   */
+  function updateLocalLedgerRow(orderId, status) {
+    // Find the row inside your existing orders-table
+    const tableRow = document.querySelector(`#orders-list tr onclick*="viewOrderDetail(${orderId})"`) ||
+      document.querySelector(`[data-order-id="${orderId}"]`);
+
+    if (tableRow) {
+      const badge = tableRow.querySelector('.nh-badge');
+      if (badge) {
+        badge.className = `nh-badge badge-${status.toLowerCase()}`;
+        badge.textContent = status.replace('_', ' ');
+      }
+      if (typeof mp3 === 'function') mp3('computerbeep_44');
+    }
+  }
+
+  /**
+   * Close order detail modal
+   */
   function closeOrderDetail() {
     document.getElementById('order-detail-modal').style.display = 'none';
+  }
+
+  /**
+   * Poll for order updates and refresh card grid cleanly without losing page position
+   */
+  function pollOrderUpdates() {
+    let customerId = <?= $customerId ?>;
+
+    mb.ajax({
+      type: 'GET',
+      url: '/?api=neighborhub',
+      data: {
+        action: 'list_customer_orders',
+        customer_id: customerId,
+      },
+      dataType: 'json',
+      success: function(response) {
+        if (response.success && response.orders) {
+          // 1. Remember the page the user is currently viewing
+          var savedPage = currentPage;
+
+          // 2. Update the master array
+          allOrders = response.orders;
+
+          // 3. Re-run filters (which normally resets currentPage = 1 inside filterOrders)
+          var searchTerm = document.getElementById('order-search').value.toLowerCase().trim();
+          var statusTerm = document.getElementById('status-filter').value;
+
+          filteredOrders = allOrders.filter(function(order) {
+            var matchesSearch = (order.business_name || '').toLowerCase().includes(searchTerm) ||
+              (order.order_number || '').toLowerCase().includes(searchTerm);
+
+            var isPending = ['PENDING', 'PENDING_CONFIRMATION', 'PREPARING', 'IN_TRANSIT'].includes(order.state);
+            var matchesStatus = true;
+
+            if (statusTerm === 'ACTIVE') matchesStatus = isPending;
+            else if (statusTerm === 'DELIVERED') matchesStatus = (order.state === 'DELIVERED');
+            else if (statusTerm === 'CANCELLED') matchesStatus = (order.state === 'CANCELLED');
+
+            return matchesSearch && matchesStatus;
+          });
+
+          // 4. Restore the user's page (making sure it doesn't exceed total pages if orders were removed)
+          var totalPages = Math.ceil(filteredOrders.length / itemsPerPage) || 1;
+          currentPage = Math.min(savedPage, totalPages);
+
+          // 5. Render without resetting the page
+          renderOrders();
+        }
+      },
+      error: function(xhr, status, error) {
+        console.error('Polling error:', error);
+      }
+    });
+  }
+
+  // Start polling interval timer on load
+  function startCustomerPolling() {
+    if (pollingInterval) {
+      clearInterval(pollingInterval);
+    }
+    pollingInterval = setInterval(pollOrderUpdates, 8000);
+  }
+
+  /**
+   * Update orders table with latest data
+   */
+  function updateOrdersTable(orders) {
+    var ordersList = document.getElementById('orders-list');
+    if (!ordersList) return;
+
+    var newHtml = '';
+
+    if (orders.length === 0) {
+      newHtml = '<tr><td colspan="6" style="text-align: center; color: var(--gray-500);">No orders</td></tr>';
+    } else {
+      orders.forEach(function(order) {
+        var statusBadgeClass = 'badge-' + order.state.toLowerCase();
+        // 1. Create the date object
+        const dateObj = new Date(order.created_at);
+        // 2. Format the date part (Jul 22, 2026)
+        const dateStr = dateObj.toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric',
+          // timeZone: 'America/New_York' // <-- Optional: Explicitly force your server/business timezone if needed
+        });
+        // 3. Format the time part (10:20 PM)
+        const timeStr = dateObj.toLocaleTimeString('en-US', {
+          hour: 'numeric',
+          minute: '2-digit',
+          hour12: true,
+          // timeZone: 'America/New_York' // <-- Match the timezone chosen above
+        });
+        newHtml += `
+                <tr>
+                    <td>
+                        <span style="font-family: monospace; font-size: 0.875rem; color: var(--gray-500);">
+                            <a href="javascript: void(0);" onclick="viewOrderDetail(${order.id})">${escapeHtml(order.order_number)}</a>
+                        </span>
+                    </td>
+                    <td>${order.business_name}</td>
+                    <td>$${parseFloat(order.total_amount).toFixed(2)}</td>
+                    <td>
+                        <span class="nh-badge ${statusBadgeClass}">
+                            ${escapeHtml(order.state.replace(/_/g, ' '))}
+                        </span>
+                    </td>
+                    <td>${dateStr} ${timeStr}</td>
+                    <td>
+                        <button type="button" class="nh-btn nh-btn-sm" onclick="viewOrderDetail(${order.id})">
+                            View
+                        </button>
+                    </td>
+                </tr>
+            `;
+      });
+
+      $(ordersList).show();
+    }
+
+    ordersList.innerHTML = newHtml;
   }
 
   function escapeHtml(text) {
@@ -458,5 +665,17 @@ if ($notification) {
 
   document.addEventListener('DOMContentLoaded', function() {
     filterOrders();
+    startCustomerPolling();
+    //window.neighborhubPoller = new NeighborhubPoller('customer', <?php echo intval($customerId); ?>);
   });
+
+  /**
+   * Clean up polling when page unloads
+   */
+  window.addEventListener('unload', function() {
+    if (pollingInterval) {
+      clearInterval(pollingInterval);
+    }
+  });
+
 </script>

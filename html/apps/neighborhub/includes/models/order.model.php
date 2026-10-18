@@ -684,20 +684,22 @@ class Order
 
             $stmt = $db->prepare(
                 "SELECT 
-                    id,
-                    order_number,
-                    customer_id,
-                    merchant_id,
-                    total_amount,
-                    state,
-                    pickup_address,
-                    order_notes,
-                    order_phone,
-                    delivery_address,
-                    created_at
-                FROM neighborhub_orders 
-                WHERE state = 'READY_FOR_PICKUP' AND locked_by_courier_id IS NULL
-                ORDER BY created_at ASC
+                    o.id,
+                    o.order_number,
+                    o.customer_id,
+                    o.merchant_id,
+                    m.business_name,
+                    o.total_amount,
+                    o.state,
+                    o.pickup_address,
+                    o.order_notes,
+                    o.order_phone,
+                    o.delivery_address,
+                    o.created_at
+                FROM neighborhub_orders o
+                INNER JOIN neighborhub_merchants m ON o.merchant_id = m.id
+                WHERE o.state = 'READY_FOR_PICKUP' AND locked_by_courier_id IS NULL
+                ORDER BY o.created_at ASC
                 LIMIT ? OFFSET ?"
             );
             $stmt->execute([$limit, $offset]);

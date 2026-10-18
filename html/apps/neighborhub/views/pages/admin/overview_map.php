@@ -1,8 +1,13 @@
 <?php
 if (!defined('MB_RUNNING')) exit;
 ?>
-
-<div id="hub-admin-map" style="height: 650px; width: 100%; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></div>
+<style>
+  
+  #hub-admin-map {
+    height: 80vh;
+  }
+</style>
+<div id="hub-admin-map" style="width: 100%; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></div>
 
 <script>
   class LiveHubTracker {

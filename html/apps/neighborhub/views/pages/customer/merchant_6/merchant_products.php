@@ -63,7 +63,7 @@ if ($spotlightProductId) {
   .nightMode body {
     --brand-bg: #1C110E;
     /* Dark Cocoa Roast background */
-    --brand-card-bg: #2E1C16;
+    --brand-card-bg: #201713;
     /* Espresso Card */
     --brand-text-main: #F5EBE6;
     /* Soft Meringue text */
@@ -617,7 +617,7 @@ if ($spotlightProductId) {
       <div id="builder-widget-mount-viewport"></div>
     </div>
 
-    <div class="row" style="width:100%; margin: 0; padding: 0 24px 15px; background-color: var(--brand-card-bg);">
+    <div class="row" style="width:100%; margin: 0; padding: 0 24px 15px; background-color: #130d0b;">
       <div class="input-field col s12" style="margin-top: 10px; margin-bottom: 0;">
         <i class="fas fa-edit prefix pk-icon" style="top: 0.8rem; font-size: 1.2rem;"></i>
         <textarea id="builder-customer-notes"

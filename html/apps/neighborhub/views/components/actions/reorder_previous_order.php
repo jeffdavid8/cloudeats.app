@@ -6,6 +6,7 @@ if (!defined('MB_RUNNING')) exit;
  */
 $reorderItems = $this->get('reorder_items', null);
 $merchant = $this->get('merchant', null);
+logger($reorderItems);
 ?>
 
 <script>
@@ -25,10 +26,10 @@ $merchant = $this->get('merchant', null);
         reorderItems.forEach(function(item) {
           // Parse customizations JSON if present
           var customizations = null;
-          if (item.customizations) {
-            customizations = typeof item.customizations === 'string' ?
-              JSON.parse(item.customizations) :
-              item.customizations;
+          if (item.meta) {
+            customizations = typeof item.meta === 'string' ?
+              JSON.parse(item.meta) :
+              item.meta;
           }
 
           // Build product payload expected by ShoppingCart.addItem()

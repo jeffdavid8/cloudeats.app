@@ -93,10 +93,10 @@ body.scrolled header.header nav {
 }
 body.scrolled .merchant-header-image .online-status-dot {
   /* top: 60px; */
-  bottom: 3px;
+  bottom: 18px;
   right: 0px;
-  width: 20px;
-  height: 20px;
+  width: 15px;
+  height: 15px;
   outline-width: 3px;
 }
 
@@ -120,7 +120,11 @@ body.scrolled .merchant-header-image .online-status-dot {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
   transition: all 0.4s;
 }
-
+body.scrolled .merchant-header-image {
+  top: -5px;
+  width: 70px;
+  right: calc(50% - 35px);
+}
 body.scrolled .merchant-header-image {
 }
 

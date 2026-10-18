@@ -50,9 +50,8 @@ $activeDelivery = $hasActiveDelivery ? $activeDeliveries[0] : null;
         <div class="nh-container">
             <div class="nh-role-header-content">
                 <div>
-                    <h1 style="margin: 0; font-size: 1.875rem;">Neighborhub</h1>
                     <p style="margin: 0; color: var(--gray-500); font-size: 0.875rem;">
-                        Delivery Courier Dashboard
+                        Delivery Dashboard
                     </p>
                 </div>
                 <div style="display: flex; gap: 1rem; align-items: center;">

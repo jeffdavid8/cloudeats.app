@@ -236,14 +236,8 @@ class NeighborhubPoller {
 
       const modal = document.getElementById("new-order-alert-modal");
       if (modal) modal.style.display = "block";
-
-      if (typeof playPersistentKitchenAlert === "function") {
-        playPersistentKitchenAlert();
-      } else {
-        try {
-          mp3("alert24");
-        } catch (err) {}
-      }
+console.log('here24');
+      mp3("alert24");
 
       lastPendingOrderCount = currentPendingOrderCount;
     }
