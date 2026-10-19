@@ -480,11 +480,11 @@ if ($spotlightProductId) {
               <?
               $map_link = "https://www.google.com/maps/search/?api=1&query=" . urlencode($merchant->address . ', ' . $merchant->city . ', ' . $merchant->state . ' ' . $merchant->zip_code);
               ?>
-              <a href="<?php echo $map_link; ?>" target="_blank" class="btn btn-small btn-outline waves-effect waves-light" style="margin-left: 10px;">
+              <a href="<?php echo $map_link; ?>" target="_blank" class="btn btn-small btn-outline waves-effect waves-light" style="margin-left: 10px; display: inline-flex; align-items: flex-start; height: auto; padding: 0.25rem 0; line-height: 1.4; background: transparent; border: none; box-shadow: none;">
                 <span class="sweets-icon" style="margin-right: 1rem; min-width: 1.25rem; text-align: center; font-size: 16px;">
                   <i class="fas fa-map-marker-alt"></i>
                 </span>
-                <span class="pk-text-main" style="word-break: break-word; font-weight: 600;">
+                <span class="pk-text-main" style="word-break: break-word; font-weight: 600; text-align: left; color: #ffffff; text-transform: uppercase;">
                   <?php echo htmlspecialchars($merchant->address . ', ' . $merchant->city . ', ' . $merchant->state . ' ' . $merchant->zip_code); ?>
                 </span>
               </a>
