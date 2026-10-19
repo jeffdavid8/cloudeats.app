@@ -96,32 +96,6 @@ if ($spotlightProductId) {
     z-index: revert-rule;
   }
 
-  /**********************************************
-  *  Terms Notice Top of window css
-  **/
-  body.header-announcement {
-    .app-container {
-      margin-top: 4rem;
-      padding: 10rem 0 4rem 0;
-    }
-
-    padding-top: 0;
-  }
-
-  body.header-announcement header.header {
-    z-index: 997;
-    top: 4rem;
-    border-bottom: none;
-  }
-
-  #nh-terms-banner {
-    padding: 0;
-  }
-
-  /**********************************************
-*  End of Terms Notice Top of window css
-**/
-
   header.header nav {
     transition: all 0.3s;
     box-shadow: none;

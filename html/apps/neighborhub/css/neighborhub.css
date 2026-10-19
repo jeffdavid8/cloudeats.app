@@ -25,7 +25,8 @@ body {
   overflow-x: hidden;
   transition:
     background-color var(--transition-base),
-    color var(--transition-base);
+    color var(--transition-base),
+    padding-top 0.3s ease-in-out;
 }
 
 @media (prefers-color-scheme: dark) {

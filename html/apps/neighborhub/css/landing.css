@@ -66,16 +66,21 @@ body.darkMode {
 **/
 body.header-announcement {
   padding-top: 0;
+  transition: padding-top 0.3s ease-in-out;
 }
 body.header-announcement header.header {
   z-index: 997;
   top: 4rem;
   border-bottom: none;
+  transition: top 0.3s ease-in-out;
 }
 @media (min-width: 992px) {
   body.header-announcement header.header {
     top: 4rem;
   }
+}
+body.scrolled.header-announcement header.header {
+  top: 0;
 }
 /**********************************************
 *  End of Terms Notice Top of window css
