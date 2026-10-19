@@ -135,7 +135,7 @@ body.scrolled.header-announcement header.header {
 }
 @media (min-width: 768px) {
   body.header-announcement header.header {
-    top: 3rem;
+    top: 57px;
   }
 }
 /**********************************************

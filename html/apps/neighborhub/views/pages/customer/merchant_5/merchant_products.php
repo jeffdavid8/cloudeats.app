@@ -84,7 +84,7 @@ if ($spotlightProductId) {
 
   /* Global Body Theme Override */
   body {
-    padding-top: 14rem;
+    padding-top: 15rem;
     background-color: var(--brand-bg) !important;
     color: var(--brand-text-main);
     font-family: 'Montserrat', 'Playfair Display', 'Helvetica Neue', sans-serif;
@@ -170,15 +170,6 @@ if ($spotlightProductId) {
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
   }
 
-  /* Dropdown Trigger */
-  .top-right-dropdown-wrapper {
-    transition: all 0.2s;
-    position: fixed;
-    top: 9rem;
-    left: 50%;
-    margin-left: 30%;
-    z-index: 885;
-  }
 
   .top-right-dropdown-wrapper a.dropdown-trigger {
     border-radius: 50%;
@@ -189,10 +180,6 @@ if ($spotlightProductId) {
 
   .top-right-dropdown-wrapper a.dropdown-trigger:hover {
     filter: brightness(1.15);
-  }
-
-  body.scrolled .top-right-dropdown-wrapper {
-    top: 5rem;
   }
 
   .dropdown-content {
@@ -302,7 +289,7 @@ if ($spotlightProductId) {
     }
 
     .merchant-header-image {
-      top: 3px;
+      top: 25px;
       width: 200px;
       right: calc(50% - 100px);
       transition: all 0.5s;

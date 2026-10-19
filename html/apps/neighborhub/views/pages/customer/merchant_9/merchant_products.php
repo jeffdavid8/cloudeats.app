@@ -317,12 +317,29 @@ if ($spotlightProductId && isset($menus[$activeMenuId]['categories'])) {
 
   /* Dropdown Anchor */
   .top-right-dropdown-wrapper {
-    transition: all 0.2s;
     position: fixed;
-    top: 17rem;
-    left: 50%;
-    margin-left: 32%;
-    z-index: 885;
+    top: 14rem;
+  }
+
+  body.header-announcement {
+    & .app-container {
+      margin-top: 9rem;
+      padding: 0rem 0 4rem 0;
+    }
+  }
+
+  body.header-announcement {
+    .top-right-dropdown-wrapper {
+      top: 14rem;
+    }
+  }
+  @media only screen and (min-width: 768px) {
+    body.header-announcement {
+      & .app-container {
+        margin-top: 7rem;
+        padding: 0rem 0 4rem 0;
+      }
+    }
   }
 
   .top-right-dropdown-wrapper a.dropdown-trigger {
@@ -497,12 +514,6 @@ if ($spotlightProductId && isset($menus[$activeMenuId]['categories'])) {
       max-width: 440px;
     }
 
-    .top-right-dropdown-wrapper {
-      top: 10.5rem;
-      right: 1rem;
-      left: auto;
-      margin-left: 0;
-    }
 
     .hero-text-overlay-pill {
       width: 45%;

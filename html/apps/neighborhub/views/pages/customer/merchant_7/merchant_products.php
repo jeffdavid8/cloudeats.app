@@ -51,17 +51,17 @@ if ($spotlightProductId) {
     color: var(--gray-900);
   }
 
-  .header-announcement .app-container {
+  body.header-announcement .app-container {
     padding-top: 4rem;
+    padding: 0 0 4rem 0;
   }
+
   #nh-terms-banner {
     margin-top: 0 !important;
   }
 
-  <? /* Header image with scroll animation */ ?>
-  header.header {
+  <? /* Header image with scroll animation */ ?>header.header {
     z-index: 997;
-    top: 5rem;
     border-bottom: none;
   }
 
@@ -81,6 +81,7 @@ if ($spotlightProductId) {
   body.scrolled header.header nav {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
   }
+
   .app-container {
     margin-top: 4rem;
     padding-bottom: 10rem 0 4rem 0;
@@ -230,12 +231,11 @@ if ($spotlightProductId) {
   }
 
   /* Floating Dropdown Button Style */
-  .top-right-dropdown-wrapper {
+  body.header-announcement .top-right-dropdown-wrapper {
     transition: all 0.3s;
     position: fixed;
-    top: 11.5rem;
-    left: 50%;
-    margin-left: 35%;
+    top: 16rem;
+    right: 1rem;
     z-index: 885;
   }
 
@@ -245,6 +245,7 @@ if ($spotlightProductId) {
     border-radius: 50%;
     transition: all 0.2s ease-in-out;
   }
+
   .top-right-dropdown-wrapper a.dropdown-trigger:hover {
     transform: scale(1.1);
   }
@@ -379,12 +380,27 @@ if ($spotlightProductId) {
     display: block;
   }
 
+  .green-section {
+    margin-top: 4rem;
+  }
 
-  @media (max-width: 768px) {
+  @media (min-width: 768px) {
     .top-right-dropdown-wrapper {
       right: 1.5rem;
       left: auto;
       margin-left: 0;
+    }
+
+    body.header-announcement .top-right-dropdown-wrapper {
+      right: 2rem;
+    }
+
+    .green-section {
+      margin-top: 4rem;
+    }
+
+    .header-announcement.green-section {
+      margin-top: 8rem;
     }
 
     .tyd-header-image img {
@@ -393,9 +409,6 @@ if ($spotlightProductId) {
   }
 
   @media (min-width: 992px) {
-    header.header {
-      top: 4rem;
-    }
     .container {
       width: 970px;
     }
@@ -439,7 +452,7 @@ if ($spotlightProductId) {
 </style>
 
 <!-- Top Hero Header Section -->
-<div class="green-section" style="<?= ($customer->terms_accepted_at) ? 'margin-top: 2rem;' : '' ?> padding-bottom: 4rem; border-bottom: 6px double #F5A623;">
+<div class="green-section" style="padding-top: 10rem; padding-bottom: 4rem; border-bottom: 6px double #F5A623;">
   <div class="container">
     <div class="tyd-header-image">
       <img class="tyd-header" src="https://storage.googleapis.com/mediabrain-system-data/apps/neighborhub/merchants/7/12108840-768w.png" alt="Tu Your Door Pizza" />

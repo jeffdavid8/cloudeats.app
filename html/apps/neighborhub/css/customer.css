@@ -3,6 +3,30 @@ body.header-announcement {
     margin-top: 4rem;
     padding: 10rem 0 4rem 0;
   }
+  .top-right-dropdown-wrapper {
+    top: 14rem;
+  }
+}
+@media only screen and (min-width: 768px) {
+  body.header-announcement {
+    .top-right-dropdown-wrapper {
+      top: 13rem;
+    }
+  }
+}
+/* Dropdown Trigger */
+.top-right-dropdown-wrapper {
+  transition: all 0.2s;
+  position: fixed;
+  top: 11rem;
+  right: 1.5rem;
+  left: auto;
+  margin-left: 0;
+  z-index: 885;
+}
+
+body.scrolled .top-right-dropdown-wrapper {
+  top: 5rem;
 }
 
 header.header img.scroll-to-top-link {
