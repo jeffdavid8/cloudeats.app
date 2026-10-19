@@ -2,7 +2,7 @@
 if (!defined('MB_RUNNING')) exit;
 
 $customer = $this->get('customer');
-if ($this->get('view') === 'customer' && !$customer->terms_accepted_at):
+if ($this->get('view') === 'customer' && $customer->terms_accepted_at):
 ?>
 <div id="nh-terms-banner">
       <div class="nh-terms-banner-content" style="display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
