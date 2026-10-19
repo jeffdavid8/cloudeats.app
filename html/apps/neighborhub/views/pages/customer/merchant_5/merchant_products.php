@@ -173,7 +173,7 @@ if ($spotlightProductId) {
   .top-right-dropdown-wrapper {
     transition: all 0.2s;
     position: fixed;
-    top: 8rem;
+    top: 9rem;
     left: 50%;
     margin-left: 30%;
     z-index: 885;
