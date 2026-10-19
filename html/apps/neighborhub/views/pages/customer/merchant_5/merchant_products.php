@@ -107,6 +107,9 @@ if ($spotlightProductId) {
     background-color: #473823 !important;
   }
 
+  .brand-eats {
+    color: #ff4800;
+  }
   .dayMode .brand-extension,
   .dayMode .brand-cloud {
     color: #efefef;
