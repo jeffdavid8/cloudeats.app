@@ -6,6 +6,8 @@ $merchant = $this->get('merchant');
 ?>
 <ul id="slide-out" class="sidenav show-on-large">
   <li style="padding: 0; margin: 0; display: flex; justify-content: flex-end; align-items: center; background-color: var(--icon-bg-color);">
+      <a class="page_link waves-effect waves-light" href="<?= $this->config['base_url'] . $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ?>"><i class="material-icons">share</i></a>
+
     <a href="#" data-target="slide-out" class="sidenav-trigger main-menu-btn"><i class="fas fa-times fa-lg"></i></a>
   </li>
   <li>
