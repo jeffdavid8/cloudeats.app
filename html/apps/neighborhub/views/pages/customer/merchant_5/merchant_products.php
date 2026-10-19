@@ -289,7 +289,7 @@ if ($spotlightProductId) {
     }
 
     .merchant-header-image {
-      top: 25px;
+      top: 12px;
       width: 200px;
       right: calc(50% - 100px);
       transition: all 0.5s;
