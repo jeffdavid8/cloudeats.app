@@ -81,6 +81,10 @@ if ($spotlightProductId) {
   body.scrolled header.header nav {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
   }
+  .app-container {
+    margin-top: 4rem;
+    padding-bottom: 10rem 0 4rem 0;
+  }
 
   /* Floating Branding Logo */
   .merchant-header-image {
@@ -435,7 +439,7 @@ if ($spotlightProductId) {
 </style>
 
 <!-- Top Hero Header Section -->
-<div class="green-section" style="<?= ($customer->terms_accepted_at) ? 'margin-top: 8rem;' : '' ?> padding: 10rem 0 4rem 0; border-bottom: 6px double #F5A623;">
+<div class="green-section" style="<?= ($customer->terms_accepted_at) ? 'margin-top: 2rem;' : '' ?> padding-bottom: 4rem; border-bottom: 6px double #F5A623;">
   <div class="container">
     <div class="tyd-header-image">
       <img class="tyd-header" src="https://storage.googleapis.com/mediabrain-system-data/apps/neighborhub/merchants/7/12108840-768w.png" alt="Tu Your Door Pizza" />

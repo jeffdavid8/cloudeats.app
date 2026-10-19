@@ -32,7 +32,7 @@ if ($this->get('view') === 'customer' && !$customer->terms_accepted_at):
                         <?= ($merchant->status == 'online') ? '<span class="online-status-dot"></span>' : '' ?>
                      </a>
                   <? else: ?>
-                        <img class="materialboxed circle" src="<?php echo htmlspecialchars($merchant->image_url); ?>" style="">
+                        <img class="scroll-to-top-link circle" src="<?php echo htmlspecialchars($merchant->image_url); ?>" style="">
                         <?= ($merchant->status == 'online') ? '<span class="online-status-dot"></span>' : '' ?>
                   <? endif; ?>
                </div>

@@ -84,7 +84,7 @@ if ($spotlightProductId) {
 
   /* Global Body Theme Override */
   body {
-    padding-top: 11rem;
+    padding-top: 14rem;
     background-color: var(--brand-bg) !important;
     color: var(--brand-text-main);
     font-family: 'Montserrat', 'Playfair Display', 'Helvetica Neue', sans-serif;
@@ -320,10 +320,6 @@ if ($spotlightProductId) {
       width: 970px;
     }
 
-    #nh-terms-banner {
-      font-size: 15px;
-    }
-
   }
 
   @media (min-width: 1200px) {
@@ -464,7 +460,7 @@ if ($spotlightProductId) {
 
 <div class="container">
   <!-- Legacy Merchant Info Card -->
-  <div class="card horizontal sweets-card" style="margin-top: 4rem; border-left: 6px solid var(--brand-caramel);">
+  <div class="card horizontal sweets-card" style="border-left: 6px solid var(--brand-caramel);">
     <div class="card-stacked">
       <div class="card-content" style="padding: 28px;">
         <h4 class="sweets-text-brown" style="margin: 0 0 5px 0; font-weight: 900; letter-spacing: -0.5px; display: inline-block;">

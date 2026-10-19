@@ -61,31 +61,13 @@ body.darkMode {
   --ce-card-shadow: 0 12px 25px rgba(0, 0, 0, 0.36);
   --ce-filter-surface: rgba(29, 39, 35, 0.76);
 }
-/**********************************************
-*  Terms Notice Top of window css
-**/
+
 body.header-announcement {
-  padding-top: 0;
-  transition: padding-top 0.3s ease-in-out;
-}
-body.header-announcement header.header {
-  z-index: 997;
-  top: 4rem;
-  border-bottom: none;
-  transition: top 0.3s ease-in-out;
-}
-@media (min-width: 992px) {
-  body.header-announcement header.header {
-    top: 4rem;
+  & .app-container {
+    margin-top: 3rem;
+    padding: 0 0 4rem 0;
   }
 }
-body.scrolled.header-announcement header.header {
-  top: 0;
-}
-/**********************************************
-*  End of Terms Notice Top of window css
-**/
-
 
 .neighborhub-app-container:has(.ce-landing) {
   width: 100%;
@@ -101,9 +83,6 @@ body.scrolled.header-announcement header.header {
   background-image: linear-gradient(90deg, var(--ce-grid-line) 1px, transparent 1px), linear-gradient(var(--ce-grid-line) 1px, transparent 1px);
   background-size: 34px 34px;
   font-family: "Trebuchet MS", "Segoe UI", sans-serif;
-}
-#nh-terms-banner {
-  padding: 0 1rem 2rem;
 }
 .ce-topbar {
   height: 76px;

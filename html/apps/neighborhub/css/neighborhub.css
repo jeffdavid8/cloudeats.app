@@ -80,9 +80,76 @@ header.header nav {
   /* display: none; */
   padding: 2rem 1rem 0;
   text-align: center;
-  font-size: 0.875rem;
-  margin-top: 1rem;
+  font-size: 0.775rem;
+  /* margin-top: 1rem; */
 }
+
+/**********************************************
+*  Terms Notice Top of window css
+**/
+body.header-announcement {
+  .app-container {
+    margin-top: 4rem;
+  }
+  padding-top: 0;
+}
+
+body.header-announcement header.header {
+  z-index: 997;
+  top: 3rem;
+  border-bottom: none;
+  transition: top 0.3s ease-in-out;
+}
+
+#nh-terms-banner {
+  padding: 0;
+}
+
+body.scrolled.header-announcement header.header {
+  top: 0;
+}
+
+/**********************************************
+*  Terms Notice Top of window css
+**/
+body.header-announcement {
+  .app-container {
+    margin-top: 4rem;
+  }
+  padding-top: 0;
+}
+
+body.header-announcement header.header {
+  z-index: 997;
+  top: 5rem;
+  border-bottom: none;
+  transition: top 0.3s ease-in-out;
+}
+
+#nh-terms-banner {
+  padding: 1rem;
+}
+
+body.scrolled.header-announcement header.header {
+  top: 0;
+}
+@media (min-width: 768px) {
+  body.header-announcement header.header {
+    top: 3rem;
+  }
+}
+/**********************************************
+*  End of Terms Notice Top of window css
+**/
+
+@media (min-width: 992px) {
+  #nh-terms-banner {
+    font-size: 15px;
+  }
+}
+/**********************************************
+*  End of Terms Notice Top of window css
+**/
 
 /* Typography */
 h1,
@@ -1591,8 +1658,8 @@ header.header #user-dropdown {
 .nh-orders-scroll-container {
   position: relative;
   max-height: 75vh;
-  overflow-y: auto;  /* Vertical scrollbar if table has many orders */
-  overflow-x: auto;  /* Horizontal scrollbar if viewed on mobile screens */
+  overflow-y: auto; /* Vertical scrollbar if table has many orders */
+  overflow-x: auto; /* Horizontal scrollbar if viewed on mobile screens */
   border: 1px solid rgba(0, 0, 0, 0.12); /* Optional: provides a clean framed border */
 }
 
@@ -1607,13 +1674,13 @@ header.header #user-dropdown {
 .nh-orders-scroll-container th {
   position: sticky;
   top: 0;
-  
+
   /* Must have an opaque background so items don't bleed visually underneath when scrolling */
-  background-color: #ffffff; 
-  
+  background-color: #ffffff;
+
   /* Higher stacking index guarantees header stays on top of status badges and text */
-  z-index: 2; 
-  
+  z-index: 2;
+
   /* Crisp bottom border that follows the header as it sticks */
   box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.12);
 }
@@ -1771,7 +1838,7 @@ body.scrolled .my-cloudeats-link {
 
   /* Smooth transition for the hover state */
   transition:
-    all  0.2s ease,
+    all 0.2s ease,
     transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .nightMode .my-cloudeats-link .btn {
