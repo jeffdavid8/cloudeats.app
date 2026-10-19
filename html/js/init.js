@@ -25,7 +25,7 @@
   window.addEventListener('scroll', () => {
     const navbar = document.getElementById('navbar');
 
-    if (window.scrollY > 40) {
+    if (window.scrollY > 0) {
       document.body.classList.add('scrolled');
     } else {
       document.body.classList.remove('scrolled');

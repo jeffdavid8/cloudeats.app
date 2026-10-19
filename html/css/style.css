@@ -1676,7 +1676,7 @@ header nav ul li a i.material-icons {
 header nav ul li a i.fa,
 header nav ul li a i.far,
 header nav ul li a i.fas {
-  line-height: 50px;
+  line-height: 53px;
 }
 @media only screen and (max-width: 600px) {
   .header nav ul > li a,
