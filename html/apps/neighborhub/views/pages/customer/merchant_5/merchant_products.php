@@ -158,8 +158,8 @@ if ($spotlightProductId) {
 
   body.scrolled .merchant-header-image {
     top: -5px;
-    width: 100px;
-    right: calc(50% - 50px);
+    width: 80px;
+    right: calc(50% - 40px);
   }
 
   body.scrolled .merchant-header-image img {

@@ -979,8 +979,8 @@ body.scrolled .merchant-header-image img {
 }
 body.scrolled .merchant-header-image .online-status-dot {
   /* top: 60px; */
-  bottom: 6px;
-  right: 18px;
+  bottom: 3px;
+  right: 0px;
   width: 18px;
   height: 18px;
   outline-width: 3px;
