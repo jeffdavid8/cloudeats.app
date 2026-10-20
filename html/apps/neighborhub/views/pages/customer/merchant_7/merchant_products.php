@@ -12,6 +12,7 @@ $merchant = $this->get('merchant');
 $menus = $this->get('menus');
 $products = $this->get('products');
 $activeMenuId = get_var('menu_id', array_keys($menus)[0]);
+$menuProductsByCategory = Menu::getProductsGroupedByCategory($activeMenuId);
 
 //error_log(print_r($menus, true));
 // Isolate the Spotlight Product ID parameter from the URL query context if present
@@ -624,15 +625,14 @@ if ($spotlightProductId) {
 
       <div class="col s12 m8 l9">
         <!-- Product Catalog Categories -->
-        <?php foreach ($menus[$activeMenuId]['categories'] as $category) : ?>
-          <?php
-          render('components/product_category.php', array(
-            'merchant' => $merchant,
-            'category' => $category,
-            'products' => $category['products'],
-            'spotlightProductId' => $spotlightProductId,
-          )); ?>
-        <?php endforeach; ?>
+      <?php foreach ($menuProductsByCategory as $categoryId => $catProducts) : ?>
+        <?php
+        render('components/product_category.php', array(
+          'merchant' => $merchant,
+          'products' => $catProducts,
+          'spotlightProductId' => $spotlightProductId,
+        )); ?>
+      <?php endforeach; ?>
       </div>
     </div>
   </div>

@@ -54,14 +54,17 @@ class MerchantStorefront {
         );
       },
     );
+    
   }
 
   bindNavigationEvents() {
     const self = this;
 
-    // Top-right dropdown category navigation click
-    $("#top-right-menu a.category-menu-item").on("click", function (e) {
-      const cleanAnchor = this.dataset.categoryAnchor
+
+    // General Smooth Scroll & Manual Active Class Assignment
+    $("a.category-menu-item").on("click", function (e) {
+      e.preventDefault();
+      const anchor = this.dataset.categoryAnchor
         ? this.dataset.categoryAnchor
             .toLowerCase()
             .replace(/&/g, "and")
@@ -70,28 +73,13 @@ class MerchantStorefront {
             .replace(/\s+/g, "-")
         : "";
 
-      const $target = $("#" + cleanAnchor);
-      if ($target.length) {
-        $("html, body").animate(
-          {
-            scrollTop: $target.offset().top - 100,
-          },
-          800,
-        );
-      }
-    });
-
-    // General Smooth Scroll & Manual Active Class Assignment
-    $("a.category-menu-item").on("click", function (e) {
-      e.preventDefault();
-      const anchor = $(this).attr("data-category-anchor");
-
       if (anchor === "top") {
         $("html, body").animate({ scrollTop: 0 }, 600);
         return;
       }
 
       const $target = $("#" + anchor);
+      
       if ($target.length) {
         self.isManualScrolling = true;
 

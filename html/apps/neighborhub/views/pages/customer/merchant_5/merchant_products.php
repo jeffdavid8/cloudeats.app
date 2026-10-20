@@ -12,6 +12,7 @@ $merchant = $this->get('merchant');
 $menus = $this->get('menus');
 $products = $this->get('products');
 $activeMenuId = get_var('menu_id', array_keys($menus)[0]);
+$menuProductsByCategory = Menu::getProductsGroupedByCategory($activeMenuId);
 
 //error_log(print_r($menus, true));
 // Isolate the Spotlight Product ID parameter from the URL query context if present
@@ -460,23 +461,23 @@ if ($spotlightProductId) {
         <div class="row" style="margin-bottom: 0;">
           <div class="col s12 m6">
             <!-- Address -->
-            <p style="display: flex; align-items: flex-start; margin-bottom: 1rem;">
+            <p style="text-align: left; margin-bottom: 1rem;">
               <?
               $map_link = "https://www.google.com/maps/search/?api=1&query=" . urlencode($merchant->address . ', ' . $merchant->city . ', ' . $merchant->state . ' ' . $merchant->zip_code);
               ?>
-              <a href="<?php echo $map_link; ?>" target="_blank" class="btn btn-small btn-outline waves-effect waves-light" style="margin-left: 10px; display: inline-flex; align-items: flex-start; height: auto; padding: 0.25rem 0; line-height: 1.4; background: transparent; border: none; box-shadow: none;">
+              <a href="<?php echo $map_link; ?>" target="_blank" class="btn btn-small btn-flat waves-effect waves-light" style="display: inline-flex; align-items: flex-start; height: auto; line-height: 1.4;">
                 <span class="sweets-icon" style="margin-right: 1rem; min-width: 1.25rem; text-align: center; font-size: 16px;">
                   <i class="fas fa-map-marker-alt"></i>
                 </span>
-                <span class="pk-text-main" style="word-break: break-word; font-weight: 600; text-align: left; color: #ffffff; text-transform: uppercase;">
+                <span class="pk-text-main" style="word-break: break-word; font-weight: 600; text-align: left; text-transform: uppercase;">
                   <?php echo htmlspecialchars($merchant->address . ', ' . $merchant->city . ', ' . $merchant->state . ' ' . $merchant->zip_code); ?>
                 </span>
               </a>
             </p>
 
             <!-- Phone -->
-            <p style="display: flex; align-items: flex-start; margin-bottom: 1rem;">
-              <a href="tel: <?= $merchant->phone ?>" class="btn btn-small btn-outline waves-effect waves-light" style="margin-left: 10px;">
+            <p style="text-align: left; margin-bottom: 1rem;">
+              <a href="tel: <?= $merchant->phone ?>" class="btn btn-small btn-flat waves-effect waves-light" style="">
                 <span class="sweets-icon" style="margin-right: 1rem; min-width: 1.25rem; text-align: center; font-size: 16px;">
                   <i class="fas fa-phone"></i>
                 </span>
@@ -486,7 +487,7 @@ if ($spotlightProductId) {
             <!-- Website -->
             <?php if (!empty($merchant->website)): ?>
               <p style="display: flex; align-items: flex-start; margin-bottom: 1rem;">
-                <a href="<?php echo htmlspecialchars($merchant->website); ?>" target="_blank" rel="noopener noreferrer" style="color: var(--brand-caramel); font-weight: 700; margin-left: 10px;" class="btn btn-small btn-outline waves-effect waves-light">
+                <a href="<?php echo htmlspecialchars($merchant->website); ?>" target="_blank" rel="noopener noreferrer" style="color: var(--brand-caramel); font-weight: 700;" class="btn btn-small btn-flat waves-effect waves-light">
                   <span class="sweets-icon" style="margin-right: 1rem; min-width: 1.25rem; text-align: center; font-size: 16px;">
                     <i class="fas fa-globe"></i>
                   </span>
@@ -604,12 +605,11 @@ if ($spotlightProductId) {
 
     <div class="col s12 m8 l9">
       <!-- Product Catalog Categories -->
-      <?php foreach ($menus[$activeMenuId]['categories'] as $category) : ?>
+      <?php foreach ($menuProductsByCategory as $categoryId => $catProducts) : ?>
         <?php
         render('components/product_category.php', array(
           'merchant' => $merchant,
-          'category' => $category,
-          'products' => $category['products'],
+          'products' => $catProducts,
           'spotlightProductId' => $spotlightProductId,
         )); ?>
       <?php endforeach; ?>
@@ -677,6 +677,7 @@ if ($spotlightProductId) {
             <?php foreach ($menus[$activeMenuId]['categories'] as $category):
               $cleanId = preg_replace('/\s+/', '-', preg_replace('/[^a-z0-9\s-]/', '', str_replace('&', 'and', strtolower($category['name']))));
             ?>
+              <li class="category-menu-item-back-to-top"><a class="category-menu-item" data-category-anchor="top" href="#!">Back to Top</a></li>
               <li><a class="category-menu-item" data-category-anchor="<?= $cleanId ?>" href="#!"><?= htmlspecialchars($category['name']) ?></a></li>
             <?php endforeach; ?>
           </ul>
