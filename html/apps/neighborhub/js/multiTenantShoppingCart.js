@@ -21,7 +21,7 @@ class ShoppingCart {
 
   save() {
     localStorage.setItem(this.storageKey, JSON.stringify(this.cart));
-    if ($('#nh-shopping-cart-sidenav').length) {
+    if ($("#nh-shopping-cart-sidenav").length) {
       this.updateUI();
     }
   }
@@ -198,23 +198,15 @@ class ShoppingCart {
     let count = 0;
     let uniqueMerchants = new Set();
 
-    // CHANGE 1: Use an object {} instead of an array [] to prevent empty index loops
     let merchantCoordinates = {};
-
     let distanceMi = 0;
     let deliveryFee = 0;
     let deliveryFeeCalc = null;
 
-    // CHANGE 2: Wrap jQuery values in parseFloat() to guarantee they are numbers
     let custLat = parseFloat($("#nh-cart-lat").val());
     let custLon = parseFloat($("#nh-cart-lon").val());
 
-    let taxAmount = 0;
-    let tips = 0;
-    let processingFee = 0;
-    let platformFee = parseFloat(this.merchant.platform_flat_fee) + parseFloat(this.merchant.platform_fee_rate) * subtotal;
-    let grandTotal = 0;
-
+    // 1. Calculate Subtotal from cart items
     for (const key in this.cart.items) {
       const item = this.cart.items[key];
       if (item.merchant_id == this.merchant.id) {
@@ -226,18 +218,15 @@ class ShoppingCart {
         };
       }
       uniqueMerchants.add(item.merchant_id);
-
-      // CHANGE 3: Convert merchant string coordinates to floats just to be safe
     }
 
+    // 2. Delivery Fee Calculation
     if (
       !this.deliveryDisabled &&
       $("#nh-cart-delivery-toggle").is(":checked")
     ) {
       for (const key in merchantCoordinates) {
         const merchantCoord = merchantCoordinates[key];
-
-        // CHANGE 4: Add a safety guard to ensure valid coordinate data exists
         if (!merchantCoord || isNaN(merchantCoord.lat) || isNaN(custLat)) {
           continue;
         }
@@ -253,32 +242,42 @@ class ShoppingCart {
       }
     }
 
-    taxAmount = Number(subtotal * 0.0825);
-    tips = parseFloat($("#nh-cart-tips-display").val()) || 0;
-    // 🌟 FIX: Calculate the core transaction value before processing fees
-    let totalBeforeProcessing = subtotal + taxAmount + tips + deliveryFee;
-    // 🌟 FIX: Apply Stripe's real math against the entire checkout total, rounded cleanly
-    processingFee = Number(
-      (Number(this.merchant.stripe_flat_fee) +
-        totalBeforeProcessing * (Number(this.merchant.stripe_percent_fee) / 100)) /
-        (1 - (Number(this.merchant.stripe_percent_fee) / 100)),
-    );
-    processingFee = Math.round(processingFee * 100) / 100;
+    // 3. Sales Tax (8.25%)
+    let taxAmount = Math.round(subtotal * 0.0825 * 100) / 100;
 
-    // Final Grand Total matching the server completely
-    grandTotal = totalBeforeProcessing + processingFee;
+    // 4. Tips
+    let tips = parseFloat($("#nh-cart-tips-display").val()) || 0;
+
+    // 5. Pre-processing Total (Platform fee removed from customer side)
+    let totalBeforeProcessing = subtotal + deliveryFee + taxAmount + tips;
+
+    // 6. Stripe Processing Fee Calculation
+    let stripeFlat = parseFloat(this.merchant.stripe_flat_fee) || 0.3;
+    let stripePercent =
+      (parseFloat(this.merchant.stripe_percent_fee) || 2.9) / 100;
+
+    let processingFee = 0;
+    if (stripePercent < 1) {
+      processingFee =
+        (stripeFlat + totalBeforeProcessing * stripePercent) /
+        (1 - stripePercent);
+      processingFee = Math.round(processingFee * 100) / 100;
+    }
+
+    // 7. Grand Total paid by customer
+    let grandTotal =
+      Math.round((totalBeforeProcessing + processingFee) * 100) / 100;
 
     return {
-      deliveryFee: deliveryFee.toFixed(2),
       subtotal: subtotal.toFixed(2),
+      deliveryFee: deliveryFee.toFixed(2),
+      taxAmount: taxAmount.toFixed(2),
+      tips: tips.toFixed(2),
       processingFee: processingFee.toFixed(2),
-      platformFee: platformFee.toFixed(2),
+      grandTotal: grandTotal.toFixed(2),
       count,
       merchantCount: uniqueMerchants.size,
       distanceMi: distanceMi.toFixed(2),
-      tips: tips.toFixed(2),
-      taxAmount: taxAmount.toFixed(2),
-      grandTotal: grandTotal.toFixed(2),
     };
   }
 
@@ -377,7 +376,7 @@ class ShoppingCart {
     $('[id="nh-cart-fee-display"]').text("$" + totals.platformFee);
 
     // 2. Format it to 2 decimals ONLY when displaying it
-    $('[id="nh-cart-tax-display"]').text(totals.taxAmount);
+    $('[id="nh-cart-tax-display"]').text("$" + totals.taxAmount);
 
     $('[id="nh-cart-total-display"]').text("$" + totals.grandTotal);
 

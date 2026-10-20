@@ -13,6 +13,7 @@ $menus = $this->get('menus');
 $products = $this->get('products');
 $activeMenuId = get_var('menu_id', array_keys($menus)[0]);
 $menuProductsByCategory = Menu::getProductsGroupedByCategory($activeMenuId);
+$menuCategories = Menu::getCategoriesByMenuId($activeMenuId);
 
 //error_log(print_r($menus, true));
 // Isolate the Spotlight Product ID parameter from the URL query context if present
@@ -703,8 +704,10 @@ if ($spotlightProductId) {
 
         <!-- Dropdown Menu Structure -->
         <ul id="top-right-menu" class="dropdown-content" style="border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.15);">
-          <?php foreach ($groupedProducts as $category => $categoryProducts): ?>
-            <li><a class="category-menu-item" data-category-anchor="<?= strtolower($category) ?>" href="#!" style="color: #2E5A27; font-weight: 600;"> <?= $category ?> </a></li>
+          <li class="category-menu-item-back-to-top"><a class="category-menu-item" data-category-anchor="top" href="#!">Back to Top</a></li>
+          <?php foreach ($menus[$activeMenuId]['categories'] as $category):
+            $cleanId = preg_replace('/\s+/', '-', preg_replace('/[^a-z0-9\s-]/', '', str_replace('&', 'and', strtolower($category['name'])))) ?>
+            <li><a class="category-menu-item" data-category-anchor="<?= $cleanId ?>" href="#!"> <?= $category['name'] ?> </a></li>
           <?php endforeach; ?>
         </ul>
       </div>
@@ -714,207 +717,9 @@ if ($spotlightProductId) {
 
 <script>
   $(document).ready(function() {
-    $('#nh-custom-builder-modal').modal();
-
-    var elems = document.querySelectorAll('.dropdown-trigger');
-    var instances = M.Dropdown.init(elems, {
-      alignment: 'right',
-      constrainWidth: false,
-      coverTrigger: false
-    });
-
-    $('#top-right-menu a.category-menu-item').on('click', function(e) {
-      const cleanId = this.dataset.categoryAnchor.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9\s-]/g, '').trim().replace(/\s+/g, '-');
-      $('html, body').animate({
-        scrollTop: $('#' + cleanId).offset().top - 100
-      }, 800);
-    });
-
-    // --- Smooth Scroll & Manual Active Class Assignment on Click ---
-    let isManualScrolling = false;
-
-    $('a.category-menu-item').on('click', function(e) {
-      e.preventDefault();
-      const anchor = $(this).attr('data-category-anchor');
-      const target = $('#' + anchor);
-
-      if (anchor === 'top') {
-        $('html, body').animate({
-          scrollTop: 0
-        }, 600);
-        return;
-      }
-
-      if (target.length) {
-        // Lock observer temporarily so smooth scrolling doesn't flicker intermediate categories
-        isManualScrolling = true;
-
-        $('a.category-menu-item').removeClass('active');
-        $(`a.category-menu-item[data-category-anchor="${anchor}"]`).addClass('active');
-
-        $('html, body').animate({
-          scrollTop: target.offset().top - 120
-        }, 600, function() {
-          // Re-enable observer after smooth scroll completes
-          setTimeout(() => {
-            isManualScrolling = false;
-          }, 50);
-        });
-      }
-    });
-
-    // --- High-Performance Scroll Highlight via IntersectionObserver ---
-    const observerOptions = {
-      // Adjust rootMargin to trigger when section top crosses middle/upper section of screen
-      rootMargin: '-120px 0px -50% 0px',
-      threshold: [0, 0.2, 0.5]
-    };
-
-    const visibleCategories = new Map();
-
-    const categoryObserver = new IntersectionObserver((entries) => {
-      if (isManualScrolling) return;
-
-      entries.forEach(entry => {
-        // Target the category container using the clean ID from header
-        const sectionId = entry.target.querySelector('[id]')?.id || entry.target.id;
-
-        if (entry.isIntersecting) {
-          visibleCategories.set(sectionId, entry.boundingClientRect.top);
-        } else {
-          visibleCategories.delete(sectionId);
-        }
-      });
-
-      // Highlight the category closest to the top of the viewport
-      if (visibleCategories.size > 0) {
-        let topCategory = null;
-        let minTop = Infinity;
-
-        visibleCategories.forEach((top, id) => {
-          if (top < minTop) {
-            minTop = top;
-            topCategory = id;
-          }
-        });
-
-        if (topCategory) {
-          $('a.category-menu-item').removeClass('active');
-          $(`a.category-menu-item[data-category-anchor="${topCategory}"]`).addClass('active');
-        }
-      }
-    }, observerOptions);
-
-    // Observe all category containers/sections
-    $('.category-section, [id]').each(function() {
-      const anchorId = $(this).attr('id');
-      if (anchorId && $(`a.category-menu-item[data-category-anchor="${anchorId}"]`).length > 0) {
-        categoryObserver.observe(this);
-      }
-    });
-
-    // Qty plus/minus selectors
-    $('.nh-card-qty-plus').on('click', function() {
-      const input = $(this).siblings('.nh-card-qty-input');
-      input.val(parseInt(input.val()) + 1);
-    });
-
-    $('.nh-card-qty-minus').on('click', function() {
-      const input = $(this).siblings('.nh-card-qty-input');
-      const currentVal = parseInt(input.val());
-      if (currentVal > 1) {
-        input.val(currentVal - 1);
-      }
-    });
-
-    // Standard item add
-    $('.nh-add-standard-btn').on('click', function() {
-      const btn = $(this);
-      const cardQty = parseInt(btn.closest('.card-action').find('.nh-card-qty-input').val() || 1);
-
-      const productInfo = {
-        id: btn.data('id'),
-        name: btn.data('name'),
-        price: btn.data('price'),
-        customizable: btn.data('customizable') === 1,
-        merchantImage: btn.data('merchant-image'),
-        merchantId: btn.data('merchant-id'),
-        merchantName: btn.data('merchant-name'),
-        merchantAddress: btn.data('merchant-address'),
-        merchantLat: btn.data('merchant-lat'),
-        merchantLon: btn.data('merchant-lon')
-      };
-      const targetMerchantId = btn.data('merchant-id') || nh.cart.activeMerchantIdReference;
-
-      NHCart.addItem(targetMerchantId, productInfo, null, cardQty);
-
-      $('#nh-shopping-cart-sidenav').sidenav('open');
-
-
-      btn.closest('.card-action').find('.nh-card-qty-input').val(1);
-      M.toast({
-        html: `<i class="fas fa-check-circle" style="color:#FFFDF9; margin-right:8px;"></i> Added (${cardQty}) ${productInfo.name} to basket!`
-      });
-    });
-
-    // Customize dialog launch
-    $('.nh-customize-trigger').on('click', function() {
-      const btn = $(this);
-      const productId = btn.data('id');
-      const productName = btn.data('name');
-      const price = btn.data('price');
-      const merchantImage = btn.data('merchant-image');
-      const merchantId = btn.data('merchant-id');
-      const merchantName = btn.data('merchant-name');
-      const merchantAddress = btn.data('merchant-address');
-      const merchantLat = btn.data('merchant-lat');
-      const merchantLon = btn.data('merchant-lon');
-      const isCustomizable = btn.data('customizable') === 1;
-
-      const initialCardQty = parseInt(btn.closest('.card-action').find('.nh-card-qty-input').val() || 1);
-
-      nh.cart.activeCustomProductMetadata = {
-        id: productId,
-        name: productName,
-        price: price,
-        merchantImage: merchantImage,
-        merchantId: merchantId,
-        merchantName: merchantName,
-        merchantAddress: merchantAddress,
-        merchantLat: merchantLat,
-        merchantLon: merchantLon,
-        customizable: isCustomizable
-      };
-      $('#builder-modal-title').text('Customize Your ' + productName);
-      $('#nh-custom-builder-modal .nh-card-qty-input').val(initialCardQty);
-
-      const modalInstance = M.Modal.getInstance(document.getElementById('nh-custom-builder-modal'));
-      modalInstance.open();
-
-      $('#builder-widget-mount-viewport').empty();
-      nh.cart.activeBuilderInstance = new CustomOrderBuilder('builder-widget-mount-viewport', productId, price);
-
-      btn.closest('.card-action').find('.nh-card-qty-input').val(1);
-    });
-
-    // Modal Cart Submissions
-    $('#nh-modal-submit-add-to-cart').on('click', function() {
-      if (nh.cart.activeBuilderInstance && nh.cart.activeCustomProductMetadata) {
-        const receiptBlob = nh.cart.activeBuilderInstance.compileSelections();
-        if (!receiptBlob) return;
-
-        const finalModalQty = parseInt($('#nh-custom-builder-modal .nh-card-qty-input').val() || 1);
-
-        NHCart.addItem(nh.cart.activeCustomProductMetadata.merchantId, nh.cart.activeCustomProductMetadata, receiptBlob, finalModalQty);
-
-        $('#nh-shopping-cart-sidenav').sidenav('open');
-
-
-        M.Modal.getInstance(document.getElementById('nh-custom-builder-modal')).close();
-        M.toast({
-          html: `<i class="fas fa-check-circle" style="color:#FFFDF9; margin-right:8px;"></i> Added (${finalModalQty}) custom ${nh.cart.activeCustomProductMetadata.name} to basket!`
-        });
-      }
+    window.storefront = new MerchantStorefront({
+      toastIcon: 'fa-check-circle', // Customize icon per theme if desired (e.g. 'fa-fire-alt')
+      toastVerb: 'basket' // Customize text per theme if desired (e.g. 'order')
     });
   });
 </script>

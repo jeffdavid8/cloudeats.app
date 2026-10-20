@@ -1010,7 +1010,7 @@ $(document).ready(function () {
 /**
  * The "Lush" Confetti Launcher
  */
-function launchSovereignConfetti() {
+function fireConfettiCannon() {
   // --- FIXED: Restored jQuery \$ selector ---
   const container = $("#confetti-cannon"); 
   const pieceCount = 150; // Total "Integrity" particles

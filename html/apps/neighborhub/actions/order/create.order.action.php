@@ -67,6 +67,9 @@ if (!empty($pendingOrder)) {
     // 🌟 FIX 2: Calculate your 4% software app usage platform cut
     $merchantAppFeePercent = $merchant->platform_fee_rate;
     $appFeeCutFromMerchant = round($merchantSubtotal * $merchantAppFeePercent, 2);
+    if ($merchant->platform_flat_fee > 0) {
+      $appFeeCutFromMerchant += $merchant->platform_flat_fee;
+    }
 
     // Subtract your cut to find exactly what the merchant takes home
     $finalMerchantPayout = $merchantSubtotal - $appFeeCutFromMerchant;

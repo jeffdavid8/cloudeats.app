@@ -638,66 +638,11 @@ try {
 
 
         // ============================================================================
-        // 🌟 SYNCHRONIZED REVENUE & FEE ENGINE
+        // 🌟 REVENUE & FEE ENGINE (Customer Pays: Items + Tax + Delivery + Tips + Processing)
         // ============================================================================
 
-        // 1. Sales Tax (8.25% of subtotal items)
+        // 1. Sales Tax (8.25% of subtotal)
         $sales_tax = round($platformTotal * 0.0825, 2);
-
-        // 2. Platform Fee Flat Profit Anchor
-        $platform_fee = $merchant->platform_flat_fee;
-        $stripeLineItems[] = [
-          'price_data' => [
-            'currency' => 'usd',
-            'product_data' => [
-              'name' => 'Platform/Basket',
-            ],
-            'unit_amount' => round($platform_fee * 100),
-          ],
-          'quantity' => 1,
-        ];
-
-        // 3. Extract safe tips from requested dataset
-        $tips = 0;
-        if (!empty($request['totals']['tips'])) {
-          $tips = $request['totals']['tips'];
-
-          $stripeLineItems[] = [
-            'price_data' => [
-              'currency' => 'usd',
-              'product_data' => [
-                'name' => 'Tips',
-              ],
-              'unit_amount' => (int)round($tips * 100, 2),
-            ],
-            'quantity' => 1,
-          ];
-        } else if (isset($request['totals']['tips'])) {
-          $tips = floatval($request['totals']['tips']);
-        }
-
-        // 4. Group all hard costs together before applying Stripe fee protection
-        $totalBeforeProcessing = $platformTotal + $deliveryFee + $platform_fee + $tips + $sales_tax;
-
-        // 5. Compute the exact processing fee against the whole card swipe amount
-        $processing_fee = round(($stripeFlat + $totalBeforeProcessing * $stripePercent) / (1 - $stripePercent), 2);
-
-        // Recompute absolute matching checkout grand total
-        $totalCheckoutAmountWithFees = $totalBeforeProcessing + $processing_fee;
-
-        // Now drop these exact matching variables straight into your $stripeLineItems arrays!
-        $stripeLineItems[] = [
-          'price_data' => [
-            'currency' => 'usd',
-            'product_data' => [
-              'name' => 'Processing',
-            ],
-            'unit_amount' => (int)round($processing_fee * 100),
-          ],
-          'quantity' => 1,
-        ];
-
-        // FIX: Missing Sales Tax Line Item injected directly into Stripe manifest
         $stripeLineItems[] = [
           'price_data' => [
             'currency' => 'usd',
@@ -707,6 +652,66 @@ try {
             'unit_amount' => (int)round($sales_tax * 100),
           ],
           'quantity' => 1,
+        ];
+
+        // 2. Extract Tips
+        $tips = 0;
+        if (!empty($request['totals']['tips'])) {
+          $tips = floatval($request['totals']['tips']);
+          $stripeLineItems[] = [
+            'price_data' => [
+              'currency' => 'usd',
+              'product_data' => [
+                'name' => 'Tips',
+              ],
+              'unit_amount' => (int)round($tips * 100),
+            ],
+            'quantity' => 1,
+          ];
+        }
+
+        // 3. Pre-Processing Customer Total (Subtotal + Delivery + Tips + Tax)
+        $totalBeforeProcessing = $platformTotal + $deliveryFee + $tips + $sales_tax;
+
+        // 4. Compute Stripe Processing Fee charged to customer
+        $processing_fee = round(($stripeFlat + ($totalBeforeProcessing * $stripePercent)) / (1 - $stripePercent), 2);
+        $totalCheckoutAmountWithFees = $totalBeforeProcessing + $processing_fee;
+
+        $stripeLineItems[] = [
+          'price_data' => [
+            'currency' => 'usd',
+            'product_data' => [
+              'name' => 'Processing Fee',
+            ],
+            'unit_amount' => (int)round($processing_fee * 100),
+          ],
+          'quantity' => 1,
+        ];
+
+        // 5. Calculate Platform Fee to deduct from Merchant Payout later
+        // Formula: platform_flat_fee + (subtotal * platform_fee_rate)
+        $platform_flat = floatval($merchant->platform_flat_fee ?? 0.00);
+        $platform_rate = floatval($merchant->platform_fee_rate ?? 0.04);
+        $platform_fee = round($platform_flat + ($platformTotal * $platform_rate), 2);
+
+        // Save order metadata including platform commission to be deducted upon acceptance
+        $pendingOrder = [
+          'merchant_id'      => $merchantId,
+          'customer_id'      => $customerId,
+          'merchant_package' => $merchantItems,
+          'delivery_location' => [
+            'address' => $request['delivery_address'],
+            'lat'     => $request['delivery_lat'],
+            'lon'     => $request['delivery_lon'],
+            'notes'   => $request['notes'] ?? '',
+          ],
+          'subtotal_amount'  => $platformTotal,
+          'delivery_fee'     => $deliveryFee,
+          'processing_fee'   => $processing_fee,
+          'platform_fee'     => $platform_fee, // Saved for backend merchant settlement
+          'tips'             => $tips,
+          'sales_tax'        => $sales_tax,
+          'total_amount'     => round($totalCheckoutAmountWithFees, 2)
         ];
 
         $customer = 0;

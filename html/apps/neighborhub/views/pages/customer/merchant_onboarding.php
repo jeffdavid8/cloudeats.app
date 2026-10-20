@@ -354,6 +354,7 @@ if (!defined('MB_RUNNING')) exit;
               data: JSON.stringify(formData),
               success: function(response) {
                 if (response && response.success) {
+                  fireConfettiCannon();
                   M.toast({
                     html: 'Application submitted! We will reach out soon.',
                     classes: 'green'

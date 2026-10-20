@@ -10,15 +10,21 @@ $customerId = $customer->id ?? 0;
 $userName = isset($_SESSION['user']['username']) ? htmlspecialchars($_SESSION['user']['username']) : 'Customer';
 $customerOrders = $this->get('customer_orders', array());
 
-if (!isset($_SESSION[get_var('session_key')]) && get_var('action', false) == 'checkout_success') {
+if (isset($_SESSION[get_var('session_key')]) && get_var('action', false) == 'checkout_success') {
   $pendingOrder = $_SESSION[get_var('session_key')];
   $merchant_id = $pendingOrder['merchant_id'];
+  $merchant = Merchant::getMerchantById($merchant_id);
   unset($_SESSION[get_var('session_key')]);
 ?>
   <script>
     $(document).ready(function() {
+      if (!window.NHCart) {
+        nh.merchant = <?= json_encode($merchant) ?>;
+        window.NHCart = new ShoppingCart(nh.merchant);
+      }
       NHCart.activeMerchantId = <?= ($merchant_id) ? $merchant_id : 'null' ?>;
       NHCart.clear();
+      fireConfettiCannon();
     });
   </script>
 <?
@@ -292,7 +298,7 @@ if ($notification) {
    * Reorder Handler: Loads previous order items and routes to merchant catalog
    */
   function reorderItems(orderId) {
-    loading(4);
+    loading(1);
 
     mb.ajax({
       type: 'GET',
@@ -303,7 +309,6 @@ if ($notification) {
       },
       dataType: 'json',
       success: function(response) {
-        if (typeof loading === 'function') loading(0);
         if (response.success && response.merchant_id) {
           // Redirect directly to the merchant product storefront to complete/adjust the basket
           window.location.href = `?app=neighborhub&view=customer&p=merchant_products&merchant_id=${response.merchant_id}&reorder_from=${orderId}`;
@@ -677,5 +682,4 @@ if ($notification) {
       clearInterval(pollingInterval);
     }
   });
-
 </script>

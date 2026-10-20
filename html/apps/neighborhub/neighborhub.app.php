@@ -248,8 +248,8 @@ function neighborhub_render_body(&$app)
     render('components/modals/leaflet_address_picker_modal.php');
     render('components/sidenav/shopping_cart.php', array('classList' => 'sidenav right-aligned'));
   }
-
-  if ($app->get('reorder_items', null)) {
+  
+  if (($app->get('reorder_items', null)) && (get_var('action', false) !== 'checkout_canceled')) {
     render('components/actions/reorder_previous_order.php');
   }
 

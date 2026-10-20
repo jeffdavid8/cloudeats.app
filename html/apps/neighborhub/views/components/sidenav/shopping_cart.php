@@ -96,7 +96,7 @@ if (!isset($merchant->stripe_flat_fee)) {
       <span class="nh-cart-subtotal-display" style="font-size: 22px; font-weight: 800; color: #26a69a;">$0.00</span>
     </div>
 
-    <div style="display: none !important; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
       <span style="font-size: 16px; font-weight: 600; color: #555;">Processing:</span>
       <span id="nh-cart-processing-fee-display" style="margin-left: 1rem; font-size: 22px; font-weight: 800; color: #747474;">$0.00</span>
     </div>

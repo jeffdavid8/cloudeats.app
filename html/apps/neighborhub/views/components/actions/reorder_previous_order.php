@@ -6,7 +6,7 @@ if (!defined('MB_RUNNING')) exit;
  */
 $reorderItems = $this->get('reorder_items', null);
 $merchant = $this->get('merchant', null);
-logger($reorderItems);
+
 ?>
 
 <script>

@@ -82,7 +82,7 @@
             submitButton.disabled = false;
             submitButton.textContent = "Create account";
             loading(0);
-            launchSovereignConfetti();
+            fireConfettiCannon();
             M.toast({
               html:
                 response.message ||
