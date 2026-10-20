@@ -82,6 +82,7 @@ if (!empty($pendingOrder)) {
       $merchantSubtotal,
       $pendingOrder['processing_fee'],
       $pendingOrder['platform_fee'],
+      $pendingOrder['delivery_requested'],
       $deliveryFee,
       $pendingOrder['tips'],
       $pendingOrder['sales_tax'],

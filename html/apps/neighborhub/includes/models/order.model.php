@@ -52,7 +52,7 @@ class Order
      * @param string $notes
      * @return int|false Order ID on success, false on failure
      */
-    public static function create($customerId, $merchantId, $itemsArray, $subtotal, $processingFee, $platformFee, $deliveryFee, $tips, $salesTax, $totalAmount, $pickupAddress, $deliveryAddress, $notes, $state = 'PENDING_CONFIRMATION', $stripePaymentIntentId, $meta = '{}')
+    public static function create($customerId, $merchantId, $itemsArray, $subtotal, $processingFee, $platformFee, $deliveryRequested=false, $deliveryFee, $tips, $salesTax, $totalAmount, $pickupAddress, $deliveryAddress, $notes, $state = 'PENDING_CONFIRMATION', $stripePaymentIntentId, $meta = '{}')
     {
         try {
             $db = App::getInstance()->db;
@@ -87,8 +87,8 @@ class Order
             // Insert main order record
             $insertStmt = $db->prepare(
                 "INSERT INTO neighborhub_orders 
-                (order_number, customer_id, merchant_id, total_amount, subtotal_amount, sales_tax, tips, processing_fee, platform_fee, delivery_fee, pickup_address, delivery_address, order_notes, state, stripe_payment_intent_id, meta, created_at, updated_at) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())"
+                (order_number, customer_id, merchant_id, total_amount, subtotal_amount, sales_tax, tips, processing_fee, platform_fee, delivery_requested, delivery_fee, pickup_address, delivery_address, order_notes, state, stripe_payment_intent_id, meta, created_at, updated_at) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())"
             );
             $insertStmt->execute([
                 $orderNumber,
@@ -100,6 +100,7 @@ class Order
                 $tips,
                 $processingFee,
                 $platformFee,
+                $deliveryRequested,
                 $deliveryFee,
                 $pickupAddress,
                 $deliveryAddress,
@@ -111,7 +112,6 @@ class Order
 
             $orderId = $db->lastInsertId();
 
-            // Insert order items
             // Insert order items
             foreach ($itemsArray as $item) {
                 $itemStmt = $db->prepare(

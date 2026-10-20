@@ -694,26 +694,6 @@ try {
         $platform_rate = floatval($merchant->platform_fee_rate ?? 0.04);
         $platform_fee = round($platform_flat + ($platformTotal * $platform_rate), 2);
 
-        // Save order metadata including platform commission to be deducted upon acceptance
-        $pendingOrder = [
-          'merchant_id'      => $merchantId,
-          'customer_id'      => $customerId,
-          'merchant_package' => $merchantItems,
-          'delivery_location' => [
-            'address' => $request['delivery_address'],
-            'lat'     => $request['delivery_lat'],
-            'lon'     => $request['delivery_lon'],
-            'notes'   => $request['notes'] ?? '',
-          ],
-          'subtotal_amount'  => $platformTotal,
-          'delivery_fee'     => $deliveryFee,
-          'processing_fee'   => $processing_fee,
-          'platform_fee'     => $platform_fee, // Saved for backend merchant settlement
-          'tips'             => $tips,
-          'sales_tax'        => $sales_tax,
-          'total_amount'     => round($totalCheckoutAmountWithFees, 2)
-        ];
-
         $customer = 0;
         if ($customerId) {
           $customer = Customer::getCustomerById($customerId);
@@ -799,23 +779,24 @@ try {
         $results['stripe_session'] = $session;
 
         $pendingOrder = [
-          'merchant_id' => $merchantId,
-          'customer_id' => $customerId,
-          'merchant_package' => $merchantItems,
+          'merchant_id'           => $merchantId,
+          'customer_id'           => $customerId,
+          'merchant_package'      => $merchantItems,
           'merchants_coordinates' => $merchant_coordinates,
-          'delivery_location' => array(
+          'delivery_requested'        => $request['delivery'] ?? false,
+          'delivery_location'     => array(
             'address' => $request['delivery_address'],
-            'lat' => $request['delivery_lat'],
-            'lon' => $request['delivery_lon'],
-            'notes' => $request['notes'] ?? '',
+            'lat'     => $request['delivery_lat'],
+            'lon'     => $request['delivery_lon'],
+            'notes'   => $request['notes'] ?? '',
           ),
-          'subtotal_amount' => $platformTotal,
-          'delivery_fee' => $deliveryFee,
-          'processing_fee' => $processing_fee,
-          'platform_fee' => $platform_fee,
-          'tips' => $tips,
-          'sales_tax' => $sales_tax,
-          'total_amount' => round($totalCheckoutAmountWithFees, 2)
+          'subtotal_amount'       => $platformTotal,
+          'delivery_fee'          => $deliveryFee,
+          'processing_fee'        => $processing_fee,
+          'platform_fee'          => $platform_fee, // Keep this line in the final array!
+          'tips'                  => $tips,
+          'sales_tax'             => $sales_tax,
+          'total_amount'          => round($totalCheckoutAmountWithFees, 2)
         ];
 
         $_SESSION[$return_key] = $pendingOrder;
@@ -2173,6 +2154,9 @@ function handle_confirm_order($request)
   $app->includeModel('merchant');
   $app->includeModel('order');
 
+  $vaultApp = App::getInstance('Vault');
+  $vaultApp->includeModel('vault');
+
   $orderId = isset($request['order_id']) ? intval($request['order_id']) : null;
   $merchantId = isset($request['merchant_id']) ? intval($request['merchant_id']) : null;
   $merchant = Merchant::getMerchantById($merchantId);
@@ -2222,29 +2206,8 @@ function handle_confirm_order($request)
 
       // Only capture if it's currently sitting in requires_capture status
       if ($intent->status === 'requires_capture') {
+
         $intent->capture();
-
-        // If the merchant does not have a Stripe API key, we will handle the funds in our platform's central vault.
-        if (!$merchant->stripe_api_key) {
-          // ============================================================================
-          // 📊 TRUSTED FINANCIAL SPLIT MANAGEMENT ENGINE
-          // ============================================================================
-
-          $merchantSubtotal = floatval($order['subtotal_amount']);
-
-          // Calculate platform app fee cut
-          $merchantAppFeePercent = $merchant->platform_fee_rate;
-          $appFeeCutFromMerchant = round($merchantSubtotal * $merchantAppFeePercent, 2);
-
-          // Subtract cut to find final merchant payout
-          $finalMerchantPayout = $merchantSubtotal - $appFeeCutFromMerchant;
-
-          // Add ALL funds from the Stripe transaction into the platform's central pool account (User ID: 1)
-          Vault::addFundsToUser(1, $order['total_amount'], "Customer Payment Deposit for Order #{$order['id']}");
-
-          // Transfer merchant's final home-take share to their linked user wallet account
-          Vault::transfer(1, $merchant->user_id, $finalMerchantPayout, "Merchant Net Share Distribution for Order #{$order['id']} (App Fee Deducted)");
-        }
       }
     } catch (\Exception $e) {
       error_log("Stripe Capture Failed for Order {$orderId}: " . $e->getMessage());
@@ -2255,6 +2218,9 @@ function handle_confirm_order($request)
       )));
     }
   }
+
+  // Add ALL funds from the Stripe transaction into the platform's central pool account (User ID: 1)
+  Vault::addFundsToUser(1, $order['total_amount'], "Customer Payment Deposit for Order #{$order['id']}");
 
   $result = Order::confirmOrder($orderId);
 
@@ -2803,8 +2769,12 @@ function handle_complete_delivery($request)
 {
   $app = App::getInstance();
   $db = $app->db;
+  $app->includeModel('merchant');
   $app->includeModel('order');
   $app->includeModel('courier');
+
+  $vaultApp = App::getInstance('Vault');
+  $vaultApp->includeModel('vault');
 
   $orderId = isset($request['order_id']) ? intval($request['order_id']) : null;
 
@@ -2860,6 +2830,51 @@ function handle_complete_delivery($request)
   }
 
   Courier::incrementDeliveryCount($courierId);
+
+  $merchantId = $order['merchant_id'];
+  $merchant = Merchant::getMerchantById($merchantId);
+
+  // If the merchant does not have a Stripe API key, we will handle the funds in our platform's central vault.
+  if (!$merchant->stripe_api_key) {
+    // ============================================================================
+    // 📊 TRUSTED FINANCIAL SPLIT MANAGEMENT ENGINE
+    // ============================================================================
+    // 1. Ensure subtotal is a float
+    $merchantSubtotal = floatval($order['subtotal_amount']);
+
+    // 2. Fetch the percentage rate
+    $merchantAppFeePercent = floatval($merchant->platform_fee_rate) / 100;
+
+    // 3. Calculate percentage cut
+    $appFeeCutFromMerchant = round($merchantSubtotal * $merchantAppFeePercent, 2);
+
+    // 4. Add the flat fee ($0.30) if it exists
+    if (!empty($merchant->platform_flat_fee) && floatval($merchant->platform_flat_fee) > 0) {
+      $appFeeCutFromMerchant = $appFeeCutFromMerchant + floatval($merchant->platform_flat_fee);
+    }
+
+    // 5. Final Payout
+    $deliveryFee = floatval($order['delivery_fee']);
+    $finalMerchantPayout = $merchantSubtotal - $appFeeCutFromMerchant + $deliveryFee;
+
+    if (!empty($order['tips'])) {
+      $finalMerchantPayout = $finalMerchantPayout + floatval($order['tips']);
+    }
+
+    /*
+    error_log('--------------------------------------------------------------------------');
+    error_log(print_r($merchant, true));
+    error_log(print_r($order, true));
+    error_log('$merchantSubtotal = ' . $merchantSubtotal);
+    error_log('$appFeeCutFromMerchant = ' . $appFeeCutFromMerchant);
+    error_log('$deliveryFee = ' . $deliveryFee);
+    error_log('$finalMerchantPayout = ' . $finalMerchantPayout);
+    error_log('--------------------------------------------------------------------------');
+    */
+
+    // Transfer merchant's final home-take share to their linked user wallet account
+    Vault::transfer(1, $merchant->user_id, $finalMerchantPayout, "Merchant Net Share Distribution for Order #{$order['id']} (App Fee Deducted)");
+  }
 
   http_response_code(200);
   exit(json_encode(array(
@@ -3861,10 +3876,15 @@ function handle_delete_product($request = null)
 function handle_mark_ready_for_pickup($request)
 {
   $app = App::getInstance();
+  $app->includeModel('merchant');
   $app->includeModel('order');
+
+  $vaultApp = App::getInstance('Vault');
+  $vaultApp->includeModel('vault');
 
   $orderId = isset($request['order_id']) ? intval($request['order_id']) : null;
   $merchantId = isset($request['merchant_id']) ? intval($request['merchant_id']) : null;
+  $merchant = Merchant::getMerchantById($merchantId);
 
   if (!$orderId || !$merchantId) {
     http_response_code(400);
@@ -3917,6 +3937,34 @@ function handle_mark_ready_for_pickup($request)
       'error' => 'Failed to mark order ready for pickup'
     )));
   }
+
+  // If the order is not a delivery, we will handle the financial split between the merchant and platform.
+  if (!$order['delivery_requested']) {
+
+    // If the merchant does not have a Stripe API key, we will handle the funds in our platform's central vault.
+    if (!$merchant->stripe_api_key) {
+      // ============================================================================
+      // 📊 TRUSTED FINANCIAL SPLIT MANAGEMENT ENGINE
+      // ============================================================================
+      $merchantSubtotal = floatval($order['subtotal_amount']);
+
+      // Calculate platform app fee cut
+      $merchantAppFeePercent = $merchant->platform_fee_rate;
+      $appFeeCutFromMerchant = round($merchantSubtotal * $merchantAppFeePercent, 2);
+
+      if ($merchant->platform_flat_fee) {
+        $appFeeCutFromMerchant += floatval($merchant->platform_flat_fee);
+      }
+
+      // Subtract cut to find final merchant payout
+      $finalMerchantPayout = $merchantSubtotal - $appFeeCutFromMerchant;
+
+
+      // Transfer merchant's final home-take share to their linked user wallet account
+      Vault::transfer(1, $merchant->user_id, $finalMerchantPayout, "Merchant Net Share Distribution for Order #{$order['id']} (App Fee Deducted)");
+    }
+  }
+
 
   http_response_code(200);
   exit(json_encode(array(
