@@ -783,7 +783,7 @@ try {
           'customer_id'           => $customerId,
           'merchant_package'      => $merchantItems,
           'merchants_coordinates' => $merchant_coordinates,
-          'delivery_requested'        => $request['delivery'] ?? false,
+          'delivery_requested'        => (int) !empty($request['delivery']),
           'delivery_location'     => array(
             'address' => $request['delivery_address'],
             'lat'     => $request['delivery_lat'],
@@ -3946,19 +3946,35 @@ function handle_mark_ready_for_pickup($request)
       // ============================================================================
       // 📊 TRUSTED FINANCIAL SPLIT MANAGEMENT ENGINE
       // ============================================================================
-      $merchantSubtotal = floatval($order['subtotal_amount']);
+    $merchantSubtotal = floatval($order['subtotal_amount']);
 
-      // Calculate platform app fee cut
-      $merchantAppFeePercent = $merchant->platform_fee_rate;
-      $appFeeCutFromMerchant = round($merchantSubtotal * $merchantAppFeePercent, 2);
+    // 2. Fetch the percentage rate
+    $merchantAppFeePercent = floatval($merchant->platform_fee_rate) / 100;
 
-      if ($merchant->platform_flat_fee) {
-        $appFeeCutFromMerchant += floatval($merchant->platform_flat_fee);
-      }
+    // 3. Calculate percentage cut
+    $appFeeCutFromMerchant = round($merchantSubtotal * $merchantAppFeePercent, 2);
 
-      // Subtract cut to find final merchant payout
-      $finalMerchantPayout = $merchantSubtotal - $appFeeCutFromMerchant;
+    // 4. Add the flat fee ($0.30) if it exists
+    if (!empty($merchant->platform_flat_fee) && floatval($merchant->platform_flat_fee) > 0) {
+      $appFeeCutFromMerchant = $appFeeCutFromMerchant + floatval($merchant->platform_flat_fee);
+    }
 
+    // 5. Final Payout
+    $finalMerchantPayout = $merchantSubtotal - $appFeeCutFromMerchant;
+
+    if (!empty($order['tips'])) {
+      $finalMerchantPayout = $finalMerchantPayout + floatval($order['tips']);
+    }
+
+    /*
+    error_log('--------------------------------------------------------------------------');
+    error_log(print_r($merchant, true));
+    error_log(print_r($order, true));
+    error_log('$merchantSubtotal = ' . $merchantSubtotal);
+    error_log('$appFeeCutFromMerchant = ' . $appFeeCutFromMerchant);
+    error_log('$finalMerchantPayout = ' . $finalMerchantPayout);
+    error_log('--------------------------------------------------------------------------');
+    */
 
       // Transfer merchant's final home-take share to their linked user wallet account
       Vault::transfer(1, $merchant->user_id, $finalMerchantPayout, "Merchant Net Share Distribution for Order #{$order['id']} (App Fee Deducted)");

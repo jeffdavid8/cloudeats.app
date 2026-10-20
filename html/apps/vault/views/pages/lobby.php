@@ -62,7 +62,7 @@ $hasStripeLinked = !empty($stripeConnectId);
                     ?>
                     <li class="collection-item">
                         <span class="title">
-                            <strong><?= date('m/d', strtotime($entry['created_at'])) ?></strong> -
+                            <strong><?= date('D m/d h:i A', strtotime($entry['created_at'])) ?></strong> -
                             <?= htmlspecialchars($entry['data']['description']) ?>
                         </span>
                         <span class="secondary-content <?= $isCredit ? 'green-text' : 'red-text' ?>">

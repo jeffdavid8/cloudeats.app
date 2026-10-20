@@ -52,7 +52,7 @@ class Order
      * @param string $notes
      * @return int|false Order ID on success, false on failure
      */
-    public static function create($customerId, $merchantId, $itemsArray, $subtotal, $processingFee, $platformFee, $deliveryRequested=false, $deliveryFee, $tips, $salesTax, $totalAmount, $pickupAddress, $deliveryAddress, $notes, $state = 'PENDING_CONFIRMATION', $stripePaymentIntentId, $meta = '{}')
+    public static function create($customerId, $merchantId, $itemsArray, $subtotal, $processingFee, $platformFee, $deliveryRequested=0, $deliveryFee, $tips, $salesTax, $totalAmount, $pickupAddress, $deliveryAddress, $notes, $state = 'PENDING_CONFIRMATION', $stripePaymentIntentId, $meta = '{}')
     {
         try {
             $db = App::getInstance()->db;
