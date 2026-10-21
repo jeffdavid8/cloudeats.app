@@ -1,3 +1,9 @@
+body.header-announcement {
+  & .app-container {
+    margin-top: 4rem;
+    padding: 0;
+  }
+}
 /* Floating Branding Logo */
 .merchant-header-image {
   position: fixed;
