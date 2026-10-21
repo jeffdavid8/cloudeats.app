@@ -94,6 +94,32 @@ if (!empty($pendingOrder)) {
       $meta = '{}'
     );
 
+    if ($newOrderId) {
+      try {
+        $app->includeClass('NeighborhubReporting');
+        $actorRole = !empty($_SESSION['user']['is_admin']) ? 'admin' : 'customer';
+        $reporting = new NeighborhubReporting($db);
+        $reporting->recordEvent(
+          'order_created',
+          $actorRole,
+          [
+            'order_state' => 'PENDING_CONFIRMATION',
+            'delivery_requested' => !empty($pendingOrder['delivery_requested']),
+          ],
+          'order-created-' . $newOrderId,
+          (int)$merchantId
+        );
+        $reporting->recordEvent(
+          'checkout_completed',
+          $actorRole,
+          ['delivery_requested' => !empty($pendingOrder['delivery_requested'])],
+          'checkout-completed-' . $newOrderId,
+          (int)$merchantId
+        );
+      } catch (Throwable $e) {
+        error_log('Neighborhub order-created analytics event failed: ' . $e->getMessage());
+      }
+    }
 
 
     $_SESSION['notification'] = array(

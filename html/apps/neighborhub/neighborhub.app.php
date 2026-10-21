@@ -12,7 +12,7 @@ use Google\ApiCore\ArrayTrait;
  * - neighborhub_render_body()
  * 
  * Provides fluid role-based context switching with atomic
- * permission matrix verification against SQLite staff ledgers.
+ * permission matrix verification against MySQL staff ledgers.
  */
 
 /**
@@ -222,6 +222,11 @@ function neighborhub_init(&$app)
       break;
   }
 
+  if ($page === 'reports') {
+    $styles[] = 'apps/neighborhub/css/reports-page.css';
+    $scripts[] = 'apps/neighborhub/js/reports-page.js';
+  }
+
   $app->app_info['scripts'] = array_merge($app->app_info['scripts'], $scripts);
   $app->app_info['styles'] = array_merge($app->app_info['styles'], $styles);
 }
@@ -264,6 +269,9 @@ function neighborhub_render_body(&$app)
     case 'admin':
       $adminDir = 'admin/';
       switch ($currentPage) {
+        case 'reports':
+          $templatePath = 'reports.php';
+          break;
         case 'add_merchant':
           $templatePath = $adminDir . 'add_merchant.php';
           break;
@@ -307,6 +315,9 @@ function neighborhub_render_body(&$app)
     case 'merchant':
       $merchantDir = 'merchant/';
       switch ($currentPage) {
+        case 'reports':
+          $templatePath = 'reports.php';
+          break;
         case 'pos':
           $templatePath = $merchantDir . 'pos.php';
           break;
@@ -365,6 +376,9 @@ function neighborhub_render_body(&$app)
     case 'courier':
       $courierDir = 'courier/';
       switch ($currentPage) {
+        case 'reports':
+          $templatePath = 'reports.php';
+          break;
         case 'active_deliveries':
           $templatePath = $courierDir . 'active_deliveries.php';
           break;
@@ -389,6 +403,9 @@ function neighborhub_render_body(&$app)
     case 'customer':
       $customerDir = 'customer/';
       switch ($currentPage) {
+        case 'reports':
+          $templatePath = 'reports.php';
+          break;
         case 'browse_merchants':
           $templatePath = $customerDir . 'browse_merchants.php';
           break;
@@ -1129,7 +1146,8 @@ function neighborhub_db_tables()
     'neighborhub_order_items',
     'neighborhub_couriers',
     'neighborhub_delivery_tracking',
-    'neighborhub_webrtc_sessions'
+    'neighborhub_webrtc_sessions',
+    'neighborhub_usage_events'
   );
 }
 
@@ -1141,6 +1159,7 @@ function neighborhub_install_db()
   $app = App::getInstance('neighborhub');
   $tableSql = "
     SET FOREIGN_KEY_CHECKS = 0;
+    DROP TABLE IF EXISTS neighborhub_usage_events;
     DROP TABLE IF EXISTS neighborhub_delivery_tracking;
     DROP TABLE IF EXISTS neighborhub_images;
     DROP TABLE IF EXISTS neighborhub_order_items;
@@ -1424,6 +1443,20 @@ function neighborhub_install_db()
       UNIQUE KEY idx_session_id (session_id),
       KEY idx_lookup (target_role, target_id, status)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    CREATE TABLE IF NOT EXISTS neighborhub_usage_events (
+      id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+      event_type VARCHAR(64) NOT NULL,
+      actor_role VARCHAR(16) NOT NULL DEFAULT 'guest',
+      merchant_id INT DEFAULT NULL,
+      properties JSON NOT NULL,
+      dedupe_key CHAR(64) DEFAULT NULL UNIQUE,
+      created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      INDEX idx_nh_usage_created (created_at),
+      INDEX idx_nh_usage_type_created (event_type, created_at),
+      INDEX idx_nh_usage_merchant_created (merchant_id, created_at),
+      CONSTRAINT fk_nh_usage_merchant FOREIGN KEY (merchant_id)
+        REFERENCES neighborhub_merchants(id) ON DELETE SET NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     CREATE INDEX idx_nh_merch_user ON neighborhub_merchants(user_id, status);
     CREATE INDEX idx_nh_merch_status ON neighborhub_merchants(status);
     CREATE INDEX idx_nh_cust_user ON neighborhub_customers(user_id, status);

@@ -140,6 +140,11 @@ $isShopOnline = ($rawStatus === 'active' || $rawStatus === 'online' || $rawStatu
 <div class="nh-wrapper">
   <main class="nh-main">
     <div class="nh-container">
+      <div class="right-align" style="margin-bottom: 1rem;">
+        <a href="/?app=neighborhub&p=reports&view=merchant&merchant_id=<?= intval($merchantId) ?>" class="btn waves-effect waves-light teal">
+          <i class="material-icons left">file_download</i> Reports & Exports
+        </a>
+      </div>
 
       <!-- Queue Section -->
       <section class="nh-pending-queue" style="margin-bottom: 3rem;">

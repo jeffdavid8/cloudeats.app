@@ -26,9 +26,42 @@ class ShoppingCart {
     }
   }
 
+  trackUsage(operation, productId, merchantId) {
+    const token =
+      (window.mb && window.mb.csrf_token) ||
+      document.querySelector('meta[name="csrf-token"]')?.content;
+    if (!token) {
+      console.warn("NeighborHub cart analytics skipped: CSRF token unavailable.");
+      return;
+    }
+
+    fetch("/?api=neighborhub&action=track_usage_event", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        "X-CSRF-TOKEN": token,
+      },
+      body: JSON.stringify({
+        operation,
+        product_id: Number(productId),
+        merchant_id: Number(merchantId),
+        item_count: Object.keys(this.cart.items).length,
+      }),
+    }).catch((error) => {
+      console.warn("NeighborHub cart analytics request failed.", error);
+    });
+  }
+
   // Pass the merchantId directly into the item compilation logic
   // Add an explicit quantity parameter that defaults to 1 if missing
-  addItem(merchantId, productData, customizationReceipt = null, quantity = 1) {
+  addItem(
+    merchantId,
+    productData,
+    customizationReceipt = null,
+    quantity = 1,
+    operation = "add",
+  ) {
     const parsedQty = parseInt(quantity || 1);
     const choicesString = customizationReceipt
       ? JSON.stringify(customizationReceipt.choices)
@@ -66,6 +99,7 @@ class ShoppingCart {
     }
 
     this.save();
+    this.trackUsage(operation, productData.id, merchantId);
     return true;
   }
 
@@ -94,7 +128,7 @@ class ShoppingCart {
           ? quantity
           : this.cart.items[oldItemKey].quantity;
       delete this.cart.items[oldItemKey];
-      this.addItem(this.merchant.id, productData, customizationReceipt, qty);
+      this.addItem(this.merchant.id, productData, customizationReceipt, qty, "quantity");
     }
   }
   /**
@@ -153,19 +187,23 @@ class ShoppingCart {
    */
   removeItem(itemKey) {
     if (this.cart.items[itemKey]) {
+      const item = this.cart.items[itemKey];
       delete this.cart.items[itemKey];
       this.save();
+      this.trackUsage("remove", item.product_id, item.merchant_id);
     }
   }
 
   changeQuantity(itemKey, amount) {
     if (!this.cart.items[itemKey]) return;
+    const item = this.cart.items[itemKey];
     this.cart.items[itemKey].quantity += amount;
 
     if (this.cart.items[itemKey].quantity <= 0) {
       delete this.cart.items[itemKey];
     }
     this.save();
+    this.trackUsage(amount < 0 ? "remove" : "quantity", item.product_id, item.merchant_id);
   }
 
   // Helper to group items by merchant on the checkout screen

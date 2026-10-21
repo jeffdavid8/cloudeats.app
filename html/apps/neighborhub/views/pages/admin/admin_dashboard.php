@@ -122,6 +122,9 @@ $merchantsList = $app->get('admin_merchants_list', array());
           <span style="font-weight: 600; ">Quick Actions:</span>
         </div>
         <div>
+          <a href="?app=neighborhub&view=admin&p=reports" class="btn waves-effect waves-light teal" style="border-radius: 4px; font-weight: 500;">
+            <i class="material-icons left">analytics</i> Reports & Analytics
+          </a>
           <a href="?app=neighborhub&view=admin&p=overview_map" class="btn waves-effect waves-light teal" style="border-radius: 4px; font-weight: 500;">
             <i class="material-icons">map</i>
           </a>

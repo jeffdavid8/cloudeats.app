@@ -14,12 +14,20 @@ class BackupManager
     private static $targetTables = [
         'neighborhub_merchants',
         'neighborhub_merchant_users',
+        'neighborhub_customers',
+        'neighborhub_registration_tokens',
+        'neighborhub_registration_attempts',
         'neighborhub_products',
-        'neighborhub_product_images',
+        'neighborhub_menus',
+        'neighborhub_menu_categories',
+        'neighborhub_menu_items',
+        'neighborhub_couriers',
         'neighborhub_orders',
         'neighborhub_order_items',
-        'neighborhub_couriers',
-        'neighborhub_delivery_tracking'
+        'neighborhub_images',
+        'neighborhub_delivery_tracking',
+        'neighborhub_webrtc_sessions',
+        'neighborhub_usage_events',
     ];
 
     /**
@@ -64,6 +72,18 @@ class BackupManager
             };
 
             foreach (self::$targetTables as $table) {
+                $tableCheck = $db->prepare("
+                    SELECT 1
+                    FROM information_schema.tables
+                    WHERE table_schema = DATABASE() AND table_name = ?
+                    LIMIT 1
+                ");
+                $tableCheck->execute([$table]);
+                if (!$tableCheck->fetchColumn()) {
+                    $exportData['tables'][$table] = [];
+                    continue;
+                }
+
                 // Fetch rows from current table iteration with spatial conversion
                 $selectCols = $safe_select($table);
                 $stmt = $db->query("SELECT {$selectCols} FROM `{$table}`");
@@ -86,7 +106,7 @@ class BackupManager
     }
 
     /**
-     * Stream read a JSON backup file and parse entries cleanly back into SQLite tables
+     * Stream read a JSON backup file and restore Neighborhub tables
      * * @param string $filePath Absolute file system pointer to the backup file
      * @return array Status payload with success flag and transactional logs
      */
@@ -115,6 +135,11 @@ class BackupManager
             $db->beginTransaction();
 
             foreach (self::$targetTables as $table) {
+                if (!array_key_exists($table, $data['tables'])) {
+                    $log[] = "Table [{$table}] is absent from the backup. Skipping without modifying it.";
+                    continue;
+                }
+
                 // Check if table exists in DB
                 $tableCheck = $db->query("SELECT 1 FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = '{$table}' LIMIT 1");
                 if ($tableCheck->fetchColumn() === false) {

@@ -84,6 +84,9 @@ if ($notification) {
       <section class="nh-tracking-ledger">
         <div class="valign-wrapper" style="justify-content: space-between; margin-bottom: 1.5rem;">
           <h2 style="margin: 0;">Your Order History</h2>
+          <a href="/?app=neighborhub&p=reports&view=customer" class="btn waves-effect waves-light teal">
+            <i class="material-icons left">file_download</i> Reports & Exports
+          </a>
         </div>
 
         <!-- Filter & Search Bar -->

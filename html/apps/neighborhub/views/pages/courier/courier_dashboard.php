@@ -55,6 +55,9 @@ $activeDelivery = $hasActiveDelivery ? $activeDeliveries[0] : null;
                     </p>
                 </div>
                 <div style="display: flex; gap: 1rem; align-items: center;">
+                    <a href="/?app=neighborhub&p=reports&view=courier" class="nh-btn nh-btn-secondary nh-btn-sm">
+                        Reports
+                    </a>
                     <div class="nh-role-badge">Courier</div>
                     <a href="/?app=neighborhub&p=dashboard&view=customer" class="nh-btn nh-btn-secondary nh-btn-sm">
                         Switch to Customer

@@ -1,5 +1,8 @@
--- Neighborhub SQLite Database Initialization Script
+-- Legacy schema reference. The active Neighborhub MySQL schema is defined in
+-- neighborhub.app.php within neighborhub_install_db().
 -- Parent tables first, then dependent tables, indexes last
+-- neighborhub_usage_events is also defined there with nullable merchant_id
+-- attribution and an index for merchant-scoped usage analytics.
 
 CREATE TABLE neighborhub_merchants (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -121,3 +124,14 @@ CREATE INDEX idx_nh_orders_cour ON neighborhub_orders(courier_id, state);
 CREATE INDEX idx_nh_orders_state_time ON neighborhub_orders(state, created_at);
 CREATE INDEX idx_nh_cour_geo ON neighborhub_couriers(status, latitude, longitude);
 CREATE INDEX idx_nh_track_order ON neighborhub_delivery_tracking(order_id, created_at);
+
+CREATE TABLE IF NOT EXISTS neighborhub_usage_events (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  event_type VARCHAR(64) NOT NULL,
+  actor_role VARCHAR(16) NOT NULL DEFAULT 'guest',
+  properties JSON NOT NULL,
+  dedupe_key CHAR(64) DEFAULT NULL UNIQUE,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_nh_usage_created (created_at),
+  INDEX idx_nh_usage_type_created (event_type, created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

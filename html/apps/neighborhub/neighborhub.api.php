@@ -47,6 +47,7 @@ if (!$action) {
 // Verify authentication for secure requests
 if (!in_array($action, array(
   'search_merchants',
+  'track_usage_event',
   'geocode_proxy',
   'reverse_geocode_proxy',
   'create_checkout_session',
@@ -81,6 +82,9 @@ try {
     case 'search_merchants':
       handle_search_merchants($request);
       break;
+    case 'track_usage_event':
+      handle_track_usage_event($request);
+      break;
     case 'geocode_proxy':
       handle_geocode_proxy($request);
       break;
@@ -94,6 +98,7 @@ try {
         http_response_code(404);
         exit(json_encode(['success' => false, 'error' => 'Product not found']));
       }
+      neighborhub_record_usage_event('product_view', [], null, (int)$productObj->merchant_id);
 
       // Isolate configuration steps matrix from the product's meta column
       $meta = is_string($productObj->meta) ? json_decode($productObj->meta, true) : $productObj->meta;
@@ -278,6 +283,9 @@ try {
 
     case 'get_courier_profile':
       handle_get_courier_profile($request);
+      break;
+    case 'get_report_data':
+      handle_get_report_data($request);
       break;
 
     case 'lookup_user_by_email':
@@ -758,6 +766,9 @@ try {
 
         $return_key = bin2hex(random_bytes(16));
 
+        neighborhub_record_usage_event('checkout_started', [
+          'delivery_requested' => !empty($request['delivery']),
+        ], null, (int)$merchantId);
         \Stripe\Stripe::setApiKey($stripe_key);
 
         $session = \Stripe\Checkout\Session::create([
@@ -808,6 +819,12 @@ try {
           'checkout_url' => $session->url
         ]);
       } catch (Exception $e) {
+        neighborhub_record_usage_event(
+          'checkout_failed',
+          ['failure_category' => 'checkout_processing'],
+          null,
+          isset($merchantId) ? (int)$merchantId : null
+        );
         http_response_code(500);
         echo json_encode([
           'success' => false,
@@ -1832,6 +1849,7 @@ function handle_search_merchants($request)
 
   App::getInstance('neighborhub')->includeModel('merchant');
   $merchants = Merchant::searchNearby($lat, $lng, $q);
+  neighborhub_record_usage_event('merchant_search', ['result_count' => count($merchants)]);
   App::getInstance('neighborhub')->includeModel('order');
 
   foreach ($merchants as &$merchant) {
@@ -2232,6 +2250,11 @@ function handle_confirm_order($request)
     )));
   }
 
+  neighborhub_record_usage_event('order_state_changed', [
+    'from_state' => 'PENDING_CONFIRMATION',
+    'to_state' => 'CONFIRMED',
+  ], 'order-state-' . $orderId . '-CONFIRMED');
+
   http_response_code(200);
   exit(json_encode(array(
     'success' => true,
@@ -2322,6 +2345,14 @@ function handle_deny_order($request)
     )));
   }
 
+  neighborhub_record_usage_event('order_cancelled', [
+    'actor_role' => !empty($_SESSION['user']['is_admin']) || !empty($app->user->is_admin) ? 'admin' : 'merchant',
+  ], 'order-cancelled-' . $orderId);
+  neighborhub_record_usage_event('order_state_changed', [
+    'from_state' => 'PENDING_CONFIRMATION',
+    'to_state' => 'CANCELLED',
+  ], 'order-state-' . $orderId . '-CANCELLED');
+
   http_response_code(200);
   exit(json_encode(array(
     'success' => true,
@@ -2382,6 +2413,11 @@ function handle_revert_order_status($request)
       'error' => 'Failed to revert order status'
     )));
   }
+
+  neighborhub_record_usage_event('order_state_changed', [
+    'from_state' => $order['state'],
+    'to_state' => $revertToState,
+  ], 'order-state-' . $orderId . '-' . $revertToState);
 
   http_response_code(200);
   exit(json_encode(array(
@@ -2634,6 +2670,11 @@ function handle_accept_delivery($request)
     )));
   }
 
+  neighborhub_record_usage_event('order_state_changed', [
+    'from_state' => 'READY_FOR_PICKUP',
+    'to_state' => 'IN_TRANSIT',
+  ], 'order-state-' . $orderId . '-IN_TRANSIT');
+
   http_response_code(200);
   exit(json_encode(array(
     'success' => true,
@@ -2828,6 +2869,11 @@ function handle_complete_delivery($request)
       'error' => 'Failed to complete delivery'
     )));
   }
+
+  neighborhub_record_usage_event('order_state_changed', [
+    'from_state' => 'IN_TRANSIT',
+    'to_state' => 'DELIVERED',
+  ], 'order-state-' . $orderId . '-DELIVERED');
 
   Courier::incrementDeliveryCount($courierId);
 
@@ -3938,6 +3984,11 @@ function handle_mark_ready_for_pickup($request)
     )));
   }
 
+  neighborhub_record_usage_event('order_state_changed', [
+    'from_state' => 'CONFIRMED',
+    'to_state' => 'READY_FOR_PICKUP',
+  ], 'order-state-' . $orderId . '-READY_FOR_PICKUP');
+
   // If the order is not a delivery, we will handle the financial split between the merchant and platform.
   if (!$order['delivery_requested']) {
 
@@ -4060,6 +4111,14 @@ function handle_cancel_order($request)
     )));
   }
 
+  neighborhub_record_usage_event('order_cancelled', [
+    'actor_role' => $isAdmin ? 'admin' : ($isMerchant ? 'merchant' : 'customer'),
+  ], 'order-cancelled-' . $orderId);
+  neighborhub_record_usage_event('order_state_changed', [
+    'from_state' => $order['state'],
+    'to_state' => 'CANCELLED',
+  ], 'order-state-' . $orderId . '-CANCELLED');
+
   http_response_code(200);
   exit(json_encode(array(
     'success' => true,
@@ -4068,155 +4127,247 @@ function handle_cancel_order($request)
   )));
 }
 
+function handle_get_report_data($request)
+{
+  header('Cache-Control: private, no-store');
+  $app = App::getInstance('neighborhub');
+  $app->includeClass('NeighborhubReporting');
+  $reporting = new NeighborhubReporting($app->db);
+  $userId = (int)($_SESSION['user']['id'] ?? 0);
+  $isAdmin = !empty($_SESSION['user']['is_admin']) || !empty($app->user->is_admin);
+  $view = neighborhub_report_view($request, $isAdmin);
+  $reportType = (string)($request['report_type'] ?? 'orders_summary');
+
+  try {
+    if (in_array($reportType, ['analytics_summary', 'analytics_events'], true)) {
+      $merchantId = (int)($request['merchant_id'] ?? 0);
+      if ($view === 'merchant' && $merchantId <= 0) {
+        $merchantId = (int)($_SESSION['user']['active_merchant_id'] ?? 0);
+      }
+      $result = $reporting->getAnalyticsReport($request, $isAdmin, $userId, $merchantId);
+      send_json_response(['success' => true, 'data' => $result]);
+    }
+
+    if (isset($_SESSION['user']['active_merchant_id']) && $view === 'merchant' && empty($request['merchant_id'])) {
+      $request['merchant_id'] = (int)$_SESSION['user']['active_merchant_id'];
+    }
+    $result = $reporting->getOrderReport(
+      $view,
+      $userId,
+      $isAdmin,
+      $request,
+      (int)($request['limit'] ?? 25),
+      (int)($request['offset'] ?? 0)
+    );
+    send_json_response(['success' => true, 'data' => $result]);
+  } catch (DomainException $e) {
+    send_json_response(['success' => false, 'error' => $e->getMessage()], 403);
+  } catch (InvalidArgumentException $e) {
+    send_json_response(['success' => false, 'error' => $e->getMessage()], 400);
+  } catch (Throwable $e) {
+    error_log('Neighborhub report query failed: ' . $e->getMessage());
+    send_json_response(['success' => false, 'error' => 'Unable to load report data.'], 500);
+  }
+}
+
 function handle_export_data($request)
 {
-  // Validate CSRF / Auth Token
+  header('Cache-Control: private, no-store');
+  header('X-Content-Type-Options: nosniff');
   if (!validate_csrf_request()) {
     http_response_code(401);
-    echo json_encode(['error' => 'Unauthorized']);
-    exit;
+    exit(json_encode(['success' => false, 'error' => 'Unauthorized']));
   }
 
-  $app = App::getInstance();
-  $db = $app->db; // Standard DB wrapper
+  $app = App::getInstance('neighborhub');
+  $app->includeClass('NeighborhubReporting');
+  $reporting = new NeighborhubReporting($app->db);
+  $userId = (int)($_SESSION['user']['id'] ?? 0);
+  $isAdmin = !empty($_SESSION['user']['is_admin']) || !empty($app->user->is_admin);
+  $view = neighborhub_report_view($request, $isAdmin);
+  $reportType = (string)($request['report_type'] ?? 'orders_summary');
+  $format = strtolower((string)($request['format'] ?? 'csv'));
 
-  $userId = $_SESSION['user']['id'] ?? 0;
-  $userRole = $_SESSION['user']['role'] ?? 'customer'; // admin, merchant, courier, customer
-
-  $startDate = filter_var($request['start_date'] ?? '', FILTER_SANITIZE_STRING);
-  $endDate = filter_var($request['end_date'] ?? '', FILTER_SANITIZE_STRING);
-  $format = strtolower($request['format'] ?? 'csv') === 'json' ? 'json' : 'csv';
-  $reportType = $request['report_type'] ?? 'orders_summary';
-  $merchantId = intval($request['merchant_id'] ?? 0);
-
-  if (!$startDate || !$endDate) {
-    http_response_code(400);
-    echo json_encode(['error' => 'Invalid date range']);
-    exit;
+  if (!in_array($format, ['csv', 'json'], true)) {
+    send_json_response(['success' => false, 'error' => 'Unsupported export format.'], 400);
   }
 
-  $params = [
-    ':start_date' => $startDate . ' 00:00:00',
-    ':end_date'   => $endDate . ' 23:59:59'
-  ];
-
-  // 1. SELECT SQL BASED ON REPORT TYPE & ROLE
-  if ($reportType === 'line_items') {
-    // Detailed Itemized Breakdown
-    $sql = "SELECT 
-              o.order_number,
-              o.created_at AS order_date,
-              p.name AS product_name,
-              p.sku,
-              p.tags,
-              oi.quantity,
-              oi.price_at_order,
-              oi.subtotal AS item_subtotal,
-              o.state AS order_status
-            FROM neighborhub_order_items oi
-            JOIN neighborhub_orders o ON oi.order_id = o.id
-            JOIN neighborhub_products p ON oi.product_id = p.id
-            WHERE o.created_at BETWEEN :start_date AND :end_date";
-
-    if ($merchantId > 0) {
-      $sql .= " AND o.merchant_id = :merchant_id";
-      $params[':merchant_id'] = $merchantId;
+  try {
+    if (str_starts_with($reportType, 'analytics_')) {
+      $merchantId = (int)($request['merchant_id'] ?? 0);
+      if ($view === 'merchant' && $merchantId <= 0) {
+        $merchantId = (int)($_SESSION['user']['active_merchant_id'] ?? 0);
+      }
+      $result = $reporting->getAnalyticsExport($request, $isAdmin, $reportType, $userId, $merchantId);
+    } else {
+      if (isset($_SESSION['user']['active_merchant_id']) && $view === 'merchant' && empty($request['merchant_id'])) {
+        $request['merchant_id'] = (int)$_SESSION['user']['active_merchant_id'];
+      }
+      $result = $reporting->getOrderExport($view, $userId, $isAdmin, $request);
     }
-    $sql .= " ORDER BY o.created_at DESC";
-  } else if ($reportType === 'payouts') {
-    // Financial & Fees Summary
-    $sql = "SELECT 
-              o.order_number,
-              o.created_at AS order_date,
-              o.payment_method,
-              o.subtotal_amount,
-              o.processing_fee,
-              o.platform_fee,
-              o.sales_tax,
-              o.delivery_fee,
-              o.tips,
-              o.total_amount,
-              (o.subtotal_amount + o.sales_tax - o.platform_fee - o.processing_fee) AS net_merchant_payout,
-              o.state AS order_status
-            FROM neighborhub_orders o
-            WHERE o.created_at BETWEEN :start_date AND :end_date";
-
-    if ($merchantId > 0) {
-      $sql .= " AND o.merchant_id = :merchant_id";
-      $params[':merchant_id'] = $merchantId;
-    }
-    $sql .= " ORDER BY o.created_at DESC";
-  } else {
-    // Default: Orders Summary
-    $sql = "SELECT 
-              o.order_number,
-              o.created_at AS order_date,
-              c.display_name AS customer_name,
-              m.business_name AS merchant_name,
-              cour.business_name AS courier_name,
-              o.subtotal_amount,
-              o.delivery_fee,
-              o.tips,
-              o.sales_tax,
-              o.total_amount,
-              o.payment_method,
-              o.state AS order_status,
-              o.delivered_at
-            FROM neighborhub_orders o
-            LEFT JOIN neighborhub_customers c ON o.customer_id = c.id
-            LEFT JOIN neighborhub_merchants m ON o.merchant_id = m.id
-            LEFT JOIN neighborhub_couriers cour ON o.courier_id = cour.id
-            WHERE o.created_at BETWEEN :start_date AND :end_date";
-
-    // Scope query based on user context
-    if ($merchantId > 0) {
-      $sql .= " AND o.merchant_id = :merchant_id";
-      $params[':merchant_id'] = $merchantId;
-    } else if ($userRole === 'customer') {
-      // Find customer record for logged in user
-      $sql .= " AND c.user_id = :user_id";
-      $params[':user_id'] = $userId;
-    } else if ($userRole === 'courier') {
-      // Find courier record for logged in user
-      $sql .= " AND cour.user_id = :user_id";
-      $params[':user_id'] = $userId;
-    }
-    $sql .= " ORDER BY o.created_at DESC";
+  } catch (DomainException $e) {
+    send_json_response(['success' => false, 'error' => $e->getMessage()], 403);
+  } catch (LengthException $e) {
+    send_json_response(['success' => false, 'error' => $e->getMessage()], 413);
+  } catch (InvalidArgumentException $e) {
+    send_json_response(['success' => false, 'error' => $e->getMessage()], 400);
+  } catch (Throwable $e) {
+    error_log('Neighborhub export failed: ' . $e->getMessage());
+    send_json_response(['success' => false, 'error' => 'Unable to generate export.'], 500);
   }
 
-  // Execute query safely
-  $stmt = $db->prepare($sql);
-  $stmt->execute($params);
-  $records = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-  // 2. STREAM OUTPUT TO BROWSER
-  $filename = "export_{$reportType}_{$startDate}_to_{$endDate}.{$format}";
+  $dateRange = $result['filters'];
+  $filename = sprintf(
+    'neighborhub_%s_%s_to_%s.%s',
+    preg_replace('/[^a-z0-9_]/i', '', $reportType),
+    $dateRange['start_date'],
+    $dateRange['end_date'],
+    $format
+  );
 
   if ($format === 'json') {
     header('Content-Type: application/json; charset=utf-8');
-    header("Content-Disposition: attachment; filename=\"{$filename}\"");
-    echo json_encode($records, JSON_PRETTY_PRINT);
+    header('Content-Disposition: attachment; filename="' . $filename . '"');
+    $metadata = [
+      'report_type' => $reportType,
+      'filters' => $result['filters'],
+      'total' => $result['total'],
+    ];
+    if (isset($result['summary'])) {
+      $metadata['summary'] = $result['summary'];
+    }
+    echo json_encode([
+      'metadata' => $metadata,
+      'records' => $result['records'],
+    ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE);
     exit;
   }
 
-  // Stream CSV
+  $headers = !empty($result['records'])
+    ? array_keys($result['records'][0])
+    : neighborhub_export_headers($reportType);
   header('Content-Type: text/csv; charset=utf-8');
-  header("Content-Disposition: attachment; filename=\"{$filename}\"");
-
+  header('Content-Disposition: attachment; filename="' . $filename . '"');
   $output = fopen('php://output', 'w');
-
-  if (!empty($records)) {
-    // Add CSV column headers dynamically from keys
-    fputcsv($output, array_keys($records[0]));
-    foreach ($records as $row) {
-      fputcsv($output, $row);
-    }
-  } else {
-    fputcsv($output, ['No records found for the selected period']);
+  if ($output === false) {
+    throw new RuntimeException('Unable to open export output stream.');
   }
-
+  fwrite($output, "\xEF\xBB\xBF");
+  fputcsv($output, $headers, ',', '"', '');
+  foreach ($result['records'] as $record) {
+    $csvRow = array_map(static function ($value): string {
+      if (is_array($value) || is_object($value)) {
+        $value = json_encode($value, JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE);
+      }
+      return NeighborhubReporting::escapeCsvCell($value);
+    }, $record);
+    fputcsv($output, $csvRow, ',', '"', '');
+  }
   fclose($output);
   exit;
+}
+
+function neighborhub_export_headers(string $reportType): array
+{
+  $headers = [
+    'orders_summary' => ['order_number', 'order_date', 'merchant_name', 'order_status', 'total_amount', 'delivered_at'],
+    'line_items' => ['order_number', 'order_date', 'merchant_name', 'product_name', 'quantity', 'price_at_order', 'item_subtotal', 'order_status'],
+    'payouts' => ['order_number', 'order_date', 'merchant_name', 'subtotal_amount', 'processing_fee', 'platform_fee', 'sales_tax', 'delivery_fee', 'tips', 'total_amount', 'estimated_merchant_payout', 'order_status'],
+    'analytics_summary' => ['event_date', 'event_type', 'event_count'],
+    'analytics_events' => ['event_type', 'actor_role', 'properties', 'created_at'],
+  ];
+
+  return $headers[$reportType] ?? ['record'];
+}
+
+function neighborhub_report_view(array $request, bool $isAdmin): string
+{
+  if (isset($request['view']) && $request['view'] !== '') {
+    return (string)$request['view'];
+  }
+  if ($isAdmin) {
+    return 'admin';
+  }
+  if (!empty($_SESSION['user']['active_merchant_id'])) {
+    return 'merchant';
+  }
+  if (!empty($_SESSION['user']['courier_id'])) {
+    return 'courier';
+  }
+  return 'customer';
+}
+
+function neighborhub_record_usage_event(
+  string $eventType,
+  array $properties = [],
+  ?string $dedupeKey = null,
+  ?int $merchantId = null
+): void
+{
+  try {
+    $app = App::getInstance('neighborhub');
+    $app->includeClass('NeighborhubReporting');
+    $role = 'guest';
+    if (!empty($_SESSION['user']['id'])) {
+      if (!empty($_SESSION['user']['is_admin']) || !empty($app->user->is_admin)) {
+        $role = 'admin';
+      } elseif (!empty($_SESSION['user']['courier_id'])) {
+        $role = 'courier';
+      } elseif (!empty($_SESSION['user']['active_merchant_id'])) {
+        $role = 'merchant';
+      } else {
+        $role = 'customer';
+      }
+    }
+    if ($merchantId === null && in_array($eventType, ['order_state_changed', 'order_cancelled'], true)
+      && $dedupeKey !== null
+      && preg_match('/^order-(?:state|cancelled)-(\d+)/', $dedupeKey, $matches)
+    ) {
+      $orderStmt = $app->db->prepare('SELECT merchant_id FROM neighborhub_orders WHERE id = :order_id LIMIT 1');
+      $orderStmt->execute([':order_id' => (int)$matches[1]]);
+      $resolvedMerchantId = $orderStmt->fetchColumn();
+      $merchantId = $resolvedMerchantId === false ? null : (int)$resolvedMerchantId;
+    }
+    (new NeighborhubReporting($app->db))->recordEvent($eventType, $role, $properties, $dedupeKey, $merchantId);
+  } catch (Throwable $e) {
+    error_log('Neighborhub usage event recording failed for ' . $eventType . ': ' . $e->getMessage());
+  }
+}
+
+function handle_track_usage_event(array $request): void
+{
+  if (!validate_csrf_request()) {
+    http_response_code(401);
+    exit(json_encode(['success' => false, 'error' => 'Unauthorized']));
+  }
+  $operation = (string)($request['operation'] ?? '');
+  if (!in_array($operation, ['add', 'remove', 'quantity'], true)) {
+    send_json_response(['success' => false, 'error' => 'Invalid cart event.'], 400);
+  }
+  $productId = (int)($request['product_id'] ?? 0);
+  $requestedMerchantId = (int)($request['merchant_id'] ?? 0);
+  if ($productId <= 0 || $requestedMerchantId <= 0) {
+    send_json_response(['success' => false, 'error' => 'A valid cart product is required.'], 400);
+  }
+  $app = App::getInstance('neighborhub');
+  $productStmt = $app->db->prepare(
+    'SELECT merchant_id FROM neighborhub_products WHERE id = :product_id AND merchant_id = :merchant_id LIMIT 1'
+  );
+  $productStmt->execute([
+    ':product_id' => $productId,
+    ':merchant_id' => $requestedMerchantId,
+  ]);
+  $merchantId = $productStmt->fetchColumn();
+  if ($merchantId === false) {
+    send_json_response(['success' => false, 'error' => 'Cart product was not found for this merchant.'], 400);
+  }
+  $itemCount = max(0, (int)($request['item_count'] ?? 0));
+  $bucket = $itemCount === 0 ? '0' : ($itemCount <= 3 ? '1-3' : ($itemCount <= 10 ? '4-10' : '11+'));
+  neighborhub_record_usage_event('cart_updated', [
+    'operation' => $operation,
+    'item_count_bucket' => $bucket,
+  ], null, (int)$merchantId);
+  send_json_response(['success' => true]);
 }
 
 
