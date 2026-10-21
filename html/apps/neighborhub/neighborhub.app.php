@@ -1162,7 +1162,7 @@ function neighborhub_install_db()
   $app = App::getInstance('neighborhub');
   $tableSql = "
     SET FOREIGN_KEY_CHECKS = 0;
-    DROP TABLE IF EXISTS neighborhub_usage_events;
+    #DROP TABLE IF EXISTS neighborhub_usage_events;
     DROP TABLE IF EXISTS neighborhub_delivery_tracking;
     DROP TABLE IF EXISTS neighborhub_images;
     DROP TABLE IF EXISTS neighborhub_order_items;
@@ -1446,6 +1446,7 @@ function neighborhub_install_db()
       UNIQUE KEY idx_session_id (session_id),
       KEY idx_lookup (target_role, target_id, status)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
     CREATE TABLE IF NOT EXISTS neighborhub_usage_events (
       id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
       event_type VARCHAR(64) NOT NULL,
@@ -1460,6 +1461,7 @@ function neighborhub_install_db()
       CONSTRAINT fk_nh_usage_merchant FOREIGN KEY (merchant_id)
         REFERENCES neighborhub_merchants(id) ON DELETE SET NULL
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
     CREATE INDEX idx_nh_merch_user ON neighborhub_merchants(user_id, status);
     CREATE INDEX idx_nh_merch_status ON neighborhub_merchants(status);
     CREATE INDEX idx_nh_cust_user ON neighborhub_customers(user_id, status);

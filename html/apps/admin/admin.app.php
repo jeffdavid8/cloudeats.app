@@ -307,7 +307,7 @@ function admin_render_body(&$app)
                 $tables = [];
                 $tables[] = app_invoke('admin', 'db_tables');
                 $tables[] = app_invoke('stitch', 'db_tables');
-                $tables[] = app_invoke('neighborhub', 'db_tables');
+                $tables[] = array_diff(app_invoke('neighborhub', 'db_tables'), ['neighborhub_usage_events']);
                 $tables = array_reduce($tables, 'array_merge', []);
 
                 render('pages/restore_db.php', array('tables' => $tables));
