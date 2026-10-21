@@ -46,6 +46,9 @@ if ($spotlightProductId) {
     <div class="card horizontal sweets-card" style="border-top:5px solid var(--brand-caramel);">
       <div class="card-stacked">
         <div class="card-content" style="padding:24px 28px;">
+
+          <p class="center-align" style="margin-bottom: 2rem;"><?= htmlspecialchars($merchant->description, ENT_QUOTES, 'UTF-8') ?></p>
+
           <p class="iv-menu-intro">Come on in · Browse the menu</p>
           <div class="row" style="margin-bottom:0;">
             <div class="col s12 m6">
