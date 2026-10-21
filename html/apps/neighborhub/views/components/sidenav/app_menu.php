@@ -36,7 +36,11 @@ if ($this->user->is_admin):
   </script>
 <?
 endif;
-
+?>
+<li>
+  <a href="/?app=vault"><i class="fab fa-btc"></i>My Vault</a>
+</li>
+<?
 if ($this->get('merchant') && $this->get('merchant_staff_role')) {
  render('components/sidenav/merchant_menu.php');
 }

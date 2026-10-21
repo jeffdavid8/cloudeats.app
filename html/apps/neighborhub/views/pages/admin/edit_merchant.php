@@ -9,6 +9,9 @@ if (!defined('MB_RUNNING')) exit;
  * @var Int $merchant_id
  * @var String $owner_email
  * */
+if (!$merchant) {
+  $merchant = new Merchant();
+}
 //error_log(print_r($merchant, true));
 //error_log($merchant_id);
 // ============================================================================

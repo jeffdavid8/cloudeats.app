@@ -165,7 +165,7 @@ function neighborhub_init(&$app)
       }
       neighborhub_init_merchant_context($app, $merchantId);
       $styles = array(
-        'apps/neighborhub/css/merchant.css',
+        './apps/neighborhub/css/merchant.css',
       );
       $scripts = array(
         'apps/neighborhub/js/multiTenantShoppingCart.js',
@@ -198,6 +198,9 @@ function neighborhub_init(&$app)
       $styles = array(
         'apps/neighborhub/css/customer.css',
       );
+      if (file_exists($app->app_dir.'/css/merchant_'.$merchantId.'/merchant-'.$merchantId.'-customer.css')) {
+        $styles[] = 'apps/neighborhub/css/merchant_'.$merchantId.'/merchant-'.$merchantId.'-customer.css';
+      }
       $scripts = array(
         'apps/neighborhub/js/multiTenantShoppingCart.js',
         'apps/neighborhub/js/merchantStorefront.js',

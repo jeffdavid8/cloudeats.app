@@ -118,7 +118,8 @@ class Merchant
         }
     }
 
-    public function address() {
+    public function address()
+    {
         $address = '';
         if (isset($this->city)) {
             $address .= $this->city;
@@ -360,20 +361,46 @@ class Merchant
                 ? "ST_PointFromText(CONCAT('POINT(', ?, ' ', ?, ')'), 4326)"
                 : "NULL";
 
-            $sql = "INSERT INTO neighborhub_merchants
-            (user_id, business_name, description, address, city, state, zip_code, latitude, longitude, location, phone, status, website, facebook, 
-             platform_fee_rate, platform_flat_fee, store_hours, keywords, delivery_assignment_mode, 
-             delivery_max_distance, stripe_api_key, stripe_percent_fee, stripe_flat_fee, type, meta, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, {$locationSql}, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
+            // 1. Build the correct SQL string with exactly 27 target columns and 27 value outputs
+            $sql = "INSERT INTO neighborhub_merchants (
+            user_id, business_name, description, address, city, state, zip_code, 
+            latitude, longitude, location, phone, status, website, facebook, 
+            platform_fee_rate, platform_flat_fee, store_hours, keywords, 
+            delivery_assignment_mode, delivery_max_distance, stripe_api_key, 
+            stripe_percent_fee, stripe_flat_fee, type, meta, created_at, updated_at
+        ) VALUES (
+            ?, ?, ?, ?, ?, ?, ?, 
+            ?, ?, {$locationSql}, ?, ?, ?, ?, 
+            ?, ?, ?, ?, 
+            ?, ?, ?, 
+            ?, ?, ?, ?, NOW(), NOW()
+        )";
 
-            $params = [$userId, $businessName, $description, $address, $city, $state, $zipCode, $latitude, $longitude];
+            // 2. Start the parameters array in the strict order of appearance
+            $params = [
+                $userId,
+                $businessName,
+                $description,
+                $address,
+                $city,
+                $state,
+                $zipCode,
+                $latitude,
+                $longitude
+            ];
 
-            // Append lat/lng again for ST_PointFromText if coordinates exist
+            // 3. Handle the dynamic placeholders inside your specific spatial function {$locationSql}
             if ($latitude !== null && $longitude !== null) {
+                // If your locationSql is ST_PointFromText('POINT(? ?)') or similar:
                 $params[] = $longitude;
                 $params[] = $latitude;
+            } else {
+                // If coordinates don't exist, ensure parameters still match what {$locationSql} expects (e.g. NULL)
+                // Adjust this depending on what your specific $locationSql variable generates when empty
+                $params[] = null;
             }
 
+            // 4. Push the remaining trailing variables to match the rest of the columns
             array_push(
                 $params,
                 $phone,
@@ -397,6 +424,7 @@ class Merchant
             if ($stmt->execute($params)) {
                 return intval($db->lastInsertId());
             }
+
             return false;
         } catch (Exception $e) {
             error_log("Merchant::create Exception: " . $e->getMessage());
@@ -702,7 +730,7 @@ class Merchant
             return [];
         }
     }
-    
+
 
     /**
      * Add a staff member to a merchant

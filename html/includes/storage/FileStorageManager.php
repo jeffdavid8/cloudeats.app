@@ -583,7 +583,7 @@ error_log("Provider type: " . $this->provider->getProviderType());
                     'public_url_base' => '/api/file.php?f='
                 ],
                 self::STORAGE_GOOGLE_CLOUD => [
-                    'project_id' => 'mediabrain-app',
+                    'project_id' => 'mediabrain',
                     'key_file' => '/tmp/storage-sa-key.json',
                     'bucket_prefix' => 'mediabrain-',
                     'bucket_name' => 'cloudeats-system-data',

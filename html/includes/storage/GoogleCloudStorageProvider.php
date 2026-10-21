@@ -16,7 +16,7 @@ class GoogleCloudStorageProvider implements StorageProviderInterface
     public function __construct($config = [])
     {
         $this->config = array_merge([
-            'project_id' => 'mediabrain-app',
+            'project_id' => 'mediabrain',
             'key_file' => '/var/www/cloudeats.app.local/secrets/service-account-key.json',
             'bucket_name' => 'cloudeats-system-data',
             'bucket_prefix' => 'mediabrain-',
