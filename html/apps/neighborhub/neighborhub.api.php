@@ -58,6 +58,8 @@ if (!in_array($action, array(
   'verify_registration',
 ))) {
   if (!isset($_SESSION['user']) || empty($_SESSION['user']['id'])) {
+    logger('----here----------------------------------------------');
+    logger($_SESSION['user']);
     http_response_code(401);
     exit(json_encode(array(
       'success' => false,
@@ -2035,6 +2037,7 @@ function handle_list_customer_orders($request)
 {
   $app = App::getInstance('neighborhub');
   $app->includeModel('order');
+  $app->includeModel('customer');
 
   // FIX: point parameters safely to $request context workspace
   $customerId = isset($request['customer_id']) ? intval($request['customer_id']) : null;
@@ -2051,8 +2054,10 @@ function handle_list_customer_orders($request)
     )));
   }
 
-  if ((int)$customerId !== (int)$_SESSION['customer_id'] && $_SESSION['user']['role'] !== 'admin') {
-    http_response_code(403);
+  $customer = Customer::getCustomerById($customerId);
+
+  if ((int)$customer->user_id !== (int)$app->user->id && $_SESSION['user']['role'] !== 'admin') {
+    http_response_code(400);
     exit(json_encode(array(
       'success' => false,
       'error' => 'You can only view your own orders'
@@ -3997,27 +4002,27 @@ function handle_mark_ready_for_pickup($request)
       // ============================================================================
       // 📊 TRUSTED FINANCIAL SPLIT MANAGEMENT ENGINE
       // ============================================================================
-    $merchantSubtotal = floatval($order['subtotal_amount']);
+      $merchantSubtotal = floatval($order['subtotal_amount']);
 
-    // 2. Fetch the percentage rate
-    $merchantAppFeePercent = floatval($merchant->platform_fee_rate) / 100;
+      // 2. Fetch the percentage rate
+      $merchantAppFeePercent = floatval($merchant->platform_fee_rate) / 100;
 
-    // 3. Calculate percentage cut
-    $appFeeCutFromMerchant = round($merchantSubtotal * $merchantAppFeePercent, 2);
+      // 3. Calculate percentage cut
+      $appFeeCutFromMerchant = round($merchantSubtotal * $merchantAppFeePercent, 2);
 
-    // 4. Add the flat fee ($0.30) if it exists
-    if (!empty($merchant->platform_flat_fee) && floatval($merchant->platform_flat_fee) > 0) {
-      $appFeeCutFromMerchant = $appFeeCutFromMerchant + floatval($merchant->platform_flat_fee);
-    }
+      // 4. Add the flat fee ($0.30) if it exists
+      if (!empty($merchant->platform_flat_fee) && floatval($merchant->platform_flat_fee) > 0) {
+        $appFeeCutFromMerchant = $appFeeCutFromMerchant + floatval($merchant->platform_flat_fee);
+      }
 
-    // 5. Final Payout
-    $finalMerchantPayout = $merchantSubtotal - $appFeeCutFromMerchant;
+      // 5. Final Payout
+      $finalMerchantPayout = $merchantSubtotal - $appFeeCutFromMerchant;
 
-    if (!empty($order['tips'])) {
-      $finalMerchantPayout = $finalMerchantPayout + floatval($order['tips']);
-    }
+      if (!empty($order['tips'])) {
+        $finalMerchantPayout = $finalMerchantPayout + floatval($order['tips']);
+      }
 
-    /*
+      /*
     error_log('--------------------------------------------------------------------------');
     error_log(print_r($merchant, true));
     error_log(print_r($order, true));
@@ -4302,8 +4307,7 @@ function neighborhub_record_usage_event(
   array $properties = [],
   ?string $dedupeKey = null,
   ?int $merchantId = null
-): void
-{
+): void {
   try {
     $app = App::getInstance('neighborhub');
     $app->includeClass('NeighborhubReporting');
@@ -4319,7 +4323,8 @@ function neighborhub_record_usage_event(
         $role = 'customer';
       }
     }
-    if ($merchantId === null && in_array($eventType, ['order_state_changed', 'order_cancelled'], true)
+    if (
+      $merchantId === null && in_array($eventType, ['order_state_changed', 'order_cancelled'], true)
       && $dedupeKey !== null
       && preg_match('/^order-(?:state|cancelled)-(\d+)/', $dedupeKey, $matches)
     ) {
