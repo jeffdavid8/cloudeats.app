@@ -41,9 +41,6 @@ if ($spotlightProductId) {
       <h2><?= htmlspecialchars($merchant->business_name, ENT_QUOTES, 'UTF-8') ?></h2>
       <p>Good food, sweet treats, and the kind of hometown stop that makes a day better. Browse the menu and find a new favorite.</p>
       <div class="iv-starline" aria-hidden="true">★ ★ ★ ★ ★</div>
-
-      <p class="center-align" style="margin-bottom: 2rem;"><?= htmlspecialchars($merchant->description, ENT_QUOTES, 'UTF-8') ?></p>
-
     </section>
 
     <div class="card horizontal sweets-card" style="border-top:5px solid var(--brand-caramel);">
