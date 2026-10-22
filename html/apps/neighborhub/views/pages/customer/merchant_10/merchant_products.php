@@ -41,6 +41,15 @@ if ($spotlightProductId) {
       <h2><?= htmlspecialchars($merchant->business_name, ENT_QUOTES, 'UTF-8') ?></h2>
       <p>Good food, sweet treats, and the kind of hometown stop that makes a day better. Browse the menu and find a new favorite.</p>
       <div class="iv-starline" aria-hidden="true">★ ★ ★ ★ ★</div>
+      <!-- Product Search & Filter Bar -->
+      <div class="row" style="margin-bottom: 20px;">
+        <div class="col s12 m8 offset-m2">
+          <div class="card-panel" style="padding: 12px 20px; border-radius: 8px; display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
+            <i class="fas fa-search" style="color: var(--brand-text-muted);"></i>
+            <input type="search" id="iv-product-search-input" placeholder="Search menu items..." aria-label="Search products" style="border: none; box-shadow: none; margin: 0; height: 35px; font-size: 15px; width: 100%;">
+          </div>
+        </div>
+      </div>
     </section>
 
     <div class="card horizontal sweets-card" style="border-top:5px solid var(--brand-caramel);">
@@ -93,7 +102,7 @@ if ($spotlightProductId) {
           </div>
           <div class="col s12 m8">
             <h4 class="sweets-text-brown" style="margin: 0 0 8px 0; font-weight: 900;"><?php echo htmlspecialchars($spotlightProduct['name']); ?>
-              <a class="page_link waves-effect waves-light" style="color: var(--brand-caramel);" href="<?= htmlspecialchars($this->config['base_url'], ENT_QUOTES, 'UTF-8') ?>/?app=neighborhub&amp;view=customer&amp;p=merchant_products&amp;merchant_id=<?= rawurlencode((string)$merchant->id) ?><?= (get_var('menu_id', false)) ? '&amp;menu_id='. rawurlencode((string)get_var('menu_id')) : '' ?>&amp;product_id=<?= rawurlencode((string)$spotlightProduct['id']) ?>"><i class="material-icons">share</i></a>
+              <a class="page_link waves-effect waves-light" style="color: var(--brand-caramel);" href="<?= htmlspecialchars($this->config['base_url'], ENT_QUOTES, 'UTF-8') ?>/?app=neighborhub&amp;view=customer&amp;p=merchant_products&amp;merchant_id=<?= rawurlencode((string)$merchant->id) ?><?= (get_var('menu_id', false)) ? '&amp;menu_id=' . rawurlencode((string)get_var('menu_id')) : '' ?>&amp;product_id=<?= rawurlencode((string)$spotlightProduct['id']) ?>"><i class="material-icons">share</i></a>
             </h4>
 
             <h5 style="color: var(--brand-caramel); margin: 0 0 12px 0; font-weight: 800;">$<?php echo number_format($spotlightProduct['price'], 2); ?></h5>
@@ -254,5 +263,37 @@ if ($spotlightProductId) {
       toastIcon: 'fa-check-circle', // Customize icon per theme if desired (e.g. 'fa-fire-alt')
       toastVerb: 'order' // Customize text per theme if desired (e.g. 'order')
     });
+
+    const $searchInput = $('#iv-product-search-input');
+    const $productCards = $('.iv-product-grid .col'); // Each product grid column wrapper
+
+    function filterProducts() {
+      const query = $searchInput.val().toLowerCase().trim();
+      const activeFilter = $('.iv-filter-chip.is-active').data('filter') || 'all';
+
+      $productCards.each(function() {
+        const $card = $(this);
+        const name = $card.find('.iv-product-name span').text().toLowerCase();
+        const desc = $card.find('.iv-product-description').text().toLowerCase();
+        const isCustomizable = $card.find('.nh-customize-trigger').length > 0;
+
+        let matchesSearch = query === '' || name.includes(query) || desc.includes(query);
+        let matchesFilter = true;
+
+        if (activeFilter === 'customizable') {
+          matchesFilter = isCustomizable;
+        }
+
+        if (matchesSearch && matchesFilter) {
+          $card.show();
+        } else {
+          $card.hide();
+        }
+      });
+    }
+
+    // Bind search input event
+    $searchInput.on('input', filterProducts);
+
   });
 </script>
