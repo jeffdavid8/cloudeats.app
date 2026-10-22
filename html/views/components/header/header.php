@@ -21,7 +21,7 @@ if ($this->get('view') === 'customer' && !$customer->terms_accepted_at):
          <? render('components/header/header_left.php', array('search_string' => $search_string)); ?>
 
          <?php
-         if (in_array($this->get('page'), array('merchant_products', 'menus', 'dashboard', 'pos'))):
+         if (in_array($this->get('page'), array('merchant_products', 'menus', 'dashboard', 'pos', 'reports'))):
             $merchant = $this->get('merchant');
 
             if (!empty($merchant->image_url)): ?>

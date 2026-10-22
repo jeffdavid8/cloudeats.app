@@ -6,13 +6,19 @@ $products = $products ?? [];
 $spotlightProductId = $spotlightProductId ?? null;
 $categoryName = !empty($products) ? ($products[0]['category_name'] ?? 'Menu') : ($category['name'] ?? 'Menu');
 $cleanId = preg_replace('/-+/', '-', trim(preg_replace('/[^a-z0-9]+/', '-', str_replace('&', 'and', strtolower($categoryName))), '-'));
-$e = static function ($value) { return htmlspecialchars((string)($value ?? ''), ENT_QUOTES, 'UTF-8'); };
+$e = static function ($value) {
+  return htmlspecialchars((string)($value ?? ''), ENT_QUOTES, 'UTF-8');
+};
 $merchantAddress = trim(($merchant->address ?? '') . ', ' . ($merchant->city ?? '') . ', ' . ($merchant->state ?? '') . ' ' . ($merchant->zip_code ?? ''), ' ,');
 ?>
 <section class="iv-product-category" id="<?= $e($cleanId) ?>">
   <h4 class="iv-section-title"><?= $e($categoryName) ?></h4>
   <?php if (empty($products)): ?>
-    <div class="card sweets-card"><div class="card-content"><p>This menu category doesn't have any items listed yet.</p></div></div>
+    <div class="card sweets-card">
+      <div class="card-content">
+        <p>This menu category doesn't have any items listed yet.</p>
+      </div>
+    </div>
   <?php else: ?>
     <div class="row iv-product-grid">
       <?php foreach ($products as $prod):
@@ -50,11 +56,13 @@ $merchantAddress = trim(($merchant->address ?? '') . ', ' . ($merchant->city ?? 
             </div>
             <?php if (($merchant->status ?? '') === 'online'): ?>
               <div class="iv-card-action">
-                <div class="iv-quantity-row"><span class="iv-quantity-label">Quantity</span><div class="quantity-pill">
-                  <button type="button" class="btn-flat nh-card-qty-minus" aria-label="Decrease quantity" style="padding:0 7px;height:28px;line-height:28px;"><i class="fas fa-minus fa-xs"></i></button>
-                  <input type="number" class="nh-card-qty-input" value="1" min="1" step="1" aria-label="Quantity for <?= $e($name) ?>" style="width:36px;text-align:center;margin:0;border:0;height:28px;font-weight:800;-webkit-appearance:none;-moz-appearance:textfield;">
-                  <button type="button" class="btn-flat nh-card-qty-plus" aria-label="Increase quantity" style="padding:0 7px;height:28px;line-height:28px;"><i class="fas fa-plus fa-xs"></i></button>
-                </div></div>
+                <div class="iv-quantity-row"><span class="iv-quantity-label">Quantity</span>
+                  <div class="quantity-pill">
+                    <button type="button" class="btn-flat nh-card-qty-minus" aria-label="Decrease quantity" style="padding:0 7px;height:28px;line-height:28px;"><i class="fas fa-minus fa-xs"></i></button>
+                    <input type="number" class="nh-card-qty-input" value="1" min="1" step="1" aria-label="Quantity for <?= $e($name) ?>" style="width:36px;text-align:center;margin:0;border:0;height:28px;font-weight:800;-webkit-appearance:none;-moz-appearance:textfield;">
+                    <button type="button" class="btn-flat nh-card-qty-plus" aria-label="Increase quantity" style="padding:0 7px;height:28px;line-height:28px;"><i class="fas fa-plus fa-xs"></i></button>
+                  </div>
+                </div>
                 <?php if ($isCustomizable): ?>
                   <button type="button" class="btn waves-effect waves-light iv-action-btn nh-customize-trigger btn-custom-customize"
                     data-id="<?= $e($prod['id'] ?? '') ?>" data-name="<?= $e($name) ?>" data-type="<?= $e($productType) ?>" data-price="<?= $e($prod['price'] ?? 0) ?>"

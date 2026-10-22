@@ -231,10 +231,10 @@ if ($spotlightProductId) {
 
             <!-- Dropdown Categories -->
             <ul id="top-right-menu" class="dropdown-content">
+                <li class="category-menu-item-back-to-top"><a class="category-menu-item" data-category-anchor="top" href="#!">Back to Top</a></li>
               <?php foreach ($menus[$activeMenuId]['categories'] as $category):
                 $cleanId = preg_replace('/\s+/', '-', preg_replace('/[^a-z0-9\s-]/', '', str_replace('&', 'and', strtolower($category['name']))));
               ?>
-                <li class="category-menu-item-back-to-top"><a class="category-menu-item" data-category-anchor="top" href="#!">Back to Top</a></li>
                 <li><a class="category-menu-item" data-category-anchor="<?= $cleanId ?>" href="#!"><?= htmlspecialchars($category['name']) ?></a></li>
               <?php endforeach; ?>
             </ul>
