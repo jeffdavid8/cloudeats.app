@@ -648,6 +648,9 @@ if ($spotlightProductId) {
       <div style="font-size: 13px; text-transform: uppercase; letter-spacing: 2px; color: var(--brand-gold); font-weight: 800;">
         ★ Good To the Very Edge ★
       </div>
+
+    <? render('components/merchant_menu_product_search_filter.php') ?>
+
     </div>
   </div>
 </div>
