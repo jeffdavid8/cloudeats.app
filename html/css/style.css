@@ -15,6 +15,18 @@
   font-weight: 400;
   font-style: normal;
 }
+:root {
+  --primary-color: #2196f3;
+  --secondary-color: #ff9800;
+  --accent-color: #4caf50;
+  --background-color: #ffffff;
+  --surface-color: #f5f5f5;
+  --text-color: #212121;
+  --border-color: rgba(128, 128, 128, 0.3);
+  --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --border-radius: 8px;
+  --transition-speed: 0.3s;
+}
 
 :root {
   --cloudeats-orange: #ff6a00;
@@ -137,6 +149,9 @@ h6 {
   --z-sticky: 820;
   --z-fixed: 1030;
   --z-modal: 1040;
+
+  --border-radius: 8px;
+  --transition-speed: 0.3s;
 }
 
 /* ============================================================================
@@ -206,6 +221,10 @@ h6 {
   --e-stroke-color: #8ab4f8; /* Vibrant glowing pastel blue */
   --brand-accent: #f87171; /* Lighter, pastel coral-red for "Eats" to pass accessibility standards */
 
+  --text-color: #dbdbdb;
+  --border-color: rgba(128, 128, 128, 0.3);
+  --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
   /* Icon variables if needed */
   --icon-bg: #374151;
   --icon-inner: #60a5fa;
@@ -238,6 +257,10 @@ h6 {
   --c-stroke-color: #94a3b8; /* Muted grey accent */
   --e-stroke-color: #1a73e8; /* Crisp tech blue */
   --brand-accent: #dc2626; /* Vibrant red/coral for "Eats" */
+
+  --text-color: #212121;
+  --border-color: rgba(128, 128, 128, 0.3);
+  --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
   /* Icon variables if needed */
   --icon-bg: #e5e7eb;
@@ -572,7 +595,11 @@ header.header nav ul li button {
 .suggestions_container .collapsible-body,
 body .tts_player_menu_container nav {
   color: rgb(44, 44, 46);
-  background-color: rgb(253, 253, 253) !important; /* front page header user dropdown background - removing this make the user menu background transparend so you can see the hero section through it */
+  background-color: rgb(
+    253,
+    253,
+    253
+  ) !important; /* front page header user dropdown background - removing this make the user menu background transparend so you can see the hero section through it */
   backdrop-filter: blur(3px);
   border-bottom: 1px solid #fff;
   box-shadow: 0 19px 17px rgba(0, 0, 0, 0.25);
@@ -1206,7 +1233,6 @@ body.header-announcement .app-container {
 * Inputs 
 */
 
-
 .input-field input[type="text"],
 .input-field textarea[type="text"] {
   border-bottom: none !important;
@@ -1485,7 +1511,11 @@ table th {
   background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #fff 100%);
 }
 .nightMode .bottom-fade {
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #0f0f0f 100%);
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0) 0%,
+    #0f0f0f 100%
+  );
 }
 .nh-order-card {
   transition:
@@ -1504,17 +1534,17 @@ table th {
 }
 
 .nh-order-card span.new.badge {
-  float: none !important;          /* Stop Materialize float layout */
-  margin: 0 !important;            /* Clear Materialize default margins */
-  height: auto !important;         /* Allow height to adjust dynamically */
-  line-height: 1.2 !important;     /* Clean line-height for wrapped text */
-  padding: 4px 8px !important;    /* Comfortable padding */
-  font-size: 0.72rem !important;  /* Slightly smaller readable typography */
+  float: none !important; /* Stop Materialize float layout */
+  margin: 0 !important; /* Clear Materialize default margins */
+  height: auto !important; /* Allow height to adjust dynamically */
+  line-height: 1.2 !important; /* Clean line-height for wrapped text */
+  padding: 4px 8px !important; /* Comfortable padding */
+  font-size: 0.72rem !important; /* Slightly smaller readable typography */
   font-weight: 600;
   text-transform: uppercase;
-  border-radius: 4px;              /* Subtle rounded corners */
-  white-space: nowrap;            /* Prevent text wrapping inside the badge */
-  flex-shrink: 0;                  /* Keep badge from shrinking when title is long */
+  border-radius: 4px; /* Subtle rounded corners */
+  white-space: nowrap; /* Prevent text wrapping inside the badge */
+  flex-shrink: 0; /* Keep badge from shrinking when title is long */
 }
 /**
 * Pages
@@ -2380,7 +2410,7 @@ body > .grecaptcha-badge {
   margin-right: 0.5rem;
 }
 #wizard-steps-indicator span.badge {
-  float: none !important;          /* Stop Materialize float layout */
-  margin: 0 !important;            /* Clear Materialize default margins */
-  height: auto !important;         /* Allow height to adjust dynamically */
+  float: none !important; /* Stop Materialize float layout */
+  margin: 0 !important; /* Clear Materialize default margins */
+  height: auto !important; /* Allow height to adjust dynamically */
 }

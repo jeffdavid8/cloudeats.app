@@ -42,11 +42,24 @@ if ($spotlightProductId) {
       <p>Good food, sweet treats, and the kind of hometown stop that makes a day better. Browse the menu and find a new favorite.</p>
       <div class="iv-starline" aria-hidden="true">★ ★ ★ ★ ★</div>
       <!-- Product Search & Filter Bar -->
+      <!-- Product Search & Filter Bar -->
       <div class="row" style="margin-bottom: 20px;">
         <div class="col s12 m8 offset-m2">
           <div class="card-panel" style="padding: 12px 20px; border-radius: 8px; display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
             <i class="fas fa-search" style="color: var(--brand-text-muted);"></i>
             <input type="search" id="iv-product-search-input" placeholder="Search menu items..." aria-label="Search products" style="border: none; box-shadow: none; margin: 0; height: 35px; font-size: 15px; width: 100%;">
+          </div>
+
+          <!-- Search Results Counter & Filter Chips Row -->
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; padding: 0 4px;">
+            <? /*
+            <div class="iv-product-filters" style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px;" aria-label="Filter products by tag">
+              <button type="button" class="btn-small waves-effect waves-light iv-filter-chip is-active" data-filter="all" style="border-radius: 20px; background-color: var(--brand-caramel);">All Items</button>
+              <button type="button" class="btn-small waves-effect waves-light iv-filter-chip grey lighten-3 grey-text text-darken-3" data-filter="customizable" style="border-radius: 20px;">Customizable</button>
+            </div>
+            */ ?>
+            <!-- Result Count Indicator -->
+            <span id="iv-result-count" class="sweets-text-muted" style="font-size: 13px; font-weight: 600;" aria-live="polite"></span>
           </div>
         </div>
       </div>
@@ -265,11 +278,14 @@ if ($spotlightProductId) {
     });
 
     const $searchInput = $('#iv-product-search-input');
-    const $productCards = $('.iv-product-grid .col'); // Each product grid column wrapper
+    const $productCards = $('.iv-product-grid .col');
+    const $resultCountSpan = $('#iv-result-count');
+    const totalProducts = $productCards.length;
 
     function filterProducts() {
       const query = $searchInput.val().toLowerCase().trim();
       const activeFilter = $('.iv-filter-chip.is-active').data('filter') || 'all';
+      let visibleCount = 0;
 
       $productCards.each(function() {
         const $card = $(this);
@@ -286,14 +302,30 @@ if ($spotlightProductId) {
 
         if (matchesSearch && matchesFilter) {
           $card.show();
+          visibleCount++;
         } else {
           $card.hide();
         }
       });
+
+      // Update result count text indicator
+      if (query !== '' || activeFilter !== 'all') {
+        $resultCountSpan.text(`Showing ${visibleCount} of ${totalProducts} items`);
+      } else {
+        $resultCountSpan.text(`${totalProducts} items available`);
+      }
     }
 
-    // Bind search input event
+    // Initialize counter text on load
+    $resultCountSpan.text(`${totalProducts} items available`);
+
+    // Bind events
     $searchInput.on('input', filterProducts);
 
+    $('.iv-filter-chip').on('click', function() {
+      $('.iv-filter-chip').removeClass('is-active').addClass('grey lighten-3 grey-text text-darken-3').css('background-color', '');
+      $(this).addClass('is-active').removeClass('grey lighten-3 grey-text text-darken-3').css('background-color', 'var(--brand-caramel)');
+      filterProducts();
+    });
   });
 </script>
