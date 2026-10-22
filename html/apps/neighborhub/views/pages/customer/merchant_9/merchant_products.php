@@ -569,10 +569,10 @@ if ($spotlightProductId && isset($menus[$activeMenuId]['categories'])) {
       <div style="font-size: 13px; text-transform: uppercase; letter-spacing: 2px; color: var(--brand-gold); font-weight: 800;">
         ★ Home-Cooked Goodness & Fresh Coffee ★
       </div>
+      <div class="iv-starline" aria-hidden="true">★ ★ ★ ★ ★</div>
+      <? render('components/merchant_menu_product_search_filter.php') ?>
+
     </div>
-
-    <? render('components/merchant_menu_product_search_filter.php') ?>
-
   </div>
 </div>
 
