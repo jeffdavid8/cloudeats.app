@@ -402,6 +402,7 @@ body.scrolled .merchant-header-image .online-status-dot {
   border: 3px solid #fff8e9;
   box-shadow: 0 5px 14px #0002;
   border-radius: 50%;
+  display: flex;
 }
 
 .ivanhoes-storefront .dropdown-content {

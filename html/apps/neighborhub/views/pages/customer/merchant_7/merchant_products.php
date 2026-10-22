@@ -698,7 +698,7 @@ if ($spotlightProductId) {
   <div class="container" style="pointer-events: auto;">
     <div class="right">
       <div class="top-right-dropdown-wrapper">
-        <a class="dropdown-trigger btn-floating btn-large waves-effect waves-light" href="#" data-target="top-right-menu">
+        <a class="dropdown-trigger hover-grow btn-floating btn-large waves-effect waves-light" href="#" data-target="top-right-menu">
           <i class="fas fa-ellipsis-v"></i>
         </a>
 
