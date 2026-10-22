@@ -10,10 +10,12 @@ if (!defined('MB_RUNNING')) exit;
 
   <!-- Search Results Counter & Filter Chips Row -->
   <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; padding: 0 4px;">
+    <? /*
     <div class="iv-product-filters" style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px;" aria-label="Filter products by tag">
       <button type="button" class="btn-small waves-effect waves-light iv-filter-chip is-active" data-filter="all" style="border-radius: 20px; background-color: var(--brand-gold); color: #FFF; font-weight: 600;">All Items</button>
       <button type="button" class="btn-small waves-effect waves-light iv-filter-chip" data-filter="customizable" style="border-radius: 20px; background-color: rgba(255,255,255,0.15); color: var(--brand-text-main); font-weight: 600;">Customizable</button>
-    </div>
+    </div> 
+    */ ?>
     <!-- Result Count Indicator -->
     <span id="iv-result-count" style="font-size: 13px; font-weight: 600; color: #ffcc7c;" aria-live="polite"></span>
   </div>
