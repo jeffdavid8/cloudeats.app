@@ -231,7 +231,7 @@ if ($spotlightProductId) {
 
             <!-- Dropdown Categories -->
             <ul id="top-right-menu" class="dropdown-content">
-                <li class="category-menu-item-back-to-top"><a class="category-menu-item" data-category-anchor="top" href="#!">Back to Top</a></li>
+              <li class="category-menu-item-back-to-top"><a class="category-menu-item" data-category-anchor="top" href="#!">Back to Top</a></li>
               <?php foreach ($menus[$activeMenuId]['categories'] as $category):
                 $cleanId = preg_replace('/\s+/', '-', preg_replace('/[^a-z0-9\s-]/', '', str_replace('&', 'and', strtolower($category['name']))));
               ?>
@@ -249,13 +249,10 @@ if ($spotlightProductId) {
 <script>
   $(document).ready(function() {
     window.merchant = <?= json_encode($merchant) ?>;
-
-    $(document).ready(function() {
-      // Initialize standard merchant storefront interactions
-      window.storefront = new MerchantStorefront({
-        toastIcon: 'fa-check-circle', // Customize icon per theme if desired (e.g. 'fa-fire-alt')
-        toastVerb: 'order' // Customize text per theme if desired (e.g. 'order')
-      });
+    // Initialize standard merchant storefront interactions
+    window.storefront = new MerchantStorefront({
+      toastIcon: 'fa-check-circle', // Customize icon per theme if desired (e.g. 'fa-fire-alt')
+      toastVerb: 'order' // Customize text per theme if desired (e.g. 'order')
     });
   });
 </script>
