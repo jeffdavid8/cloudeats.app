@@ -800,7 +800,7 @@ nav ul a:hover {
 }
 .hover-grow {
   /* Smoothly animates the size change over 0.2 seconds */
-  transition: transform 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 .hover-grow:hover {
   /* Increases the size by 10% (1.1). Change to 1.05 for 5% */

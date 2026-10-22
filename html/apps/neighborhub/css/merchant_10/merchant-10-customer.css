@@ -398,8 +398,10 @@ body.scrolled .merchant-header-image .online-status-dot {
 
 .ivanhoes-storefront .top-right-dropdown-wrapper a.dropdown-trigger {
   background: var(--brand-caramel) !important;
+  color: #eee;
   border: 3px solid #fff8e9;
   box-shadow: 0 5px 14px #0002;
+  border-radius: 50%;
 }
 
 .ivanhoes-storefront .dropdown-content {
