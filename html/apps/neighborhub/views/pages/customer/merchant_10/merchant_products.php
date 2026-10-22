@@ -93,7 +93,7 @@ if ($spotlightProductId) {
           </div>
           <div class="col s12 m8">
             <h4 class="sweets-text-brown" style="margin: 0 0 8px 0; font-weight: 900;"><?php echo htmlspecialchars($spotlightProduct['name']); ?>
-              <a class="page_link waves-effect waves-light" style="color: var(--brand-caramel);" href="<?= htmlspecialchars($this->config['base_url'], ENT_QUOTES, 'UTF-8') ?>/?app=neighborhub&amp;view=customer&amp;p=merchant_products&amp;merchant_id=<?= rawurlencode((string)$merchant->id) ?>&amp;menu_id=<?= rawurlencode((string)$activeMenuId) ?>&amp;product_id=<?= rawurlencode((string)$spotlightProduct['id']) ?>"><i class="material-icons">share</i></a>
+              <a class="page_link waves-effect waves-light" style="color: var(--brand-caramel);" href="<?= htmlspecialchars($this->config['base_url'], ENT_QUOTES, 'UTF-8') ?>/?app=neighborhub&amp;view=customer&amp;p=merchant_products&amp;merchant_id=<?= rawurlencode((string)$merchant->id) ?><?= (get_var('menu_id', false)) ? '&amp;menu_id='. rawurlencode((string)get_var('menu_id')) : '' ?>&amp;product_id=<?= rawurlencode((string)$spotlightProduct['id']) ?>"><i class="material-icons">share</i></a>
             </h4>
 
             <h5 style="color: var(--brand-caramel); margin: 0 0 12px 0; font-weight: 800;">$<?php echo number_format($spotlightProduct['price'], 2); ?></h5>

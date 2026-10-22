@@ -48,7 +48,7 @@ $merchantAddress = trim(($merchant->address ?? '') . ', ' . ($merchant->city ?? 
             <?php endif; ?>
             <div class="card-content iv-product-body">
               <h5 class="iv-product-name"><span><?= $e($name) ?></span>
-                <a class="page_link waves-effect waves-light" aria-label="Share <?= $e($name) ?>" href="<?= $e($this->config['base_url']) ?>/?app=neighborhub&amp;view=customer&amp;p=merchant_products&amp;merchant_id=<?= rawurlencode((string)$merchantId) ?>&amp;menu_id=<?= rawurlencode((string)get_var('menu_id', '1')) ?>&amp;product_id=<?= rawurlencode((string)($prod['id'] ?? '')) ?>"><i class="material-icons">share</i></a>
+                <a class="page_link waves-effect waves-light" aria-label="Share <?= $e($name) ?>" href="<?= $e($this->config['base_url']) ?>/?app=neighborhub&amp;view=customer&amp;p=merchant_products&amp;merchant_id=<?= rawurlencode((string)$merchantId) ?><?= (get_var('menu_id', false)) ? '&amp;menu_id='. rawurlencode((string)get_var('menu_id')) : '' ?>&amp;product_id=<?= rawurlencode((string)($prod['id'] ?? '')) ?>"><i class="material-icons">share</i></a>
               </h5>
               <?php if (!empty($prod['description'])): ?>
                 <p class="iv-product-description clamped" onclick="$(this).toggleClass('clamped')" title="Tap to expand description" style="cursor:pointer;"><?= nl2br($e($prod['description'])) ?></p>
