@@ -75,7 +75,7 @@ body.scrolled .merchant-header-image .online-status-dot {
 .top-right-dropdown-wrapper {
   transition: all 0.2s;
   position: fixed;
-  top: 11rem;
+  top: 12rem;
   right: 1.5rem;
   left: auto;
   margin-left: 0;
