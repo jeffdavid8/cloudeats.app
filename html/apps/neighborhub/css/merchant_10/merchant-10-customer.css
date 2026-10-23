@@ -87,7 +87,7 @@ body.scrolled .merchant-header-image .online-status-dot {
 }
 
 .ivanhoes-storefront .iv-hero {
-  margin: 1rem 0 2rem;
+  margin: 2rem 0 2rem;
   padding: clamp(22px, 4vw, 42px);
   text-align: center;
   border-radius: 20px;

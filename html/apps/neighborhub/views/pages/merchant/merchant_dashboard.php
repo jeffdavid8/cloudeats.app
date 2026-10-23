@@ -102,7 +102,7 @@ $isShopOnline = ($rawStatus === 'active' || $rawStatus === 'online' || $rawStatu
 
                 $isCategoryActive = ($category['status'] ?? '') === 'active';
               ?>
-                <li class="collection-item category-item-row" data-category-id="<?= $categoryId ?>" style="display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #e0e0e0; background: transparent;">
+                <li class="collection-item category-item-row" data-category-id="<?= $categoryId ?>" style="display: flex; align-items: center; justify-content: space-between; padding: 8px 4px; border-bottom: 1px dashed #e0e0e0; background: transparent;">
                   <span class="category-name" style="font-weight: 500; font-size: 0.875rem; opacity: <?= $isCategoryActive ? '1' : '0.5' ?>;">
                     <?= $categoryName ?>
                   </span>

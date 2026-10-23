@@ -591,7 +591,7 @@ if ($spotlightProductId) {
     }
 
     .top-right-dropdown-wrapper {
-      top: 10.5rem;
+      top: 14.5rem;
     }
 
     .top-right-dropdown-wrapper {
