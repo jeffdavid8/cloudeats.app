@@ -403,7 +403,7 @@ $isShopOnline = ($rawStatus === 'active' || $rawStatus === 'online' || $rawStatu
             html: 'Order confirmed! Press Z to undo.',
             displayLength: 2500
           });
-          animateOrderStateTransition(orderId, 'CONFIRMED');
+          animateOrderStateTransition(orderId, 'CONFIRMED', response.card);
         } else {
           resetCardVisuals(orderId);
         }
@@ -478,7 +478,7 @@ $isShopOnline = ($rawStatus === 'active' || $rawStatus === 'online' || $rawStatu
             html: 'Ticket Ready! Press Z to undo.',
             displayLength: 2500
           });
-          animateOrderStateTransition(orderId, 'READY_FOR_PICKUP');
+          animateOrderStateTransition(orderId, 'READY_FOR_PICKUP', response.card);
         } else {
           resetCardVisuals(orderId);
         }

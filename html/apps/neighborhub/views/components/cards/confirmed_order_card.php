@@ -66,15 +66,9 @@ if (!defined('MB_RUNNING')) exit;
   </div>
 
   <div class="nh-card-footer">
-    <?php if ($order['state'] === 'CONFIRMED'): ?>
       <button type="button" class="nh-btn" onclick="markReadyForPickup(<?php echo intval($order['id']); ?>)" style="flex: 1;">
         Mark Ready for Pickup
       </button>
-    <?php else: ?>
-      <button type="button" class="nh-btn" disabled style="flex: 1;">
-        Awaiting Courier
-      </button>
-    <?php endif; ?>
   </div>
 
 </div>

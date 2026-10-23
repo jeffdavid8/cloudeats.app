@@ -14,7 +14,7 @@ if (!defined('MB_RUNNING')) exit;
       <span class="nh-badge badge-<?php echo strtolower($order['state']); ?> right">
         <?php echo htmlspecialchars(str_replace('_', ' ', $order['state'])); ?>
       </span>
-      <h4 style="margin: 0; margin-bottom: 0.5rem;">Delivery Job</h4>
+      <h4 style="margin: 0; margin-bottom: 0.5rem;"><?= ($order['delivery_requested']) ? 'Delivery' : 'Pickup' ?></h4>
     </div>
   </div>
 
@@ -40,13 +40,13 @@ if (!defined('MB_RUNNING')) exit;
   </div>
 
   <div class="nh-card-footer">
-    <?php if ($order['state'] === 'CONFIRMED'): ?>
-      <button type="button" class="nh-btn" onclick="markReadyForPickup(<?php echo intval($order['id']); ?>)" style="flex: 1;">
-        Mark Ready for Pickup
-      </button>
-    <?php else: ?>
+    <?php if ($order['delivery_requested']): ?>
       <button type="button" class="nh-btn" disabled style="flex: 1;">
         Awaiting Courier
+      </button>
+    <?php else: ?>
+      <button type="button" class="nh-btn" onclick="itemPickedUp(<?php echo intval($order['id']); ?>)" style="flex: 1;">
+        Awaiting Pickup
       </button>
     <?php endif; ?>
   </div>

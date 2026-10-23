@@ -65,6 +65,10 @@ $merchant = $this->get('merchant', null);
         // Open the cart side menu so the user sees their reordered items
         $('#nh-shopping-cart-sidenav').sidenav('open');
 
+        const url = new URL(window.location.href);
+        url.searchParams.delete('reorder_from');
+        window.history.replaceState(window.history.state, '', url.href);
+
         // Toast notification
         M.toast({
           html: '<i class="fas fa-redo"></i> Previous order items loaded into your basket!',

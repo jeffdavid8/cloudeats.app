@@ -570,6 +570,7 @@ if ($spotlightProductId && isset($menus[$activeMenuId]['categories'])) {
         ★ Home-Cooked Goodness & Fresh Coffee ★
       </div>
       <div class="iv-starline" aria-hidden="true">★ ★ ★ ★ ★</div>
+      
       <? render('components/merchant_menu_product_search_filter.php') ?>
 
     </div>

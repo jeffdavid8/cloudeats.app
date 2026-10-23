@@ -2173,7 +2173,7 @@ function handle_create_pos_order($request)
 
 function handle_confirm_order($request)
 {
-  $app = App::getInstance();
+  $app = App::getInstance('neighborhub');
   $app->includeModel('merchant');
   $app->includeModel('order');
 
@@ -2182,7 +2182,7 @@ function handle_confirm_order($request)
 
   $orderId = isset($request['order_id']) ? intval($request['order_id']) : null;
   $merchantId = isset($request['merchant_id']) ? intval($request['merchant_id']) : null;
-  $merchant = Merchant::getMerchantById($merchantId);
+  //$merchant = Merchant::getMerchantById($merchantId);
 
   if (!$orderId || !$merchantId) {
     http_response_code(400);
@@ -2242,10 +2242,14 @@ function handle_confirm_order($request)
     }
   }
 
+  $result = Order::confirmOrder($orderId);
+  $order = Order::getOrderById($orderId);
+
   // Add ALL funds from the Stripe transaction into the platform's central pool account (User ID: 1)
   Vault::addFundsToUser(1, $order['total_amount'], "Customer Payment Deposit for Order #{$order['id']}");
 
-  $result = Order::confirmOrder($orderId);
+  // Hydrate orders with their respective items if requested
+  $new_card = render('components/cards/confirmed_order_card.php', array('order' => $order), true);
 
   if (!$result) {
     http_response_code(500);
@@ -2264,7 +2268,8 @@ function handle_confirm_order($request)
   exit(json_encode(array(
     'success' => true,
     'order_id' => $orderId,
-    'message' => 'Order confirmed successfully'
+    'message' => 'Order confirmed successfully',
+    'card' => $new_card,
   )));
 }
 
@@ -3926,11 +3931,11 @@ function handle_delete_product($request = null)
 
 function handle_mark_ready_for_pickup($request)
 {
-  $app = App::getInstance();
+  $app = App::getInstance('neighborhub');
   $app->includeModel('merchant');
   $app->includeModel('order');
 
-  $vaultApp = App::getInstance('Vault');
+  $vaultApp = App::getInstance('vault');
   $vaultApp->includeModel('vault');
 
   $orderId = isset($request['order_id']) ? intval($request['order_id']) : null;
@@ -3980,6 +3985,10 @@ function handle_mark_ready_for_pickup($request)
   }
 
   $result = Order::setReadyForPickup($orderId);
+  $order = Order::getOrderById($orderId);
+  
+  $new_card = render('components/cards/ready_order_card.php', array('order' => $order), true);
+
 
   if (!$result) {
     http_response_code(500);
@@ -4042,7 +4051,8 @@ function handle_mark_ready_for_pickup($request)
   exit(json_encode(array(
     'success' => true,
     'order_id' => $orderId,
-    'message' => 'Order marked ready for pickup'
+    'message' => 'Order marked ready for pickup',
+    'card' => $new_card,
   )));
 }
 

@@ -122,11 +122,11 @@ $merchantsList = $app->get('admin_merchants_list', array());
           <span style="font-weight: 600; ">Quick Actions:</span>
         </div>
         <div>
-          <a href="?app=neighborhub&view=admin&p=reports" class="btn waves-effect waves-light teal" style="border-radius: 4px; font-weight: 500;">
-            <i class="material-icons left">analytics</i> Reports & Analytics
-          </a>
           <a href="?app=neighborhub&view=admin&p=overview_map" class="btn waves-effect waves-light teal" style="border-radius: 4px; font-weight: 500;">
             <i class="material-icons">map</i>
+          </a>
+          <a href="?app=neighborhub&view=admin&p=reports" class="btn waves-effect waves-light teal" style="border-radius: 4px; font-weight: 500;">
+            <i class="fas fa-chart-line"></i> Reports & Analytics
           </a>
           <a href="?app=neighborhub&view=admin&p=add_courier" class="btn waves-effect waves-light teal" style="border-radius: 4px; font-weight: 500;">
             <i class="material-icons left">person_add</i> Provision New Courier
@@ -168,7 +168,7 @@ $merchantsList = $app->get('admin_merchants_list', array());
               <h6 style=" margin-top: 15px;">No registered merchant profiles located on network databases.</h6>
             </div>
           <?php else: ?>
-            <table class="striped responsive-table highlight" style="font-size: 14px;">
+            <table class="striped highlight" style="font-size: 14px;">
               <thead>
                 <tr style=" border-bottom: 2px solid #ddd;">
                   <th style="font-weight: 600; width: 60px;">ID</th>

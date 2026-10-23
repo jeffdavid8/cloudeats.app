@@ -373,7 +373,7 @@ class ShoppingCart {
     let address = $('[id="nh-cart-address-string"]').val();
     if (
       !address.length ||
-      totals.distanceMi >= this.merchant.delivery_max_distance
+      Number(totals.distanceMi) >= Number(this.merchant.delivery_max_distance)
     ) {
       $(".nh-cart-delivery-distance-mi").html(totals.distanceMi + " mi ");
       $(".nh-cart-delivery-fee").hide();
@@ -391,7 +391,7 @@ class ShoppingCart {
       $('[id="nh-cart-delivery-summary-box"]').slideDown();
     } else {
       $(".nh-cart-delivery-distance-mi").text("(" + totals.distanceMi + " mi)");
-      $(".nh-cart-delivery-distance-mi").html("");
+      //$(".nh-cart-delivery-distance-mi").html("");
       $(".nh-cart-delivery-fee").show();
       $('[id="nh-cart-delivery-summary-box"]')
         .html(`<strong>Delivery To:</strong> <span id="nh-summary-address-text" class="grey-text text-darken-2">${address}</span><br>
