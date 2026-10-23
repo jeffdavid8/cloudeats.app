@@ -87,7 +87,7 @@ function admin_init(&$app)
     }
 
     // Require admin for user management pages
-    if (in_array($page, ['users', 'settings'])) {
+    if (in_array($page, ['users', 'settings', 'maintenance'], true)) {
         admin_require_admin();
     }
 }
@@ -99,6 +99,7 @@ function admin_db_tables()
         'users',
         'permissions_registry',
         'user_permissions_map',
+        'app_system_settings',
     );
 }
 
@@ -114,6 +115,7 @@ function admin_install_db()
             DROP TABLE IF EXISTS users;
             DROP TABLE IF EXISTS permissions_registry;
             DROP TABLE IF EXISTS user_permissions_map;
+            DROP TABLE IF EXISTS app_system_settings;
             SET FOREIGN_KEY_CHECKS = 1;
 
             -- 👤 USER TABLE
@@ -149,6 +151,13 @@ function admin_install_db()
                 PRIMARY KEY (user_id, perm_id, action),
                 FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
                 FOREIGN KEY (perm_id) REFERENCES permissions_registry(id) ON DELETE CASCADE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+            CREATE TABLE IF NOT EXISTS app_system_settings (
+                setting_key VARCHAR(100) NOT NULL PRIMARY KEY,
+                setting_value TEXT NOT NULL,
+                updated_by VARCHAR(180) NULL,
+                updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
             ";
 
@@ -366,6 +375,10 @@ function admin_render_body(&$app)
             case 'settings':
                 admin_require_admin();
                 include __DIR__ . '/views/settings.php';
+                break;
+            case 'maintenance':
+                admin_require_admin();
+                include __DIR__ . '/views/maintenance.php';
                 break;
             case 'ancestry_family':
                 admin_require_admin();

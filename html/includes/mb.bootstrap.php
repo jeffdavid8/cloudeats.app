@@ -33,6 +33,7 @@ require_once __DIR__ . '/util.php';
 require_once __DIR__ . '/database.php';
 require_once __DIR__ . '/SecurityHeaders.php';
 require_once __DIR__ . '/EventLogger.php';
+require_once __DIR__ . '/MaintenanceMode.php';
 require_once __DIR__ . '/storage/FileStorageManager.php';
 require_once __DIR__ . '/../includes/OAuthHandler.php';
 require_once __DIR__ . '/../apps/admin/includes/UserManager.php';
@@ -46,7 +47,7 @@ $host = $_SERVER['HTTP_HOST'] ?? '';
 $is_development = (bool)preg_match('/localhost|127\\.0\\.0\\.1|\\.local|:8080|:3000|:8000/', $host);
 
 
-if (file_exists(STORAGE_PATH . '/_install_db.trigger') && !$is_development) {
+if (file_exists(STORAGE_PATH . '/_install_db.trigger') && $is_development) {
     $_SESSION['bypass_admin_key'] = true;
 
     // Start the shield

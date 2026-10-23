@@ -6,8 +6,22 @@ ini_set('display_errors', 'Off');
 error_reporting(E_ALL && ~E_WARNING && ~E_NOTICE);
 date_default_timezone_set('America/Indiana/Indianapolis');
 
+// A lightweight liveness endpoint that remains available during maintenance.
+$requestPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
+if ($requestPath === '/healthz' && in_array($_SERVER['REQUEST_METHOD'] ?? 'GET', ['GET', 'HEAD'], true)) {
+    http_response_code(200);
+    header('Content-Type: text/plain; charset=utf-8');
+    header('Cache-Control: no-store');
+    if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'HEAD') {
+        echo "ok\n";
+    }
+    exit;
+}
+
 // Set the absolute path to your log file
 require_once __DIR__ . '/includes/mb.bootstrap.php';
+
+MaintenanceMode::enforce();
 
 use MediaBrain\Services\AnalyticsService;
 
@@ -30,8 +44,11 @@ if (!empty($api_app)) {
         $isEmailVerification = $api_app === 'neighborhub'
             && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'GET'
             && ($_GET['action'] ?? '') === 'verify_registration';
+        $isStripeWebhook = $api_app === 'neighborhub'
+            && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST'
+            && ($_GET['action'] ?? '') === 'stripe_webhook';
 
-        if ($isEmailVerification) {
+        if ($isEmailVerification || $isStripeWebhook) {
             include $api_file;
             exit;
         }

@@ -2561,7 +2561,7 @@ function handle_admin_save_courier($request)
 
 function handle_get_pending_orders($request)
 {
-  $app = App::getInstance();
+  $app = App::getInstance('neighborhub');
   $app->includeModel('order');
 
   $merchantId = isset($request['merchant_id']) ? intval($request['merchant_id']) : null;
