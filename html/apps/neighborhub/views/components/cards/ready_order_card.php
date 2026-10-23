@@ -14,6 +14,9 @@ if (!defined('MB_RUNNING')) exit;
       <span class="nh-badge badge-<?php echo strtolower($order['state']); ?> right">
         <?php echo htmlspecialchars(str_replace('_', ' ', $order['state'])); ?>
       </span>
+      <?php if (!empty($order['sandbox_mode'])): ?>
+        <span class="nh-badge" style="background: #ef6c00; color: #fff;">SANDBOX — NO PAYMENT COLLECTED</span>
+      <?php endif; ?>
       <h4 style="margin: 0; margin-bottom: 0.5rem;"><?= ($order['delivery_requested']) ? 'Delivery' : 'Pickup' ?></h4>
     </div>
   </div>

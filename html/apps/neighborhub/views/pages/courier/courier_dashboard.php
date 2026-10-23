@@ -212,6 +212,9 @@ $activeDelivery = $hasActiveDelivery ? $activeDeliveries[0] : null;
                                 <div>
                                     <p style="margin: 0; color: var(--gray-500); font-size: 0.875rem; font-weight: 600; text-transform: uppercase; margin-bottom: 0.5rem;">Order Amount</p>
                                     <h3 style="margin: 0; color: var(--gray-900);">$<?php echo number_format($activeDelivery['total_amount'], 2); ?></h3>
+                                    <?php if (!empty($activeDelivery['sandbox_mode'])): ?>
+                                        <p style="color: #ef6c00; font-weight: 700;">SANDBOX — NO PAYMENT COLLECTED</p>
+                                    <?php endif; ?>
                                 </div>
                                 <div>
                                     <p style="margin: 0; color: var(--gray-500); font-size: 0.875rem; font-weight: 600; text-transform: uppercase; margin-bottom: 0.5rem;">Assigned At</p>
@@ -264,6 +267,9 @@ $activeDelivery = $hasActiveDelivery ? $activeDeliveries[0] : null;
                                     <div class="nh-card-header">
                                         <div>
                                             <p class="nh-order-number"><?php echo htmlspecialchars($job['order_number']); ?></p>
+                                            <?php if (!empty($job['sandbox_mode'])): ?>
+                                                <span class="nh-badge" style="background: #ef6c00; color: #fff;">SANDBOX — NO PAYMENT COLLECTED</span>
+                                            <?php endif; ?>
                                             <h4 style="margin: 0; margin-bottom: 0.5rem;">Delivery Job</h4>
                                         </div>
                                         <span class="nh-badge badge-ready_for_pickup">Available</span>
@@ -349,9 +355,17 @@ $activeDelivery = $hasActiveDelivery ? $activeDeliveries[0] : null;
                                     <tr>
                                         <td>
                                             <strong><?php echo htmlspecialchars($delivery['order_number']); ?></strong>
+                                            <?php if (!empty($delivery['sandbox_mode'])): ?>
+                                                <span class="nh-badge" style="background: #ef6c00; color: #fff;">SANDBOX</span>
+                                            <?php endif; ?>
                                         </td>
                                         <td><?php echo htmlspecialchars($delivery['business_name']); ?></td>
-                                        <td>$<?php echo number_format($delivery['total_amount'], 2); ?></td>
+                                        <td>
+                                            $<?php echo number_format($delivery['total_amount'], 2); ?>
+                                            <?php if (!empty($delivery['sandbox_mode'])): ?>
+                                                <span class="nh-badge" style="background: #ef6c00; color: #fff;">SANDBOX</span>
+                                            <?php endif; ?>
+                                        </td>
                                         <td>
                                             <?php
                                             if (!empty($delivery['delivered_at'])) {

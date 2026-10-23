@@ -69,7 +69,7 @@ class MaintenanceMode
             $override = self::getEnvironmentOverride();
             $status = $override !== null
                 ? self::getStatusFromEnvironment()
-                : self::getStatus(App::getInstance()->db);
+                : self::getStatus(App::getInstance('/')->db);
 
             if ($status['enabled'] && !self::isAdminSession()) {
                 self::sendResponse($status, $jsonResponse);

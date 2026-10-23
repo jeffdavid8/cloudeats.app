@@ -52,7 +52,7 @@ class Order
      * @param string $notes
      * @return int|false Order ID on success, false on failure
      */
-    public static function create($customerId, $merchantId, $itemsArray, $subtotal, $processingFee, $platformFee, $deliveryRequested=0, $deliveryFee, $tips, $salesTax, $totalAmount, $pickupAddress, $deliveryAddress, $notes, $state = 'PENDING_CONFIRMATION', $stripePaymentIntentId, $meta = '{}')
+    public static function create($customerId, $merchantId, $itemsArray, $subtotal, $processingFee, $platformFee, $deliveryRequested, $deliveryFee, $tips, $salesTax, $totalAmount, $pickupAddress, $deliveryAddress, $notes, $state = 'PENDING_CONFIRMATION', $stripePaymentIntentId = null, $meta = '{}', $sandboxMode = false)
     {
         try {
             $db = App::getInstance()->db;
@@ -87,8 +87,8 @@ class Order
             // Insert main order record
             $insertStmt = $db->prepare(
                 "INSERT INTO neighborhub_orders 
-                (order_number, customer_id, merchant_id, total_amount, subtotal_amount, sales_tax, tips, processing_fee, platform_fee, delivery_requested, delivery_fee, pickup_address, delivery_address, order_notes, state, stripe_payment_intent_id, meta, created_at, updated_at) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())"
+                (order_number, customer_id, merchant_id, total_amount, subtotal_amount, sales_tax, tips, processing_fee, platform_fee, delivery_requested, delivery_fee, pickup_address, delivery_address, order_notes, state, stripe_payment_intent_id, sandbox_mode, meta, created_at, updated_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())"
             );
             $insertStmt->execute([
                 $orderNumber,
@@ -107,6 +107,7 @@ class Order
                 $notes,
                 $state,
                 $stripePaymentIntentId,
+                (int)$sandboxMode,
                 $sanitized['meta']
             ]);
 
@@ -518,6 +519,7 @@ class Order
                         m.business_name AS business_name,
                         o.courier_id,
                         o.total_amount,
+                        o.sandbox_mode,
                         o.state,
                         o.delivery_assignment_mode,
                         o.order_notes,
@@ -544,6 +546,7 @@ class Order
                         m.business_name AS business_name,
                         o.courier_id,
                         o.total_amount,
+                        o.sandbox_mode,
                         o.state,
                         o.delivery_assignment_mode,
                         o.order_notes,
@@ -604,6 +607,7 @@ class Order
                         delivery_fee,
                         tips,
                         total_amount,
+                        sandbox_mode,
                         state,
                         delivery_assignment_mode,
                         order_notes,
@@ -629,6 +633,7 @@ class Order
                         merchant_id,
                         courier_id,
                         total_amount,
+                        sandbox_mode,
                         state,
                         delivery_assignment_mode,
                         order_notes,
@@ -690,6 +695,7 @@ class Order
                     o.merchant_id,
                     m.business_name,
                     o.total_amount,
+                    o.sandbox_mode,
                     o.state,
                     o.pickup_address,
                     o.order_notes,

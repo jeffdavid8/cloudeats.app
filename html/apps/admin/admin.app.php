@@ -313,6 +313,7 @@ function admin_render_body(&$app)
 
             case 'restore_db':
                 admin_require_admin();
+
                 $tables = [];
                 $tables[] = app_invoke('admin', 'db_tables');
                 $tables[] = app_invoke('stitch', 'db_tables');

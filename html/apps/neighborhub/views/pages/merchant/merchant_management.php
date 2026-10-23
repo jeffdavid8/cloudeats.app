@@ -1,5 +1,7 @@
 <?php
 if (!defined('MB_RUNNING')) exit;
+$merchantStaffRole = strtolower((string)($_SESSION['user']['merchant_staff_role'] ?? ''));
+$canManageSandboxMode = !empty($_SESSION['user']['is_admin']) || $merchantStaffRole === 'owner' || $merchantStaffRole === 'admin';
 /**
  * Generic Merchant Products Catalog & Spotlight Storefront
  * @var Object $customer
@@ -166,6 +168,18 @@ if (!defined('MB_RUNNING')) exit;
           ?>
         </select>
       </div>
+
+      <div class="form-group col s12">
+        <label for="zip-code">Zip Code *</label>
+        <input
+          type="text"
+          id="zip-code"
+          name="zip_code"
+          placeholder="12345"
+          value="<?php echo htmlspecialchars($merchant['zip_code']); ?>"
+          required />
+      </div>
+
       <div class="form-group">
         <label for="delivery_assignment_mode">Delivery Assignment Mode</label>
         <select id="delivery_assignment_mode">
@@ -174,6 +188,18 @@ if (!defined('MB_RUNNING')) exit;
           <option value="disabled" <?php echo ($merchant['delivery_assignment_mode'] ?? '') === 'disabled' ? 'selected' : ''; ?>>Disabled</option>
         </select>
       </div>
+
+      <div class="form-group col s12">
+        <label for="delivery_max_distance">Delivery Distance Threshold</label>
+        <input
+          type="text"
+          id="delivery-max-distance"
+          name="delivery_max_distance"
+          placeholder="7"
+          value="<?php echo htmlspecialchars($merchant['delivery_max_distance']); ?>"
+          required />
+      </div>
+
       <div class="form-group">
         <label for="status">Profile Operational Status</label>
         <select id="status">
@@ -183,6 +209,21 @@ if (!defined('MB_RUNNING')) exit;
           <option value="paused" <?php echo ($merchant['status'] ?? '') === 'paused' ? 'selected' : ''; ?>>Paused</option>
         </select>
       </div>
+      <?php if ($canManageSandboxMode): ?>
+        <div class="form-group">
+          <label>
+            <input
+              type="checkbox"
+              id="sandbox_mode"
+              class="filled-in"
+              <?php echo !empty($merchant['sandbox_mode']) ? 'checked' : ''; ?>>
+            <span>Sandbox mode</span>
+          </label>
+          <p class="grey-text text-darken-1">
+            Orders will skip Stripe and follow normal fulfillment. The checkout total still includes a simulated processing fee, but no payment is collected.
+          </p>
+        </div>
+      <?php endif; ?>
       <button onclick="saveSettings(event)" class="btn waves-effect waves-light">Save Configuration</button>
     </form>
   </div>
@@ -250,6 +291,7 @@ if (!defined('MB_RUNNING')) exit;
 <script>
   const API_PATH = '?api=neighborhub&action=update_merchant_settings';
   const merchantId = document.getElementById('merchant_id').value;
+  const canManageSandboxMode = <?php echo $canManageSandboxMode ? 'true' : 'false'; ?>;
 
   document.addEventListener('DOMContentLoaded', function() {
     M.FormSelect.init(document.querySelectorAll('select'));
@@ -276,9 +318,10 @@ if (!defined('MB_RUNNING')) exit;
         city: document.getElementById('city').value,
         state: document.getElementById('state').value,
         zip_code: document.getElementById('zip-code').value,
-        delivery_max_distance: document.getElementById('delivery_max_distance').value,
+        delivery_max_distance: document.getElementById('delivery-max-distance').value,
         delivery_assignment_mode: document.getElementById('delivery_assignment_mode').value,
-        status: document.getElementById('status').value
+        status: document.getElementById('status').value,
+        sandbox_mode: canManageSandboxMode ? document.getElementById('sandbox_mode').checked : undefined
       }),
       success: function(res) {
         M.toast({

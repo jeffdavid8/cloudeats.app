@@ -25,6 +25,7 @@ class Merchant
     public $phone;
     public $image_url;
     public $status;
+    public $sandbox_mode;
     public $website;
     public $facebook;
     public $platform_fee_rate;
@@ -70,6 +71,7 @@ class Merchant
                 'phone' => $this->phone,
                 'image_url' => $this->image_url,
                 'status' => $this->status,
+                'sandbox_mode' => $this->sandbox_mode,
                 'website' => $this->website,
                 'facebook' => $this->facebook,
                 'platform_fee_rate' => $this->platform_fee_rate,
@@ -100,6 +102,7 @@ class Merchant
             $this->phone = $data['phone'] ?? null;
             $this->image_url = $data['image_url'] ?? null;
             $this->status = $data['status'] ?? null;
+            $this->sandbox_mode = $data['sandbox_mode'] ?? 0;
             $this->website = $data['website'] ?? null;
             $this->facebook = $data['facebook'] ?? null;
             $this->platform_fee_rate = $data['platform_fee_rate'] ?? null;
@@ -144,7 +147,7 @@ class Merchant
             $app->includeClass('assetmanager');
             $stmt = $db->prepare(
                 "SELECT 
-                    id, user_id, business_name, description, address, city, state, zip_code, latitude, longitude, phone, image_url, status, type, website, facebook, platform_fee_rate, platform_flat_fee, store_hours, keywords, delivery_assignment_mode, delivery_max_distance, stripe_api_key, stripe_percent_fee, stripe_flat_fee, meta, created_at, updated_at
+                    id, user_id, business_name, description, address, city, state, zip_code, latitude, longitude, phone, image_url, status, sandbox_mode, type, website, facebook, platform_fee_rate, platform_flat_fee, store_hours, keywords, delivery_assignment_mode, delivery_max_distance, stripe_api_key, stripe_percent_fee, stripe_flat_fee, meta, created_at, updated_at
                 FROM neighborhub_merchants
                 WHERE id = ?"
             );
@@ -179,7 +182,7 @@ class Merchant
             $app->includeClass('assetmanager');
             $stmt = $db->prepare(
                 "SELECT 
-                    id, user_id, business_name, description, address, city, state, zip_code, latitude, longitude, phone, image_url, status, type, website, facebook, platform_fee_rate, platform_flat_fee, store_hours, keywords, delivery_assignment_mode, delivery_max_distance, stripe_api_key, stripe_percent_fee, stripe_flat_fee, meta, created_at, updated_at
+                    id, user_id, business_name, description, address, city, state, zip_code, latitude, longitude, phone, image_url, status, sandbox_mode, type, website, facebook, platform_fee_rate, platform_flat_fee, store_hours, keywords, delivery_assignment_mode, delivery_max_distance, stripe_api_key, stripe_percent_fee, stripe_flat_fee, meta, created_at, updated_at
                 FROM neighborhub_merchants
                 WHERE user_id = ?
                 LIMIT 1"
@@ -596,6 +599,11 @@ class Merchant
             if (isset($data['status'])) {
                 $updates[] = "status = ?";
                 $params[] = $data['status'];
+            }
+
+            if (isset($data['sandbox_mode'])) {
+                $updates[] = "sandbox_mode = ?";
+                $params[] = (int)(bool)$data['sandbox_mode'];
             }
 
             if (empty($updates)) {

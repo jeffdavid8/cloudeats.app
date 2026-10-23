@@ -833,20 +833,22 @@ function neighborhub_init_merchant_context(&$app, $merchantId = null)
 
     $app->set('merchant', $merchant);
 
-    $image = $merchant->image_url;
-    $image_info = getimagesize($image);
-    list($width, $height, $image_type, $attr) = $image_info;
-    $meta = array(
-      'title' => $merchant->business_name,
-      'keywords' => (isset($merchant->keywords)) ? $merchant->keywords : '',
-      'type' => 'article',
-      'og:type' => 'article',
-      'image' => $image,
-      'image_width' => $width,
-      'image_height' => $height,
-      'image_type' => $image_info['mime'],
-    );
-    $app->set('meta', $meta);
+    if ($merchant->image_url) {
+      $image = $merchant->image_url;
+      $image_info = getimagesize($image);
+      list($width, $height, $image_type, $attr) = $image_info;
+      $meta = array(
+        'title' => $merchant->business_name,
+        'keywords' => (isset($merchant->keywords)) ? $merchant->keywords : '',
+        'type' => 'article',
+        'og:type' => 'article',
+        'image' => $image,
+        'image_width' => $width,
+        'image_height' => $height,
+        'image_type' => $image_info['mime'],
+      );
+      $app->set('meta', $meta);
+    }
 
     // Init POS
     if ($app->get('page') === 'pos') {
@@ -1053,7 +1055,7 @@ function neighborhub_init_courier_context(&$app)
     // Load available delivery jobs (READY_FOR_PICKUP, unlocked)
     $availableJobsStmt = $db->prepare(
       "SELECT 
-                o.id, o.order_number, o.customer_id, o.merchant_id, o.total_amount,
+                o.id, o.order_number, o.customer_id, o.merchant_id, o.total_amount, o.sandbox_mode,
                 o.state, o.pickup_address, o.delivery_address, o.created_at,
                 m.business_name, m.latitude as merchant_lat, m.longitude as merchant_lng
             FROM neighborhub_orders o
@@ -1069,7 +1071,7 @@ function neighborhub_init_courier_context(&$app)
     // Load active courier deliveries (IN_TRANSIT assignments)
     $activeDeliveriesStmt = $db->prepare(
       "SELECT 
-                o.id, o.order_number, o.customer_id, o.merchant_id, o.total_amount,
+                o.id, o.order_number, o.customer_id, o.merchant_id, o.total_amount, o.sandbox_mode,
                 o.state, o.pickup_address, o.delivery_address, o.locked_at, o.updated_at,
                 m.business_name, m.latitude as merchant_lat, m.longitude as merchant_lng
             FROM neighborhub_orders o
@@ -1084,7 +1086,7 @@ function neighborhub_init_courier_context(&$app)
     // Load recent delivery history (completed jobs)
     $historyStmt = $db->prepare(
       "SELECT 
-                o.id, o.order_number, o.customer_id, o.merchant_id, o.total_amount,
+                o.id, o.order_number, o.customer_id, o.merchant_id, o.total_amount, o.sandbox_mode,
                 o.state, o.delivered_at, o.created_at,
                 m.business_name
             FROM neighborhub_orders o
@@ -1397,6 +1399,7 @@ function neighborhub_install_db()
       delivery_address TEXT,
       order_phone VARCHAR(50),
       order_notes TEXT,
+      sandbox_mode TINYINT DEFAULT 0 CHECK(sandbox_mode IN (0, 1)),
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       confirmed_at DATETIME,
       ready_at DATETIME,

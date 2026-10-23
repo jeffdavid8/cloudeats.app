@@ -6,6 +6,9 @@ if (!defined('MB_RUNNING')) exit;
  * @var String $classList
  */
 $merchant = $this->get('merchant', false);
+$checkoutButtonHtml = !empty($merchant->sandbox_mode)
+  ? 'Place Sandbox Order <i class="fas fa-flask right"></i>'
+  : 'Checkout with Stripe <i class="fas fa-credit-card right"></i>';
 //error_log(print_r($merchant, true));
 $customer = $this->get('customer');
 
@@ -156,8 +159,17 @@ if (!isset($merchant->stripe_flat_fee)) {
     </div>
 
 
+    <?php if (!empty($merchant->sandbox_mode)): ?>
+      <p class="orange-text text-darken-3" style="font-size: 0.85rem;">
+        Sandbox order: no payment will be collected. The simulated processing fee remains in the total.
+      </p>
+    <?php endif; ?>
     <button id="nh-checkout-stripe-btn" class="btn btn-large teal accent-4 waves-effect waves-light" style="width: 100%; font-weight: 600; border-radius: 4px;">
-      Checkout with Stripe <i class="fas fa-credit-card right"></i>
+      <?php if (!empty($merchant->sandbox_mode)): ?>
+        Place Sandbox Order <i class="fas fa-flask right"></i>
+      <?php else: ?>
+        Checkout with Stripe <i class="fas fa-credit-card right"></i>
+      <?php endif; ?>
     </button>
     <button id="nh-clear-cart-btn" class="btn-flat grey-text text-darken-1 center-align" style="width: 100%; margin-top: 8px; font-size: 12px;">
       Clear All Items
@@ -781,7 +793,7 @@ if (!isset($merchant->stripe_flat_fee)) {
             M.toast({
               html: 'Error: ' + (response.error || 'Failed to initialize session.')
             });
-            $('#nh-checkout-stripe-btn').removeClass('disabled').html('Checkout with Stripe <i class="fas fa-credit-card right"></i>');
+            $('#nh-checkout-stripe-btn').removeClass('disabled').html(<?= json_encode($checkoutButtonHtml) ?>);
           }
         },
         error: function(xhr) {
@@ -791,7 +803,7 @@ if (!isset($merchant->stripe_flat_fee)) {
             html: $('<span>').text(message).html(),
             classes: 'red'
           });
-          $('#nh-checkout-stripe-btn').removeClass('disabled').html('Checkout with Stripe <i class="fas fa-credit-card right"></i>');
+          $('#nh-checkout-stripe-btn').removeClass('disabled').html(<?= json_encode($checkoutButtonHtml) ?>);
         }
       });
     });

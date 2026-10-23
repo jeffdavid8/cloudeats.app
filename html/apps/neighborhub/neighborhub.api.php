@@ -315,9 +315,12 @@ try {
       $app = App::getInstance('neighborhub');
       $app->includeModel('merchant');
       $merchant_id = isset($request['merchant_id']) ? intval($request['merchant_id']) : 0;
+      $isPlatformAdmin = !empty($app->user->is_admin);
 
       // Authorization: Validate the user is an owner or staff member with access
-      ensure_merchant_access($app->user->id, $merchant_id, ['owner', 'staff']);
+      if (!$isPlatformAdmin) {
+        ensure_merchant_access($app->user->id, $merchant_id, ['owner', 'staff']);
+      }
 
       // Map fields directly to your table schema
       $update_data = [];
@@ -344,6 +347,26 @@ try {
         if (in_array($request['delivery_assignment_mode'], $allowed_modes)) {
           $update_data['delivery_assignment_mode'] = $request['delivery_assignment_mode'];
         }
+      }
+
+      if (array_key_exists('sandbox_mode', $request)) {
+        $rawSandboxMode = $request['sandbox_mode'];
+        if (!is_bool($rawSandboxMode) && !in_array((string)$rawSandboxMode, ['0', '1'], true)) {
+          send_json_response(['success' => false, 'message' => 'Sandbox mode must be enabled or disabled.'], 400);
+        }
+
+        if (!$isPlatformAdmin) {
+          $roleStmt = $db->prepare(
+            "SELECT staff_role FROM neighborhub_merchant_users
+             WHERE merchant_id = ? AND user_id = ? AND status = 'active' LIMIT 1"
+          );
+          $roleStmt->execute([$merchant_id, (int)$app->user->id]);
+          if ($roleStmt->fetchColumn() !== 'owner') {
+            send_json_response(['success' => false, 'message' => 'Only merchant owners or platform admins can change sandbox mode.'], 403);
+          }
+        }
+
+        $update_data['sandbox_mode'] = filter_var($rawSandboxMode, FILTER_VALIDATE_BOOLEAN);
       }
 
       if (empty($update_data)) {
@@ -526,12 +549,18 @@ try {
       }
 
       $stripe_key = getenv('STRIPE_SECRET_KEY');
-      $stripePercent = getenv('STRIPE_FEE_PERCENT') ?? 0.029;
-      $stripeFlat = getenv('STRIPE_FEE_FLAT') ?? 0.30;
+      $stripePercent = getenv('STRIPE_FEE_PERCENT');
+      $stripePercent = $stripePercent === false ? 0.029 : (float)$stripePercent;
+      $stripeFlat = getenv('STRIPE_FEE_FLAT');
+      $stripeFlat = $stripeFlat === false ? 0.30 : (float)$stripeFlat;
 
       $customerId = (isset($_SESSION['customer_id'])) ? $_SESSION['customer_id'] : 0;
       $merchantId = $request['merchant_id'];
       $merchant = Merchant::getMerchantById($merchantId);
+      if (!$merchant) {
+        send_json_response(['success' => false, 'error' => 'Merchant not found.'], 404);
+      }
+      $sandboxMode = !empty($merchant->sandbox_mode);
       $merchantItems = [];
       $stripeLineItems = [];
       $platformTotal = 0;
@@ -782,26 +811,6 @@ try {
         neighborhub_record_usage_event('checkout_started', [
           'delivery_requested' => !empty($request['delivery']),
         ], null, (int)$merchantId);
-        \Stripe\Stripe::setApiKey($stripe_key);
-
-        $session = \Stripe\Checkout\Session::create([
-          'payment_method_types' => ['card'],
-          'line_items' => $stripeLineItems,
-          'mode' => 'payment',
-          // Tell Stripe to authorize now, capture manually later
-          'payment_intent_data' => [
-            'capture_method' => 'manual',
-          ],
-          'success_url' => $checkout_return_url . '&action=checkout_success&session_key=' . $return_key,
-          'cancel_url' => $checkout_cancel_url . '&action=checkout_cancelled',
-          'metadata' => [
-            'customer_id' => $customer->id,
-            'session_key' => $return_key
-          ],
-        ]);
-
-        $results['stripe_session'] = $session;
-
         $pendingOrder = [
           'merchant_id'           => $merchantId,
           'customer_id'           => $customerId,
@@ -820,8 +829,33 @@ try {
           'platform_fee'          => $platform_fee, // Keep this line in the final array!
           'tips'                  => $tips,
           'sales_tax'             => $sales_tax,
-          'total_amount'          => round($totalCheckoutAmountWithFees, 2)
+          'total_amount'          => round($totalCheckoutAmountWithFees, 2),
+          'sandbox_mode'          => $sandboxMode,
         ];
+
+        if ($sandboxMode) {
+          $checkoutUrl = '/?app=neighborhub&view=customer&p=dashboard&action=checkout_success&session_key=' . rawurlencode($return_key);
+        } else {
+          \Stripe\Stripe::setApiKey($stripe_key);
+
+          $session = \Stripe\Checkout\Session::create([
+            'payment_method_types' => ['card'],
+            'line_items' => $stripeLineItems,
+            'mode' => 'payment',
+            'payment_intent_data' => [
+              'capture_method' => 'manual',
+            ],
+            'success_url' => $checkout_return_url . '&action=checkout_success&session_key=' . $return_key,
+            'cancel_url' => $checkout_cancel_url . '&action=checkout_cancelled',
+            'metadata' => [
+              'customer_id' => $customer->id,
+              'session_key' => $return_key
+            ],
+          ]);
+
+          $results['stripe_session'] = $session;
+          $checkoutUrl = $session->url;
+        }
 
         $_SESSION[$return_key] = $pendingOrder;
         $_SESSION['customer_id'] = $customerId;
@@ -829,7 +863,7 @@ try {
         echo json_encode([
           'success' => true,
           'results' => $results,
-          'checkout_url' => $session->url
+          'checkout_url' => $checkoutUrl
         ]);
       } catch (Exception $e) {
         neighborhub_record_usage_event(
@@ -2977,8 +3011,10 @@ function handle_complete_delivery($request)
     error_log('--------------------------------------------------------------------------');
     */
 
-    // Transfer merchant's final home-take share to their linked user wallet account
-    Vault::transfer(1, $merchant->user_id, $finalMerchantPayout, "Merchant Net Share Distribution for Order #{$order['id']} (App Fee Deducted)");
+    if (!$order['sandbox_mode']) {
+      // Transfer merchant's final home-take share to their linked user wallet account
+      Vault::transfer(1, $merchant->user_id, $finalMerchantPayout, "Merchant Net Share Distribution for Order #{$order['id']} (App Fee Deducted)");
+    }
   }
 
   http_response_code(200);
@@ -4093,8 +4129,10 @@ function handle_mark_ready_for_pickup($request)
     error_log('--------------------------------------------------------------------------');
     */
 
-      // Transfer merchant's final home-take share to their linked user wallet account
-      Vault::transfer(1, $merchant->user_id, $finalMerchantPayout, "Merchant Net Share Distribution for Order #{$order['id']} (App Fee Deducted)");
+      if (!$order['sandbox_mode']) {
+        // Transfer merchant's final home-take share to their linked user wallet account
+        Vault::transfer(1, $merchant->user_id, $finalMerchantPayout, "Merchant Net Share Distribution for Order #{$order['id']} (App Fee Deducted)");
+      }
     }
   }
 
@@ -4337,9 +4375,9 @@ function handle_export_data($request)
 function neighborhub_export_headers(string $reportType): array
 {
   $headers = [
-    'orders_summary' => ['order_number', 'order_date', 'merchant_name', 'order_status', 'total_amount', 'delivered_at'],
-    'line_items' => ['order_number', 'order_date', 'merchant_name', 'product_name', 'quantity', 'price_at_order', 'item_subtotal', 'order_status'],
-    'payouts' => ['order_number', 'order_date', 'merchant_name', 'subtotal_amount', 'processing_fee', 'platform_fee', 'sales_tax', 'delivery_fee', 'tips', 'total_amount', 'estimated_merchant_payout', 'order_status'],
+    'orders_summary' => ['order_number', 'order_date', 'merchant_name', 'order_status', 'total_amount', 'delivered_at', 'sandbox_mode'],
+    'line_items' => ['order_number', 'order_date', 'merchant_name', 'product_name', 'quantity', 'price_at_order', 'item_subtotal', 'order_status', 'sandbox_mode'],
+    'payouts' => ['order_number', 'order_date', 'merchant_name', 'subtotal_amount', 'processing_fee', 'platform_fee', 'sales_tax', 'delivery_fee', 'tips', 'total_amount', 'estimated_merchant_payout', 'order_status', 'sandbox_mode'],
     'analytics_summary' => ['event_date', 'event_type', 'event_count'],
     'analytics_events' => ['event_type', 'actor_role', 'properties', 'created_at'],
   ];

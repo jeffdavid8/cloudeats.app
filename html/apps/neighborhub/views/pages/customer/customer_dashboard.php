@@ -9,13 +9,15 @@ $customer = $this->get('customer');
 $customerId = $customer->id ?? 0;
 $userName = isset($_SESSION['user']['username']) ? htmlspecialchars($_SESSION['user']['username']) : 'Customer';
 $customerOrders = $this->get('customer_orders', array());
+$checkoutOrderSaved = isset($_SESSION['notification']['type']) && $_SESSION['notification']['type'] === 'success';
 
 if (isset($_SESSION[get_var('session_key')]) && get_var('action', false) == 'checkout_success') {
   $pendingOrder = $_SESSION[get_var('session_key')];
   $merchant_id = $pendingOrder['merchant_id'];
   $merchant = Merchant::getMerchantById($merchant_id);
   unset($_SESSION[get_var('session_key')]);
-?>
+  if ($checkoutOrderSaved):
+  ?>
   <script>
     $(document).ready(function() {
       if (!window.NHCart) {
@@ -24,10 +26,15 @@ if (isset($_SESSION[get_var('session_key')]) && get_var('action', false) == 'che
       }
       NHCart.activeMerchantId = <?= ($merchant_id) ? $merchant_id : 'null' ?>;
       NHCart.clear();
+      const url = new URL(window.location.href);
+      url.searchParams.delete('action');
+      url.searchParams.delete('session_key');
+      window.history.replaceState(window.history.state, '', url.href);
       fireConfettiCannon();
     });
   </script>
-<?
+  <?php
+  endif;
 }
 
 // Display session notifications
@@ -230,6 +237,7 @@ if ($notification) {
             <span class="new badge ${isPending ? 'pulse' : ''}" style="background-color: ${badgeBg}; margin: 0;" data-badge-caption="">
               ${escapeHtml(order.state.replace(/_/g, ' '))}
             </span>
+            ${Number(order.sandbox_mode) === 1 ? '<span style="color: #ef6c00; font-weight: 700;">SANDBOX — NO PAYMENT COLLECTED</span>' : ''}
             <span class="card-title truncate" style="font-weight: 600; font-size: 1.15rem; margin: 0; color: #fff; width: 100%;" title="${escapeHtml(order.business_name || 'Unknown')}">
               <a target="_blank" href="/?p=merchant_products&merchant_id=${escapeHtml(order.merchant_id || '')}" rel="noopener noreferrer">
                 ${escapeHtml(order.business_name || 'Unknown')}
@@ -373,6 +381,8 @@ if ($notification) {
                 </span>
             </div>
         </div>
+
+        ${Number(order.sandbox_mode) === 1 ? '<div class="nh-alert nh-alert-info" style="margin-bottom: 1rem;"><p class="nh-alert-message"><strong>Sandbox order:</strong> No payment was collected. The processing fee shown in the checkout total was simulated.</p></div>' : ''}
         
         <div style="background: var(--gray-50); border-radius: var(--border-radius-base); padding: 1.5rem; margin-bottom: 2rem;">
             <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;">
@@ -438,9 +448,10 @@ if ($notification) {
     if (order.state === 'PENDING' || order.state === 'PENDING_CONFIRMATION') {
       html += `
         <button type="button" class="btn red" onclick="showContactMerchantAndCancel(${order.id})" style="margin-top: 1rem; width: 100%;">
-            Cancel Order & Request Refund
+            ${Number(order.sandbox_mode) === 1 ? 'Cancel Sandbox Order' : 'Cancel Order & Request Refund'}
         </button>
         <div id="order-cancelation-container" style="margin-top: 3rem; color: var(--gray-500); font-size: 0.875rem;">
+          ${Number(order.sandbox_mode) === 1 ? '<p>No payment was collected for this sandbox order.</p>' : ''}
             <div class="cancellation-choice" style="display: none; flex-direction: column; align-items: center; text-align: center;">
               <p><i class="fas fa-exclamation fa-2x"></i> Sometimes merchants may not be able to accept your order immediately. You can call the merchant directly to confirm if they can fulfill your order.</p>
               <div style="margin-top: 1rem;">
@@ -639,6 +650,7 @@ if ($notification) {
                         <span class="nh-badge ${statusBadgeClass}">
                             ${escapeHtml(order.state.replace(/_/g, ' '))}
                         </span>
+                        ${Number(order.sandbox_mode) === 1 ? '<span style="color: #ef6c00; font-weight: 700;">SANDBOX</span>' : ''}
                     </td>
                     <td>${dateStr} ${timeStr}</td>
                     <td>

@@ -87,7 +87,7 @@ class NeighborhubReportingTest extends TestCase
         $this->assertStringContainsString('o.merchant_id = :requested_merchant_id', $db->queries[0]);
     }
 
-    public function testLineItemReportUsesStableOrderingAndPayoutsUseRecordedCheckoutFees(): void
+    public function testLineItemReportUsesStableOrderingAndSandboxPayoutsAreNotReportedAsRealPayouts(): void
     {
         $db = new NeighborhubReportingTestPdo();
         $reporting = new \NeighborhubReporting($db);
@@ -100,10 +100,16 @@ class NeighborhubReportingTest extends TestCase
         $this->assertStringContainsString('ORDER BY o.created_at DESC, o.id DESC, oi.id DESC', $db->queries[1]);
 
         $reporting->getOrderReport('admin', 1, true, $filters + ['report_type' => 'payouts']);
+        $this->assertStringContainsString('CASE WHEN o.sandbox_mode = 0', $db->queries[3]);
         $this->assertStringContainsString(
-            '(o.subtotal_amount - o.platform_fee + o.delivery_fee + o.tips) AS estimated_merchant_payout',
+            'THEN (o.subtotal_amount - o.platform_fee + o.delivery_fee + o.tips)',
             $db->queries[3]
         );
+        $this->assertStringContainsString(
+            'ELSE 0 END AS estimated_merchant_payout',
+            $db->queries[3]
+        );
+        $this->assertStringContainsString('o.state AS order_status, o.sandbox_mode', $db->queries[3]);
     }
 
     public function testAdminReportCannotBeRequestedWithoutAdminAuthorization(): void

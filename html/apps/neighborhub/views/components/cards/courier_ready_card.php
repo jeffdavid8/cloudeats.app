@@ -14,6 +14,9 @@ if (!defined('MB_RUNNING')) exit;
         <?php echo htmlspecialchars(str_replace('_', ' ', $order['state'])); ?>
       </span>
       <p class="nh-order-number flow-text"><?php echo htmlspecialchars($order['order_number']); ?></p>
+      <?php if (!empty($order['sandbox_mode'])): ?>
+        <span class="nh-badge" style="background: #ef6c00; color: #fff;">SANDBOX — NO PAYMENT COLLECTED</span>
+      <?php endif; ?>
       <h4 style="margin: 0; margin-bottom: 0.5rem;">Delivery Job</h4>
     </div>
   </div>

@@ -434,6 +434,7 @@ class Customer
                     o.customer_id,
                     o.merchant_id,
                     o.total_amount,
+                    o.sandbox_mode,
                     o.state,
                     o.pickup_address,
                     o.delivery_address,

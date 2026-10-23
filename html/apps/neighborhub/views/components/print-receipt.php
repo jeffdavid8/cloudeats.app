@@ -10,6 +10,9 @@ $orderNumber = htmlspecialchars($order['order_number'] ?? $order->order_number ?
 $createdAt = htmlspecialchars($order['created_at'] ?? $order->created_at ?? date('Y-m-d H:i'));
 $items = is_array($order['items'] ?? null) ? $order['items'] : ($order->items ?? []);
 $total = number_format(floatval($order['total_amount'] ?? $order->total_amount ?? 0), 2);
+$sandboxMode = is_array($order)
+  ? !empty($order['sandbox_mode'])
+  : !empty($order->sandbox_mode);
 $merchantName = htmlspecialchars($merchant->business_name ?? $merchant['business_name'] ?? '');
 ?>
 <!doctype html>
@@ -37,6 +40,9 @@ $merchantName = htmlspecialchars($merchant->business_name ?? $merchant['business
     <h1><?php echo $merchantName ?: 'Merchant'; ?></h1>
     <h2>Order #<?php echo $orderNumber; ?></h2>
     <div class="meta">Placed: <?php echo $createdAt; ?> | Ticket: <?php echo $orderId; ?></div>
+    <?php if ($sandboxMode): ?>
+      <div class="meta"><strong>SANDBOX ORDER — NO PAYMENT COLLECTED</strong></div>
+    <?php endif; ?>
 
     <div class="items">
       <?php if (!empty($items) && is_array($items)): ?>

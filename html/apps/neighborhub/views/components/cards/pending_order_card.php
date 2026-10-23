@@ -13,6 +13,9 @@ if (!defined('MB_RUNNING')) exit;
   <div class="nh-card-header">
     <div style="width: 100%">
       <p class="nh-order-number flow-text"><?php echo htmlspecialchars($order['order_number']); ?></p>
+      <?php if (!empty($order['sandbox_mode'])): ?>
+        <span class="nh-badge" style="background: #ef6c00; color: #fff;">SANDBOX — NO PAYMENT COLLECTED</span>
+      <?php endif; ?>
       <span class="nh-badge badge-<?php echo strtolower($order['state']); ?> right">
         <?php echo htmlspecialchars(str_replace('_', ' ', $order['state'])); ?>
       </span>

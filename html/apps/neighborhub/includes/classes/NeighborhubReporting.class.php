@@ -458,18 +458,20 @@ class NeighborhubReporting
         if ($reportType === 'line_items') {
             return 'o.order_number, o.created_at AS order_date, m.business_name AS merchant_name,
                     p.name AS product_name, oi.quantity, oi.price_at_order,
-                    oi.subtotal AS item_subtotal, o.state AS order_status';
+                    oi.subtotal AS item_subtotal, o.state AS order_status, o.sandbox_mode';
         }
 
         if ($reportType === 'payouts') {
             return 'o.order_number, o.created_at AS order_date, m.business_name AS merchant_name,
                     o.subtotal_amount, o.processing_fee, o.platform_fee, o.sales_tax,
                     o.delivery_fee, o.tips, o.total_amount,
-                    (o.subtotal_amount - o.platform_fee + o.delivery_fee + o.tips) AS estimated_merchant_payout,
-                    o.state AS order_status';
+                    CASE WHEN o.sandbox_mode = 0
+                        THEN (o.subtotal_amount - o.platform_fee + o.delivery_fee + o.tips)
+                        ELSE 0 END AS estimated_merchant_payout,
+                    o.state AS order_status, o.sandbox_mode';
         }
 
         return 'o.order_number, o.created_at AS order_date, m.business_name AS merchant_name,
-                o.state AS order_status, o.total_amount, o.delivered_at';
+                o.state AS order_status, o.total_amount, o.delivered_at, o.sandbox_mode';
     }
 }

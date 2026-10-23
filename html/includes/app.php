@@ -164,6 +164,15 @@ class App
 
   public static function getInstance($app = '')
   {
+    if ($app === '/') {
+      if (self::$_instance === null) {
+        $baseApp = new App();
+        $baseApp->handleInternalErrors();
+        return $baseApp;
+      } else {
+        return self::$_instance;
+      }
+    }
     // If no instance exists at all, create the initial one
     if (self::$_instance === null) {
       self::$_instance = new App($app);
