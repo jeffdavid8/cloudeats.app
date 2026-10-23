@@ -685,11 +685,33 @@ function neighborhub_init_customer_context(&$app)
       }
     }
 
-    $menus = Menu::getMenusWithProductsByMerchantId($merchantId);
+    $menus = Menu::getMenusWithProductsByMerchantId($merchantId, true);
+    if (!empty($menus)) {
+      $requestedMenuId = filter_var($_GET['menu_id'] ?? null, FILTER_VALIDATE_INT);
+      if (!$requestedMenuId || !isset($menus[$requestedMenuId])) {
+        $_GET['menu_id'] = (string)array_key_first($menus);
+      }
+    } else {
+      unset($_GET['menu_id']);
+    }
     //error_log(print_r($menus, true));
     $app->set('menus', $menus);
 
     $products = Product::getProductsByMerchant($merchantId, true, 'array');
+    $visibleProductIds = [];
+    foreach ($menus as $menu) {
+      foreach ($menu['categories'] as $category) {
+        foreach ($category['products'] as $menuProduct) {
+          $visibleProductIds[(int)$menuProduct['id']] = true;
+        }
+      }
+    }
+    $products = array_values(array_filter(
+      $products,
+      static function ($product) use ($visibleProductIds): bool {
+        return isset($visibleProductIds[(int)($product['id'] ?? 0)]);
+      }
+    ));
     $catalogProducts = [];
     foreach ($products as $p) {
       $tags = !empty($p['tags']) ? explode(',', $p['tags']) : [];

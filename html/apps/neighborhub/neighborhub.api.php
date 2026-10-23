@@ -94,9 +94,13 @@ try {
     case 'get_product_builder_view':
       $app = App::getInstance('neighborhub');
       $app->includeModel('product');
+      $app->includeModel('menu');
       $productId = $request['product_id'] ?? null;
       $productObj = Product::getProductById($productId, 'object'); // Assuming a single lookup helper exists
-      if (!$productObj) {
+      if (
+        !$productObj
+        || !Menu::productHasActiveMenuAssignment((int)$productObj->id, (int)$productObj->merchant_id)
+      ) {
         http_response_code(404);
         exit(json_encode(['success' => false, 'error' => 'Product not found']));
       }
@@ -503,6 +507,7 @@ try {
       $app->includeModel('merchant');
       $app->includeModel('customer');
       $app->includeModel('order');
+      $app->includeModel('menu');
       $results = array();
       $checkout_return_url = (!empty($request['return_url']))
         ? $request['return_url']
@@ -554,6 +559,12 @@ try {
 
           if (!$dbProduct) {
             throw new Exception("Product code ID {$productId} could not be verified in our catalog.");
+          }
+          if (!Menu::productHasActiveMenuAssignment($productId, (int)$merchantId)) {
+            send_json_response([
+              'success' => false,
+              'error' => "{$dbProduct['name']} is no longer available on this menu. Remove it from your basket or try again after the merchant reactivates it."
+            ], 409);
           }
 
           // Evaluate base price securely from server rows
@@ -1078,20 +1089,28 @@ try {
       break;
     case 'update_menu_status':
       authenticate_user($request);
+      if (!validate_csrf_request()) {
+        send_json_response(['success' => false, 'message' => 'Invalid security token.'], 401);
+      }
       $app = App::getInstance('neighborhub');
       $app->includeModel('menu');
 
       $menuId    = intval($request['menu_id'] ?? 0);
-      $newStatus = trim($request['new_status'] ?? '');
+      $newStatus = $request['new_status'] ?? null;
 
-      if ($menuId <= 0 || empty($newStatus)) {
+      if ($menuId <= 0 || !in_array($newStatus, [0, 1, '0', '1'], true)) {
         send_json_response([
           'success' => false,
-          'message' => 'Menu ID and new status are required.'
+          'message' => 'A valid menu ID and active status are required.'
         ], 400);
       }
 
       try {
+        $menu = Menu::getById($menuId);
+        if (!$menu) {
+          send_json_response(['success' => false, 'message' => 'Menu not found.'], 404);
+        }
+        ensure_merchant_access((int)$_SESSION['user']['id'], (int)$menu['merchant_id'], ['owner', 'staff']);
         $updated = Menu::updateStatus($menuId, $newStatus);
 
         if (!$updated) {
@@ -1106,10 +1125,11 @@ try {
           'message' => 'Menu status updated successfully.',
           'data'    => [
             'menu_id'    => $menuId,
-            'new_status' => $newStatus
+            'new_status' => (int)$newStatus
           ]
         ]);
       } catch (Exception $e) {
+        error_log('NeighborHub menu status update failed: ' . $e->getMessage());
         send_json_response([
           'success' => false,
           'message' => 'An error occurred while updating the menu status.'
@@ -1119,20 +1139,43 @@ try {
 
     case 'update_menu_category_status':
       authenticate_user($request);
+      if (!validate_csrf_request()) {
+        send_json_response(['success' => false, 'message' => 'Invalid security token.'], 401);
+      }
       $app = App::getInstance('neighborhub');
       $app->includeModel('menucategory');
+      $app->includeModel('menu');
 
       $categoryId = intval($request['category_id'] ?? 0);
-      $newStatus  = trim($request['new_status'] ?? '');
+      $newStatus = $request['new_status'] ?? null;
 
-      if ($categoryId <= 0 || empty($newStatus)) {
+      if (
+        $categoryId <= 0
+        || !is_string($newStatus)
+        || !in_array($newStatus, ['active', 'inactive'], true)
+      ) {
         send_json_response([
           'success' => false,
-          'message' => 'Category ID and new status are required.'
+          'message' => 'A valid category ID and active/inactive status are required.'
         ], 400);
       }
 
       try {
+        $category = MenuCategory::getById($categoryId);
+        if (!$category) {
+          send_json_response(['success' => false, 'message' => 'Category not found.'], 404);
+        }
+        $menu = Menu::getById((int)$category['menu_id']);
+        if (!$menu) {
+          send_json_response(['success' => false, 'message' => 'Parent menu not found.'], 404);
+        }
+        ensure_merchant_access((int)$_SESSION['user']['id'], (int)$menu['merchant_id'], ['owner', 'staff']);
+        if (empty($menu['is_active'])) {
+          send_json_response([
+            'success' => false,
+            'message' => 'Activate the parent menu before changing category availability.'
+          ], 409);
+        }
         $updated = MenuCategory::updateStatus($categoryId, $newStatus);
 
         if (!$updated) {
@@ -1141,7 +1184,13 @@ try {
             'message' => 'Failed to update category status. Category not found.'
           ], 404);
         }
+        send_json_response([
+          'success' => true,
+          'message' => 'Category status updated successfully.',
+          'data' => ['category_id' => $categoryId, 'new_status' => $newStatus]
+        ]);
       } catch (Exception $e) {
+        error_log('NeighborHub category status update failed: ' . $e->getMessage());
         send_json_response([
           'success' => false,
           'message' => 'An error occurred while updating the category status.'
@@ -2990,6 +3039,9 @@ function handle_get_merchant_products($request)
     )));
   }
 
+  if (empty($_SESSION['user']['is_admin'])) {
+    ensure_merchant_access((int)($_SESSION['user']['id'] ?? 0), $merchantId, ['owner', 'staff']);
+  }
   $products = Merchant::getProductsCatalog($merchantId, true, 'object');
 
   if ($products === false) {

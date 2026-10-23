@@ -17,9 +17,12 @@ $current_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $params = $_GET;
 
 // Default Active Menu Context (Kammy's Kafe standard single catalog menu)
-$activeMenuId = get_var('menu_id', !empty($menus) ? array_keys($menus)[0] : 1);
-$menuProductsByCategory = Menu::getProductsGroupedByCategory($activeMenuId);
-$menuCategories = Menu::getCategoriesByMenuId($activeMenuId);
+$activeMenuId = get_var('menu_id', !empty($menus) ? array_keys($menus)[0] : 0);
+$menuProductsByCategory = Menu::getProductsGroupedByCategory($activeMenuId, true);
+$menuCategories = Menu::getCategoriesByMenuId($activeMenuId, true);
+if (empty($menus)) {
+  echo '<div class="container" role="status"><p>This merchant currently has no active menus available.</p></div>';
+}
 //error_log(print_r($menuCategories, true));
 $menu_meta = array(
   1 => array(
@@ -33,7 +36,7 @@ $spotlightProductId = isset($_GET['product_id']) ? intval($_GET['product_id']) :
 $spotlightProduct = null;
 
 if ($spotlightProductId && isset($menus[$activeMenuId]['categories'])) {
-  foreach ($menus[$activeMenuId]['categories'] as $category) {
+  foreach (($menus[$activeMenuId]['categories'] ?? []) as $category) {
     foreach ($category['products'] as $product) {
       if (intval($product['id']) === $spotlightProductId) {
         $spotlightProduct = $product;

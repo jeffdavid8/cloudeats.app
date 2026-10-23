@@ -7,6 +7,7 @@
 class App {
     private static $_instance = null;
     private $eventLogger = null;
+    public $db = null;
 
     public static function getInstance() {
         if (self::$_instance === null) {

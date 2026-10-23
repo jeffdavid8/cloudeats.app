@@ -81,16 +81,19 @@ class Menu
     return self::update(intval($menuId), ['name' => trim($newName)]);
   }
 
-  public static function getCategoriesByMenuId($menuId)
+  public static function getCategoriesByMenuId($menuId, $activeOnly = false)
   {
     try {
       $db = self::getDb();
-      $stmt = $db->prepare(
-        "SELECT id, menu_id, name, sort_order
-         FROM neighborhub_menu_categories
-         WHERE menu_id = ?
-         ORDER BY sort_order ASC, name ASC"
-      );
+      $query = "SELECT mc.id, mc.menu_id, mc.name, mc.sort_order, mc.status
+         FROM neighborhub_menu_categories mc
+         INNER JOIN neighborhub_menus m ON m.id = mc.menu_id
+         WHERE mc.menu_id = ?";
+      if ($activeOnly) {
+        $query .= " AND mc.status = 'active' AND m.is_active = 1";
+      }
+      $query .= " ORDER BY mc.sort_order ASC, mc.name ASC";
+      $stmt = $db->prepare($query);
       $stmt->execute([intval($menuId)]);
       return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     } catch (Exception $e) {
@@ -150,12 +153,11 @@ class Menu
    * @param int $merchantId
    * @return array
    */
-  public static function getMenusWithProductsByMerchantId($merchantId)
+  public static function getMenusWithProductsByMerchantId($merchantId, $activeOnly = false)
   {
     try {
       $db = self::getDb();
-      $stmt = $db->prepare(
-        "SELECT
+      $query = "SELECT
                 m.id AS menu_id,
                 m.merchant_id,
                 m.name AS menu_name,
@@ -165,6 +167,7 @@ class Menu
                 mc.id AS category_id,
                 mc.name AS category_name,
                 mc.sort_order AS category_sort_order,
+                mc.status AS category_status,
                 p.id AS product_id,
                 p.name AS product_name,
                 COALESCE(mi.override_price, p.price) AS product_price,
@@ -182,8 +185,15 @@ class Menu
              INNER JOIN neighborhub_menu_items mi ON mi.category_id = mc.id
              INNER JOIN neighborhub_products p ON p.id = mi.product_id
              WHERE m.merchant_id = ?
-             ORDER BY m.sort_order ASC, m.name ASC, mc.sort_order ASC, mc.name ASC, mi.sort_order ASC, p.name ASC"
-      );
+               AND p.merchant_id = m.merchant_id";
+      if ($activeOnly) {
+        $query .= " AND m.is_active = 1
+                    AND mc.status = 'active'
+                    AND mi.is_available = 1
+                    AND p.is_available = 1";
+      }
+      $query .= " ORDER BY m.sort_order ASC, m.name ASC, mc.sort_order ASC, mc.name ASC, mi.sort_order ASC, p.name ASC";
+      $stmt = $db->prepare($query);
       $stmt->execute([intval($merchantId)]);
       $rows = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
 
@@ -213,6 +223,7 @@ class Menu
             'id' => $categoryId,
             'name' => $row['category_name'],
             'sort_order' => intval($row['category_sort_order'] ?? 0),
+            'status' => $row['category_status'] ?? 'inactive',
             'products' => []
           ];
         }
@@ -309,7 +320,10 @@ class Menu
 
   public static function updateStatus($menuId, $isActive)
   {
-    return self::update(intval($menuId), ['status' => intval($isActive)]);
+    if (!in_array($isActive, [0, 1, '0', '1'], true)) {
+      return false;
+    }
+    return self::setActive(intval($menuId), (int)$isActive);
   }
 
   /**
@@ -341,6 +355,7 @@ class Menu
             mi.id AS menu_item_id,
             mi.sort_order AS item_sort_order
           FROM neighborhub_menu_categories mc
+          INNER JOIN neighborhub_menus m ON m.id = mc.menu_id
           LEFT JOIN neighborhub_menu_items mi ON mc.id = mi.category_id
           LEFT JOIN neighborhub_products p ON mi.product_id = p.id
           WHERE mc.menu_id = ?";
@@ -348,7 +363,11 @@ class Menu
       $params = [intval($menuId)];
 
       if ($activeOnly) {
-        $query .= " AND mi.is_available = 1 AND p.is_available = 1";
+        $query .= " AND m.is_active = 1
+                    AND mc.status = 'active'
+                    AND mi.is_available = 1
+                    AND p.is_available = 1
+                    AND p.merchant_id = m.merchant_id";
       }
 
       $query .= " ORDER BY mc.sort_order ASC, mc.name ASC, mi.sort_order ASC, p.name ASC";
@@ -389,6 +408,33 @@ class Menu
     } catch (Exception $e) {
       error_log("Menu::getProductsGroupedByCategory Error: " . $e->getMessage());
       return [];
+    }
+  }
+
+  public static function productHasActiveMenuAssignment($productId, $merchantId): bool
+  {
+    try {
+      $db = self::getDb();
+      $stmt = $db->prepare(
+        "SELECT 1
+         FROM neighborhub_menu_items mi
+         INNER JOIN neighborhub_menu_categories mc ON mc.id = mi.category_id
+         INNER JOIN neighborhub_menus m ON m.id = mc.menu_id
+         INNER JOIN neighborhub_products p ON p.id = mi.product_id
+         WHERE mi.product_id = ?
+           AND p.merchant_id = ?
+           AND p.is_available = 1
+           AND mi.is_available = 1
+           AND mc.status = 'active'
+           AND m.is_active = 1
+           AND m.merchant_id = p.merchant_id
+         LIMIT 1"
+      );
+      $stmt->execute([intval($productId), intval($merchantId)]);
+      return (bool)$stmt->fetchColumn();
+    } catch (Exception $e) {
+      error_log("Menu::productHasActiveMenuAssignment Error: " . $e->getMessage());
+      return false;
     }
   }
 

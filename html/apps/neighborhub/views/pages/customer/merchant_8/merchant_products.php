@@ -19,8 +19,11 @@ $params['menu_id'] = 1;
 $pkMenuLink = $current_path . '?' . http_build_query($params);
 $params['menu_id'] = 2;
 $mjMenuLink = $current_path . '?' . http_build_query($params);
-$activeMenuId = get_var('menu_id', array_keys($menus)[0]);
-$menuProductsByCategory = Menu::getProductsGroupedByCategory($activeMenuId);
+$activeMenuId = get_var('menu_id', !empty($menus) ? array_keys($menus)[0] : 0);
+$menuProductsByCategory = Menu::getProductsGroupedByCategory($activeMenuId, true);
+if (empty($menus)) {
+  echo '<div class="container" role="status"><p>This merchant currently has no active menus available.</p></div>';
+}
 
 /*
 */
@@ -44,7 +47,7 @@ $spotlightProductId = isset($_GET['product_id']) ? intval($_GET['product_id']) :
 $spotlightProduct = null;
 
 if ($spotlightProductId) {
-  foreach ($menus[$activeMenuId]['categories'] as $category) {
+  foreach (($menus[$activeMenuId]['categories'] ?? []) as $category) {
     foreach ($category['products'] as $product) {
       if (intval($product['id']) === $spotlightProductId) {
         $spotlightProduct = $product;
@@ -793,7 +796,7 @@ if ($spotlightProductId) {
       <div class="card secondary-category-menu">
         <div class="menu-title"><i class="fas fa-list-ul"></i> Menu Categories</div>
         <ul>
-          <?php foreach ($menus[$activeMenuId]['categories'] as $category):
+          <?php foreach (($menus[$activeMenuId]['categories'] ?? []) as $category):
             $cleanId = preg_replace('/\s+/', '-', preg_replace('/[^a-z0-9\s-]/', '', str_replace('&', 'and', strtolower($category['name']))));
           ?>
             <li><a class="category-menu-item" data-category-anchor="<?= $cleanId ?>" href="#!"><?= htmlspecialchars($category['name']) ?></a></li>
@@ -875,7 +878,7 @@ if ($spotlightProductId) {
         <!-- Dropdown Categories -->
         <ul id="top-right-menu" class="dropdown-content">
           <li class="category-menu-item-back-to-top"><a class="category-menu-item" data-category-anchor="top" href="#!">Back to Top</a></li>
-          <?php foreach ($menus[$activeMenuId]['categories'] as $category):
+          <?php foreach (($menus[$activeMenuId]['categories'] ?? []) as $category):
             $cleanId = preg_replace('/\s+/', '-', preg_replace('/[^a-z0-9\s-]/', '', str_replace('&', 'and', strtolower($category['name'])))) ?>
             <li><a class="category-menu-item" data-category-anchor="<?= $cleanId ?>" href="#!"> <?= $category['name'] ?> </a></li>
           <?php endforeach; ?>

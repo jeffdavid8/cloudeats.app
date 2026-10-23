@@ -73,7 +73,7 @@ $isShopOnline = ($rawStatus === 'active' || $rawStatus === 'online' || $rawStatu
         $categories = $menu['categories'] ?? [];
 
         // Determine parent menu active status (1/0 or active/inactive)
-        $isMenuRawStatus = $menu['status'] ?? $menu['is_active'] ?? 1;
+        $isMenuRawStatus = $menu['menu_is_active'] ?? $menu['is_active'] ?? 1;
         $isMenuActive = ($isMenuRawStatus === 1 || $isMenuRawStatus === '1' || strtolower((string)$isMenuRawStatus) === 'active');
     ?>
         <div class="card-panel menu-group-panel" data-menu-id="<?= $menuId ?>" style="padding: 0.75rem; margin-bottom: 1.25rem; border: 1px solid #e0e0e0; box-shadow: none;">
@@ -100,12 +100,7 @@ $isShopOnline = ($rawStatus === 'active' || $rawStatus === 'online' || $rawStatu
                 $categoryId = intval($category['category_id']);
                 $categoryName = htmlspecialchars($category['category_name']);
 
-                $type = strtolower(trim($category['type'] ?? ''));
-                $metaActive = $category['meta']['is_active'] ?? null;
-
-                $isCategoryActive = ($metaActive !== null)
-                  ? !empty($metaActive)
-                  : ($type !== 'inactive' && $type !== 'disabled' && ($category['status'] ?? '') !== 'inactive');
+                $isCategoryActive = ($category['status'] ?? '') === 'active';
               ?>
                 <li class="collection-item category-item-row" data-category-id="<?= $categoryId ?>" style="display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #e0e0e0; background: transparent;">
                   <span class="category-name" style="font-weight: 500; font-size: 0.875rem; opacity: <?= $isCategoryActive ? '1' : '0.5' ?>;">
@@ -116,7 +111,7 @@ $isShopOnline = ($rawStatus === 'active' || $rawStatus === 'online' || $rawStatu
                       <input type="checkbox"
                         class="toggle-category-status"
                         data-category-id="<?= $categoryId ?>"
-                        <?= ($isCategoryActive && $isMenuActive) ? 'checked' : '' ?>
+                        <?= $isCategoryActive ? 'checked' : '' ?>
                         <?= !$isMenuActive ? 'disabled' : '' ?>>
                       <span class="lever" style="margin: 0;"></span>
                     </label>
@@ -908,4 +903,71 @@ $isShopOnline = ($rawStatus === 'active' || $rawStatus === 'online' || $rawStatu
       }
     });
   }
+
+  $(document).on('change', '.toggle-menu-status', function() {
+    const checkbox = this;
+    const $checkbox = $(checkbox);
+    const previousState = !checkbox.checked;
+    const menuId = Number($checkbox.data('menu-id'));
+    checkbox.disabled = true;
+
+    mb.ajax({
+      type: 'POST',
+      url: '/?api=neighborhub&action=update_menu_status',
+      data: JSON.stringify({
+        menu_id: menuId,
+        new_status: checkbox.checked ? '1' : '0'
+      }),
+      success: function(response) {
+        if (!response || !response.success) {
+          checkbox.checked = previousState;
+          M.toast({ html: response?.message || 'Unable to update menu availability.', classes: 'red' });
+          return;
+        }
+        const $group = $checkbox.closest('.menu-group-panel');
+        $group.find('.toggle-category-status').prop('disabled', !checkbox.checked);
+        $group.find('.categories-collection').css('opacity', checkbox.checked ? '1' : '0.45');
+        M.toast({ html: 'Menu availability updated.', classes: 'green' });
+      },
+      error: function() {
+        checkbox.checked = previousState;
+        M.toast({ html: 'Unable to update menu availability. Try again.', classes: 'red' });
+      },
+      complete: function() {
+        checkbox.disabled = false;
+      }
+    });
+  });
+
+  $(document).on('change', '.toggle-category-status', function() {
+    const checkbox = this;
+    const $checkbox = $(checkbox);
+    const previousState = !checkbox.checked;
+    const categoryId = Number($checkbox.data('category-id'));
+    checkbox.disabled = true;
+
+    mb.ajax({
+      type: 'POST',
+      url: '/?api=neighborhub&action=update_menu_category_status',
+      data: JSON.stringify({
+        category_id: categoryId,
+        new_status: checkbox.checked ? 'active' : 'inactive'
+      }),
+      success: function(response) {
+        if (!response || !response.success) {
+          checkbox.checked = previousState;
+          M.toast({ html: response?.message || 'Unable to update category availability.', classes: 'red' });
+          return;
+        }
+        M.toast({ html: 'Category availability updated.', classes: 'green' });
+      },
+      error: function() {
+        checkbox.checked = previousState;
+        M.toast({ html: 'Unable to update category availability. Try again.', classes: 'red' });
+      },
+      complete: function() {
+        checkbox.disabled = false;
+      }
+    });
+  });
 </script>

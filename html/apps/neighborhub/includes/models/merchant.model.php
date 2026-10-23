@@ -1180,6 +1180,7 @@ class Merchant
             mc.id AS category_id,
             mc.name AS category_name,
             mc.sort_order AS cat_sort,
+            mc.status AS category_status,
             mc.type AS category_type,
             mc.meta AS category_meta
           FROM neighborhub_menus m
@@ -1216,6 +1217,7 @@ class Merchant
                         'category_id'   => intval($row['category_id']),
                         'category_name' => $row['category_name'],
                         'cat_sort'      => intval($row['cat_sort']),
+                        'status'        => $row['category_status'] ?? 'inactive',
                         'type'          => $row['category_type'],
                         'meta'          => !empty($row['category_meta']) ? json_decode($row['category_meta'], true) : []
                     ];

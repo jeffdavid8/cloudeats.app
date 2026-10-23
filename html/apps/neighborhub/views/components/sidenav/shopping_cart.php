@@ -784,9 +784,12 @@ if (!isset($merchant->stripe_flat_fee)) {
             $('#nh-checkout-stripe-btn').removeClass('disabled').html('Checkout with Stripe <i class="fas fa-credit-card right"></i>');
           }
         },
-        error: function() {
+        error: function(xhr) {
+          const response = (xhr && xhr.responseJSON) ? xhr.responseJSON : {};
+          const message = response.error || 'Network connection failure across payment channels.';
           M.toast({
-            html: 'Network connection failure across payment channels.'
+            html: $('<span>').text(message).html(),
+            classes: 'red'
           });
           $('#nh-checkout-stripe-btn').removeClass('disabled').html('Checkout with Stripe <i class="fas fa-credit-card right"></i>');
         }
