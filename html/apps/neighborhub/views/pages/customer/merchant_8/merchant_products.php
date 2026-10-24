@@ -126,7 +126,7 @@ if ($spotlightProductId) {
   /* Custom Owned Background Image Overlay Support */
   .pk-hero-banner {
     position: relative;
-    height: 70vh;
+    height: 80vh;
     margin-top: 0;
     padding-top: 9rem;
     /* Slightly darkened
