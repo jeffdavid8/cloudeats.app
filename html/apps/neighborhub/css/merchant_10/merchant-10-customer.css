@@ -522,3 +522,152 @@ body.scrolled .merchant-header-image .online-status-dot {
     height: 220px;
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================================
+   CLOUD EATS — CONSISTENT PRODUCT CARD GRID
+   ========================================= */
+
+.iv-product-grid {
+    display: flex !important;
+    flex-wrap: wrap;
+    align-items: stretch;
+    column-count: initial !important;
+    column-gap: normal !important;
+    margin-bottom: 0;
+}
+
+.iv-product-grid::before,
+.iv-product-grid::after {
+    display: none !important;
+    content: none !important;
+}
+
+/* Equal-width grid columns */
+.iv-product-grid > .col {
+    display: flex !important;
+    float: none !important;
+    width: 33.333333% !important;
+    margin-left: 0 !important;
+    margin-bottom: 24px;
+    align-items: stretch;
+}
+
+/* Equal-height cards */
+.iv-product-grid .product-item-card {
+    display: flex !important;
+    flex-direction: column;
+    width: 100%;
+    height: 505px !important;
+    min-height: 490px;
+    margin: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+/* Keep the image area consistent */
+.iv-product-grid .iv-product-image {
+    flex: 0 0 180px;
+    height: 180px;
+    min-height: 180px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Product details occupy the available space */
+.iv-product-grid .iv-product-body {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+    padding: 16px;
+}
+
+/* Reserve consistent space for product names */
+.iv-product-grid .iv-product-name {
+    flex: 0 0 auto;
+    min-height: 48px;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+/* Fixed, visibly scrollable description area */
+.iv-product-grid .iv-product-description {
+    flex: 0 0 100px;
+    height: 100px;
+    min-height: 100px;
+    max-height: 100px;
+    margin: 0;
+    overflow-y: auto !important;
+    overflow-x: hidden;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    line-height: 1.55;
+    padding: 4px 8px 4px 0;
+    scrollbar-width: auto;
+    scrollbar-color: #ef6964 #183c3d;
+}
+
+/* Override any existing line-clamping */
+.iv-product-grid .iv-product-description.clamped {
+    display: block !important;
+    -webkit-line-clamp: unset !important;
+    -webkit-box-orient: initial !important;
+    text-overflow: clip !important;
+}
+
+/* Make the scrollbar noticeable in Chrome, Edge and Safari */
+.iv-product-grid .iv-product-description::-webkit-scrollbar {
+    width: 8px;
+}
+
+.iv-product-grid .iv-product-description::-webkit-scrollbar-track {
+    background: #183c3d;
+    border-radius: 8px;
+}
+
+.iv-product-grid .iv-product-description::-webkit-scrollbar-thumb {
+    background: #ef6964;
+    border: 1px solid #183c3d;
+    border-radius: 8px;
+}
+
+/* Keep quantity and Add to Order controls at the bottom */
+.iv-product-grid .iv-card-action {
+    flex: 0 0 auto;
+    margin-top: auto;
+}
+
+/* Tablet */
+@media only screen and (min-width: 601px)
+       and (max-width: 992px) {
+    .iv-product-grid > .col {
+        width: 50% !important;
+    }
+}
+
+/* Mobile */
+@media only screen and (max-width: 600px) {
+    .iv-product-grid > .col {
+        width: 100% !important;
+    }
+
+    .iv-product-grid .product-item-card {
+        height: 490px !important;
+        min-height: 490px;
+    }
+}
