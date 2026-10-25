@@ -100,6 +100,7 @@ function admin_db_tables()
         'permissions_registry',
         'user_permissions_map',
         'app_system_settings',
+        'mb_schema_migrations',
     );
 }
 
@@ -380,6 +381,10 @@ function admin_render_body(&$app)
             case 'maintenance':
                 admin_require_admin();
                 include __DIR__ . '/views/maintenance.php';
+                break;
+            case 'migrations':
+                admin_require_admin();
+                include __DIR__ . '/views/pages/migrations.php';
                 break;
             case 'ancestry_family':
                 admin_require_admin();

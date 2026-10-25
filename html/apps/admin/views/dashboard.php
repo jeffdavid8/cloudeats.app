@@ -222,6 +222,11 @@ $currentTheme = $themeManager->getCurrentTheme();
                         <span class="title">Analytics</span>
                         <p class="grey-text">View visitor statistics and traffic insights</p>
                     </a>
+                    <a href="?app=admin&p=migrations" class="collection-item quick-action-item">
+                        <i class="fas fa-database left blue-text"></i>
+                        <span class="title">Database Migrations</span>
+                        <p class="grey-text">Review migration history and apply reviewed changes</p>
+                    </a>
                     <a href="?app=admin&p=backup_db&type=json" class="collection-item">
                         <i class="material-icons left blue-text">backup</i>
                         <span class="title">Create Cloud Backup</span>

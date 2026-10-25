@@ -8,6 +8,7 @@ if (!defined('MB_RUNNING')) exit;
 
 require_once __DIR__ . '/../../includes/SecurityHeaders.php';
 require_once __DIR__ . '/../../includes/RateLimiter.php';
+require_once __DIR__ . '/../../includes/classes/DatabaseMigrationRunner.class.php';
 
 // Set API security headers early
 SecurityHeaders::setAPIHeaders([
@@ -103,9 +104,12 @@ $csrf_protected_actions = [
     'delete_role',
     'toggle_event_logging',
     'clear_event_log',
-    'migrate_json_file'
+    'migrate_json_file',
+    'migration_adopt_baseline',
+    'migration_apply'
 ];
 
+$jsonData = null;
 // Validate CSRF token for protected actions
 if (in_array($action, $csrf_protected_actions)) {
     // Handle JSON input
@@ -124,11 +128,235 @@ if (in_array($action, $csrf_protected_actions)) {
 // Initialize components
 $app = App::getInstance();
 $userManager = new UserManager();
+$migrationApps = ['admin', 'stitch', 'neighborhub'];
+$migrationDirectory = static function (string $migrationApp): string {
+    return dirname(__DIR__) . DIRECTORY_SEPARATOR . $migrationApp . DIRECTORY_SEPARATOR . 'migrations';
+};
+$migrationDatabase = static function (): array {
+    $app = App::getInstance();
+    $driver = $app->db->getAttribute(PDO::ATTR_DRIVER_NAME);
+    $database = null;
+    if ($driver === 'mysql') {
+        $database = $app->db->query('SELECT DATABASE()')->fetchColumn();
+    } elseif ($driver === 'sqlite') {
+        $databaseFile = $app->db->query('PRAGMA database_list')->fetch(PDO::FETCH_ASSOC)['file'] ?? '';
+        $database = $databaseFile === '' ? 'sqlite-memory' : basename($databaseFile);
+    }
+
+    return [
+        'environment' => is_development() ? 'development' : 'production',
+        'driver' => $driver,
+        'database' => (string)$database,
+    ];
+};
+$readMigrationInput = static function () use (&$jsonData): array {
+    if (is_array($jsonData)) {
+        return $jsonData;
+    }
+    $rawInput = file_get_contents('php://input');
+    if ($rawInput === false || trim($rawInput) === '') {
+        return $_POST;
+    }
+    $input = json_decode($rawInput, true);
+    if (!is_array($input)) {
+        throw new InvalidArgumentException('Request body must be a JSON object.');
+    }
+    return $input;
+};
+$auditMigrationOperation = static function (
+    string $operation,
+    string $appName,
+    string $result,
+    string $correlationId,
+    ?string $migrationId = null
+): void {
+    $user = $_SESSION['user'] ?? [];
+    $actor = is_array($user) ? (string)($user['username'] ?? 'unknown') : (string)$user;
+    $context = [
+        'actor' => $actor,
+        'operation' => $operation,
+        'app' => $appName,
+        'migration' => $migrationId,
+        'result' => $result,
+        'timestamp' => date(DATE_ATOM),
+        'correlation_id' => $correlationId,
+    ];
+    $app = App::getInstance();
+    if (method_exists($app, 'getEventLogger') && $app->getEventLogger()) {
+        $level = $result === 'success' ? 'INFO' : 'WARNING';
+        $app->getEventLogger()->log(
+            $level,
+            'admin_migration_operation',
+            $operation . ' ' . $result,
+            $context
+        );
+    } else {
+        error_log('[migration-admin] ' . json_encode($context, JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE));
+    }
+};
 
 // Import Analytics Service for analytics endpoints
 use MediaBrain\Services\AnalyticsService;
 
 switch ($action) {
+    case 'migration_status':
+        admin_require_admin();
+        try {
+            $database = $migrationDatabase();
+            $correlationId = bin2hex(random_bytes(12));
+            $status = [];
+            foreach ($migrationApps as $migrationApp) {
+                $runner = new DatabaseMigrationRunner($app->db, $migrationApp, $migrationDirectory($migrationApp));
+                $status[$migrationApp] = $runner->inspectStatus();
+            }
+            echo json_encode([
+                'success' => true,
+                'correlation_id' => $correlationId,
+                'database' => $database,
+                'apps' => $status,
+                'adoption_verification' => 'table_columns_and_foreign_keys',
+            ]);
+        } catch (Throwable $exception) {
+            http_response_code(500);
+            echo json_encode(['success' => false, 'error' => $exception->getMessage()]);
+        }
+        break;
+
+    case 'migration_adopt_baseline':
+        admin_require_admin();
+        if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') {
+            http_response_code(405);
+            header('Allow: POST');
+            echo json_encode(['success' => false, 'error' => 'POST is required.']);
+            break;
+        }
+
+        try {
+            $input = $readMigrationInput();
+            $correlationId = bin2hex(random_bytes(12));
+            $migrationApp = $input['app'] ?? '';
+            if (!is_string($migrationApp) || !in_array($migrationApp, $migrationApps, true)) {
+                throw new InvalidArgumentException('Select a supported migration app.');
+            }
+            $database = $migrationDatabase();
+            if (!isset($input['confirm_database']) || !is_string($input['confirm_database'])
+                || !hash_equals($database['database'], $input['confirm_database'])) {
+                throw new InvalidArgumentException('Database confirmation did not match the active database.');
+            }
+            if (($input['schema_reviewed'] ?? false) !== true) {
+                throw new InvalidArgumentException('Confirm that the live schema was reviewed against the baseline.');
+            }
+            if (($input['backup_confirmed'] ?? false) !== true) {
+                throw new InvalidArgumentException('Confirm that a current database backup is available.');
+            }
+
+            $runner = new DatabaseMigrationRunner($app->db, $migrationApp, $migrationDirectory($migrationApp));
+            $migrationId = $runner->adoptBaseline();
+            $auditMigrationOperation('adopt', $migrationApp, 'success', $correlationId, $migrationId);
+            echo json_encode([
+                'success' => true,
+                'correlation_id' => $correlationId,
+                'app' => $migrationApp,
+                'migration' => $migrationId,
+                'message' => 'Baseline adopted. Application tables and data were not changed.',
+            ]);
+        } catch (InvalidArgumentException $exception) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'error' => $exception->getMessage()]);
+        } catch (Throwable $exception) {
+            $migrationApp = isset($migrationApp) && is_string($migrationApp) ? $migrationApp : 'unknown';
+            $correlationId = $correlationId ?? bin2hex(random_bytes(12));
+            $auditMigrationOperation('adopt', $migrationApp, 'failure', $correlationId);
+            http_response_code(str_contains($exception->getMessage(), 'lock') ? 409 : 500);
+            echo json_encode([
+                'success' => false,
+                'correlation_id' => $correlationId,
+                'error' => $exception->getMessage(),
+            ]);
+        }
+        break;
+
+    case 'migration_apply':
+        admin_require_admin();
+        if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') {
+            http_response_code(405);
+            header('Allow: POST');
+            echo json_encode(['success' => false, 'error' => 'POST is required.']);
+            break;
+        }
+
+        $results = [];
+        try {
+            $input = $readMigrationInput();
+            $correlationId = bin2hex(random_bytes(12));
+            $requestedApp = $input['app'] ?? '';
+            if (!is_string($requestedApp)
+                || ($requestedApp !== 'all' && !in_array($requestedApp, $migrationApps, true))) {
+                throw new InvalidArgumentException('Select a supported migration app or all.');
+            }
+            $database = $migrationDatabase();
+            if (!isset($input['confirm_database']) || !is_string($input['confirm_database'])
+                || !hash_equals($database['database'], $input['confirm_database'])) {
+                throw new InvalidArgumentException('Database confirmation did not match the active database.');
+            }
+            if (($input['backup_confirmed'] ?? false) !== true) {
+                throw new InvalidArgumentException('Confirm that a current database backup is available.');
+            }
+            $appsToMigrate = $requestedApp === 'all' ? $migrationApps : [$requestedApp];
+
+            $failed = false;
+            $failedApp = null;
+            $failureMessage = null;
+            foreach ($appsToMigrate as $migrationApp) {
+                try {
+                    $runner = new DatabaseMigrationRunner($app->db, $migrationApp, $migrationDirectory($migrationApp));
+                    $applied = $runner->migrate();
+                    $results[$migrationApp] = ['success' => true, 'applied' => $applied];
+                    $auditMigrationOperation('apply', $migrationApp, 'success', $correlationId, implode(',', $applied));
+                } catch (Throwable $exception) {
+                    $results[$migrationApp] = ['success' => false, 'error' => $exception->getMessage()];
+                    $failedMigrationId = null;
+                    if (preg_match('/Migration [a-z][a-z0-9_]*\/([0-9]{14}_[a-z0-9_-]+) failed/', $exception->getMessage(), $matches)) {
+                        $failedMigrationId = $matches[1];
+                    }
+                    $auditMigrationOperation('apply', $migrationApp, 'failure', $correlationId, $failedMigrationId);
+                    http_response_code(str_contains($exception->getMessage(), 'lock') ? 409 : 500);
+                    $failed = true;
+                    $failedApp = $migrationApp;
+                    $failureMessage = $exception->getMessage();
+                    break;
+                }
+            }
+
+            if ($failed) {
+                echo json_encode([
+                    'success' => false,
+                    'correlation_id' => $correlationId,
+                    'results' => $results,
+                    'error' => "Migration application stopped at {$failedApp}: {$failureMessage}",
+                ]);
+            } else {
+                echo json_encode(['success' => true, 'correlation_id' => $correlationId, 'results' => $results]);
+            }
+        } catch (InvalidArgumentException $exception) {
+            http_response_code(400);
+            echo json_encode([
+                'success' => false,
+                'correlation_id' => $correlationId ?? null,
+                'results' => $results,
+                'error' => $exception->getMessage(),
+            ]);
+        } catch (Throwable $exception) {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'correlation_id' => $correlationId ?? null,
+                'results' => $results,
+                'error' => $exception->getMessage(),
+            ]);
+        }
+        break;
+
     case 'login':
         // Admin login now handled by main authentication system
         // Return redirect instruction to client
