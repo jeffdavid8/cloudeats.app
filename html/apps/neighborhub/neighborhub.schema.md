@@ -3,6 +3,12 @@
 -- Parent tables first, then dependent tables, indexes last
 -- neighborhub_usage_events is also defined there with nullable merchant_id
 -- attribution and an index for merchant-scoped usage analytics.
+--
+-- neighborhub_merchants.store_hours is JSON with this shape:
+-- {"weekly":{"monday":[{"open":"09:00","close":"17:00"}]},
+--  "holidays":{"2026-12-25":[]}}
+-- Intervals use 24-hour HH:MM values. Multiple intervals support split shifts;
+-- an empty holiday array marks that date closed and overrides the weekly schedule.
 
 CREATE TABLE neighborhub_merchants (
   id INT AUTO_INCREMENT PRIMARY KEY,

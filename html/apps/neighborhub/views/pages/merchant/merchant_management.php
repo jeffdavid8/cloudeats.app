@@ -2,6 +2,13 @@
 if (!defined('MB_RUNNING')) exit;
 $merchantStaffRole = strtolower((string)($_SESSION['user']['merchant_staff_role'] ?? ''));
 $canManageSandboxMode = !empty($_SESSION['user']['is_admin']) || $merchantStaffRole === 'owner' || $merchantStaffRole === 'admin';
+$storeHours = $merchant['store_hours'] ?? [];
+if (is_string($storeHours)) {
+  $storeHours = json_decode($storeHours, true) ?: [];
+}
+if (!isset($storeHours['weekly']) || !is_array($storeHours['weekly'])) {
+  $storeHours = ['weekly' => []];
+}
 /**
  * Generic Merchant Products Catalog & Spotlight Storefront
  * @var Object $customer
@@ -112,9 +119,9 @@ $canManageSandboxMode = !empty($_SESSION['user']['is_admin']) || $merchantStaffR
       </div>
       <div class="form-group">
         <label for="store_hours">Store Hours</label>
-        <textarea
-          id="store_hours"
-          placeholder="Mon-Fri: 9am - 9pm"><?php echo htmlspecialchars($merchant['store_hours'] ?? ''); ?></textarea>
+        <div class="store-hours-editor" data-store-hours-editor data-textarea="store_hours">
+          <textarea id="store_hours" required><?php echo htmlspecialchars(json_encode($storeHours, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)); ?></textarea>
+        </div>
       </div>
       <div class="form-group">
         <label for="address">Address</label>
@@ -288,6 +295,7 @@ $canManageSandboxMode = !empty($_SESSION['user']['is_admin']) || $merchantStaffR
 </div>
 
 <!-- Keep your existing JavaScript block from earlier down here unchanged -->
+<script src="/apps/neighborhub/js/store-hours-editor.js"></script>
 <script>
   const API_PATH = '?api=neighborhub&action=update_merchant_settings';
   const merchantId = document.getElementById('merchant_id').value;
@@ -306,6 +314,13 @@ $canManageSandboxMode = !empty($_SESSION['user']['is_admin']) || $merchantStaffR
   function saveSettings(e) {
     e.preventDefault();
     e.stopPropagation();
+    let storeHours;
+    try {
+      storeHours = JSON.parse(document.getElementById('store_hours').value);
+    } catch (error) {
+      M.toast({html: 'Store hours must be valid JSON.', classes: 'red'});
+      return;
+    }
     mb.ajax({
       url: API_PATH,
       method: 'POST',
@@ -313,7 +328,7 @@ $canManageSandboxMode = !empty($_SESSION['user']['is_admin']) || $merchantStaffR
         merchant_id: merchantId,
         business_name: document.getElementById('business_name').value,
         description: document.getElementById('description').value,
-        store_hours: document.getElementById('store_hours').value,
+        store_hours: storeHours,
         address: document.getElementById('address').value,
         city: document.getElementById('city').value,
         state: document.getElementById('state').value,

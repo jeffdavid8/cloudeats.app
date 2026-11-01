@@ -518,7 +518,7 @@ if ($spotlightProductId) {
             <span style="margin-right: 1rem; width: 1.5rem; text-align: center; margin-top: 2px;">
               <i class="fas fa-clock" style="color: #F5A623;"></i>
             </span>
-            <span><?php echo nl2br(htmlspecialchars($merchant->store_hours)); ?></span>
+            <span><?= nl2br(htmlspecialchars(Merchant::formatStoreHours($merchant->store_hours), ENT_QUOTES, 'UTF-8')) ?></span>
           </p>
         <?php endif; ?>
       </div>
@@ -720,6 +720,7 @@ if ($spotlightProductId) {
 
 <script>
   $(document).ready(function() {
+    window.merchant = <?= json_encode($merchant) ?>;
     window.storefront = new MerchantStorefront({
       toastIcon: 'fa-check-circle', // Customize icon per theme if desired (e.g. 'fa-fire-alt')
       toastVerb: 'basket' // Customize text per theme if desired (e.g. 'order')

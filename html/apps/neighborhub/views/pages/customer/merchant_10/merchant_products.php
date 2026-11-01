@@ -88,7 +88,7 @@ if ($spotlightProductId) {
             </div>
             <div class="col s12 m6">
               <?php if (!empty($merchant->store_hours)): ?>
-                <div class="iv-contact-link"><i class="fas fa-clock"></i><span><?= nl2br(htmlspecialchars($merchant->store_hours, ENT_QUOTES, 'UTF-8')) ?></span></div>
+                <div class="iv-contact-link"><i class="fas fa-clock"></i><span><?= nl2br(htmlspecialchars(Merchant::formatStoreHours($merchant->store_hours), ENT_QUOTES, 'UTF-8')) ?></span></div>
               <?php endif; ?>
               <p class="sweets-text-muted" style="font-size:13px;line-height:1.7;margin-top:8px;">Pick something delicious below. Your selections will be added to your CloudEats order.</p>
             </div>

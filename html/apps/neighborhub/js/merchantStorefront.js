@@ -24,10 +24,166 @@ class MerchantStorefront {
 
   init() {
     this.initMaterializeComponents();
+    this.initOperationalStatus();
     this.bindNavigationEvents();
     this.initIntersectionObserver();
     this.bindQuantityControls();
     this.bindCartActions();
+  }
+
+  initOperationalStatus() {
+    const merchant = window.merchant || {};
+    const status = String(merchant.status || "").toLowerCase();
+    const hours = merchant.store_hours || {};
+    const operational = this.getOperationalStatus(status, hours);
+    const banner = document.createElement("div");
+
+    banner.id = "nh-merchant-operational-status";
+    banner.setAttribute("role", "status");
+    banner.className = `nh-merchant-operational-status is-${operational.open ? "open" : "closed"} ${operational.urgency ? `is-${operational.urgency}` : ""}`;
+    banner.innerHTML = `
+      <span class="nh-merchant-operational-dot" aria-hidden="true"></span>
+      <strong>${operational.label}</strong>
+      <span>${operational.message}</span>
+    `;
+    document.body.insertBefore(banner, document.body.firstChild);
+
+    if (!operational.open) {
+      $(".nh-add-standard-btn, .nh-customize-trigger")
+        .prop("disabled", true)
+        .attr("aria-disabled", "true")
+        .addClass("nh-merchant-closed-action");
+    }
+
+    this.addOperationalStatusStyles();
+    this.operationalStatus = operational;
+  }
+
+  getOperationalStatus(status, hours) {
+    if (status !== "active") {
+      return { open: false, label: "Temporarily paused", message: "Temporarily paused by vendor" };
+    }
+
+    const schedule = this.normalizeSchedule(hours);
+    const now = new Date();
+    const current = this.findInterval(schedule, now);
+    if (current) {
+      const close = this.dateAt(now, current.close);
+      if (close <= now) close.setDate(close.getDate() + 1);
+      const minutes = Math.max(1, Math.ceil((close - now) / 60000));
+      return {
+        open: true,
+        label: minutes <= 30 ? "Closing soon" : "Open now",
+        urgency: minutes <= 30 ? "closing-soon" : "",
+        message: `Closes in ${minutes} minute${minutes === 1 ? "" : "s"}`,
+      };
+    }
+
+    const nextOpen = this.findNextOpen(schedule, now);
+    const minutesUntilOpen = nextOpen ? Math.max(1, Math.ceil((nextOpen - now) / 60000)) : null;
+    return {
+      open: false,
+      label: minutesUntilOpen !== null && minutesUntilOpen <= 30 ? "Opening soon" : "Closed",
+      urgency: minutesUntilOpen !== null && minutesUntilOpen <= 30 ? "opening-soon" : "",
+      message: nextOpen
+        ? (minutesUntilOpen <= 30
+          ? `Opens in ${minutesUntilOpen} minute${minutesUntilOpen === 1 ? "" : "s"}`
+          : `Opens at ${this.formatDateTime(nextOpen, now)}`)
+        : "Hours not listed",
+    };
+  }
+
+  normalizeSchedule(hours) {
+    if (typeof hours === "string") {
+      try { hours = JSON.parse(hours); } catch (error) { return { weekly: {}, holidays: {} }; }
+    }
+    return {
+      weekly: hours && typeof hours.weekly === "object" ? hours.weekly : {},
+      holidays: hours && typeof hours.holidays === "object" ? hours.holidays : {},
+    };
+  }
+
+  intervalsForDate(schedule, date) {
+    const dateKey = this.dateKey(date);
+    const day = date.toLocaleDateString("en-US", { weekday: "long" }).toLowerCase();
+    const intervals = Object.prototype.hasOwnProperty.call(schedule.holidays, dateKey)
+      ? schedule.holidays[dateKey]
+      : schedule.weekly[day];
+    return Array.isArray(intervals) ? intervals : [];
+  }
+
+  findInterval(schedule, now) {
+    const todayIntervals = this.intervalsForDate(schedule, now);
+    for (const interval of todayIntervals) {
+      if (this.inInterval(interval, now)) return interval;
+    }
+    const yesterday = new Date(now);
+    yesterday.setDate(yesterday.getDate() - 1);
+    for (const interval of this.intervalsForDate(schedule, yesterday)) {
+      if (interval.close <= interval.open && this.inInterval(interval, now, yesterday)) return interval;
+    }
+    return null;
+  }
+
+  inInterval(interval, now, date = now) {
+    if (!interval || !interval.open || !interval.close) return false;
+    const open = this.dateAt(date, interval.open);
+    const close = this.dateAt(date, interval.close);
+    if (close <= open) close.setDate(close.getDate() + 1);
+    return now >= open && now < close;
+  }
+
+  findNextOpen(schedule, now) {
+    for (let offset = 0; offset <= 7; offset++) {
+      const date = new Date(now);
+      date.setHours(0, 0, 0, 0);
+      date.setDate(date.getDate() + offset);
+      for (const interval of this.intervalsForDate(schedule, date)) {
+        const open = this.dateAt(date, interval.open);
+        if (offset === 0 && open <= now) continue;
+        return open;
+      }
+    }
+    return null;
+  }
+
+  dateAt(date, value) {
+    const match = typeof value === "string" && value.match(/^([01]\d|2[0-3]):([0-5]\d)$/);
+    const result = new Date(date);
+    if (!match) return new Date(NaN);
+    result.setHours(Number(match[1]), Number(match[2]), 0, 0);
+    return result;
+  }
+
+  dateKey(date) {
+    return [
+      date.getFullYear(),
+      String(date.getMonth() + 1).padStart(2, "0"),
+      String(date.getDate()).padStart(2, "0"),
+    ].join("-");
+  }
+
+  formatDateTime(date, now) {
+    const time = date.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+    return this.dateKey(date) === this.dateKey(now)
+      ? time
+      : `${date.toLocaleDateString([], { weekday: "long" })} at ${time}`;
+  }
+
+  addOperationalStatusStyles() {
+    if (document.getElementById("nh-merchant-operational-status-styles")) return;
+    const style = document.createElement("style");
+    style.id = "nh-merchant-operational-status-styles";
+    style.textContent = `
+      .nh-merchant-operational-status{position:relative;z-index:1000;display:flex;align-items:center;justify-content:center;gap:.5rem;padding:.65rem 1rem;font:600 14px/1.3 system-ui,sans-serif}
+      .nh-merchant-operational-status.is-open{background:#ecfdf5;color:#065f46}
+      .nh-merchant-operational-status.is-closed{background:#fff7ed;color:#9a3412}
+      .nh-merchant-operational-status.is-closing-soon{background:#fffbeb;color:#92400e}
+      .nh-merchant-operational-status.is-opening-soon{background:#eff6ff;color:#1e40af}
+      .nh-merchant-operational-dot{width:9px;height:9px;border-radius:50%;background:currentColor}
+      .nh-merchant-closed-action{opacity:.5!important;cursor:not-allowed!important}
+    `;
+    document.head.appendChild(style);
   }
 
   initMaterializeComponents() {
@@ -181,6 +337,7 @@ class MerchantStorefront {
     $(".nh-add-standard-btn")
       .off("click")
       .on("click", function () {
+        if (self.operationalStatus && !self.operationalStatus.open) return;
         const btn = $(this);
         const cardQty = parseInt(
           btn.closest(".card-action").find(".nh-card-qty-input").val() || 1,
@@ -221,6 +378,7 @@ class MerchantStorefront {
     $(".nh-customize-trigger")
       .off("click")
       .on("click", function () {
+        if (self.operationalStatus && !self.operationalStatus.open) return;
         const btn = $(this);
         const productId = btn.data("id");
         const productName = btn.data("name");

@@ -12,6 +12,7 @@ if (!defined('MB_RUNNING')) exit;
 if (!$merchant) {
   $merchant = new Merchant();
 }
+$storeHours = is_array($merchant->store_hours) ? $merchant->store_hours : (json_decode((string)$merchant->store_hours, true) ?: ['weekly' => []]);
 //error_log(print_r($merchant, true));
 //error_log($merchant_id);
 // ============================================================================
@@ -36,7 +37,7 @@ $page_title = ($merchant->id ?? -1) === -1
     </div>
 </nav>
 
-<?
+<?php
 if (!$this->user->is_admin) {
   // Not an administrator - render 403 Forbidden card
 ?>
@@ -708,12 +709,9 @@ if (!$this->user->is_admin) {
       <div class="nh-form-group input-field col s12">
         <i class="fas fa-clock prefix"></i>
         <label for="store-hours">Store Hours</label>
-        <textarea
-          style="min-height: 200px;"
-          id="store-hours"
-          name="store_hours"
-          placeholder=""
-          value=""><?php echo htmlspecialchars($merchant->store_hours); ?></textarea>
+        <div class="store-hours-editor" data-store-hours-editor data-textarea="store-hours">
+          <textarea id="store-hours" name="store_hours"><?php echo htmlspecialchars(json_encode($storeHours, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)); ?></textarea>
+        </div>
       </div>
 
       <div class="nh-form-group input-field col s12">
@@ -883,6 +881,7 @@ if (!$this->user->is_admin) {
   </div>
 </div>
 
+<script src="/apps/neighborhub/js/store-hours-editor.js"></script>
 <script>
   //(function() {
   //'use strict';
@@ -1253,6 +1252,13 @@ if (!$this->user->is_admin) {
       // FIXED: Switched from .value checking to accurate boolean representation (.checked)
       const statusSelect = document.getElementById('status');
       const status = statusSelect.value;
+
+      try {
+        JSON.parse(storeHours);
+      } catch (error) {
+        showErrorAlert('Store hours must be valid JSON.');
+        return;
+      }
 
       // Validate form fields
       if (!businessName || !address || !latitude || !longitude || !phone || !ownerEmail) {

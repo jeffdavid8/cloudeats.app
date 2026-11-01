@@ -156,7 +156,7 @@ if ($spotlightProductId) {
   }
 
   body {
-    padding-top: 7rem;
+    padding-top: 8rem;
     background-color: var(--brand-bg) !important;
     color: var(--brand-text-main);
     font-family: 'Open Sans', 'Roboto', 'Helvetica Neue', sans-serif;
@@ -580,7 +580,7 @@ if ($spotlightProductId) {
 
   @media (min-width: 768px) {
     .merchant-header-image {
-      top: 0px;
+      top: 7rem;
       width: 210px;
       right: calc(50% - 105px);
     }
@@ -693,7 +693,7 @@ if ($spotlightProductId) {
                 <span class="pk-icon" style="margin-right: 0.75rem; min-width: 1.25rem; text-align: center; margin-top: 2px; font-size: 16px;">
                   <i class="fas fa-clock"></i>
                 </span>
-                <span class="pk-text-main" style="font-weight: 600; line-height: 1.5;"><?php echo nl2br(htmlspecialchars($merchant->store_hours)); ?></span>
+                <span class="pk-text-main" style="font-weight: 600; line-height: 1.5;"><?php echo nl2br(htmlspecialchars(Merchant::formatStoreHours($merchant->store_hours), ENT_QUOTES, 'UTF-8')); ?></span>
               </p>
             <?php endif; ?>
           </div>

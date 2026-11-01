@@ -48,10 +48,103 @@ class Merchant
         if (is_array($data)) {
             foreach ($data as $key => $val) {
                 if (property_exists($this, $key)) {
+                    if ($key === 'store_hours' && is_string($val)) {
+                        $decoded = json_decode($val, true);
+                        $val = is_array($decoded) ? $decoded : [];
+                    }
                     $this->$key = $val;
                 }
             }
         }
+    }
+
+    public static function getOperationalStatus($merchant): array
+    {
+        $status = is_array($merchant) ? ($merchant['status'] ?? '') : ($merchant->status ?? '');
+        if (strtolower((string)$status) !== 'active') {
+            return ['status' => 'closed', 'reason' => 'manual_override', 'message' => 'Temporarily paused by vendor'];
+        }
+
+        $hours = is_array($merchant) ? ($merchant['store_hours'] ?? []) : ($merchant->store_hours ?? []);
+        $app = App::getInstance('neighborhub');
+        $app->includeClass('VendorHoursChecker');
+        if (VendorHoursChecker::isOpen($hours)) {
+            return ['status' => 'open', 'message' => 'Accepting orders'];
+        }
+
+        return [
+            'status' => 'closed',
+            'reason' => 'outside_hours',
+            'message' => 'Closed - Opens at ' . VendorHoursChecker::getNextOpenTime($hours),
+        ];
+    }
+
+    public static function encodeStoreHours($value): string
+    {
+        if (is_string($value)) {
+            $decoded = json_decode($value, true);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new InvalidArgumentException('Store hours must be valid JSON.');
+            }
+            $value = $decoded;
+        }
+        if (!is_array($value) || !isset($value['weekly']) || !is_array($value['weekly'])) {
+            throw new InvalidArgumentException('Store hours must include a weekly schedule.');
+        }
+        return json_encode($value, JSON_THROW_ON_ERROR);
+    }
+
+    public static function formatStoreHours($value): string
+    {
+        if (is_string($value)) {
+            $value = json_decode($value, true);
+        }
+        if (!is_array($value) || !isset($value['weekly']) || !is_array($value['weekly'])) {
+            return 'Hours not listed';
+        }
+
+        $dayLabels = [
+            'monday' => 'Monday',
+            'tuesday' => 'Tuesday',
+            'wednesday' => 'Wednesday',
+            'thursday' => 'Thursday',
+            'friday' => 'Friday',
+            'saturday' => 'Saturday',
+            'sunday' => 'Sunday',
+        ];
+        $lines = [];
+        foreach ($dayLabels as $day => $label) {
+            $intervals = $value['weekly'][$day] ?? [];
+            if (!is_array($intervals) || empty($intervals)) {
+                $lines[] = $label . ': Closed';
+                continue;
+            }
+            $formatted = [];
+            foreach ($intervals as $interval) {
+                if (is_array($interval) && !empty($interval['open']) && !empty($interval['close'])) {
+                    $formatted[] = self::formatStoreHour($interval['open']) . ' - ' . self::formatStoreHour($interval['close']);
+                }
+            }
+            $lines[] = $label . ': ' . (!empty($formatted) ? implode(', ', $formatted) : 'Closed');
+        }
+
+        foreach (($value['holidays'] ?? []) as $date => $intervals) {
+            $formatted = [];
+            foreach (is_array($intervals) ? $intervals : [] as $interval) {
+                if (is_array($interval) && !empty($interval['open']) && !empty($interval['close'])) {
+                    $formatted[] = self::formatStoreHour($interval['open']) . ' - ' . self::formatStoreHour($interval['close']);
+                }
+            }
+            $lines[] = $date . ': ' . (!empty($formatted) ? implode(', ', $formatted) : 'Closed');
+        }
+
+        return implode("\n", $lines);
+    }
+
+    private static function formatStoreHour($value): string
+    {
+        $time = DateTimeImmutable::createFromFormat('!H:i', (string)$value);
+        return $time ? $time->format('g:i A') : (string)$value;
     }
 
     public function data($data = [])
@@ -164,6 +257,7 @@ class Merchant
                 $obj->gallery = AssetManager::getImagesByEntity('merchant', $obj->id);
                 return $obj;
             }
+            $row['store_hours'] = self::decodeStoreHours($row['store_hours']);
             return $row;
         } catch (Exception $e) {
             error_log("Merchant::getMerchantById Error: " . $e->getMessage());
@@ -200,6 +294,7 @@ class Merchant
                 $obj->gallery = AssetManager::getImagesByEntity('merchant', $obj->id);
                 return $obj;
             }
+            $row['store_hours'] = self::decodeStoreHours($row['store_hours']);
             return $row;
         } catch (Exception $e) {
             error_log("Merchant::getMerchantByUserId Error: " . $e->getMessage());
@@ -251,7 +346,10 @@ class Merchant
                 }, $results);
             }
 
-            return $results;
+            return array_map(function ($row) {
+                $row['store_hours'] = self::decodeStoreHours($row['store_hours'] ?? null);
+                return $row;
+            }, $results);
         } catch (Exception $e) {
             error_log("Merchant::getProductsCatalog Error: " . $e->getMessage());
             return array();
@@ -348,7 +446,7 @@ class Merchant
             $facebook = $data['facebook'] ?? null;
             $platform_fee_rate = !empty($data['platform_fee_rate']) ? $data['platform_fee_rate'] : 0.04;
             $platform_flat_fee = !empty($data['platform_flat_fee']) ? $data['platform_flat_fee'] : 0.00;
-            $store_hours = $data['store_hours'] ?? null;
+            $store_hours = isset($data['store_hours']) ? self::encodeStoreHours($data['store_hours']) : null;
             $keywords = $data['keywords'] ?? null;
             $delivery_assignment_mode = $data['delivery_assignment_mode'] ?? 'auto';
             $delivery_max_distance = $data['delivery_max_distance'] ?? 7.00;
@@ -553,7 +651,7 @@ class Merchant
 
             if (isset($data['store_hours'])) {
                 $updates[] = "store_hours = ?";
-                $params[] = $data['store_hours'];
+                $params[] = self::encodeStoreHours($data['store_hours']);
             }
 
             if (isset($data['keywords'])) {
@@ -663,8 +761,22 @@ class Merchant
             return $result;
         } catch (Exception $e) {
             error_log("Merchant::update Error: " . $e->getMessage());
-            return false;
+            return [
+                'success' => false,
+                'message' => $e instanceof InvalidArgumentException
+                    ? $e->getMessage()
+                    : 'Failed to update merchant record',
+            ];
         }
+    }
+
+    private static function decodeStoreHours($value): array
+    {
+        if (is_array($value)) {
+            return $value;
+        }
+        $decoded = json_decode((string)$value, true);
+        return is_array($decoded) ? $decoded : [];
     }
 
     /**

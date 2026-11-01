@@ -614,7 +614,7 @@ if ($spotlightProductId && isset($menus[$activeMenuId]['categories'])) {
                 <span class="pk-icon" style="margin-right: 0.75rem; min-width: 1.25rem; text-align: center; margin-top: 2px; font-size: 16px;">
                   <i class="fas fa-clock"></i>
                 </span>
-                <span class="pk-text-main" style="font-weight: 600; line-height: 1.5;"><?php echo nl2br(htmlspecialchars($merchant->store_hours)); ?></span>
+                <span class="pk-text-main" style="font-weight: 600; line-height: 1.5;"><?php echo nl2br(htmlspecialchars(Merchant::formatStoreHours($merchant->store_hours), ENT_QUOTES, 'UTF-8')); ?></span>
               </p>
             <?php endif; ?>
           </div>
@@ -797,6 +797,7 @@ if ($spotlightProductId && isset($menus[$activeMenuId]['categories'])) {
 
 <script>
   $(document).ready(function() {
+    window.merchant = <?= json_encode($merchant) ?>;
     // Initialize standard merchant storefront interactions
     window.storefront = new MerchantStorefront({
       toastIcon: 'fa-check-circle', // Customize icon per theme if desired (e.g. 'fa-fire-alt')
