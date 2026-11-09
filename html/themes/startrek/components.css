@@ -453,7 +453,7 @@ input.valid:not([type]), input.valid:not([type]):focus, input.valid[type="text"]
     border: 1px solid var(--lcars-orange);
     border-radius: 10px;
     overflow: hidden;
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+    /* box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5); */
 }
 
 .progress .determinate {

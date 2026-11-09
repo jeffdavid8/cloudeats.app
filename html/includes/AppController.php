@@ -204,7 +204,18 @@ class AppController
         $this->app->render('components/open_body_tag.php');
 ?>
 
-        <? $this->app->render('components/cloudeats_preloader.php', array('text' => 'Loading CloudEats...')); ?>
+        <?
+        $preloaderMerchant = $this->app->get('merchant');
+        $preloaderMerchantId = (int)$this->app->get('merchant_id', get_var('merchant_id', 0));
+        $preloaderMerchantLogo = ($preloaderMerchantId > 0 && is_object($preloaderMerchant))
+            ? trim((string)($preloaderMerchant->image_url ?? ''))
+            : '';
+        ?>
+        <? $this->app->render('components/cloudeats_preloader.php', array(
+            'text' => 'Loading CloudEats...',
+            'merchant_logo' => $preloaderMerchantLogo,
+            'merchant_name' => is_object($preloaderMerchant) ? (string)($preloaderMerchant->business_name ?? '') : '',
+        )); ?>
 
         <?php $this->app->render('components/audio_interfaces.php'); ?>
 

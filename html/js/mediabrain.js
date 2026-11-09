@@ -353,11 +353,6 @@ mb.ajax = function (options, callback) {
           "/?p=login&return=" +
           encodeURIComponent(window.location.pathname + window.location.search);
       },
-      403: function () {
-        window.location.href =
-          "/?p=login&return=" +
-          encodeURIComponent(window.location.pathname + window.location.search);
-      },
       500: function (jqxhr, textStatus, errorThrown) {
         console.log(
           "Something went wrong while trying to process your request." +

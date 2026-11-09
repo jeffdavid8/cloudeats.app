@@ -21,7 +21,7 @@ class SecurityHeaders
         'img-src' => "'self' data: blob: https://i.ytimg.com https://storage.googleapis.com https://api.weather.gov https://radar.weather.gov https://*.googleusercontent.com https://*.openstreetmap.org https://images.unsplash.com https://plus.unsplash.com https://*.fbsbx.com", 
         
         // 🔌 UPDATED: Appended the Nominatim geocoding engine to prevent fetch() breaks
-        'connect-src' => "'self' https://www.google.com https://connect.facebook.com https://www.youtube.com https://apis.google.com https://www.facebook.com https://api.weather.gov https://ipapi.co https://www.google-analytics.com https://stats.g.doubleclick.net https://nominatim.openstreetmap.org",
+        'connect-src' => "'self' https://www.google.com https://connect.facebook.com https://www.youtube.com https://apis.google.com https://www.facebook.com https://api.weather.gov https://cdn.jsdelivr.net https://ipapi.co https://www.google-analytics.com https://stats.g.doubleclick.net https://nominatim.openstreetmap.org",
         
         'media-src' => "'self' data: blob: https://www.youtube.com https://*.googlevideo.com",
         'frame-src' => "'self' https://www.google.com https://www.youtube.com https://youtube.com",

@@ -382,6 +382,10 @@ function admin_render_body(&$app)
                 admin_require_admin();
                 include __DIR__ . '/views/maintenance.php';
                 break;
+            case 'merchant_assets':
+                admin_require_admin();
+                include __DIR__ . '/views/merchant_assets.php';
+                break;
             case 'migrations':
                 admin_require_admin();
                 include __DIR__ . '/views/pages/migrations.php';

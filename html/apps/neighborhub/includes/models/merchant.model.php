@@ -58,25 +58,23 @@ class Merchant
         }
     }
 
-    public static function getOperationalStatus($merchant): array
+    public static function getOperationalStatus($merchant, ?DateTimeImmutable $now = null): array
     {
         $status = is_array($merchant) ? ($merchant['status'] ?? '') : ($merchant->status ?? '');
-        if (strtolower((string)$status) !== 'active') {
-            return ['status' => 'closed', 'reason' => 'manual_override', 'message' => 'Temporarily paused by vendor'];
+        $normalizedStatus = strtolower(trim((string)$status));
+        if (!in_array($normalizedStatus, ['active', 'online', '1'], true) && $status !== 1) {
+            return ['status' => 'closed', 'reason' => 'manual_override', 'label' => 'Temporarily paused', 'urgency' => '', 'message' => 'Temporarily paused by vendor'];
         }
 
         $hours = is_array($merchant) ? ($merchant['store_hours'] ?? []) : ($merchant->store_hours ?? []);
-        $app = App::getInstance('neighborhub');
-        $app->includeClass('VendorHoursChecker');
-        if (VendorHoursChecker::isOpen($hours)) {
-            return ['status' => 'open', 'message' => 'Accepting orders'];
+        if (!class_exists('VendorHoursChecker')) {
+            App::getInstance('neighborhub')->includeClass('VendorHoursChecker');
         }
-
-        return [
-            'status' => 'closed',
-            'reason' => 'outside_hours',
-            'message' => 'Closed - Opens at ' . VendorHoursChecker::getNextOpenTime($hours),
-        ];
+        $details = VendorHoursChecker::getOperationalDetails($hours, $now);
+        if ($details['status'] === 'closed') {
+            $details['reason'] = 'outside_hours';
+        }
+        return $details;
     }
 
     public static function encodeStoreHours($value): string

@@ -5,7 +5,6 @@ if (!defined('MB_RUNNING')) exit;
  * 
  * @var array $tables
  */
-logger('here4');
 ?>
 
 <style>

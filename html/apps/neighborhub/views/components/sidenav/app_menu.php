@@ -3,7 +3,7 @@ if (!defined('MB_RUNNING')) exit;
 ?>
 
 <li>
-  <a href="/"><i class="material-icons">store</i>Home</a>
+  <a href="/"><i class="material-icons">store</i></a>
 </li>
 
 <?
@@ -40,8 +40,3 @@ endif;
 <li>
   <a href="/?app=vault"><i class="fab fa-btc"></i>My Vault</a>
 </li>
-<?
-if ($this->get('merchant') && $this->get('merchant_staff_role')) {
- render('components/sidenav/merchant_menu.php');
-}
-?>

@@ -25,13 +25,18 @@ MaintenanceMode::enforce();
 
 use MediaBrain\Services\AnalyticsService;
 
-// Track page view for analytics (after session started, before API routing)
-try {
-    $analytics = AnalyticsService::getInstance();
-    $analytics->trackPageView();
-} catch (Exception $e) {
-    // Silently fail if analytics tracking encounters errors
-    error_log("Analytics tracking error: " . $e->getMessage());
+$isMerchantStatusRefresh = ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'GET'
+    && ($_GET['api'] ?? '') === 'neighborhub'
+    && ($_GET['action'] ?? '') === 'get_merchant_operational_status';
+if (!$isMerchantStatusRefresh) {
+    // Track page view for analytics (after session started, before API routing)
+    try {
+        $analytics = AnalyticsService::getInstance();
+        $analytics->trackPageView();
+    } catch (Exception $e) {
+        // Silently fail if analytics tracking encounters errors
+        error_log("Analytics tracking error: " . $e->getMessage());
+    }
 }
 
 // Handle API requests first (before any app initialization)

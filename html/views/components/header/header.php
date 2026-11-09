@@ -2,6 +2,20 @@
 if (!defined('MB_RUNNING')) exit;
 
 $customer = $this->get('customer');
+$merchant = $this->get('merchant', null);
+$canOpenMerchantMenu = $this->appName === 'neighborhub'
+   && $merchant && !empty($merchant->id) && !empty($merchant->image_url)
+   && $this->user && !empty($this->user->id)
+   && ($this->user->is_admin || $this->user->isMerchantUser((int)$merchant->id));
+$operationalStatus = null;
+if (
+   $this->get('view') === 'customer'
+   && $merchant
+   && !empty($merchant->id)
+   && class_exists('Merchant')
+) {
+   $operationalStatus = Merchant::getOperationalStatus($merchant);
+}
 if ($this->get('view') === 'customer' && !$customer->terms_accepted_at):
 ?>
 <div id="nh-terms-banner">
@@ -18,37 +32,36 @@ if ($this->get('view') === 'customer' && !$customer->terms_accepted_at):
    <nav>
       <div class="nav-wrapper ">
 
-         <? render('components/header/header_left.php', array('search_string' => $search_string)); ?>
-
-         <?php
-         if (in_array($this->get('page'), array('merchant_products', 'menus', 'dashboard', 'pos', 'reports', 'merchant_management'))):
-            $merchant = $this->get('merchant');
-
-            if (!empty($merchant->image_url)): ?>
-               <div class="merchant-header-image">
-                  <? if ($this->get('view') === 'merchant'): ?>
-                     <a href="?app=neighborhub&view=merchant&p=dashboard&merchant_id=<?= $merchant->id ?>" title="Merchant Dashboard for <?= htmlspecialchars($merchant->business_name) ?>">
-                        <img class="circle" src="<?php echo htmlspecialchars($merchant->image_url); ?>" style="">
-                        <?= ($merchant->status == 'online') ? '<span class="online-status-dot"></span>' : '' ?>
-                     </a>
-                  <? else: ?>
-                        <img class="scroll-to-top-link circle" src="<?php echo htmlspecialchars($merchant->image_url); ?>" style="">
-                        <?= ($merchant->status == 'online') ? '<span class="online-status-dot"></span>' : '' ?>
-                  <? endif; ?>
-               </div>
-
-            <?php endif; ?>
-         <?php endif; ?>
-
-
+         <? render('components/header/header_left.php', array('search_string' => $search_string, 'canOpenMerchantMenu' => $canOpenMerchantMenu)); ?>
 
          <? render('components/header/header_right.php', array('search_string' => $search_string)); ?>
 
 
       </div>
+<?php if ($operationalStatus): ?>
+<div
+   id="nh-merchant-operational-status"
+   role="status"
+   data-merchant-id="<?= (int)$merchant->id ?>"
+   data-status="<?= htmlspecialchars($operationalStatus['status'], ENT_QUOTES, 'UTF-8') ?>"
+   class="nh-merchant-operational-status is-<?= $operationalStatus['status'] === 'open' ? 'open' : 'closed' ?><?= $operationalStatus['urgency'] ? ' is-' . htmlspecialchars($operationalStatus['urgency'], ENT_QUOTES, 'UTF-8') : '' ?>"
+>
+   <span class="nh-merchant-operational-dot" aria-hidden="true"></span>
+   <strong data-status-label><?= htmlspecialchars($operationalStatus['label'], ENT_QUOTES, 'UTF-8') ?></strong>
+   <span data-status-message><?= htmlspecialchars($operationalStatus['message'], ENT_QUOTES, 'UTF-8') ?></span>
+</div>
+<?php endif; ?>
       <div class="progress"><div class="indeterminate"></div></div>
    </nav>
 
 </header>
 
 <? render('components/sidenav/main_left.php'); ?>
+<?php if ($canOpenMerchantMenu): ?>
+<ul id="merchant-slide-out" class="sidenav" aria-label="Merchant navigation">
+   <li class="merchant-sidenav-header">
+      <a href="#!" class="merchant-sidenav-close" aria-label="Close merchant navigation"><i class="fas fa-times fa-lg" aria-hidden="true"></i></a>
+   </li>
+   <? render('components/sidenav/merchant_menu.php'); ?>
+</ul>
+<?php endif; ?>

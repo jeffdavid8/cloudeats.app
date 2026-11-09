@@ -454,8 +454,16 @@ function json_read_file($json_file)
   }
 }
 
-function logger($message) {
-  error_log(print_r($message, true));
+function logger($message='[NA]', $level = 'info')
+{
+  $formattedMessage = sprintf(
+    "[%s] [%s]: %s\n",
+    date('Y-m-d H:i:s'),
+    strtoupper($level),
+    print_r($message, true)
+  );
+
+  error_log($formattedMessage);
 }
 
 function log_error($message)

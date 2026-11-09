@@ -25,165 +25,180 @@ class MerchantStorefront {
   init() {
     this.initMaterializeComponents();
     this.initOperationalStatus();
+    this.initTermsBannerOffset();
+    this.initMerchantHeaderStack();
+    this.bindDraftPreviewMessages();
+    this.initHeroParallax();
     this.bindNavigationEvents();
     this.initIntersectionObserver();
     this.bindQuantityControls();
     this.bindCartActions();
   }
 
-  initOperationalStatus() {
-    const merchant = window.merchant || {};
-    const status = String(merchant.status || "").toLowerCase();
-    const hours = merchant.store_hours || {};
-    const operational = this.getOperationalStatus(status, hours);
-    const banner = document.createElement("div");
+  initHeroParallax() {
+    const hero = document.querySelector(".merchant-storefront-hero");
+    if (!hero) return;
 
-    banner.id = "nh-merchant-operational-status";
-    banner.setAttribute("role", "status");
-    banner.className = `nh-merchant-operational-status is-${operational.open ? "open" : "closed"} ${operational.urgency ? `is-${operational.urgency}` : ""}`;
-    banner.innerHTML = `
-      <span class="nh-merchant-operational-dot" aria-hidden="true"></span>
-      <strong>${operational.label}</strong>
-      <span>${operational.message}</span>
-    `;
-    document.body.insertBefore(banner, document.body.firstChild);
-
-    if (!operational.open) {
-      $(".nh-add-standard-btn, .nh-customize-trigger")
-        .prop("disabled", true)
-        .attr("aria-disabled", "true")
-        .addClass("nh-merchant-closed-action");
-    }
-
-    this.addOperationalStatusStyles();
-    this.operationalStatus = operational;
-  }
-
-  getOperationalStatus(status, hours) {
-    if (status !== "active") {
-      return { open: false, label: "Temporarily paused", message: "Temporarily paused by vendor" };
-    }
-
-    const schedule = this.normalizeSchedule(hours);
-    const now = new Date();
-    const current = this.findInterval(schedule, now);
-    if (current) {
-      const close = this.dateAt(now, current.close);
-      if (close <= now) close.setDate(close.getDate() + 1);
-      const minutes = Math.max(1, Math.ceil((close - now) / 60000));
-      return {
-        open: true,
-        label: minutes <= 30 ? "Closing soon" : "Open now",
-        urgency: minutes <= 30 ? "closing-soon" : "",
-        message: `Closes in ${minutes} minute${minutes === 1 ? "" : "s"}`,
-      };
-    }
-
-    const nextOpen = this.findNextOpen(schedule, now);
-    const minutesUntilOpen = nextOpen ? Math.max(1, Math.ceil((nextOpen - now) / 60000)) : null;
-    return {
-      open: false,
-      label: minutesUntilOpen !== null && minutesUntilOpen <= 30 ? "Opening soon" : "Closed",
-      urgency: minutesUntilOpen !== null && minutesUntilOpen <= 30 ? "opening-soon" : "",
-      message: nextOpen
-        ? (minutesUntilOpen <= 30
-          ? `Opens in ${minutesUntilOpen} minute${minutesUntilOpen === 1 ? "" : "s"}`
-          : `Opens at ${this.formatDateTime(nextOpen, now)}`)
-        : "Hours not listed",
-    };
-  }
-
-  normalizeSchedule(hours) {
-    if (typeof hours === "string") {
-      try { hours = JSON.parse(hours); } catch (error) { return { weekly: {}, holidays: {} }; }
-    }
-    return {
-      weekly: hours && typeof hours.weekly === "object" ? hours.weekly : {},
-      holidays: hours && typeof hours.holidays === "object" ? hours.holidays : {},
-    };
-  }
-
-  intervalsForDate(schedule, date) {
-    const dateKey = this.dateKey(date);
-    const day = date.toLocaleDateString("en-US", { weekday: "long" }).toLowerCase();
-    const intervals = Object.prototype.hasOwnProperty.call(schedule.holidays, dateKey)
-      ? schedule.holidays[dateKey]
-      : schedule.weekly[day];
-    return Array.isArray(intervals) ? intervals : [];
-  }
-
-  findInterval(schedule, now) {
-    const todayIntervals = this.intervalsForDate(schedule, now);
-    for (const interval of todayIntervals) {
-      if (this.inInterval(interval, now)) return interval;
-    }
-    const yesterday = new Date(now);
-    yesterday.setDate(yesterday.getDate() - 1);
-    for (const interval of this.intervalsForDate(schedule, yesterday)) {
-      if (interval.close <= interval.open && this.inInterval(interval, now, yesterday)) return interval;
-    }
-    return null;
-  }
-
-  inInterval(interval, now, date = now) {
-    if (!interval || !interval.open || !interval.close) return false;
-    const open = this.dateAt(date, interval.open);
-    const close = this.dateAt(date, interval.close);
-    if (close <= open) close.setDate(close.getDate() + 1);
-    return now >= open && now < close;
-  }
-
-  findNextOpen(schedule, now) {
-    for (let offset = 0; offset <= 7; offset++) {
-      const date = new Date(now);
-      date.setHours(0, 0, 0, 0);
-      date.setDate(date.getDate() + offset);
-      for (const interval of this.intervalsForDate(schedule, date)) {
-        const open = this.dateAt(date, interval.open);
-        if (offset === 0 && open <= now) continue;
-        return open;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let frame = null;
+    const update = () => {
+      frame = null;
+      if (reducedMotion.matches || hero.dataset.storefrontLayout !== "hero-full") {
+        hero.style.removeProperty("--merchant-hero-parallax");
+        return;
       }
+      const rect = hero.getBoundingClientRect();
+      if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+      const offset = (window.innerHeight / 2 - (rect.top + rect.height / 2)) * 0.2;
+      const limit = rect.height * 0.18;
+      hero.style.setProperty("--merchant-hero-parallax", `${Math.max(-limit, Math.min(limit, offset))}px`);
+    };
+    const schedule = () => {
+      if (frame === null) frame = window.requestAnimationFrame(update);
+    };
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    reducedMotion.addEventListener("change", schedule);
+    new MutationObserver(schedule).observe(hero, {
+      attributes: true,
+      attributeFilter: ["data-storefront-layout"],
+    });
+    schedule();
+  }
+
+  initTermsBannerOffset() {
+    const update = () => {
+      const banner = document.getElementById("nh-terms-banner");
+      const height = banner && window.getComputedStyle(banner).display !== "none"
+        ? banner.getBoundingClientRect().height
+        : 0;
+      document.documentElement.style.setProperty("--nh-terms-height", `${height}px`);
+    };
+    update();
+    window.addEventListener("resize", update);
+    const banner = document.getElementById("nh-terms-banner");
+    if (banner) {
+      new MutationObserver(update).observe(banner, {
+        attributes: true,
+        attributeFilter: ["style", "class"],
+      });
     }
-    return null;
   }
 
-  dateAt(date, value) {
-    const match = typeof value === "string" && value.match(/^([01]\d|2[0-3]):([0-5]\d)$/);
-    const result = new Date(date);
-    if (!match) return new Date(NaN);
-    result.setHours(Number(match[1]), Number(match[2]), 0, 0);
-    return result;
+  bindDraftPreviewMessages() {
+    if (document.body.dataset.storefrontPreview !== "true") return;
+    window.addEventListener("message", (event) => {
+      if (event.origin !== window.location.origin || !event.data || event.data.type !== "merchant-storefront-draft") {
+        return;
+      }
+      if (!event.data.configuration || typeof event.data.configuration !== "object") {
+        return;
+      }
+      this.applyPublishedConfiguration(event.data.configuration);
+    });
   }
 
-  dateKey(date) {
-    return [
-      date.getFullYear(),
-      String(date.getMonth() + 1).padStart(2, "0"),
-      String(date.getDate()).padStart(2, "0"),
-    ].join("-");
+  applyPublishedConfiguration(configuration) {
+    const root = document.documentElement;
+    const colors = configuration.colors || {};
+    if (colors.primary) root.style.setProperty("--merchant-primary", colors.primary);
+    if (colors.background) root.style.setProperty("--merchant-background", colors.background);
+    if (colors.text) root.style.setProperty("--merchant-text", colors.text);
+    document.body.dataset.storefrontTheme = configuration.theme || "default";
+    document.body.dataset.storefrontLayout = configuration.layout || "hero-centered";
+    const hero = document.querySelector(".merchant-storefront-hero");
+    if (hero && ["hero-centered", "hero-split", "hero-minimal", "hero-full"].includes(configuration.layout)) {
+      hero.dataset.storefrontLayout = configuration.layout;
+    }
+    if (hero) {
+      hero.dataset.storefrontLogoStyle = ["default", "original", "circle", "rectangle"].includes(configuration.logo_style)
+        ? configuration.logo_style
+        : "default";
+    }
+    this.applyStorefrontAssets(configuration);
+
+    const visibility = configuration.visibility || {};
+    $(".iv-product-search-input, #product-search-input, [id*='product-search']")
+      .closest(".row")
+      .toggle(visibility.search !== false);
+    $(".category-menu-item, .category-menu-item-back-to-top")
+      .closest("li")
+      .toggle(visibility.categories !== false);
+    $(".secondary-category-menu, .menu-toggle-wrapper")
+      .toggle(visibility.categories !== false);
+    $(".merchant-info-card").toggle(visibility.contact !== false);
+    const operationalStatus = $("#nh-merchant-operational-status");
+    operationalStatus.toggle(visibility.operational_status !== false);
+    document.body.classList.toggle("nh-operational-status-hidden", visibility.operational_status === false);
   }
 
-  formatDateTime(date, now) {
-    const time = date.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
-    return this.dateKey(date) === this.dateKey(now)
-      ? time
-      : `${date.toLocaleDateString([], { weekday: "long" })} at ${time}`;
+  applyStorefrontAssets(configuration) {
+    const hero = document.querySelector(".merchant-storefront-hero");
+    const logo = document.querySelector("[data-storefront-logo]");
+    if (!hero) return;
+
+    const assets = configuration.assets || {};
+    const assetUrls = configuration.asset_urls || {};
+    const profileImage = hero.dataset.storefrontProfileImage || "";
+    const logoUrl = assets.logo_id && assetUrls[assets.logo_id] ? assetUrls[assets.logo_id] : profileImage;
+    const heroUrl = assets.hero_id && assetUrls[assets.hero_id]
+      ? assetUrls[assets.hero_id]
+      : (hero.dataset.storefrontLayout === "hero-full" ? profileImage : "");
+
+    if (logo) {
+      logo.src = logoUrl;
+    }
+    hero.style.backgroundImage = heroUrl
+      ? `linear-gradient(rgba(0, 0, 0, .35), rgba(0, 0, 0, .35)), url("${heroUrl.replace(/"/g, '\\"')}")`
+      : "";
   }
 
-  addOperationalStatusStyles() {
-    if (document.getElementById("nh-merchant-operational-status-styles")) return;
-    const style = document.createElement("style");
-    style.id = "nh-merchant-operational-status-styles";
-    style.textContent = `
-      .nh-merchant-operational-status{position:relative;z-index:1000;display:flex;align-items:center;justify-content:center;gap:.5rem;padding:.65rem 1rem;font:600 14px/1.3 system-ui,sans-serif}
-      .nh-merchant-operational-status.is-open{background:#ecfdf5;color:#065f46}
-      .nh-merchant-operational-status.is-closed{background:#fff7ed;color:#9a3412}
-      .nh-merchant-operational-status.is-closing-soon{background:#fffbeb;color:#92400e}
-      .nh-merchant-operational-status.is-opening-soon{background:#eff6ff;color:#1e40af}
-      .nh-merchant-operational-dot{width:9px;height:9px;border-radius:50%;background:currentColor}
-      .nh-merchant-closed-action{opacity:.5!important;cursor:not-allowed!important}
-    `;
-    document.head.appendChild(style);
+  initOperationalStatus() {
+    const banner = document.getElementById("nh-merchant-operational-status");
+    if (!banner) return;
+    const disabledByStatus = new WeakSet();
+    const update = (open) => {
+      this.operationalStatus = { open };
+      document.querySelectorAll(".nh-add-standard-btn, .nh-customize-trigger").forEach((button) => {
+        if (!open && !button.disabled) {
+          disabledByStatus.add(button);
+          button.disabled = true;
+          button.setAttribute("aria-disabled", "true");
+          button.classList.add("nh-merchant-closed-action");
+        } else if (open && disabledByStatus.has(button)) {
+          disabledByStatus.delete(button);
+          button.disabled = false;
+          button.removeAttribute("aria-disabled");
+          button.classList.remove("nh-merchant-closed-action");
+        }
+      });
+    };
+    update(banner.dataset.status === "open" && banner.dataset.stale !== "true");
+    banner.addEventListener("nh:merchant-status", (event) => update(event.detail.open));
+  }
+
+  initMerchantHeaderStack() {
+    const header = document.querySelector("header.header");
+    const logo = document.querySelector(".merchant-header-image");
+    const context = document.querySelector(".merchant-context-subheader");
+    const status = document.getElementById("nh-merchant-operational-status");
+    if (!header || !context || !status) return;
+
+    const stack = document.createElement("div");
+    stack.className = "merchant-storefront-header-stack";
+    stack.setAttribute("aria-label", "Merchant storefront header");
+
+    if (logo) {
+      const logoRow = document.createElement("div");
+      logoRow.className = "merchant-header-logo-row";
+      logoRow.appendChild(logo);
+      stack.appendChild(logoRow);
+    }
+    stack.appendChild(context);
+    stack.appendChild(status);
+
+    header.insertAdjacentElement("afterend", stack);
+    document.body.classList.add("nh-merchant-header-stack-ready");
   }
 
   initMaterializeComponents() {
@@ -445,6 +460,10 @@ class MerchantStorefront {
     $("#nh-modal-submit-add-to-cart")
       .off("click")
       .on("click", function () {
+        if (self.operationalStatus && !self.operationalStatus.open) {
+          M.toast({ html: "This merchant is not currently accepting orders." });
+          return;
+        }
         if (nh && nh.cart && nh.cart.activeBuilderInstance) {
           const receiptBlob = nh.cart.activeBuilderInstance.compileSelections();
           if (!receiptBlob) return;

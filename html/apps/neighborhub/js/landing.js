@@ -233,6 +233,16 @@ $(document).ready(function () {
   function merchantCard(merchant) {
     const card = document.createElement("a");
     card.className = "ce-merchant-card";
+    // set onclick
+
+    card.addEventListener("click", function (event) {
+      event.preventDefault();
+      loading(4);
+      window.location.href =
+        "/?app=neighborhub&view=customer&p=merchant_products&merchant_id=" +
+        encodeURIComponent(merchant.id);
+    });
+    
     card.href =
       "/?app=neighborhub&view=customer&p=merchant_products&merchant_id=" +
       encodeURIComponent(merchant.id);

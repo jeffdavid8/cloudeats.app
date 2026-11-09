@@ -100,8 +100,10 @@ if (!isset($storeHours['weekly']) || !is_array($storeHours['weekly'])) {
   <div class="row">
     <div class="col s12">
       <ul class="tabs">
-        <li class="tab col s6"><a class="active" href="#settings-tab">Store Settings</a></li>
-        <li class="tab col s6"><a href="#staff-tab">Staff Roster</a></li>
+        <li class="tab col s3"><a class="active" href="#settings-tab">Store Settings</a></li>
+        <li class="tab col s3"><a href="#storefront-tab">Storefront Designer</a></li>
+        <li class="tab col s3"><a href="#staff-tab">Staff Roster</a></li>
+        <li class="tab col s3"><a href="#assets-tab">Assets</a></li>
       </ul>
     </div>
   </div>
@@ -235,6 +237,76 @@ if (!isset($storeHours['weekly']) || !is_array($storeHours['weekly'])) {
     </form>
   </div>
 
+  <div id="storefront-tab" class="tab-content">
+    <p>
+      <a class="btn blue waves-effect waves-light" href="?view=merchant&merchant_id=<?= (int)$merchant_id ?>&p=storefront_editor">
+        Open visual storefront editor
+      </a>
+    </p>
+    <form id="storefront-designer-form">
+      <div class="form-group">
+        <label for="storefront-theme">Theme</label>
+        <select id="storefront-theme">
+          <option value="default">Default</option>
+          <option value="pizza-king">Pizza King</option>
+          <option value="bakery">Bakery</option>
+          <option value="diner">Diner</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="storefront-layout">Hero Layout</label>
+        <select id="storefront-layout">
+          <option value="hero-centered">Centered hero</option>
+          <option value="hero-full">Full hero</option>
+          <option value="hero-split">Split hero</option>
+          <option value="hero-minimal">Minimal hero</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="storefront-logo-style">Logo style</label>
+        <select id="storefront-logo-style">
+          <option value="default">Default (existing style)</option>
+          <option value="original">Original / transparent</option>
+          <option value="circle">Circle</option>
+          <option value="rectangle">Rectangle</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="storefront-primary-color">Primary color</label>
+        <input type="color" id="storefront-primary-color" value="#4f46e5">
+      </div>
+      <div class="form-group">
+        <label>Visible sections</label>
+        <p><label><input type="checkbox" class="filled-in storefront-visibility" data-key="search" checked><span>Product search</span></label></p>
+        <p><label><input type="checkbox" class="filled-in storefront-visibility" data-key="contact" checked><span>Contact information</span></label></p>
+        <p><label><input type="checkbox" class="filled-in storefront-visibility" data-key="categories" checked><span>Menu categories</span></label></p>
+        <p><label><input type="checkbox" class="filled-in storefront-visibility" data-key="operational_status" checked><span>Open/closed status</span></label></p>
+      </div>
+      <div class="form-group">
+        <label>Promotional blocks</label>
+        <div id="storefront-blocks"></div>
+        <div style="display:flex; gap:8px; align-items:flex-end; flex-wrap:wrap;">
+          <div style="min-width:220px; flex:1;">
+            <label for="storefront-block-type">Block type</label>
+            <select id="storefront-block-type">
+              <option value="announcement">Announcement</option>
+              <option value="featured_product">Featured product</option>
+              <option value="image_text">Image and text</option>
+              <option value="call_to_action">Call to action</option>
+              <option value="store_information">Store information</option>
+            </select>
+          </div>
+          <button type="button" class="btn-small btn-flat" id="storefront-add-block">Add block</button>
+        </div>
+      </div>
+      <button type="button" class="btn waves-effect waves-light" id="storefront-save-draft">Save Draft</button>
+      <button type="button" class="btn blue waves-effect waves-light" id="storefront-preview">Preview Draft</button>
+      <button type="button" class="btn green waves-effect waves-light" id="storefront-publish">Publish</button>
+      <button type="button" class="btn-flat waves-effect" id="storefront-revert">Revert Draft</button>
+      <p class="grey-text text-darken-1">Changes remain private until published. Promotional blocks use predefined, accessible layouts.</p>
+    </form>
+  </div>
+
   <!-- 2. STAFF TAB (Populated from DB) -->
   <div id="staff-tab" class="tab-content">
     <h3>Add Team Member</h3>
@@ -292,6 +364,12 @@ if (!isset($storeHours['weekly']) || !is_array($storeHours['weekly'])) {
       </tbody>
     </table>
   </div>
+  <div id="assets-tab" class="tab-content">
+    <?php
+    $asset_merchant_id = (int)$merchant_id;
+    include __DIR__ . '/../../components/merchant_asset_manager.php';
+    ?>
+  </div>
 </div>
 
 <!-- Keep your existing JavaScript block from earlier down here unchanged -->
@@ -307,9 +385,185 @@ if (!isset($storeHours['weekly']) || !is_array($storeHours['weekly'])) {
       swipeable: false
     });
 
+    document.getElementById('storefront-preview').addEventListener('click', function() {
+      const previewUrl = window.location.origin + '/?app=neighborhub&view=customer&p=merchant_products&merchant_id='
+        + encodeURIComponent(merchantId) + '&preview=1';
+      window.open(previewUrl, '_blank', 'noopener');
+    });
+
     // Make sure populated Materialize labels don't visually overlap prefilled text inputs
     M.updateTextFields();
+    loadStorefrontConfiguration();
   });
+
+  let storefrontConfiguration = null;
+
+  function loadStorefrontConfiguration() {
+    mb.ajax({
+      url: '?api=neighborhub&action=get_merchant_storefront&merchant_id=' + encodeURIComponent(merchantId),
+      method: 'GET',
+      success: function(res) {
+        storefrontConfiguration = res.configuration || {};
+        renderStorefrontConfiguration();
+      },
+      error: function(err) {
+        M.toast({html: err.message || 'Unable to load storefront configuration.', classes: 'red'});
+      }
+    });
+  }
+
+  function renderStorefrontConfiguration() {
+    const config = storefrontConfiguration || {};
+    document.getElementById('storefront-theme').value = config.theme || 'default';
+    document.getElementById('storefront-layout').value = config.layout || 'hero-centered';
+    document.getElementById('storefront-logo-style').value = config.logo_style || 'default';
+    document.getElementById('storefront-primary-color').value = (config.colors && config.colors.primary) || '#4f46e5';
+    document.querySelectorAll('.storefront-visibility').forEach(function(input) {
+      input.checked = !config.visibility || config.visibility[input.dataset.key] !== false;
+    });
+    renderStorefrontBlocks();
+    M.FormSelect.init(document.querySelectorAll('#storefront-tab select'));
+  }
+
+  function renderStorefrontBlocks() {
+    const wrapper = document.getElementById('storefront-blocks');
+    wrapper.innerHTML = '';
+    (storefrontConfiguration.blocks || []).forEach(function(block, index) {
+      const row = document.createElement('div');
+      row.className = 'form-group';
+      row.style = 'display:flex; align-items:center; gap:8px;';
+      const label = document.createElement('span');
+      label.textContent = block.type.replace(/_/g, ' ');
+      label.style.fontWeight = '600';
+      const fields = document.createElement('div');
+      fields.style = 'display:grid; gap:6px; flex:2;';
+      const content = block.content || {};
+      if (block.type === 'announcement' || block.type === 'image_text') {
+        fields.appendChild(storefrontTextInput('Title', content.title || '', function(value) {
+          block.content = Object.assign({}, block.content, {title: value});
+        }));
+        fields.appendChild(storefrontTextInput('Text', content.text || '', function(value) {
+          block.content = Object.assign({}, block.content, {text: value});
+        }));
+        if (block.type === 'image_text') {
+          fields.appendChild(storefrontTextInput('Gallery image ID', content.image_id || '', function(value) {
+            block.content = Object.assign({}, block.content, {image_id: value ? Number(value) : null});
+          }));
+        }
+      } else if (block.type === 'call_to_action') {
+        fields.appendChild(storefrontTextInput('Label', content.label || '', function(value) {
+          block.content = Object.assign({}, block.content, {label: value});
+        }));
+        fields.appendChild(storefrontTextInput('Link', content.url || '', function(value) {
+          block.content = Object.assign({}, block.content, {url: value});
+        }));
+      } else if (block.type === 'featured_product') {
+        fields.appendChild(storefrontTextInput('Product ID', content.product_id || '', function(value) {
+          block.content = Object.assign({}, block.content, {product_id: value ? Number(value) : null});
+        }));
+      }
+      const remove = document.createElement('button');
+      remove.type = 'button';
+      remove.className = 'btn-small red waves-effect';
+      remove.textContent = 'Remove';
+      remove.addEventListener('click', function() {
+        storefrontConfiguration.blocks.splice(index, 1);
+        renderStorefrontBlocks();
+      });
+      row.append(label, fields, remove);
+      wrapper.appendChild(row);
+    });
+  }
+
+  function storefrontTextInput(labelText, value, onChange) {
+    const wrapper = document.createElement('label');
+    wrapper.style = 'font-size:.85rem; color:#4b5563;';
+    const label = document.createElement('span');
+    label.textContent = labelText;
+    const input = document.createElement('input');
+    input.type = labelText === 'Text' ? 'text' : 'text';
+    input.value = value;
+    input.addEventListener('input', function() { onChange(input.value); });
+    wrapper.append(label, input);
+    return wrapper;
+  }
+
+  function collectStorefrontConfiguration() {
+    const config = storefrontConfiguration || {};
+    config.theme = document.getElementById('storefront-theme').value;
+    config.layout = document.getElementById('storefront-layout').value;
+    config.logo_style = document.getElementById('storefront-logo-style').value;
+    config.colors = Object.assign({}, config.colors, {
+      primary: document.getElementById('storefront-primary-color').value
+    });
+    config.visibility = Object.assign({}, config.visibility);
+    document.querySelectorAll('.storefront-visibility').forEach(function(input) {
+      config.visibility[input.dataset.key] = input.checked;
+    });
+    config.blocks = Array.isArray(config.blocks) ? config.blocks : [];
+    return config;
+  }
+
+  document.getElementById('storefront-add-block').addEventListener('click', function() {
+    const type = document.getElementById('storefront-block-type').value;
+    storefrontConfiguration = storefrontConfiguration || {};
+    storefrontConfiguration.blocks = storefrontConfiguration.blocks || [];
+    storefrontConfiguration.blocks.push({type: type, content: {}});
+    renderStorefrontBlocks();
+  });
+
+  document.getElementById('storefront-save-draft').addEventListener('click', function() {
+    saveStorefrontDraft(false);
+  });
+
+  document.getElementById('storefront-publish').addEventListener('click', function() {
+    saveStorefrontDraft(true);
+  });
+
+  document.getElementById('storefront-revert').addEventListener('click', function() {
+    mb.ajax({
+      url: '?api=neighborhub&action=revert_merchant_storefront',
+      method: 'POST',
+      data: JSON.stringify({merchant_id: merchantId}),
+      success: function(res) {
+        M.toast({html: res.message || 'Draft reverted.', classes: 'green'});
+        loadStorefrontConfiguration();
+      },
+      error: function(err) {
+        M.toast({html: err.message || 'Unable to revert draft.', classes: 'red'});
+      }
+    });
+  });
+
+  function saveStorefrontDraft(publish) {
+    const config = collectStorefrontConfiguration();
+    mb.ajax({
+      url: '?api=neighborhub&action=save_merchant_storefront_draft',
+      method: 'POST',
+      data: JSON.stringify({merchant_id: merchantId, configuration: config}),
+      success: function(res) {
+        storefrontConfiguration = res.configuration || config;
+        if (!publish) {
+          M.toast({html: res.message || 'Storefront draft saved.', classes: 'green'});
+          return;
+        }
+        mb.ajax({
+          url: '?api=neighborhub&action=publish_merchant_storefront',
+          method: 'POST',
+          data: JSON.stringify({merchant_id: merchantId}),
+          success: function(publishResponse) {
+            M.toast({html: publishResponse.message || 'Storefront published.', classes: 'green'});
+          },
+          error: function(err) {
+            M.toast({html: err.message || 'Unable to publish storefront.', classes: 'red'});
+          }
+        });
+      },
+      error: function(err) {
+        M.toast({html: err.message || 'Unable to save storefront draft.', classes: 'red'});
+      }
+    });
+  }
 
   function saveSettings(e) {
     e.preventDefault();

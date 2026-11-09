@@ -68,7 +68,6 @@ class AuthManager
     // simple file-based auth: users stored in users.json with password_hash
     public function loadUsers()
     {
-
         //echo 'app.php6.1 '; die();
 
         // 🛰️ LOG: Performance check
@@ -111,44 +110,59 @@ class AuthManager
 
     public static function requireLogin()
     {
-        if (!isset($_SESSION['user'])) {
-            if (class_exists('App')) {
-                try {
-                    $app = App::getInstance();
-                    $app_name = !empty($app->app) ? $app->app : (isset($_GET['app']) ? $_GET['app'] : 'ancestry');
-                    $return = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : ('/?app=' . $app_name);
-                    $url = '/?app=' . urlencode($app_name) . '&p=login&return_url=' . rawurlencode($return);
-                    if (!headers_sent()) {
-                        header('Location: ' . $url);
-                        exit();
+        // If the user is logged in, do nothing
+        if (isset($_SESSION['user'])) {
+            return;
+        }
+
+        // 1. Determine the base return URI safely
+        $return = $_SERVER['REQUEST_URI'] ?? '/';
+
+        // 2. Resolve application scoping query variables if 'App' exists
+        $query_params = [];
+        if (class_exists('App')) {
+            try {
+                $app = App::getInstance();
+                $app_uri = !empty($app->app) ? $app->app : ($_GET['app'] ?? '');
+
+                if (!empty($app_uri)) {
+                    // If it already contains 'app=', pull the value out so http_build_query can format it clean
+                    if (strpos($app_uri, 'app=') === 0) {
+                        parse_str($app_uri, $parsed_app);
+                        $query_params['app'] = $parsed_app['app'] ?? '';
                     } else {
-                        $escAttr = htmlspecialchars($url, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-                        $jsUrl = json_encode($url);
-                        echo "<!doctype html><html><head>\n";
-                        echo "<meta http-equiv=\"refresh\" content=\"0;url=$escAttr\">\n";
-                        echo "<script>location.replace($jsUrl);</script>\n";
-                        echo "</head><body>If you are not redirected automatically, <a href=\"$escAttr\">click here</a>.</body></html>";
-                        exit();
+                        $query_params['app'] = $app_uri;
                     }
-                } catch (Exception $e) {
                 }
-            }
-            if (!headers_sent()) {
-                $return = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/';
-                header('Location: /?p=login&return_url=' . rawurlencode($return));
-                exit();
-            } else {
-                $fallbackUrl = '/?p=login&return_url=' . rawurlencode(isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/');
-                $escAttr = htmlspecialchars($fallbackUrl, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-                $jsUrl = json_encode($fallbackUrl);
-                echo "<!doctype html><html><head>\n";
-                echo "<meta http-equiv=\"refresh\" content=\"0;url=$escAttr\">\n";
-                echo "<script>location.replace($jsUrl);</script>\n";
-                echo "</head><body>If you are not redirected automatically, <a href=\"$escAttr\">click here</a>.</body></html>";
-                exit();
+            } catch (Exception $e) {
+                // Silently fall back to default login routing if App instance fails
             }
         }
+
+        // 3. Build the core query parameters dynamically
+        $query_params['p'] = 'login';
+        $query_params['return'] = $return;
+
+        // 4. Construct the final safe URL (Handles all encoding safely)
+        $url = '/?' . http_build_query($query_params, '', '&', PHP_QUERY_RFC3986);
+
+        // 5. Execute Redirect
+        if (!headers_sent()) {
+            header('Location: ' . $url);
+            exit();
+        }
+
+        // HTML/JS safe fallback if headers were already sent
+        $escAttr = htmlspecialchars($url, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+        $jsUrl = json_encode($url);
+
+        echo "<!doctype html><html><head>\n";
+        echo "<meta http-equiv=\"refresh\" content=\"0;url=$escAttr\">\n";
+        echo "<script>location.replace($jsUrl);</script>\n";
+        echo "</head><body>If you are not redirected automatically, <a href=\"$escAttr\">click here</a>.</body></html>";
+        exit();
     }
+
 
     public function checkCredentials($user, $pass)
     {
@@ -263,7 +277,6 @@ class AuthManager
                 'modified'   => $user['modified_at'],
                 'last_login' => $user['last_login']
             ];
-
         } catch (Exception $e) {
             // Log the error
             error_log("AuthManager::getUserById Error: " . $e->getMessage());
@@ -295,7 +308,6 @@ class AuthManager
                 'modified'   => $user['modified_at'],
                 'last_login' => $user['last_login']
             ];
-
         } catch (Exception $e) {
             // Log the error
             error_log("AuthManager::getUserById Error: " . $e->getMessage());
@@ -318,19 +330,18 @@ class AuthManager
             // We use a prepared statement to prevent SQL injection
             $stmt = $app->db->prepare("SELECT id FROM users WHERE username = ? LIMIT 1");
             $stmt->execute([$username]);
-            
+
             // fetchColumn() is perfect here since we only asked for 'id'
             $id = $stmt->fetchColumn();
 
             return $id ? (int)$id : null;
-
         } catch (Exception $e) {
             // Log the error through your cloud logger if possible
             error_log("AuthManager::getUserIdByUsername Error: " . $e->getMessage());
             return null;
         }
     }
-    
+
 
     // Admin helpers
     public function userIsAdmin($username = null)
@@ -364,9 +375,9 @@ class AuthManager
     public static function requireAdmin()
     {
 
-        if ((!isset($_SESSION['user']) && is_array($_SESSION['user'])) 
-            && ($_SESSION['user']['is_admin'] == false)) 
-        {
+        if ((!isset($_SESSION['user']) && is_array($_SESSION['user']))
+            && ($_SESSION['user']['is_admin'] == false)
+        ) {
             $url = '/?p=dashboard&msg=Access+required';
             header("Location: $url");
             echo "<script>location.replace(\"$url\");</script>";

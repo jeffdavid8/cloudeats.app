@@ -292,6 +292,189 @@ header nav .merchant-header-image img {
   width: 100%;
   object-fit: cover;
 }
+header nav .nav-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: auto;
+  min-height: 57px;
+}
+header.header nav {
+  height: auto;
+  min-height: 57px;
+}
+header nav .nav-wrapper > ul.header-left,
+header nav .nav-wrapper > ul.header-right {
+  float: none;
+  flex-shrink: 0;
+  align-self: stretch;
+  height: auto;
+  min-height: 57px;
+}
+header nav .nav-wrapper > ul.header-left > li,
+header nav .nav-wrapper > ul.header-right > li {
+  display: flex;
+  align-items: center;
+}
+header.header nav .nav-wrapper > ul.header-right > li > a,
+header.header nav .header-left > li > div > a,
+header.header nav .header-merchant-brand > a {
+  margin-top: 0;
+}
+header.header nav .header-merchant-brand > a.merchant-sidenav-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+header.header nav .header-left > li > div > a.header-sidenav-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+header nav .header-right > li > a > i.fa,
+header nav .header-right > li > a > i.far,
+header nav .header-right > li > a > i.fas,
+header nav .header-right > li > a > i.material-icons {
+  line-height: 50px;
+}
+header nav .nav-wrapper > ul.header-left {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+header nav .nav-wrapper > ul.header-right {
+  flex: 0 0 auto;
+}
+.header-merchant-brand {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-left: 6px;
+}
+.header-merchant-brand a,
+.header-merchant-brand img {
+  display: block;
+}
+.header-merchant-brand img {
+  width: 34px;
+  height: 34px;
+  object-fit: cover;
+  border: 2px solid rgba(246, 240, 225, 0.7);
+  border-radius: 50%;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.header-merchant-brand a:hover img,
+.header-merchant-brand img.scroll-to-top-link:hover {
+  transform: scale(1.08);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+}
+.header-merchant-status-dot {
+  position: absolute;
+  right: -2px;
+  bottom: 0;
+  width: 9px;
+  height: 9px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: #12e91c;
+}
+.header-merchant-search-trigger {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  margin: 0 1px;
+  padding: 0;
+  color: inherit;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+.header-merchant-search-trigger:hover,
+.header-merchant-search-trigger:focus-visible {
+  background: rgba(128, 128, 128, 0.2);
+  outline: 0;
+  transform: scale(1.05);
+}
+.header-merchant-search-trigger i {
+  height: auto;
+  margin: 0;
+  line-height: 1;
+  font-size: 1.4rem;
+}
+.header-merchant-search-overlay {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 20;
+  width: calc(100% - 16px);
+  display: none;
+  align-items: center;
+  gap: 6px;
+  min-height: 38px;
+  padding: 0 10px;
+  color: inherit;
+  border: 1px solid rgba(128, 128, 128, 0.55);
+  border-radius: 20px;
+  background: var(--panel-dark, #202020);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  line-height: 1;
+}
+.header-merchant-search-overlay.is-expanded {
+  display: flex;
+}
+.header-merchant-search-overlay::before {
+  content: "\f002";
+  flex: 0 0 auto;
+  font-family: "Font Awesome 5 Free";
+  font-size: 0.8rem;
+  font-weight: 900;
+  opacity: 0.75;
+}
+.header-merchant-search-overlay textarea {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 30px;
+  height: 30px;
+  margin: 0;
+  padding: 6px 0;
+  border: 0 !important;
+  box-shadow: none !important;
+  outline: 0;
+  overflow: hidden;
+  resize: none;
+  background: transparent !important;
+  color: inherit !important;
+  font: inherit;
+  font-size: 0.9rem;
+  line-height: 18px;
+}
+.header-merchant-search-overlay textarea:focus {
+  border: 0 !important;
+  box-shadow: none !important;
+}
+.header-merchant-search-overlay textarea::placeholder {
+  color: currentColor;
+  opacity: 0.65;
+}
+.header-merchant-search-overlay.is-expanded {
+  border-color: rgba(128, 128, 128, 0.55);
+}
+@media only screen and (max-width: 600px) {
+  .header-merchant-search-overlay textarea {
+    font-size: 0.7rem;
+  }
+}
+@media only screen and (max-width: 700px) {
+  .header-merchant-search-overlay textarea::placeholder {
+    font-size: 0;
+  }
+}
 .login-header h3 {
   font-size: 2em;
 }
@@ -717,6 +900,35 @@ body.loading-progress nav .progress {
   padding: 2rem;
 }
 
+.merchant-preloader-logo {
+  width: min(52vw, 260px);
+  height: min(52vw, 260px);
+  object-fit: cover;
+  border: 8px solid #f59e0b;
+  border-radius: 50%;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+  animation: merchant-preloader-bounce 1.4s ease-in-out infinite;
+}
+
+.merchant-preloader-logo + .nav-trigger-favicon {
+  margin-top: 1.5rem;
+}
+
+@keyframes merchant-preloader-bounce {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-12px) scale(1.03);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .merchant-preloader-logo {
+    animation: none;
+  }
+}
+
 /* Base SVG styling */
 body.loading-nav-trigger .nav-trigger-favicon,
 .loading-preloader .nav-trigger-favicon {
@@ -1024,7 +1236,7 @@ header nav ul.header-left,
 header nav ul.header-right {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: flex-start;
   gap: 0;
   height: 57px;
 }
@@ -1068,8 +1280,15 @@ header nav ul.header-left {
   }
 }
 
-ul#slide-out {
+ul#slide-out,
+ul#merchant-slide-out {
   z-index: 1001;
+}
+.merchant-sidenav-header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  background-color: var(--icon-bg-color);
 }
 .sidenav {
   -webkit-box-shadow: none;
@@ -1754,6 +1973,7 @@ nav ul a.sidenav-trigger {
 
 footer {
   height: 3em;
+  margin-top: 5rem;
 }
 footer .version {
   margin: 0 1rem;
