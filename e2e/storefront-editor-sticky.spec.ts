@@ -11,6 +11,7 @@ for (const width of [400, 1200]) {
       await page.setViewportSize({ width, height: 800 });
       await page.setContent(`<html class="${mode}"><body>${editor}<div style="height:1000px"></div></body></html>`);
       await page.addStyleTag({ path: path.resolve('html/css/materialize.min.css') });
+      await page.addStyleTag({ path: path.resolve('html/apps/neighborhub/css/merchant-image-picker.css') });
       await page.addStyleTag({ content: '.storefront-editor-panel select { display: block; }' });
       const panel = page.locator('.storefront-editor-panel');
       const footer = page.locator('.storefront-editor-footer');
@@ -21,7 +22,7 @@ for (const width of [400, 1200]) {
         await expect.poll(() => panel.evaluate(element => element.scrollHeight - element.clientHeight)).toBeGreaterThan(100);
         await panel.evaluate(element => { element.scrollTop = 100; });
       } else {
-        await page.evaluate(() => window.scrollTo(0, 400));
+        await page.evaluate(() => window.scrollTo(0, 250));
       }
       const bounds = await footer.evaluate(element => {
         const footerRect = element.getBoundingClientRect();

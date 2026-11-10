@@ -10,6 +10,37 @@ $merchant = $this->get('merchant');
 $rawStatus = strtolower(trim($merchant->status ?? ''));
 $isShopOnline = ($rawStatus === 'active' || $rawStatus === 'online' || $rawStatus === '1' || $merchant->status === 1);
 
+if ($this->user->is_admin):
+  $merchants = Merchant::getAllMerchants();
+?>
+  <li style="margin-left: 10px;">
+    <select id="merchant-select" class="browser-default" onchange="window.location.href = updateQueryStringParameter('merchant_id', this.value); loading(5);">
+      <option value="">Select Merchant</option>
+      <? foreach ($merchants as $merchant): ?>
+        <option value="<?= $merchant->id ?>" <?= (get_var('merchant_id') == $merchant->id) ? 'selected' : '' ?>><?= $merchant->id . ' - ' . htmlspecialchars($merchant->business_name) ?></option>
+      <? endforeach; ?>
+    </select>
+  </li>
+
+  <script>
+    function updateQueryStringParameter(key, value) {
+      // return the current URL with only "&view&merchant_id&p" param
+      const url = new URL(window.location.href);
+      url.searchParams.set(key, value);
+      // Remove all other query params except "view", "merchant_id", and "p"
+      const allowedParams = ['app', 'view', 'merchant_id', 'p'];
+      for (const param of url.searchParams.keys()) {
+        if (!allowedParams.includes(param)) {
+          url.searchParams.delete(param);
+        }
+      }
+      return url.toString();
+    }
+  </script>
+<?
+endif;
+
+
 // Get the current URL path and query string to match against hrefs
 $current_url = $_SERVER['REQUEST_URI'];
 
@@ -20,14 +51,19 @@ $menu_items = [
         'title' => 'Storefront'
     ],
     [
-        'href' => '/?app=neighborhub&view=merchant&merchant_id=' . $merchant->id . '&p=dashboard',
-        'icon' => 'fas fa-store',
-        'title' => 'Dashboard'
+        'href' => '/?view=merchant&p=storefront_editor&merchant_id=' . $merchant->id,
+        'icon' => 'fas fa-edit',
+        'title' => 'Storefront Editor'
     ],
     [
         'href' => '/?app=neighborhub&p=pos&view=merchant&merchant_id=' . $merchant->id,
         'icon' => 'fas fa-store',
         'title' => 'POS'
+    ],
+    [
+        'href' => '/?app=neighborhub&view=merchant&merchant_id=' . $merchant->id . '&p=dashboard',
+        'icon' => 'fas fa-store',
+        'title' => 'Dashboard'
     ],
     [
         'href' => '/?app=neighborhub&view=merchant&merchant_id=' . $merchant->id . '&p=screen&screen=expo',

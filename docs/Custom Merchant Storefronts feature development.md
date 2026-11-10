@@ -66,6 +66,11 @@ and updates immediately in the visual editor.
 The editor keeps its draft actions and status together at the bottom of the
 scrolling settings panel; on smaller screens they remain visible while scrolling
 through the settings and leave view with the panel.
+The visual editor and merchant settings share an image picker with gallery
+thumbnails, image preview, and drag-and-drop or file upload. Uploads add an
+image to the merchant gallery immediately; choosing it for a storefront or
+profile takes effect only after saving the relevant form. Changing the profile
+image also changes the fallback used by storefronts without a selected image.
 
 When a merchant image is present, verified staff for that merchant and
 platform admins can open the shared merchant management menu by clicking the

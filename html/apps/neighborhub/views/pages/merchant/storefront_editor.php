@@ -12,6 +12,7 @@ foreach ($merchantGallery as $asset) {
 }
 $previewUrl = '/?app=neighborhub&view=customer&p=merchant_products&merchant_id=' . $merchantId . '&preview=1';
 ?>
+<link rel="stylesheet" href="/apps/neighborhub/css/merchant-image-picker.css">
 <style>
   .storefront-editor {
     display: grid;
@@ -21,7 +22,7 @@ $previewUrl = '/?app=neighborhub&view=customer&p=merchant_products&merchant_id='
   }
 
   .storefront-editor-canvas {
-    min-height: 720px;
+    min-height: calc(90vh - 5rem);
     overflow: hidden;
     border: 1px solid #d1d5db;
     border-radius: 12px;
@@ -41,6 +42,7 @@ $previewUrl = '/?app=neighborhub&view=customer&p=merchant_products&merchant_id='
     --storefront-editor-panel-background: #fff;
     position: sticky;
     top: 1rem;
+    height: calc(90vh - 5rem);
     align-self: start;
     max-height: calc(100vh - 2rem);
     overflow: auto;
@@ -66,12 +68,6 @@ $previewUrl = '/?app=neighborhub&view=customer&p=merchant_products&merchant_id='
     color: #f9fafb !important;
   }
 
-  .nightMode .storefront-editor-dropzone {
-    background: #374151;
-    border-color: #4b5563;
-  }
-
-
   .storefront-editor-field {
     margin: 0 0 1rem;
   }
@@ -89,33 +85,6 @@ $previewUrl = '/?app=neighborhub&view=customer&p=merchant_products&merchant_id='
 
   .storefront-editor-field .select-wrapper {
     margin-top: 0;
-  }
-
-  .storefront-editor-dropzone {
-    padding: .75rem;
-    border: 1px dashed #9ca3af;
-    border-radius: 8px;
-    text-align: center;
-    cursor: pointer;
-    background: #f9fafb;
-  }
-
-  .storefront-editor-dropzone.is-dragging {
-    border-color: #2563eb;
-    background: #eff6ff;
-  }
-
-  .storefront-editor-dropzone img {
-    display: block;
-    width: 100%;
-    max-height: 100px;
-    object-fit: cover;
-    margin-bottom: .5rem;
-    border-radius: 6px;
-  }
-
-  .storefront-editor-dropzone input[type="file"] {
-    display: none;
   }
 
   .storefront-editor-panel select,
@@ -263,20 +232,14 @@ $previewUrl = '/?app=neighborhub&view=customer&p=merchant_products&merchant_id='
         <label for="storefront-editor-primary">Primary color</label>
         <input id="storefront-editor-primary" type="color" value="#4f46e5">
       </div>
-      <div class="storefront-editor-field">
-        <label for="storefront-editor-logo">Storefront logo</label>
-        <div class="storefront-editor-dropzone" data-slot="logo">
-          <img data-slot-preview="logo" alt="" hidden>
-          <span data-slot-copy="logo">Drop a logo here or click to upload</span>
-          <input type="file" data-slot-input="logo" accept="image/*">
-        </div>
-        <select id="storefront-editor-logo">
-          <option value="">Use merchant profile image</option>
-          <?php foreach ($merchantGallery as $asset): ?>
-            <option value="<?= (int)$asset['id'] ?>"><?= htmlspecialchars('Image ' . $asset['id'], ENT_QUOTES, 'UTF-8') ?></option>
-          <?php endforeach; ?>
-        </select>
-      </div>
+      <?php
+      render('components/merchant_image_picker.php', ['imagePicker' => [
+        'id' => 'storefront-editor-logo', 
+        'label' => 'Promo Image', 
+        'fallback_label' => 'Use merchant profile image', 
+        'fallback_url' => $merchant->image_url ?? '', 'gallery' => $merchantGallery
+        ]]);
+      ?>
       <div class="storefront-editor-field">
         <label for="storefront-editor-logo-style">Logo style</label>
         <select id="storefront-editor-logo-style">
@@ -286,20 +249,10 @@ $previewUrl = '/?app=neighborhub&view=customer&p=merchant_products&merchant_id='
           <option value="rectangle">Rectangle</option>
         </select>
       </div>
-      <div class="storefront-editor-field">
-        <label for="storefront-editor-hero">Hero image</label>
-        <div class="storefront-editor-dropzone" data-slot="hero">
-          <img data-slot-preview="hero" alt="" hidden>
-          <span data-slot-copy="hero">Drop a hero image here or click to upload</span>
-          <input type="file" data-slot-input="hero" accept="image/*">
-        </div>
-        <select id="storefront-editor-hero">
-          <option value="">Use merchant profile image</option>
-          <?php foreach ($merchantGallery as $asset): ?>
-            <option value="<?= (int)$asset['id'] ?>"><?= htmlspecialchars('Image ' . $asset['id'], ENT_QUOTES, 'UTF-8') ?></option>
-          <?php endforeach; ?>
-        </select>
-      </div>
+      <?php
+      $imagePicker = ['id' => 'storefront-editor-hero', 'label' => 'Hero image', 'fallback_label' => 'Use merchant profile image', 'fallback_url' => $merchant->image_url ?? '', 'gallery' => $merchantGallery];
+      include __DIR__ . '/../../components/merchant_image_picker.php';
+      ?>
       <p><label><input type="checkbox" class="filled-in storefront-editor-visibility" data-key="search"><span>Product search</span></label></p>
       <p><label><input type="checkbox" class="filled-in storefront-editor-visibility" data-key="contact"><span>Contact information</span></label></p>
       <p><label><input type="checkbox" class="filled-in storefront-editor-visibility" data-key="categories"><span>Menu categories</span></label></p>
@@ -329,12 +282,13 @@ $previewUrl = '/?app=neighborhub&view=customer&p=merchant_products&merchant_id='
   </aside>
 </div>
 
+<script src="/apps/neighborhub/js/merchant-image-picker.js"></script>
 <script>
   (function() {
     const merchantId = <?= json_encode($merchantId) ?>;
     const preview = document.getElementById('storefront-editor-preview');
     let configuration = <?= json_encode($configuration, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
-    const pendingAssetDeletes = new Set();
+    const pickers = [];
 
     function status(message, error) {
       const element = document.getElementById('storefront-editor-status');
@@ -358,97 +312,13 @@ $previewUrl = '/?app=neighborhub&view=customer&p=merchant_products&merchant_id='
       document.getElementById('storefront-editor-primary').value = configuration.colors && configuration.colors.primary || '#4f46e5';
       document.getElementById('storefront-editor-logo').value = configuration.assets && configuration.assets.logo_id || '';
       document.getElementById('storefront-editor-hero').value = configuration.assets && configuration.assets.hero_id || '';
-      updateAssetDropzones();
       document.querySelectorAll('.storefront-editor-visibility').forEach(function(input) {
         input.checked = !configuration.visibility || configuration.visibility[input.dataset.key] !== false;
       });
       renderBlocks();
       initMaterializeSelects();
-    }
-
-    function updateAssetDropzones() {
-      const urls = configuration.asset_urls || {};
-      ['logo', 'hero'].forEach(function(slot) {
-        const id = configuration.assets && configuration.assets[slot + '_id'];
-        const previewImage = document.querySelector('[data-slot-preview="' + slot + '"]');
-        const copy = document.querySelector('[data-slot-copy="' + slot + '"]');
-        const url = id && urls[id] ? urls[id] : '';
-        previewImage.hidden = !url;
-        previewImage.src = url;
-        copy.textContent = url ? 'Drop a replacement here or click to replace' : 'Drop an image here or click to upload';
-      });
-    }
-
-    function uploadAsset(slot, file) {
-      const formData = new FormData();
-      formData.append('merchant_id', merchantId);
-      formData.append('asset', file);
-      status('Uploading ' + slot + ' image...');
-      loading(4);
-      mb.ajax({
-        url: '?api=neighborhub&action=upload_storefront_asset',
-        type: 'POST',
-        data: formData,
-        processData: false,
-        contentType: false,
-        headers: {
-          'X-CSRF-Token': window.mb && mb.csrf_token ? mb.csrf_token : ''
-        },
-        success: function(response) {
-          if (!response.success || !response.image) {
-            status(response.error || 'Unable to upload image.', true);
-            return;
-          }
-          configuration.assets = configuration.assets || {};
-          const key = slot + '_id';
-          const previousId = Number(configuration.assets[key] || 0);
-          if (previousId) pendingAssetDeletes.add(previousId);
-          configuration.assets[key] = Number(response.image.id);
-          configuration.asset_urls[response.image.id] = response.image.image_url;
-          const select = document.getElementById('storefront-editor-' + slot);
-          select.value = String(response.image.id);
-          const selectInstance = window.M && M.FormSelect ?
-            M.FormSelect.getInstance(select) :
-            null;
-          if (selectInstance && selectInstance.input) {
-            selectInstance.input.value = 'Image ' + response.image.id;
-          }
-          updateAssetDropzones();
-          updatePreview();
-          status('Image uploaded. Save the draft to keep the replacement.');
-        },
-        error: function(xhr) {
-          const response = xhr.responseJSON || {};
-          status(response.error || 'Unable to upload image.', true);
-        }
-      });
-    }
-
-    function bindAssetDropzone(slot) {
-      const zone = document.querySelector('[data-slot="' + slot + '"]');
-      const input = zone.querySelector('[data-slot-input="' + slot + '"]');
-      zone.addEventListener('click', function() {
-        input.click();
-      });
-      input.addEventListener('change', function() {
-        if (input.files[0]) uploadAsset(slot, input.files[0]);
-        input.value = '';
-      });
-      ['dragenter', 'dragover'].forEach(function(eventName) {
-        zone.addEventListener(eventName, function(event) {
-          event.preventDefault();
-          zone.classList.add('is-dragging');
-        });
-      });
-      ['dragleave', 'drop'].forEach(function(eventName) {
-        zone.addEventListener(eventName, function(event) {
-          event.preventDefault();
-          zone.classList.remove('is-dragging');
-        });
-      });
-      zone.addEventListener('drop', function(event) {
-        const file = event.dataTransfer.files[0];
-        if (file) uploadAsset(slot, file);
+      pickers.forEach(function(picker) {
+        picker.refresh();
       });
     }
 
@@ -571,6 +441,12 @@ $previewUrl = '/?app=neighborhub&view=customer&p=merchant_products&merchant_id='
     }
 
     document.getElementById('storefront-editor-save').addEventListener('click', function() {
+      if (pickers.some(function(picker) {
+          return picker.uploading;
+        })) {
+        status('Wait for the image upload to finish before saving.', true);
+        return;
+      }
       updateConfiguration();
       status('Saving draft...');
       request('save_merchant_storefront_draft', {
@@ -584,15 +460,10 @@ $previewUrl = '/?app=neighborhub&view=customer&p=merchant_products&merchant_id='
           localConfiguration.assets || {},
           savedConfiguration.assets || {}
         );
-        ['logo_id', 'hero_id'].forEach(function(assetKey) {
-          if (savedConfiguration.assets && savedConfiguration.assets[assetKey]) {
-            configuration.assets[assetKey] = savedConfiguration.assets[assetKey];
-          } else if (localConfiguration.assets && localConfiguration.assets[assetKey]) {
-            configuration.assets[assetKey] = localConfiguration.assets[assetKey];
-          }
-        });
         configuration.asset_urls = assetUrls;
-        updateAssetDropzones();
+        pickers.forEach(function(picker) {
+          picker.refresh();
+        });
         return Promise.resolve();
       }).then(function() {
         preview.contentWindow.location.reload();
@@ -603,6 +474,12 @@ $previewUrl = '/?app=neighborhub&view=customer&p=merchant_products&merchant_id='
     });
 
     document.getElementById('storefront-editor-publish').addEventListener('click', function() {
+      if (pickers.some(function(picker) {
+          return picker.uploading;
+        })) {
+        status('Wait for the image upload to finish before publishing.', true);
+        return;
+      }
       if (!window.confirm('Publish this storefront draft for customers?')) return;
       request('publish_merchant_storefront').then(function() {
         status('Storefront published.');
@@ -633,25 +510,27 @@ $previewUrl = '/?app=neighborhub&view=customer&p=merchant_products&merchant_id='
     });
     document.getElementById('storefront-editor-primary').addEventListener('input', updateConfiguration);
     document.getElementById('storefront-editor-logo').addEventListener('change', function() {
-      const previousId = Number(configuration.assets && configuration.assets.logo_id || 0);
       updateConfiguration();
-      const nextId = Number(configuration.assets && configuration.assets.logo_id || 0);
       if (!this.value) configuration.assets.logo_id = null;
-      if (previousId && previousId !== nextId) pendingAssetDeletes.add(previousId);
-      updateAssetDropzones();
       updatePreview();
     });
     document.getElementById('storefront-editor-hero').addEventListener('change', function() {
-      const previousId = Number(configuration.assets && configuration.assets.hero_id || 0);
       updateConfiguration();
-      const nextId = Number(configuration.assets && configuration.assets.hero_id || 0);
       if (!this.value) configuration.assets.hero_id = null;
-      if (previousId && previousId !== nextId) pendingAssetDeletes.add(previousId);
-      updateAssetDropzones();
       updatePreview();
     });
-    bindAssetDropzone('logo');
-    bindAssetDropzone('hero');
+    document.querySelectorAll('[data-image-picker]').forEach(function(element) {
+      pickers.push(new MerchantImagePicker(element, {
+        merchantId: merchantId,
+        onStatus: status,
+        onUpload: function(image) {
+          configuration.asset_urls[image.id] = image.image_url;
+          pickers.forEach(function(picker) {
+            picker.addImage(image);
+          });
+        }
+      }));
+    });
     document.querySelectorAll('.storefront-editor-visibility').forEach(function(input) {
       input.addEventListener('change', updateConfiguration);
     });

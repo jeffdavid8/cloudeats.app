@@ -2,6 +2,8 @@
 if (!defined('MB_RUNNING')) exit;
 $merchantStaffRole = strtolower((string)($_SESSION['user']['merchant_staff_role'] ?? ''));
 $canManageSandboxMode = !empty($_SESSION['user']['is_admin']) || $merchantStaffRole === 'owner' || $merchantStaffRole === 'admin';
+$merchantWithGallery = Merchant::getMerchantWithGallery((int)$merchant_id, 'object');
+$merchantGallery = $merchantWithGallery && is_array($merchantWithGallery->gallery ?? null) ? $merchantWithGallery->gallery : [];
 $storeHours = $merchant['store_hours'] ?? [];
 if (is_string($storeHours)) {
   $storeHours = json_decode($storeHours, true) ?: [];
@@ -19,6 +21,7 @@ if (!isset($storeHours['weekly']) || !is_array($storeHours['weekly'])) {
 
 ?>
 
+<link rel="stylesheet" href="/apps/neighborhub/css/merchant-image-picker.css">
 <style>
   :root {
     --primary: #4f46e5;
@@ -111,6 +114,11 @@ if (!isset($storeHours['weekly']) || !is_array($storeHours['weekly'])) {
   <!-- 1. SETTINGS TAB (Populated from DB) -->
   <div id="settings-tab" class="tab-content active">
     <form id="settings-form">
+      <?php
+      $imagePicker = ['id' => 'merchant-profile-image', 'label' => 'Store profile image', 'fallback_label' => 'Keep current profile image', 'fallback_url' => $merchant['image_url'] ?? '', 'gallery' => $merchantGallery];
+      include __DIR__ . '/../../components/merchant_image_picker.php';
+      ?>
+      <div id="merchant-profile-image-status" role="status"></div>
       <div class="form-group">
         <label for="business_name">Business Name</label>
         <input type="text" id="business_name" required value="<?php echo htmlspecialchars($merchant['business_name'] ?? ''); ?>">
@@ -374,13 +382,24 @@ if (!isset($storeHours['weekly']) || !is_array($storeHours['weekly'])) {
 
 <!-- Keep your existing JavaScript block from earlier down here unchanged -->
 <script src="/apps/neighborhub/js/store-hours-editor.js"></script>
+<script src="/apps/neighborhub/js/merchant-image-picker.js"></script>
 <script>
   const API_PATH = '?api=neighborhub&action=update_merchant_settings';
   const merchantId = document.getElementById('merchant_id').value;
   const canManageSandboxMode = <?php echo $canManageSandboxMode ? 'true' : 'false'; ?>;
+  let merchantImagePicker;
 
   document.addEventListener('DOMContentLoaded', function() {
     M.FormSelect.init(document.querySelectorAll('select'));
+    merchantImagePicker = new MerchantImagePicker(document.querySelector('#settings-form [data-image-picker]'), {
+      merchantId: merchantId,
+      onStatus: function(message, error) {
+        const status = document.getElementById('merchant-profile-image-status');
+        status.textContent = message;
+        status.className = error ? 'red-text' : 'green-text';
+      },
+      onUpload: function(image, picker) { picker.addImage(image); }
+    });
     var instances = M.Tabs.init(document.querySelectorAll('.tabs'), {
       swipeable: false
     });
@@ -568,6 +587,11 @@ if (!isset($storeHours['weekly']) || !is_array($storeHours['weekly'])) {
   function saveSettings(e) {
     e.preventDefault();
     e.stopPropagation();
+    if (merchantImagePicker.uploading) {
+      document.getElementById('merchant-profile-image-status').textContent = 'Wait for the image upload to finish before saving.';
+      document.getElementById('merchant-profile-image-status').className = 'red-text';
+      return;
+    }
     let storeHours;
     try {
       storeHours = JSON.parse(document.getElementById('store_hours').value);
@@ -575,11 +599,15 @@ if (!isset($storeHours['weekly']) || !is_array($storeHours['weekly'])) {
       M.toast({html: 'Store hours must be valid JSON.', classes: 'red'});
       return;
     }
+    const profileSelect = document.getElementById('merchant-profile-image');
+    const selectedProfileId = profileSelect.value;
+    const selectedProfileUrl = profileSelect.selectedOptions[0].dataset.imageUrl;
     mb.ajax({
       url: API_PATH,
       method: 'POST',
       data: JSON.stringify({
         merchant_id: merchantId,
+        profile_image_id: selectedProfileId || undefined,
         business_name: document.getElementById('business_name').value,
         description: document.getElementById('description').value,
         store_hours: storeHours,
@@ -593,6 +621,11 @@ if (!isset($storeHours['weekly']) || !is_array($storeHours['weekly'])) {
         sandbox_mode: canManageSandboxMode ? document.getElementById('sandbox_mode').checked : undefined
       }),
       success: function(res) {
+        if (selectedProfileId) {
+          profileSelect.options[0].dataset.imageUrl = selectedProfileUrl;
+          if (profileSelect.value === selectedProfileId) profileSelect.value = '';
+          merchantImagePicker.refresh();
+        }
         M.toast({
           html: res.message || 'Configuration saved!',
           classes: 'green'

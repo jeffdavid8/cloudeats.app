@@ -1265,6 +1265,12 @@ class Merchant
                 error_log("Merchant::deleteGalleryImage Error: Image record not found for merchant $merchantId");
                 return false;
             }
+            $profileStmt = $db->prepare("SELECT 1 FROM neighborhub_merchants WHERE id = ? AND image_url = ? LIMIT 1");
+            $profileStmt->execute([intval($merchantId), $image['image_url']]);
+            if ($profileStmt->fetchColumn() !== false) {
+                error_log("Merchant::deleteGalleryImage Error: Image is the merchant profile image for merchant $merchantId");
+                return false;
+            }
 
             // 2. Clean it out of Google Cloud Storage using path isolation
             //require_once __DIR__ . '/../../includes/storage/FileStorageManager.php';

@@ -348,8 +348,13 @@ try {
       if (!$urls) {
         send_json_response(['success' => false, 'error' => 'The storefront image could not be uploaded.'], 400);
       }
-      $images = AssetManager::getImagesByEntity('merchant', $merchantId);
-      $image = end($images);
+      $stmt = $app->db->prepare("SELECT id, image_url FROM neighborhub_images WHERE parent_type = 'merchant' AND parent_id = ? AND image_url = ? ORDER BY id DESC LIMIT 1");
+      $stmt->execute([$merchantId, $urls[0]]);
+      $image = $stmt->fetch(PDO::FETCH_ASSOC);
+      if (!$image) {
+        error_log("Uploaded merchant image record not found for merchant " . $merchantId);
+        send_json_response(['success' => false, 'error' => 'The uploaded image could not be located.'], 500);
+      }
       send_json_response(['success' => true, 'image' => $image]);
       break;
     case 'delete_storefront_asset':
@@ -413,6 +418,19 @@ try {
       if (isset($request['website']))                  $update_data['website'] = $request['website'];
       if (isset($request['facebook']))                 $update_data['facebook'] = $request['facebook'];
       if (isset($request['delivery_max_distance']))     $update_data['delivery_max_distance'] = (float)$request['delivery_max_distance'];
+      if (array_key_exists('profile_image_id', $request)) {
+        $imageId = filter_var($request['profile_image_id'], FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
+        if ($imageId === false) {
+          send_json_response(['success' => false, 'message' => 'A valid profile image is required.'], 400);
+        }
+        $imageStmt = $app->db->prepare("SELECT image_url FROM neighborhub_images WHERE id = ? AND parent_type = 'merchant' AND parent_id = ? LIMIT 1");
+        $imageStmt->execute([$imageId, $merchant_id]);
+        $imageUrl = $imageStmt->fetchColumn();
+        if ($imageUrl === false) {
+          send_json_response(['success' => false, 'message' => 'The selected image does not belong to this merchant.'], 400);
+        }
+        $update_data['image_url'] = $imageUrl;
+      }
 
       // Status validation matching your CHECK constraint ('online', 'offline', 'active', etc.)
       if (isset($request['status'])) {
