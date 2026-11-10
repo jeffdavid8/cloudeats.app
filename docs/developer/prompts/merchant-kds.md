@@ -1,5 +1,7 @@
 You are an expert POS (Point of Sale) and KDS (Kitchen Display System) engineering specialist. We are building a high-volume, enterprise-grade restaurant Kitchen Display System based on a single-file PHP/JS view template. 
 
+Current timer contract: order `created_at` values are MySQL `DATETIME` values written by the checkout connection using the fixed `-04:00` session offset, not the browser's timezone or a daylight-saving-aware zone. KDS timers interpret that stored offset explicitly. Missing, invalid, and future timestamps display `Time unavailable` and do not trigger the five-minute pending-order auto-cancellation. Fixing a previously blank timer can immediately cancel a pending order that is already five minutes old. If the database timestamp convention changes, migrate existing values or version the timestamp contract before changing this interpretation; legacy values contain no offset.
+
 Review the attached `merchant_dashboard.php` source file carefully. It utilizes a custom AJAX module (`mb.ajax()`), a WebRTC data channel mesh (`window.merchantMesh`), MaterializeCSS elements, and a memory-safe `MutationObserver` layout mapping physical KB9000 kitchen bump bars (keys 1-9) directly to order cards.
 
 #### The Goal:

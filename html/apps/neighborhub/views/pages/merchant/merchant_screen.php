@@ -233,6 +233,37 @@ $screenName = get_var('screen', 'expo');
     });
   }
 
+  function denyOrder(orderId, reason = 'Kitchen busy / Out of stock') {
+    mb.ajax({
+      type: 'POST',
+      url: '/?api=neighborhub&action=deny_order',
+      data: JSON.stringify({
+        order_id: orderId,
+        merchant_id: <?php echo intval($merchantId); ?>,
+        cancellation_reason: reason
+      }),
+      success: function(response) {
+        if (response.success) {
+          M.toast({ html: 'Order denied & refunded.', displayLength: 3000 });
+          const card = document.querySelector(`.nh-order-card[data-order-id="${orderId}"]`);
+          if (card) {
+            card.style.transition = 'all 300ms ease';
+            card.style.opacity = '0';
+            card.style.transform = 'scale(0.8)';
+            setTimeout(() => card.remove(), 300);
+          }
+        } else {
+          M.toast({ html: 'Error denying order', classes: 'red' });
+          resetCardVisuals(orderId);
+        }
+      },
+      error: function() {
+        M.toast({ html: 'Network connection error.', classes: 'red' });
+        resetCardVisuals(orderId);
+      }
+    });
+  }
+
   function markReadyForPickup(orderId, skipConfirm = true) {
     if (!skipConfirm && !confirm('Mark as ready?')) return;
 
