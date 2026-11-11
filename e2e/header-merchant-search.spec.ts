@@ -42,6 +42,7 @@ for (const width of [375, 1024]) {
     for (const stylesheet of ['html/css/materialize.min.css', 'html/css/style.css', 'html/apps/neighborhub/css/merchant-operational-status.css']) {
       await page.addStyleTag({ path: path.resolve(stylesheet) });
     }
+
     await page.addScriptTag({ path: path.resolve('html/js/jquery-2.1.1.min.js') });
     await page.addScriptTag({ content: searchScript });
     await page.addScriptTag({ content: legacyScript });

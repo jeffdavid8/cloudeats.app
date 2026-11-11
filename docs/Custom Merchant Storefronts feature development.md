@@ -274,6 +274,8 @@ The merchant header search opens below the header and filters menu items as
 the customer types. The search stays open when focus moves elsewhere; Clear
 restores all items, while Cancel or Escape also closes the search. Where a
 storefront has an additional menu search field, both fields share the filter.
+While search is open, the floating category button moves below the header if
+needed and returns to its normal position when search closes.
 
 ## Important security boundary
 

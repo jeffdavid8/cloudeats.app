@@ -525,6 +525,10 @@ body.scrolled header.header.has-merchant-search nav {
   padding: 8px 4px 2px;
   font: 400 14px/1.4 system-ui, sans-serif;
 }
+.nh-search-positioned-category {
+  transform: translateY(var(--nh-search-category-offset, 0px)) !important;
+  transition: none !important;
+}
 .login-header h3 {
   font-size: 2em;
 }

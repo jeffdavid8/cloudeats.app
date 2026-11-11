@@ -62,14 +62,42 @@ $(function() {
   const $otherSearch = $('#iv-product-search-input');
   if (!$search.length || !$panel.length) return;
 
+  const header = document.querySelector('header.header');
+  const categoryMenu = document.querySelector('#top-right-menu');
+  const categoryWrapper = categoryMenu && categoryMenu.closest('.top-right-dropdown-wrapper');
+  let headerObserver;
+
+  function positionCategoryMenu() {
+    if (!header || !categoryWrapper || $panel.prop('hidden')) return;
+    categoryWrapper.style.setProperty('--nh-search-category-offset', '0px');
+    const gap = header.getBoundingClientRect().bottom + 8 - categoryWrapper.getBoundingClientRect().top;
+    categoryWrapper.style.setProperty('--nh-search-category-offset', `${Math.max(0, gap)}px`);
+  }
+
   function setSearchExpanded(expanded) {
     $panel.prop('hidden', !expanded);
     $('header.header').toggleClass('has-merchant-search', expanded);
     $trigger.attr('aria-expanded', expanded ? 'true' : 'false');
+    if (header && categoryWrapper) {
+      if (expanded) {
+        categoryWrapper.classList.add('nh-search-positioned-category');
+        positionCategoryMenu();
+        if (window.ResizeObserver) {
+          headerObserver = new ResizeObserver(positionCategoryMenu);
+          headerObserver.observe(header);
+        }
+      } else {
+        if (headerObserver) headerObserver.disconnect();
+        categoryWrapper.classList.remove('nh-search-positioned-category');
+        categoryWrapper.style.removeProperty('--nh-search-category-offset');
+      }
+    }
     if (expanded) {
       $search.trigger('focus');
     }
   }
+
+  $(window).on('scroll resize', positionCategoryMenu);
 
   function filterMerchantProducts() {
     const query = String($search.val() || '').toLowerCase().trim();
@@ -106,6 +134,7 @@ $(function() {
     });
 
     $noResults.prop('hidden', !query || !$cards.length || matches > 0);
+    positionCategoryMenu();
     $('#iv-result-count').text(query
       ? `Showing ${matches} of ${$cards.length} items`
       : `${$cards.length} items available`);
