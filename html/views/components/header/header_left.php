@@ -95,8 +95,11 @@ $(function() {
       const $title = $(this);
       const $categoryRow = $title.next('.row');
       if (!$categoryRow.length) return;
-      $title.toggle($categoryRow.find('.product-item-card:visible').length > 0);
-      $categoryRow.toggle($categoryRow.find('.product-item-card:visible').length > 0);
+      const hasMatches = !query || $categoryRow.find('.product-item-card').filter(function() {
+        return $(this).text().toLowerCase().includes(query);
+      }).length > 0;
+      $title.toggle(hasMatches);
+      $categoryRow.toggle(hasMatches);
     });
   }
 
