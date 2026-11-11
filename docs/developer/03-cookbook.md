@@ -2,6 +2,10 @@
 
 This document provides practical, step-by-step guides for common development tasks.
 
+## Restoring a JSON Backup
+
+In Admin Center, open **Restore DB**, select the tables to overwrite, and choose a JSON file from the server's `storage/backups` directory or upload a backup. Confirm the selected source and tables before restoring. Tables absent from the backup are skipped; selected tables present with no rows are cleared. Back up the current database first, and inspect the restore result for skipped tables or errors. Server backup selection is limited to regular JSON files directly in that directory.
+
 ## How to Add a New API Endpoint
 
 All API endpoints belong to a specific application module (e.g., `admin`, `recipes`). Follow the Drupal-inspired modular pattern.
