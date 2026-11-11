@@ -16,8 +16,8 @@ if ($this->user->is_admin):
   <li style="margin-left: 10px;">
     <select id="merchant-select" class="browser-default" onchange="window.location.href = updateQueryStringParameter('merchant_id', this.value); loading(5);">
       <option value="">Select Merchant</option>
-      <? foreach ($merchants as $merchant): ?>
-        <option value="<?= $merchant->id ?>" <?= (get_var('merchant_id') == $merchant->id) ? 'selected' : '' ?>><?= $merchant->id . ' - ' . htmlspecialchars($merchant->business_name) ?></option>
+      <? foreach ($merchants as $m): ?>
+        <option value="<?= $m->id ?>" <?= (get_var('merchant_id') == $m->id) ? 'selected' : '' ?>><?= $m->id . ' - ' . htmlspecialchars($m->business_name) ?></option>
       <? endforeach; ?>
     </select>
   </li>
@@ -39,7 +39,6 @@ if ($this->user->is_admin):
   </script>
 <?
 endif;
-
 
 // Get the current URL path and query string to match against hrefs
 $current_url = $_SERVER['REQUEST_URI'];
