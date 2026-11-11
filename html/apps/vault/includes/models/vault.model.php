@@ -57,41 +57,93 @@ class Vault extends Storage
     public static function transfer($from_id, $to_id, $amount, $note)
     {
         $db = self::getDb();
-        $from_user = User::getById($from_id);
-        $to_user = User::getById($to_id);
+        $amount = self::moneyAmount($amount);
+        if (!is_scalar($note) || (!is_string($from_id) && !is_int($from_id))
+            || (!is_string($to_id) && !is_int($to_id)) || !preg_match('/^[1-9][0-9]*$/', (string)$from_id)
+            || !preg_match('/^[1-9][0-9]*$/', (string)$to_id) || (string)$from_id === (string)$to_id) {
+            throw new InvalidArgumentException('Invalid transfer details.');
+        }
 
         $db->beginTransaction();
         try {
+            $driver = $db->getAttribute(PDO::ATTR_DRIVER_NAME);
+            if ($driver === 'sqlite') {
+                $lock = $db->prepare('UPDATE users SET id = id WHERE id = ?');
+                $lock->execute([$from_id]);
+            } elseif ($driver !== 'mysql') {
+                throw new RuntimeException('Unsupported database for Vault transfers.');
+            }
+
+            $senderQuery = $db->prepare('SELECT username FROM users WHERE id = ?' . ($driver === 'mysql' ? ' FOR UPDATE' : ''));
+            $senderQuery->execute([$from_id]);
+            $sender = $senderQuery->fetchColumn();
+            $recipientQuery = $db->prepare('SELECT username FROM users WHERE id = ?');
+            $recipientQuery->execute([$to_id]);
+            $recipient = $recipientQuery->fetchColumn();
+            if ($sender === false || $recipient === false) {
+                throw new InvalidArgumentException('Transfer user not found.');
+            }
+
+            $entries = $db->prepare("SELECT content_type, content FROM memory_anchors WHERE architect_id = ? AND status = 'active' AND content_type IN ('daily_provision', 'token_credit', 'token_debit')");
+            $entries->execute([$from_id]);
+            $balance = '0.00';
+            while ($entry = $entries->fetch(PDO::FETCH_ASSOC)) {
+                $content = json_decode($entry['content'], true, 512, JSON_THROW_ON_ERROR);
+                if (!is_array($content) || !array_key_exists('amount', $content)) {
+                    throw new RuntimeException('Invalid Vault ledger entry.');
+                }
+                try {
+                    $entryAmount = self::moneyAmount($content['amount'], true);
+                } catch (InvalidArgumentException $e) {
+                    throw new RuntimeException('Invalid Vault ledger amount.', 0, $e);
+                }
+                $balance = $entry['content_type'] === 'token_debit'
+                    ? bcsub($balance, $entryAmount, 2)
+                    : bcadd($balance, $entryAmount, 2);
+            }
+            if (bccomp($balance, $amount, 2) < 0) {
+                throw new DomainException('Insufficient Vault balance.');
+            }
+
             $uuid = bin2hex(random_bytes(16));
             $timestamp = date('Y-m-d H:i:s');
 
-            // Wrap the data in a JSON string for the 'content' column
             $senderContent = json_encode([
-                'description' => "Sent to User ($to_user->username): $note",
+                'description' => "Sent to User ($recipient): $note",
                 'amount' => (float)$amount
-            ]);
+            ], JSON_THROW_ON_ERROR);
 
             $receiverContent = json_encode([
-                'description' => "Received from User ($from_user->username): $note",
+                'description' => "Received from User ($sender): $note",
                 'amount' => (float)$amount
-            ]);
+            ], JSON_THROW_ON_ERROR);
 
             $stmt = $db->prepare("INSERT INTO memory_anchors (uuid, architect_id, content, content_type, created_at, projected_to, status) VALUES (?, ?, ?, ?, ?, ?, ?)");
-
-            // 1. Debit Sender
-            $stmt->execute([$uuid . '-out', $from_user->id, $senderContent, 'token_debit', $timestamp, $timestamp, 'active']);
-
-            // 2. Credit Receiver
-            $stmt->execute([$uuid . '-in', $to_user->id, $receiverContent, 'token_credit', $timestamp, $timestamp, 'active']);
+            $stmt->execute([$uuid . '-out', $from_id, $senderContent, 'token_debit', $timestamp, $timestamp, 'active']);
+            $stmt->execute([$uuid . '-in', $to_id, $receiverContent, 'token_credit', $timestamp, $timestamp, 'active']);
 
             $db->commit();
             return true;
-        } catch (Exception $e) {
-            $db->rollBack();
-            // 📢 Log the actual error to the server logs
-            error_log("Vault Transfer Error: " . $e->getMessage());
-            return ['error' => $e->getMessage()];
+        } catch (Throwable $e) {
+            if ($db->inTransaction()) {
+                $db->rollBack();
+            }
+            throw $e;
         }
+    }
+
+    private static function moneyAmount($amount, $allowZero = false)
+    {
+        if ((!is_string($amount) && !is_int($amount) && !is_float($amount))
+            || (is_float($amount) && !is_finite($amount))
+            || !preg_match('/^(?:0|[1-9][0-9]{0,9})(?:\.[0-9]{1,2})?$/', (string)$amount)) {
+            throw new InvalidArgumentException('Amount must be a valid value with at most two decimal places.');
+        }
+        $normalized = bcadd((string)$amount, '0', 2);
+        if (!$allowZero && bccomp($normalized, '0', 2) <= 0) {
+            throw new InvalidArgumentException('Amount must be greater than zero.');
+        }
+        return $normalized;
     }
 
     public static function addFundsToUser($user_id, $amount, $note)

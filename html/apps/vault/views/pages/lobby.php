@@ -27,6 +27,7 @@ $hasStripeLinked = !empty($stripeConnectId);
     </div>
 
     <div class="row action-grid" style="margin-bottom: 10px;">
+        <?php if ($this->user->is_admin): ?>
         <div class="col s4">
             <button class="btn-large waves-effect waves-light full-width gold-btn" onclick="Vault.mintProvision()" style="padding: 0 4px; font-size: 13px;">
                 <i class="material-icons left" style="margin-right: 4px;">cloud_download</i> MINT
@@ -37,6 +38,7 @@ $hasStripeLinked = !empty($stripeConnectId);
                 <i class="material-icons left" style="margin-right: 4px;">send</i> SHARE
             </button>
         </div>
+        <?php endif; ?>
         <div class="col s4">
             <?php if ($hasStripeLinked): ?>
                 <button class="btn-large waves-effect waves-light full-width green" onclick="Vault.openPayoutModal()" style="padding: 0 4px; font-size: 13px;">

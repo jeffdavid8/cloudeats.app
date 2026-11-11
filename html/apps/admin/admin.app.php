@@ -315,13 +315,22 @@ function admin_render_body(&$app)
             case 'restore_db':
                 admin_require_admin();
 
+                require_once __DIR__ . '/includes/BackupFiles.php';
+                $backupError = null;
+                try {
+                    $backupFiles = BackupFiles::list(STORAGE_PATH . DIRECTORY_SEPARATOR . 'backups');
+                } catch (Throwable $e) {
+                    error_log('Unable to list database backups: ' . $e->getMessage());
+                    $backupFiles = [];
+                    $backupError = 'Unable to list server backups. Check the server logs.';
+                }
                 $tables = [];
                 $tables[] = app_invoke('admin', 'db_tables');
                 $tables[] = app_invoke('stitch', 'db_tables');
                 $tables[] = array_diff(app_invoke('neighborhub', 'db_tables'), ['neighborhub_usage_events']);
                 $tables = array_reduce($tables, 'array_merge', []);
 
-                render('pages/restore_db.php', array('tables' => $tables));
+                render('pages/restore_db.php', array('tables' => $tables, 'backupFiles' => $backupFiles, 'backupError' => $backupError));
                 break;
 
             case 'backup_db':
@@ -381,6 +390,10 @@ function admin_render_body(&$app)
             case 'maintenance':
                 admin_require_admin();
                 include __DIR__ . '/views/maintenance.php';
+                break;
+            case 'merchant_assets':
+                admin_require_admin();
+                include __DIR__ . '/views/merchant_assets.php';
                 break;
             case 'migrations':
                 admin_require_admin();

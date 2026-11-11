@@ -51,9 +51,12 @@ function neighborhub_info(&$app)
       //'apps/neighborhub/css/neighborhub.css',
       /*'themes/startrek/lcars-base.css', */
       'themes/startrek/components.css',
+      'apps/neighborhub/css/merchant-operational-status.css',
     ),
     'scripts' => array(
       'apps/neighborhub/js/neighborhub.init.js',
+      'apps/neighborhub/js/merchant-operational-status.js',
+      'apps/neighborhub/js/merchant-sidenav.js',
       'apps/neighborhub/js/nh.audio.js',
       'apps/neighborhub/js/signup.js',
       //'./js/vis-network.min.js',
@@ -150,6 +153,9 @@ function neighborhub_init(&$app)
   switch ($view) {
 
     case 'admin':
+      if (!$app->user->is_admin) {
+        die("Access denied: Admin privileges required.");
+      }
       $scripts = array(
         'apps/neighborhub/js/gallery_manager.js',
         'apps/neighborhub/js/polling.js',
@@ -357,6 +363,15 @@ function neighborhub_render_body(&$app)
           );
 
           break;
+        case 'storefront_editor':
+          $templatePath = $merchantDir . 'storefront_editor.php';
+          $app->includeModel('merchantstorefront');
+          $vars = array(
+            'merchant' => $app->get('merchant'),
+            'merchant_id' => (int)$merchantId,
+            'storefront_config' => MerchantStorefront::getByMerchantId((int)$merchantId, 'draft'),
+          );
+          break;
         case 'products':
           $templatePath = $merchantDir . 'products.php';
           break;
@@ -416,11 +431,19 @@ function neighborhub_render_body(&$app)
         case 'merchant_products': // Changed to merchant_items for generic compatibility
           $merchantId = get_var('merchant_id', false);
           $customMechantViewOverrideDir = $customerDir . 'merchant_' . $merchantId . '/';
+          $storefrontConfig = $app->get('storefront_config', []);
+          $selectedTheme = is_array($storefrontConfig)
+            ? (string)($storefrontConfig['theme'] ?? 'default')
+            : 'default';
 
-          if ($merchantId && file_exists($app->app_dir . '/views/pages/' . $customMechantViewOverrideDir . $currentPage . '.php')) {
+          if (
+            $merchantId
+            && $selectedTheme === 'default'
+            && file_exists($app->app_dir . '/views/pages/' . $customMechantViewOverrideDir . $currentPage . '.php')
+          ) {
             $templatePath = $customMechantViewOverrideDir . $currentPage . '.php';
           } else {
-            $templatePath = $customerDir . $currentPage . '.php';
+            $templatePath = '../storefront/shell.php';
           }
           break;
 
@@ -669,6 +692,7 @@ function neighborhub_init_customer_context(&$app)
   if ($page == 'merchant_products') {
 
     $app->includeModel('product');
+    $app->includeModel('merchantstorefront');
     $merchantId = $app->get('merchant_id');
     //$merchant = Merchant::getMerchantById($merchantId);
     //$app->set('merchant', $merchant);
@@ -733,6 +757,17 @@ function neighborhub_init_customer_context(&$app)
       }
     }
     $app->set('productCatalog', $productCatalog);
+    $previewRequested = (string)($_GET['preview'] ?? '') === '1';
+    $storefrontConfiguration = 'published';
+    if ($previewRequested && !neighborhub_can_preview_storefront($app, (int)$merchantId)) {
+      http_response_code(403);
+      exit('Storefront preview access denied.');
+    }
+    if ($previewRequested) {
+      $storefrontConfiguration = 'draft';
+      $app->set('storefront_preview', true);
+    }
+    $app->set('storefront_config', MerchantStorefront::getByMerchantId((int)$merchantId, $storefrontConfiguration));
 
     $image = $merchant->image_url;
     $image_info = getimagesize($image);
@@ -772,6 +807,7 @@ function neighborhub_init_customer_context(&$app)
         'image_type' => $image_info['mime'],
       );
     }
+
   }
   if ($page == 'public.splash') {
     $image = 'images/neighborhub-app-index-logo-lg.png';
@@ -791,6 +827,26 @@ function neighborhub_init_customer_context(&$app)
   $app->set('meta', $meta);
 }
 
+function neighborhub_can_preview_storefront(&$app, int $merchantId): bool
+{
+  if ($merchantId < 1 || empty($_SESSION['user']['id'])) {
+    return false;
+  }
+  if (!empty($_SESSION['user']['is_admin']) || !empty($app->user->is_admin)) {
+    return true;
+  }
+
+  $stmt = $app->db->prepare(
+    "SELECT 1
+     FROM neighborhub_merchant_users
+     WHERE merchant_id = ? AND user_id = ? AND status = 'active'
+       AND staff_role IN ('owner', 'staff')
+     LIMIT 1"
+  );
+  $stmt->execute([$merchantId, (int)$_SESSION['user']['id']]);
+  return $stmt->fetchColumn() !== false;
+}
+
 /**
  * Initialize merchant view context
  * 
@@ -803,6 +859,7 @@ function neighborhub_init_customer_context(&$app)
  */
 function neighborhub_init_merchant_context(&$app, $merchantId = null)
 {
+  AuthManager::requireLogin();
   try {
     $db = $app->db;
     $user_id = $app->user->id;
@@ -881,7 +938,7 @@ function neighborhub_init_merchant_context(&$app, $merchantId = null)
     $staffRecord = $staffStmt->fetch(PDO::FETCH_ASSOC);
 
     // Verify staff relationship exists and is active
-    if ((!$staffRecord) && (!$app->user->is_admin)) {
+    if ((!$app->user->isMerchantUser($merchant_id)) && (!$app->user->is_admin)) {
       // Clear invalid context and display error
       if (isset($_SESSION['user']['active_merchant_id'])) {
         unset($_SESSION['user']['active_merchant_id']);
@@ -894,8 +951,9 @@ function neighborhub_init_merchant_context(&$app, $merchantId = null)
         'type' => 'error',
         'message' => 'Access Denied: You do not hold active staff clearance for this merchant storefront. Returning to customer view.'
       );
-      $app->set('current_view', 'customer');
-      neighborhub_init_customer_context($app);
+
+      header('Location: ?view=customer&p=dashboard', true, 302);
+
       return;
     }
 
@@ -1174,7 +1232,8 @@ function neighborhub_db_tables()
     'neighborhub_couriers',
     'neighborhub_delivery_tracking',
     'neighborhub_webrtc_sessions',
-    'neighborhub_usage_events'
+    'neighborhub_usage_events',
+    'neighborhub_merchant_storefronts'
   );
 }
 

@@ -602,10 +602,25 @@ function toggleKdsFullscreen(container) {
 // Track already auto-timed-out orders to prevent looping requests
 const autoTimedOutOrders = new Set();
 
+function parseKdsCreatedAt(createdStr) {
+  if (!/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(createdStr || "")) {
+    return NaN;
+  }
+
+  const timestamp = Date.parse(createdStr.replace(" ", "T") + "-04:00");
+  if (!Number.isFinite(timestamp)) return NaN;
+
+  const storedTime = new Date(timestamp - 4 * 60 * 60 * 1000)
+    .toISOString()
+    .slice(0, 19)
+    .replace("T", " ");
+  return storedTime === createdStr ? timestamp : NaN;
+}
+
 function startKdsTimers() {
   setInterval(function() {
     const cards = document.querySelectorAll('.nh-order-card');
-    const now = new Date();
+    const now = Date.now();
 
     cards.forEach(card => {
       let timerBadge = card.querySelector('.kds-timer-badge');
@@ -619,14 +634,22 @@ function startKdsTimers() {
       }
 
       const createdStr = card.getAttribute('data-created-at');
-      if (!createdStr) return;
-
-      const createdTime = new Date(createdStr.replace(/-/g, "/"));
-      if (isNaN(createdTime.getTime())) return;
-
-      const diffMs = now - createdTime;
-      const totalSecs = Math.floor(diffMs / 1000);
-      if (totalSecs < 0) return;
+      const createdTime = parseKdsCreatedAt(createdStr);
+      const totalSecs = Math.floor((now - createdTime) / 1000);
+      if (!Number.isFinite(totalSecs) || totalSecs < 0) {
+        const error = Number.isFinite(totalSecs) ? 'Order time is in the future' : 'Invalid order time';
+        timerBadge.textContent = 'Time unavailable';
+        timerBadge.title = error;
+        timerBadge.style.background = '#616161';
+        timerBadge.style.color = '#fff';
+        if (card.dataset.kdsTimeError !== error) {
+          console.warn(`[KDS Timer] ${error} for order #${card.getAttribute('data-order-id')}.`);
+          card.dataset.kdsTimeError = error;
+        }
+        return;
+      }
+      delete card.dataset.kdsTimeError;
+      timerBadge.title = '';
 
       const mins = Math.floor(totalSecs / 60);
       const secs = totalSecs % 60;

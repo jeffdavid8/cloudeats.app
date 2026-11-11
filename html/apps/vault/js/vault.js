@@ -59,6 +59,13 @@ const Vault = {
         method: "POST",
         data: JSON.stringify(data),
         dataType: "json",
+        error: function (xhr) {
+          const message = xhr.responseJSON && xhr.responseJSON.message;
+          M.toast({
+            html: "Transfer Failed: " + $("<div>").text(message || "Please try again.").html(),
+            classes: "red",
+          });
+        },
       },
       function (res) {
         if (res.status === "success") {

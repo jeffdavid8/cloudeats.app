@@ -54,12 +54,18 @@ if (!in_array($action, array(
   'list_customer_orders',
   'get_order',
   'get_product_builder_view',
+  'get_merchant_storefront',
+  'get_merchant_operational_status',
+  'get_merchant_storefront_draft',
+  'save_merchant_storefront_draft',
+  'publish_merchant_storefront',
+  'revert_merchant_storefront',
   'register_customer',
   'verify_registration',
 ))) {
   if (!isset($_SESSION['user']) || empty($_SESSION['user']['id'])) {
-    logger('----here----------------------------------------------');
-    logger($_SESSION['user']);
+    error_log('----here----------------------------------------------');
+    error_log(print_r($_SESSION['user'], true));
     http_response_code(401);
     exit(json_encode(array(
       'success' => false,
@@ -143,6 +149,24 @@ try {
 
     case 'get_order':
       handle_get_order($request);
+      break;
+    case 'get_merchant_storefront':
+      handle_get_merchant_storefront($request);
+      break;
+    case 'get_merchant_operational_status':
+      handle_get_merchant_operational_status($request);
+      break;
+    case 'get_merchant_storefront_draft':
+      handle_get_merchant_storefront_draft($request);
+      break;
+    case 'save_merchant_storefront_draft':
+      handle_save_merchant_storefront_draft($request);
+      break;
+    case 'publish_merchant_storefront':
+      handle_publish_merchant_storefront($request);
+      break;
+    case 'revert_merchant_storefront':
+      handle_revert_merchant_storefront($request);
       break;
 
     case 'get_order_ticket':
@@ -309,6 +333,68 @@ try {
     case 'upload_merchant_image':
       handle_merchant_upload_image($request);
       break;
+    case 'upload_storefront_asset':
+      authenticate_user($request);
+      $merchantId = (int)($request['merchant_id'] ?? 0);
+      $app = App::getInstance('neighborhub');
+      if (!$merchantId || (!$app->user->is_admin && !validateMerchantStaff($_SESSION['user']['id'], $merchantId))) {
+        send_json_response(['success' => false, 'error' => 'Unauthorized merchant access.'], 403);
+      }
+      if (empty($_FILES['asset']['name'])) {
+        send_json_response(['success' => false, 'error' => 'An image file is required.'], 400);
+      }
+      $app->includeModel('merchant');
+      $urls = Merchant::uploadGalleryImages($merchantId, $_FILES['asset']);
+      if (!$urls) {
+        send_json_response(['success' => false, 'error' => 'The storefront image could not be uploaded.'], 400);
+      }
+      $stmt = $app->db->prepare("SELECT id, image_url FROM neighborhub_images WHERE parent_type = 'merchant' AND parent_id = ? AND image_url = ? ORDER BY id DESC LIMIT 1");
+      $stmt->execute([$merchantId, $urls[0]]);
+      $image = $stmt->fetch(PDO::FETCH_ASSOC);
+      if (!$image) {
+        error_log("Uploaded merchant image record not found for merchant " . $merchantId);
+        send_json_response(['success' => false, 'error' => 'The uploaded image could not be located.'], 500);
+      }
+      send_json_response(['success' => true, 'image' => $image]);
+      break;
+    case 'delete_storefront_asset':
+      authenticate_user($request);
+      $merchantId = (int)($request['merchant_id'] ?? 0);
+      $imageId = (int)($request['image_id'] ?? 0);
+      $app = App::getInstance('neighborhub');
+      if (!$merchantId || !$imageId || (!$app->user->is_admin && !validateMerchantStaff($_SESSION['user']['id'], $merchantId))) {
+        send_json_response(['success' => false, 'error' => 'Unauthorized merchant access.'], 403);
+      }
+      $app->includeModel('merchantstorefront');
+      if (MerchantStorefront::assetIsReferenced($merchantId, $imageId)) {
+        send_json_response([
+          'success' => true,
+          'deleted' => false,
+          'message' => 'The previous image was retained because a storefront configuration still references it.'
+        ]);
+      }
+      $app->includeModel('merchant');
+      if (!Merchant::deleteGalleryImage($merchantId, $imageId)) {
+        send_json_response(['success' => false, 'error' => 'The storefront image could not be deleted.'], 500);
+      }
+      send_json_response(['success' => true]);
+      break;
+    case 'delete_merchant_gallery_image':
+      authenticate_user($request);
+      if (empty(App::getInstance()->user->is_admin)) {
+        send_json_response(['success' => false, 'error' => 'Administrator access is required.'], 403);
+      }
+      $merchantId = (int)($request['merchant_id'] ?? 0);
+      $imageId = (int)($request['image_id'] ?? 0);
+      if (!$merchantId || !$imageId) {
+        send_json_response(['success' => false, 'error' => 'Merchant and image identifiers are required.'], 400);
+      }
+      App::getInstance('neighborhub')->includeModel('merchant');
+      if (!Merchant::deleteGalleryImage($merchantId, $imageId)) {
+        send_json_response(['success' => false, 'error' => 'Unable to delete the merchant gallery image.'], 500);
+      }
+      send_json_response(['success' => true]);
+      break;
     case 'update_merchant_settings':
       authenticate_user($request);
 
@@ -332,6 +418,19 @@ try {
       if (isset($request['website']))                  $update_data['website'] = $request['website'];
       if (isset($request['facebook']))                 $update_data['facebook'] = $request['facebook'];
       if (isset($request['delivery_max_distance']))     $update_data['delivery_max_distance'] = (float)$request['delivery_max_distance'];
+      if (array_key_exists('profile_image_id', $request)) {
+        $imageId = filter_var($request['profile_image_id'], FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
+        if ($imageId === false) {
+          send_json_response(['success' => false, 'message' => 'A valid profile image is required.'], 400);
+        }
+        $imageStmt = $app->db->prepare("SELECT image_url FROM neighborhub_images WHERE id = ? AND parent_type = 'merchant' AND parent_id = ? LIMIT 1");
+        $imageStmt->execute([$imageId, $merchant_id]);
+        $imageUrl = $imageStmt->fetchColumn();
+        if ($imageUrl === false) {
+          send_json_response(['success' => false, 'message' => 'The selected image does not belong to this merchant.'], 400);
+        }
+        $update_data['image_url'] = $imageUrl;
+      }
 
       // Status validation matching your CHECK constraint ('online', 'offline', 'active', etc.)
       if (isset($request['status'])) {
@@ -559,6 +658,10 @@ try {
       $merchant = Merchant::getMerchantById($merchantId);
       if (!$merchant) {
         send_json_response(['success' => false, 'error' => 'Merchant not found.'], 404);
+      }
+      $operationalStatus = Merchant::getOperationalStatus($merchant);
+      if ($operationalStatus['status'] !== 'open') {
+        send_json_response(['success' => false, 'error' => 'This merchant is not currently accepting orders. ' . $operationalStatus['message']], 409);
       }
       $sandboxMode = !empty($merchant->sandbox_mode);
       $merchantItems = [];
@@ -1191,7 +1294,7 @@ try {
         send_json_response([
           'success' => false,
           'message' => 'A valid category ID and active/inactive status are required.'
-        ], 400);
+        ], 500);
       }
 
       try {
@@ -1586,6 +1689,107 @@ try {
 }
 
 
+
+function handle_get_merchant_operational_status(array $request): void
+{
+  $merchantId = filter_var($request['merchant_id'] ?? null, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
+  if ($merchantId === false || $merchantId === null) {
+    send_json_response(['success' => false, 'error' => 'A valid merchant_id is required.'], 400);
+  }
+  $app = App::getInstance('neighborhub');
+  if (session_status() === PHP_SESSION_ACTIVE && !session_write_close()) {
+    throw new RuntimeException('Unable to release the session for merchant status refresh.');
+  }
+  $app->includeModel('merchant');
+  $stmt = $app->db->prepare('SELECT status, store_hours FROM neighborhub_merchants WHERE id = ?');
+  $stmt->execute([$merchantId]);
+  $merchant = $stmt->fetch(PDO::FETCH_ASSOC);
+  if (!$merchant) {
+    send_json_response(['success' => false, 'error' => 'Merchant not found.'], 404);
+  }
+  header('Cache-Control: no-store');
+  send_json_response(['success' => true, 'merchant_id' => $merchantId, 'operational_status' => Merchant::getOperationalStatus($merchant)]);
+}
+
+function handle_get_merchant_storefront(array $request): void
+{
+  $merchantId = (int)($request['merchant_id'] ?? 0);
+  if ($merchantId < 1) {
+    send_json_response(['success' => false, 'error' => 'merchant_id parameter is required'], 400);
+  }
+
+  $app = App::getInstance('neighborhub');
+  $app->includeModel('merchantstorefront');
+  send_json_response([
+    'success' => true,
+    'merchant_id' => $merchantId,
+    'configuration' => MerchantStorefront::getByMerchantId($merchantId, 'published'),
+  ]);
+}
+
+function handle_get_merchant_storefront_draft(array $request): void
+{
+  $merchantId = (int)($request['merchant_id'] ?? 0);
+  $userId = (int)($_SESSION['user']['id'] ?? 0);
+  $isAdmin = !empty($_SESSION['user']['is_admin']);
+  if (!$isAdmin) {
+    ensure_merchant_access($userId, $merchantId, ['owner', 'staff']);
+  }
+
+  $app = App::getInstance('neighborhub');
+  $app->includeModel('merchantstorefront');
+  send_json_response([
+    'success' => true,
+    'merchant_id' => $merchantId,
+    'configuration' => MerchantStorefront::getByMerchantId($merchantId, 'draft'),
+  ]);
+}
+
+function handle_save_merchant_storefront_draft(array $request): void
+{
+  $merchantId = (int)($request['merchant_id'] ?? 0);
+  $userId = (int)($_SESSION['user']['id'] ?? 0);
+  $isAdmin = !empty($_SESSION['user']['is_admin']);
+  if (!$isAdmin) {
+    ensure_merchant_access($userId, $merchantId, ['owner', 'staff']);
+  }
+  $configuration = $request['configuration'] ?? null;
+  if (!is_array($configuration)) {
+    send_json_response(['success' => false, 'error' => 'A storefront configuration is required'], 400);
+  }
+
+  $app = App::getInstance('neighborhub');
+  $app->includeModel('merchantstorefront');
+  send_json_response(MerchantStorefront::saveDraft($merchantId, $configuration, $userId, $isAdmin));
+}
+
+function handle_publish_merchant_storefront(array $request): void
+{
+  $merchantId = (int)($request['merchant_id'] ?? 0);
+  $userId = (int)($_SESSION['user']['id'] ?? 0);
+  $isAdmin = !empty($_SESSION['user']['is_admin']);
+  if (!$isAdmin) {
+    ensure_merchant_access($userId, $merchantId, ['owner', 'staff']);
+  }
+
+  $app = App::getInstance('neighborhub');
+  $app->includeModel('merchantstorefront');
+  send_json_response(MerchantStorefront::publish($merchantId, $userId, $isAdmin));
+}
+
+function handle_revert_merchant_storefront(array $request): void
+{
+  $merchantId = (int)($request['merchant_id'] ?? 0);
+  $userId = (int)($_SESSION['user']['id'] ?? 0);
+  $isAdmin = !empty($_SESSION['user']['is_admin']);
+  if (!$isAdmin) {
+    ensure_merchant_access($userId, $merchantId, ['owner', 'staff']);
+  }
+
+  $app = App::getInstance('neighborhub');
+  $app->includeModel('merchantstorefront');
+  send_json_response(MerchantStorefront::revertDraft($merchantId, $userId));
+}
 
 function handle_register_customer(array $request)
 {
@@ -3011,9 +3215,15 @@ function handle_complete_delivery($request)
     error_log('--------------------------------------------------------------------------');
     */
 
-    if (!$order['sandbox_mode']) {
+    if (!$order['sandbox_mode'] && round($finalMerchantPayout, 2) != 0.0) {
       // Transfer merchant's final home-take share to their linked user wallet account
-      Vault::transfer(1, $merchant->user_id, $finalMerchantPayout, "Merchant Net Share Distribution for Order #{$order['id']} (App Fee Deducted)");
+      try {
+        Vault::transfer(1, $merchant->user_id, round($finalMerchantPayout, 2), "Merchant Net Share Distribution for Order #{$order['id']} (App Fee Deducted)");
+      } catch (Throwable $e) {
+        error_log("Vault settlement failed for completed delivery order {$orderId}: " . $e->getMessage());
+        http_response_code(500);
+        exit(json_encode(['success' => false, 'error' => 'Delivery was completed, but merchant settlement failed. Contact support.']));
+      }
     }
   }
 
@@ -4129,9 +4339,15 @@ function handle_mark_ready_for_pickup($request)
     error_log('--------------------------------------------------------------------------');
     */
 
-      if (!$order['sandbox_mode']) {
+      if (!$order['sandbox_mode'] && round($finalMerchantPayout, 2) != 0.0) {
         // Transfer merchant's final home-take share to their linked user wallet account
-        Vault::transfer(1, $merchant->user_id, $finalMerchantPayout, "Merchant Net Share Distribution for Order #{$order['id']} (App Fee Deducted)");
+        try {
+          Vault::transfer(1, $merchant->user_id, round($finalMerchantPayout, 2), "Merchant Net Share Distribution for Order #{$order['id']} (App Fee Deducted)");
+        } catch (Throwable $e) {
+          error_log("Vault settlement failed for ready pickup order {$orderId}: " . $e->getMessage());
+          http_response_code(500);
+          exit(json_encode(['success' => false, 'error' => 'Order was marked ready, but merchant settlement failed. Contact support.']));
+        }
       }
     }
   }
@@ -4543,7 +4759,12 @@ function ensure_merchant_access(int $user_id, int $merchant_id, array $allowed_r
   }
 
   try {
-    $db = App::getInstance('neighborhub')->db;
+    $app = App::getInstance('neighborhub');
+    $isPlatformAdmin = !empty($_SESSION['user']['is_admin']) || !empty($app->user->is_admin);
+    if ($isPlatformAdmin) {
+      return true;
+    }
+    $db = $app->db;
 
     // Check if user is linked to the merchant, active, and matching allowed roles
     $stmt = $db->prepare(
@@ -4572,12 +4793,13 @@ function ensure_merchant_access(int $user_id, int $merchant_id, array $allowed_r
     }
 
     // 🚨 Safety Check 3: Is their role approved for this explicit endpoint case?
-    if (!empty($allowed_roles) && !in_array($relation['staff_role'], $allowed_roles)) {
+    if (!empty($allowed_roles) && !in_array($relation['staff_role'], $allowed_roles, true)) {
       send_json_response([
         'success' => false,
         'message' => 'Unauthorized. This feature requires elevated roles: ' . implode(', ', $allowed_roles) . '.'
       ], 403);
     }
+    return true;
   } catch (Exception $e) {
     error_log("Security Router Gatekeeper Exception: " . $e->getMessage());
     send_json_response([

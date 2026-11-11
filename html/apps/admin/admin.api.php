@@ -9,6 +9,7 @@ if (!defined('MB_RUNNING')) exit;
 require_once __DIR__ . '/../../includes/SecurityHeaders.php';
 require_once __DIR__ . '/../../includes/RateLimiter.php';
 require_once __DIR__ . '/../../includes/classes/DatabaseMigrationRunner.class.php';
+require_once __DIR__ . '/includes/BackupFiles.php';
 
 // Set API security headers early
 SecurityHeaders::setAPIHeaders([
@@ -46,7 +47,7 @@ if (!function_exists('admin_user_is_admin')) {
             return false;
         }
 
-        return $app->authManager->userIsAdmin($_SESSION['user']);
+        return App::getInstance()->authManager->userIsAdmin($_SESSION['user']);
     }
 }
 
@@ -105,6 +106,7 @@ $csrf_protected_actions = [
     'toggle_event_logging',
     'clear_event_log',
     'migrate_json_file',
+    'restore_db',
     'migration_adopt_baseline',
     'migration_apply'
 ];
@@ -381,25 +383,52 @@ switch ($action) {
         break;
 
     case 'restore_db':
+        admin_require_admin();
+        if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
+            http_response_code(405);
+            echo json_encode(['success' => false, 'error' => 'POST required.']);
+            break;
+        }
         $db = $app->db;
         $results = [];
+        $restoredTables = [];
         $uploadedFile = $_FILES['db_file']['tmp_name'] ?? '';
+        $backupName = $_POST['backup_file'] ?? '';
         $targetTables = $_POST['target_tables'] ?? [];
 
-        if (empty($targetTables) || !is_array($targetTables)) {
+        if (empty($targetTables) || !is_array($targetTables) || count(array_filter($targetTables, 'is_string')) !== count($targetTables)) {
             http_response_code(400);
             echo json_encode(['success' => false, 'error' => 'Restructure matrix failure. Zero explicit table elements specified.']);
             exit;
         }
 
-        if (empty($uploadedFile) || !file_exists($uploadedFile)) {
+        if (!is_string($backupName) || ($backupName !== '' && $uploadedFile !== '')) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'error' => 'Choose exactly one backup source.']);
+            exit;
+        }
+        if ($backupName !== '') {
+            try {
+                $uploadedFile = BackupFiles::resolve(STORAGE_PATH . DIRECTORY_SEPARATOR . 'backups', $backupName);
+            } catch (InvalidArgumentException $e) {
+                http_response_code(400);
+                echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+                exit;
+            }
+        } elseif (empty($uploadedFile) || !is_uploaded_file($uploadedFile) || ($_FILES['db_file']['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
             http_response_code(400);
             echo json_encode(['success' => false, 'error' => 'No database backup file uploaded or upload failed.']);
             exit;
         }
 
         // Extract and Verify Payload Contents
-        $payloadContent = file_get_contents($uploadedFile);
+        $payloadContent = @file_get_contents($uploadedFile);
+        if ($payloadContent === false) {
+            error_log('restore_db: unable to read selected backup file.');
+            http_response_code(400);
+            echo json_encode(['success' => false, 'error' => 'Unable to read the selected backup file.']);
+            exit;
+        }
         $data = json_decode($payloadContent, true);
 
         if (!$data || !isset($data['tables']) || !is_array($data['tables'])) {
@@ -420,7 +449,8 @@ switch ($action) {
                 if (empty($table)) continue;
 
                 // Check if table exists in database
-                $tableCheck = $db->query("SELECT 1 FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = '{$table}' LIMIT 1");
+                $tableCheck = $db->prepare("SELECT 1 FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = ? AND table_type = 'BASE TABLE' LIMIT 1");
+                $tableCheck->execute([$table]);
                 if ($tableCheck->fetchColumn() === false) {
                     $results['restore'][$table][] = "Table [{$table}] does not exist in database. Skipping.";
                     continue;
@@ -433,72 +463,89 @@ switch ($action) {
                 }
 
                 $rows = $data['tables'][$table];
+                if (!is_array($rows) || !array_is_list($rows)) {
+                    throw new RuntimeException("Invalid rows for table [{$table}].");
+                }
+                $quotedTable = '`' . str_replace('`', '``', $table) . '`';
                 if (empty($rows)) {
-                    $db->exec("DELETE FROM `{$table}`;");
+                    $db->exec("DELETE FROM {$quotedTable};");
+                    $restoredTables[] = $table;
                     $results['restore'][$table][] = "Table [{$table}] cleared (backup dataset contained 0 rows).";
                     continue;
                 }
 
                 // Detect spatial/geometry columns (e.g. location POINT) so we wrap them in ST_PointFromText()
                 $spatialColumns = [];
-                try {
-                    $colStmt = $db->query("
+                $validColumns = [];
+                $colStmt = $db->prepare("
                         SELECT COLUMN_NAME, LOWER(DATA_TYPE) as data_type
                         FROM information_schema.COLUMNS
-                        WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = '{$table}'
+                        WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ?
                     ");
-                    while ($col = $colStmt->fetch(PDO::FETCH_ASSOC)) {
-                        if (in_array($col['data_type'], ['point','geometry','linestring','polygon','multipoint','multilinestring','multipolygon','geometrycollection'])) {
-                            $spatialColumns[] = $col['COLUMN_NAME'];
-                        }
+                $colStmt->execute([$table]);
+                while ($col = $colStmt->fetch(PDO::FETCH_ASSOC)) {
+                    $validColumns[] = $col['COLUMN_NAME'];
+                    if (in_array($col['data_type'], ['point','geometry','linestring','polygon','multipoint','multilinestring','multipolygon','geometrycollection'])) {
+                        $spatialColumns[] = $col['COLUMN_NAME'];
                     }
-                } catch (Exception $e) {
-                    $spatialColumns = [];
                 }
-
-                // Clear existing table content to prevent UNIQUE key/PKey constraint collisions
-                $db->exec("DELETE FROM `{$table}`;");
 
                 // Grab array columns dynamically from the first payload chunk element
                 $sampleRow = $rows[0];
+                if (!is_array($sampleRow) || !$sampleRow) {
+                    throw new RuntimeException("Invalid row for table [{$table}].");
+                }
                 $columns = array_keys($sampleRow);
+                if (array_diff($columns, $validColumns)) {
+                    throw new RuntimeException("Backup contains unknown columns for table [{$table}].");
+                }
+                foreach ($rows as $row) {
+                    if (!is_array($row) || count($row) !== count($columns) || array_diff($columns, array_keys($row))) {
+                        throw new RuntimeException("Inconsistent rows for table [{$table}].");
+                    }
+                }
+
+                // Clear existing table content to prevent UNIQUE key/PKey constraint collisions
+                $db->exec("DELETE FROM {$quotedTable};");
 
                 // Construct statement strings mapping query variables safely
-                $columnList = '`' . implode('`, `', $columns) . '`';
+                $columnList = implode(', ', array_map(static fn($column) => '`' . str_replace('`', '``', $column) . '`', $columns));
                 $placeholders = [];
                 foreach ($columns as $col) {
                     if (in_array($col, $spatialColumns)) {
-                        $placeholders[] = "ST_PointFromText(:{$col})";
+                        $placeholders[] = "ST_PointFromText(?)";
                     } else {
-                        $placeholders[] = ":{$col}";
+                        $placeholders[] = "?";
                     }
                 }
                 $placeholderList = implode(', ', $placeholders);
 
-                $sql = "INSERT INTO `{$table}` ({$columnList}) VALUES ({$placeholderList})";
+                $sql = "INSERT INTO {$quotedTable} ({$columnList}) VALUES ({$placeholderList})";
                 $stmt = $db->prepare($sql);
 
                 $rowCount = 0;
                 foreach ($rows as $row) {
                     $bindArray = [];
-                    foreach ($row as $columnName => $value) {
+                    foreach ($columns as $columnName) {
+                        $value = $row[$columnName];
                         if (in_array($columnName, $spatialColumns)) {
                             // ST_PointFromText expects valid WKT (e.g. 'POINT(x y)') or NULL
                             if (empty($value) || !is_string($value) || !preg_match('/^point\s*\(/i', trim($value))) {
-                                $bindArray[':' . $columnName] = null;
+                                $bindArray[] = null;
                             } else {
-                                $bindArray[':' . $columnName] = trim($value);
+                                $bindArray[] = trim($value);
                             }
                         } elseif (is_array($value) || is_object($value)) {
-                            $bindArray[':' . $columnName] = json_encode($value, JSON_UNESCAPED_UNICODE);
+                            $bindArray[] = json_encode($value, JSON_UNESCAPED_UNICODE);
                         } else {
-                            $bindArray[':' . $columnName] = $value;
+                            $bindArray[] = $value;
                         }
                     }
                     $stmt->execute($bindArray);
                     $rowCount++;
                 }
 
+                $restoredTables[] = $table;
                 $results['restore'][$table][] = "Successfully restored {$rowCount} record segments into [{$table}].";
             }
 
@@ -511,7 +558,7 @@ switch ($action) {
             echo json_encode([
                 'success' => true,
                 'data' => [
-                    'tables_restored' => $targetTables,
+                    'tables_restored' => $restoredTables,
                     'results' => $results,
                 ],
             ]);

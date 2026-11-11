@@ -47,9 +47,39 @@ if (!empty($_SESSION['login_error'])) {
         justify-content: center;
         margin: 0;
     }
-    #nh-terms-banner {
-        display: none;
+
+    body.header-announcement {
+        & .app-container {
+            margin-top: 4rem;
+            padding: 0 0 4rem 0;
+        }
     }
+
+    /* --- Medium Devices (Tablets/Small Laptops, 768px and up) --- */
+    @media (min-width: 768px) {
+
+        /* Styles for tablets/small laptops */
+        body.header-announcement {
+            & .app-container {
+                margin-top: 4rem;
+                padding: 5rem 0 4rem 0;
+            }
+        }
+    }
+
+    /* --- Large Devices (Laptops/Desktops, 992px and up) --- */
+    @media (min-width: 992px) {
+        /* Styles for desktops */
+        /* Styles for tablets/small laptops */
+        body.header-announcement {
+            & .app-container {
+                margin-top: 4rem;
+                padding: 10rem 0 4rem 0;
+            }
+        }
+    }
+
+
     .login-container {
         background: white;
         border-radius: 10px;
@@ -625,11 +655,12 @@ if (!empty($_SESSION['login_error'])) {
                 const formData = new FormData(this);
                 const dataObject = JSON.stringify(Object.fromEntries(formData.entries()));
 
+                loading(4);
                 // 🏗️ Using the mb.post wrapper
                 // We point to "auth" api with "login" action
                 mb.post('?api=auth', dataObject)
                     .then(data => {
-
+                        loading(0);
                         if (data && data.success) {
                             // 🎷 Success! Play the "Genuine" Signal
                             play('audio/star trek sounds/computer_work_beep.mp3');

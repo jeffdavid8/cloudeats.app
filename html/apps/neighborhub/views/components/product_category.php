@@ -9,6 +9,9 @@
    */
   //error_log(print_r($category, true));
   $categoryName = $products[0]['category_name'];
+  $merchantStatus = strtolower(trim((string)($merchant->status ?? '')));
+  $merchantCanAcceptOrders = in_array($merchantStatus, ['active', 'online', '1'], true)
+    || $merchant->status === 1;
 
   $cleanId = preg_replace('/\s+/', '-', preg_replace('/[^a-z0-9\s-]/', '', str_replace('&', 'and', strtolower($categoryName))));
   // Output: burgers-and-sandwiches
@@ -21,8 +24,7 @@
         <p class="">This merchant hasn't cataloged any items yet.</p>
       </div>
     <?php else: ?>
-      <?
-      foreach ($products as $prod):
+      <?php foreach ($products as $prod):
         $meta = is_string($prod['meta']) ? json_decode($prod['meta'], true) : $prod['meta'];
         $productType = $prod['type'] ?? 'default';
         $isCustomizable = (isset($meta['form_builder']['steps']));
@@ -30,7 +32,7 @@
         $isSpotlit = ($prod['id'] == $spotlightProductId);
       ?>
         <div class="col s12 m6 l4">
-          <div class="card product-item-card" style="border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; <?= ($merchant->status == 'online') ? 'height: auto;' : 'padding-bottom: 2rem;' ?>border: <?php echo $isSpotlit ? '2px solid #ff9800;' : 'none;'; ?>">
+          <div class="card product-item-card" style="border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; <?= $merchantCanAcceptOrders ? 'height: auto;' : 'padding-bottom: 2rem;' ?>border: <?php echo $isSpotlit ? '2px solid #ff9800;' : 'none;'; ?>">
             <div class="card-image" style="">
               <div style="<?= (empty($prod['image_url'])) ? ' display: none;' : '' ?>">
                 <?php if (!empty($prod['image_url'])): ?>
@@ -41,11 +43,11 @@
                   </div>
                 <?php endif; ?>
               </div>
-              <? if (!empty($prod['image_url'])): ?>
+              <?php if (!empty($prod['image_url'])): ?>
                 <span class="card-title font-weight-bold" style="background: rgba(0,0,0,0.6); width: 100%; padding: 8px 15px; font-size:17px; bottom:0; display: block; position: initial;">
                   $<?php echo number_format($prod['price'], 2); ?>
                 </span>
-              <? endif; ?>
+              <?php endif; ?>
             </div>
 
             <div class="card-content" style="flex-grow: 1; padding: 15px;<?= (empty($prod['image_url'])) ? 'position: relative; padding-bottom: 4rem;' : '' ?>">
@@ -61,15 +63,15 @@
                   echo nl2br($prod['description']); ?>
                 </p>
               <?php endif; ?>
-              <? if (empty($prod['image_url'])): ?>
+              <?php if (empty($prod['image_url'])): ?>
                 <span class="card-body-price font-weight-bold" style="width: 100%; padding: 8px 15px; font-size:17px; bottom:0; position: absolute; bottom: 0;left: 0;">
                   $<?php echo number_format($prod['price'], 2); ?>
                 </span>
-              <? endif; ?>
+              <?php endif; ?>
 
             </div>
 
-            <? if ($merchant->status == 'online') : ?>
+            <?php if ($merchantCanAcceptOrders): ?>
               <!-- Interactive Quantity + Action Control Center Pad -->
               <div class="card-action" style="border-top: 1px solid #7c7c7c; padding: 12px 15px;">
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
@@ -114,7 +116,7 @@
                   Add to Order <i class="fas fa-shopping-basket right"></i>
                 </button>
               </div>
-            <? endif; ?>
+            <?php endif; ?>
           </div>
         </div>
       <?php endforeach; ?>

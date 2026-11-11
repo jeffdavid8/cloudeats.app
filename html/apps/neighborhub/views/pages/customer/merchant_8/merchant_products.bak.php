@@ -12,6 +12,45 @@ $customer = $this->get('customer');
 $merchant = $this->get('merchant');
 $menus = $this->get('menus');
 $products = $this->get('products');
+$storefrontConfig = $this->get('storefront_config', MerchantStorefront::defaultConfiguration());
+$storefrontColors = $storefrontConfig['colors'] ?? [];
+$storefrontBlocks = is_array($storefrontConfig['blocks'] ?? null) ? $storefrontConfig['blocks'] : [];
+$storefrontImageUrls = [];
+foreach ($storefrontBlocks as $storefrontBlock) {
+  if (($storefrontBlock['type'] ?? '') !== 'image_text') {
+    continue;
+  }
+  $imageId = (int)($storefrontBlock['content']['image_id'] ?? 0);
+  if ($imageId < 1) {
+    continue;
+  }
+  $imageStatement = App::getInstance('neighborhub')->db->prepare(
+    "SELECT image_url
+     FROM neighborhub_images
+     WHERE id = ? AND parent_type = 'merchant' AND parent_id = ?
+     LIMIT 1"
+  );
+  $imageStatement->execute([$imageId, (int)$merchant->id]);
+  $imageUrl = $imageStatement->fetchColumn();
+  if ($imageUrl !== false) {
+    $storefrontImageUrls[$imageId] = (string)$imageUrl;
+  }
+}
+
+$storefrontProducts = [];
+foreach ($storefrontBlocks as $storefrontBlock) {
+  if (($storefrontBlock['type'] ?? '') !== 'featured_product') {
+    continue;
+  }
+  $productId = (int)($storefrontBlock['content']['product_id'] ?? 0);
+  if ($productId < 1 || isset($storefrontProducts[$productId])) {
+    continue;
+  }
+  $featuredProduct = Product::getProductById($productId);
+  if (is_array($featuredProduct) && (int)($featuredProduct['merchant_id'] ?? 0) === (int)$merchant->id) {
+    $storefrontProducts[$productId] = $featuredProduct;
+  }
+}
 
 $current_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $params = $_GET;
@@ -115,12 +154,17 @@ if ($spotlightProductId) {
     --brand-pill-bg: #26211E;
   }
 
+  .nh-terms-banner-content {
+    color: #1c1917;
+  }
+
   .nh-terms-banner-content a {
-    color: #ffffff;
+    color: #1c1917;
+    font-weight: 700;
   }
 
   .nh-terms-banner-content a:hover {
-    color: #ffcc7c;
+    color: #8b1e1e;
   }
 
   /* Custom Owned Background Image Overlay Support */
@@ -156,11 +200,32 @@ if ($spotlightProductId) {
   }
 
   body {
-    padding-top: 8rem;
+    padding-top: 0;
     background-color: var(--brand-bg) !important;
     color: var(--brand-text-main);
     font-family: 'Open Sans', 'Roboto', 'Helvetica Neue', sans-serif;
     transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  body[data-storefront-theme] {
+    --brand-primary: <?= htmlspecialchars($storefrontColors['primary'] ?? '#4f46e5', ENT_QUOTES, 'UTF-8') ?>;
+    --brand-bg: <?= htmlspecialchars($storefrontColors['background'] ?? '#ffffff', ENT_QUOTES, 'UTF-8') ?>;
+    --brand-text-main: <?= htmlspecialchars($storefrontColors['text'] ?? '#111827', ENT_QUOTES, 'UTF-8') ?>;
+  }
+
+  body[data-storefront-layout="hero-split"] .pk-hero-banner {
+    justify-content: flex-start;
+  }
+
+  body[data-storefront-layout="hero-minimal"] .pk-hero-banner {
+    height: 48vh;
+  }
+
+  html.nightMode body[data-storefront-theme] {
+    --brand-bg: #1c1917;
+    --brand-text-main: #f5f5f4;
+    --merchant-background: #1c1917;
+    --merchant-text: #f5f5f4;
   }
 
   body.scrolled {
@@ -186,10 +251,26 @@ if ($spotlightProductId) {
     border-bottom: none;
   }
 
+  #nh-terms-banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1200;
+    box-sizing: border-box;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  body.scrolled #nh-terms-banner {
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
+  }
+
   header.header {
     z-index: 997;
-    top: 4rem;
+    top: var(--nh-terms-height, 0px);
     border-bottom: none;
+    transition: top 0.3s ease;
   }
 
   header.header nav {
@@ -211,16 +292,184 @@ if ($spotlightProductId) {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
   }
 
-  /* Floating Branding Logo */
-  .merchant-header-image {
+  .merchant-storefront-header-stack {
     position: fixed;
-    transition: all 0.3s;
-    top: 3rem;
+    top: calc(var(--nh-terms-height, 0px) + 65px);
+    left: 0;
+    right: 0;
+    z-index: 1100;
+    background: var(--brand-nav-bg);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+    transition: top 0.3s ease;
+  }
+
+  body.scrolled .merchant-storefront-header-stack {
+    top: 65px;
+  }
+
+  .merchant-header-logo-row,
+  .merchant-context-subheader {
     display: flex;
     align-items: center;
-    width: 180px;
-    right: calc(50% - 90px);
-    z-index: 999;
+    justify-content: center;
+    min-height: 58px;
+    background: var(--brand-nav-bg);
+    border-bottom: 1px solid var(--brand-nav-border);
+  }
+
+  body:not(.scrolled) .merchant-context-subheader,
+  body.scrolled .merchant-header-logo-row {
+    display: none;
+  }
+
+  .merchant-storefront-header-stack:not(:has(.merchant-header-logo-row)) {
+    box-shadow: none;
+  }
+
+  body.nh-operational-status-hidden .nh-merchant-operational-status {
+    display: none;
+  }
+
+  .merchant-context-subheader-inner {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-height: 58px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  .merchant-context-identity {
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+    gap: 0.65rem;
+    min-width: 0;
+    color: var(--brand-text-main);
+    font-weight: 800;
+    white-space: nowrap;
+  }
+
+  .merchant-context-identity img {
+    width: 42px;
+    height: 42px;
+    object-fit: cover;
+    border: 2px solid var(--brand-gold);
+    border-radius: 50%;
+  }
+
+  .merchant-context-identity span {
+    max-width: 220px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .merchant-context-categories {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+
+  .merchant-context-categories a {
+    flex: 0 0 auto;
+    padding: 0.45rem 0.7rem;
+    border-radius: 999px;
+    color: var(--brand-text-main);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .merchant-context-categories a:hover,
+  .merchant-context-categories a:focus {
+    background: var(--brand-primary);
+    color: #fff;
+    outline: none;
+  }
+
+  .nightMode body .merchant-context-subheader {
+    background: #1c1917;
+    border-bottom-color: #44403c;
+  }
+
+  .nightMode body .merchant-storefront-header-stack,
+  .nightMode body .merchant-header-logo-row {
+    background: #1c1917;
+  }
+
+  @media (max-width: 600px) {
+    .merchant-context-subheader-inner {
+      gap: 0.6rem;
+      padding: 0 0.6rem;
+    }
+
+    .merchant-context-identity span {
+      display: none;
+    }
+
+    .merchant-context-identity img {
+      width: 38px;
+      height: 38px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .merchant-storefront-header-stack,
+    .merchant-context-subheader,
+    .merchant-header-logo-row,
+    #nh-terms-banner,
+    header.header { transition: none; }
+  }
+
+  /* Floating Branding Logo */
+  .merchant-header-image {
+    position: relative;
+    top: auto;
+    right: auto;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    z-index: 1;
+  }
+
+  body .merchant-header-logo-row .merchant-header-image {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: 100px;
+    transform: none;
+  }
+
+  body[data-storefront-logo-state="intro"] .merchant-header-image {
+    width: min(72vw, 420px);
+  }
+
+  body[data-storefront-logo-state="intro"] .merchant-header-logo-row .merchant-header-image {
+    width: min(72vw, 420px);
+  }
+
+  body[data-storefront-logo-state="intro"] .merchant-header-image img {
+    border-width: 8px;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55);
+  }
+
+  body[data-storefront-logo-state="compact"] .merchant-header-image {
+    width: 60px;
+  }
+
+  body[data-storefront-logo-state="compact"] .merchant-header-logo-row .merchant-header-image {
+    width: 60px;
+  }
+
+  body[data-storefront-logo-state="compact"] .merchant-header-image img {
+    border: none;
   }
 
   .merchant-header-image img {
@@ -231,14 +480,15 @@ if ($spotlightProductId) {
     transition: all 0.4s;
   }
 
-  body.scrolled .merchant-header-image {
-    top: 2px;
-    width: 100px;
-    right: calc(50% - 50px);
+  .merchant-header-logo-row .merchant-header-image img {
+    border: none;
   }
 
-  body.scrolled .merchant-header-image img {
-    border: none;
+  @media (prefers-reduced-motion: reduce) {
+    .merchant-header-image,
+    .merchant-header-image img {
+      transition: none !important;
+    }
   }
 
   /* Card Styling */
@@ -638,7 +888,55 @@ if ($spotlightProductId) {
     z-index: initial;
   }
 </style>
-<div class="pk-hero-banner">
+<script>
+  (function () {
+    if (document.body) {
+      document.body.dataset.storefrontLogoState = 'intro';
+    }
+
+    function applyStorefrontAttributes() {
+      if (!document.body) {
+        return;
+      }
+      document.body.dataset.storefrontTheme = <?= json_encode($storefrontConfig['theme'] ?? 'default') ?>;
+      document.body.dataset.storefrontLayout = <?= json_encode($storefrontConfig['layout'] ?? 'hero-centered') ?>;
+      document.body.dataset.storefrontPreview = <?= !empty($this->get('storefront_preview')) ? '"true"' : '"false"' ?>;
+    }
+
+    function finishLogoIntro() {
+      if (!document.body) {
+        return;
+      }
+      document.body.dataset.storefrontLogoState = 'compact';
+      document.dispatchEvent(new CustomEvent('storefront-logo-state-changed'));
+    }
+
+    if (document.body) {
+      applyStorefrontAttributes();
+      window.addEventListener('load', function () {
+        window.requestAnimationFrame(finishLogoIntro);
+      }, { once: true });
+    } else {
+      document.addEventListener('DOMContentLoaded', function () {
+        applyStorefrontAttributes();
+        window.addEventListener('load', function () {
+          window.requestAnimationFrame(finishLogoIntro);
+        }, { once: true });
+      }, { once: true });
+    }
+  }());
+</script>
+<?php if (!empty($this->get('storefront_preview'))): ?>
+  <div class="container" role="status">
+    <div class="card amber lighten-5">
+      <div class="card-content amber-text text-darken-4">
+        <strong>Draft preview</strong>
+        <span>This view is private and uses the saved storefront draft.</span>
+      </div>
+    </div>
+  </div>
+<?php endif; ?>
+<div id="top" class="pk-hero-banner">
   <div style="text-align: center; width: 100%;">
     <!-- Merchant Logo -->
     <img class="merchant-logo-image" src="<?= $menu_meta[$activeMenuId]['text-logo-image'] ?>" />
@@ -658,6 +956,86 @@ if ($spotlightProductId) {
   </div>
 </div>
 
+<nav class="merchant-context-subheader" aria-label="Merchant context and quick categories">
+  <div class="merchant-context-subheader-inner">
+    <a class="merchant-context-identity scroll-to-top-link" href="#top" aria-label="Return to top of <?= htmlspecialchars($merchant->business_name, ENT_QUOTES, 'UTF-8') ?>">
+      <img src="<?= htmlspecialchars($merchant->image_url, ENT_QUOTES, 'UTF-8') ?>" alt="">
+      <span><?= htmlspecialchars($merchant->business_name, ENT_QUOTES, 'UTF-8') ?></span>
+    </a>
+    <div class="merchant-context-categories">
+      <?php foreach (($menus[$activeMenuId]['categories'] ?? []) as $category):
+        $cleanId = preg_replace('/\s+/', '-', preg_replace('/[^a-z0-9\s-]/', '', str_replace('&', 'and', strtolower($category['name']))));
+      ?>
+        <a href="#<?= htmlspecialchars($cleanId, ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($category['name'], ENT_QUOTES, 'UTF-8') ?></a>
+      <?php endforeach; ?>
+    </div>
+  </div>
+</nav>
+
+
+<?php if (!empty($storefrontBlocks)): ?>
+  <div class="container merchant-storefront-blocks" aria-label="Merchant announcements">
+    <?php foreach ($storefrontBlocks as $storefrontBlock):
+      $blockType = (string)($storefrontBlock['type'] ?? '');
+      $blockContent = is_array($storefrontBlock['content'] ?? null) ? $storefrontBlock['content'] : [];
+      $blockTitle = trim((string)($blockContent['title'] ?? ''));
+      $blockText = trim((string)($blockContent['text'] ?? ''));
+    ?>
+      <?php if ($blockType === 'announcement' && ($blockTitle !== '' || $blockText !== '')): ?>
+        <section class="card pk-card merchant-storefront-block merchant-storefront-announcement">
+          <div class="card-content">
+            <?php if ($blockTitle !== ''): ?><h3 class="pk-text-main"><?php echo htmlspecialchars($blockTitle, ENT_QUOTES, 'UTF-8'); ?></h3><?php endif; ?>
+            <?php if ($blockText !== ''): ?><p class="pk-text-main"><?php echo nl2br(htmlspecialchars($blockText, ENT_QUOTES, 'UTF-8')); ?></p><?php endif; ?>
+          </div>
+        </section>
+      <?php elseif ($blockType === 'featured_product'):
+        $blockProduct = $storefrontProducts[(int)($blockContent['product_id'] ?? 0)] ?? null;
+        if ($blockProduct):
+      ?>
+        <section class="card pk-card merchant-storefront-block merchant-storefront-featured-product">
+          <?php if (!empty($blockProduct['image_url'])): ?>
+            <img class="responsive-img" src="<?php echo htmlspecialchars($blockProduct['image_url'], ENT_QUOTES, 'UTF-8'); ?>" alt="">
+          <?php endif; ?>
+          <div class="card-content">
+            <h3 class="pk-text-main"><?php echo htmlspecialchars((string)$blockProduct['name'], ENT_QUOTES, 'UTF-8'); ?></h3>
+            <p class="pk-text-main"><?php echo nl2br(htmlspecialchars((string)$blockProduct['description'], ENT_QUOTES, 'UTF-8')); ?></p>
+            <strong>$<?php echo number_format((float)$blockProduct['price'], 2); ?></strong>
+            <a class="btn waves-effect waves-light" href="<?php echo htmlspecialchars($this->config['base_url'] . '/?app=neighborhub&view=customer&p=merchant_products&merchant_id=' . (int)$merchant->id . '&product_id=' . (int)$blockProduct['id'], ENT_QUOTES, 'UTF-8'); ?>">View item</a>
+          </div>
+        </section>
+      <?php endif; elseif ($blockType === 'image_text' && ($blockTitle !== '' || $blockText !== '' || !empty($storefrontImageUrls[(int)($blockContent['image_id'] ?? 0)]))): ?>
+        <section class="card pk-card merchant-storefront-block merchant-storefront-image-text">
+          <?php $imageUrl = $storefrontImageUrls[(int)($blockContent['image_id'] ?? 0)] ?? ''; ?>
+          <?php if ($imageUrl !== ''): ?><img class="responsive-img" src="<?php echo htmlspecialchars($imageUrl, ENT_QUOTES, 'UTF-8'); ?>" alt=""><?php endif; ?>
+          <div class="card-content">
+            <?php if ($blockTitle !== ''): ?><h3 class="pk-text-main"><?php echo htmlspecialchars($blockTitle, ENT_QUOTES, 'UTF-8'); ?></h3><?php endif; ?>
+            <?php if ($blockText !== ''): ?><p class="pk-text-main"><?php echo nl2br(htmlspecialchars($blockText, ENT_QUOTES, 'UTF-8')); ?></p><?php endif; ?>
+          </div>
+        </section>
+      <?php elseif ($blockType === 'call_to_action'):
+        $label = trim((string)($blockContent['label'] ?? ''));
+        $url = trim((string)($blockContent['url'] ?? ''));
+        $urlScheme = strtolower((string)parse_url($url, PHP_URL_SCHEME));
+        if ($label !== '' && ($urlScheme === '' || in_array($urlScheme, ['http', 'https'], true))):
+      ?>
+        <section class="card pk-card merchant-storefront-block merchant-storefront-call-to-action">
+          <div class="card-content">
+            <a class="btn-large waves-effect waves-light" href="<?php echo htmlspecialchars($url, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($label, ENT_QUOTES, 'UTF-8'); ?></a>
+          </div>
+        </section>
+      <?php endif; elseif ($blockType === 'store_information'): ?>
+        <section class="card pk-card merchant-storefront-block merchant-storefront-information">
+          <div class="card-content">
+            <h3 class="pk-text-main">Store information</h3>
+            <p class="pk-text-main"><?php echo htmlspecialchars($merchant->address . ', ' . $merchant->city . ', ' . $merchant->state . ' ' . $merchant->zip_code, ENT_QUOTES, 'UTF-8'); ?></p>
+            <?php if (!empty($merchant->phone)): ?><p class="pk-text-main"><?php echo htmlspecialchars($merchant->phone, ENT_QUOTES, 'UTF-8'); ?></p><?php endif; ?>
+            <?php if (!empty($merchant->store_hours)): ?><p class="pk-text-main"><?php echo nl2br(htmlspecialchars(Merchant::formatStoreHours($merchant->store_hours), ENT_QUOTES, 'UTF-8')); ?></p><?php endif; ?>
+          </div>
+        </section>
+      <?php endif; ?>
+    <?php endforeach; ?>
+  </div>
+<?php endif; ?>
 
 <div class="container">
   <!-- Merchant Info Card -->

@@ -173,7 +173,7 @@ if ($spotlightProductId) {
   }
 
   body.scrolled .top-right-dropdown-wrapper {
-    top: 5rem;
+    top: 7rem;
   }
 
   .nightMode .top-right-dropdown-wrapper a.dropdown-trigger i {
@@ -356,7 +356,7 @@ if ($spotlightProductId) {
   }
 </style>
 
-<div class="container">
+<div class="container menu-container">
   <div class="card horizontal border-radius-smooth" style="border-radius: 30px; box-shadow: none; margin-top: 2rem; border: none; ">
     <div class="card-stacked">
       <div class="card-content">

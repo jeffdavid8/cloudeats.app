@@ -104,7 +104,7 @@ if (!empty($share_image_name)) {
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/brands.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" />
   <!--Import primary css-->
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=<?= (int)@filemtime(__DIR__ . '/../../css/style.css') ?>" />
   <link rel="stylesheet" href="css/respond.css" />
   <link rel="stylesheet" href="css/jquery.json-viewer.css">
   <!--Import night mode css-->

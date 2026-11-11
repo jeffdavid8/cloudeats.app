@@ -12,13 +12,23 @@
     --transition-speed: 0.3s;
 }
 
+.header-announcement {
+    background-color: var(--primary-color);
+    color: var(--background-color);
+    text-align: center;
+    font-size: 1rem;
+    font-weight: bold;
+}
 
+.menu-container {
+    padding-top: 0;
+}
 
 
 body.header-announcement {
   .app-container {
     margin-top: 4rem;
-    padding: 10rem 0 4rem 0;
+    padding: 0 0 4rem 0;
   }
   .top-right-dropdown-wrapper {
     top: 14rem;
@@ -83,7 +93,7 @@ body.scrolled .merchant-header-image .online-status-dot {
 }
 
 body.scrolled .top-right-dropdown-wrapper {
-  top: 5rem;
+  top: 7rem;
 }
 
 header.header img.scroll-to-top-link {

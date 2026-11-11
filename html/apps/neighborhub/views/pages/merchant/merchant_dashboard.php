@@ -945,7 +945,7 @@ $isShopOnline = ($rawStatus === 'active' || $rawStatus === 'online' || $rawStatu
     const previousState = !checkbox.checked;
     const categoryId = Number($checkbox.data('category-id'));
     checkbox.disabled = true;
-
+    loading(4);
     mb.ajax({
       type: 'POST',
       url: '/?api=neighborhub&action=update_menu_category_status',
@@ -966,6 +966,7 @@ $isShopOnline = ($rawStatus === 'active' || $rawStatus === 'online' || $rawStatu
         M.toast({ html: 'Unable to update category availability. Try again.', classes: 'red' });
       },
       complete: function() {
+        loading(0);
         checkbox.disabled = false;
       }
     });

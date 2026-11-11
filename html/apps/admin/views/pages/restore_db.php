@@ -5,7 +5,6 @@ if (!defined('MB_RUNNING')) exit;
  * 
  * @var array $tables
  */
-logger('here4');
 ?>
 
 <style>
@@ -89,6 +88,13 @@ logger('here4');
   }
 </style>
 
+<nav class="clean-nav breadcrumb-nav" aria-label="Breadcrumb">
+  <div class="nav-wrapper">
+    <a href="?app=admin&p=dashboard" class="breadcrumb">Admin Dashboard</a>
+    <a href="?app=admin&p=restore_db" class="breadcrumb" aria-current="page">Restore DB</a>
+  </div>
+</nav>
+
 <div class="restore-container">
   <form id="restoreDbForm">
     <h3>1. Select Tables to Target for Overwrite</h3>
@@ -106,13 +112,27 @@ logger('here4');
       <?php endforeach; ?>
     </div>
 
-    <h3>2. Upload Source Payload</h3>
+    <h3>2. Choose a JSON Backup</h3>
+    <label for="backupFile">Server backup</label>
+    <select id="backupFile" class="browser-default">
+      <option value="">Choose a server backup, or upload a file below</option>
+      <?php foreach ($backupFiles as $backupFile): ?>
+        <option value="<?php echo htmlspecialchars($backupFile, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($backupFile, ENT_QUOTES, 'UTF-8'); ?></option>
+      <?php endforeach; ?>
+    </select>
+    <?php if ($backupError): ?>
+      <p role="alert"><?php echo htmlspecialchars($backupError, ENT_QUOTES, 'UTF-8'); ?></p>
+    <?php elseif (!$backupFiles): ?>
+      <p>No JSON backups found on the server. You can upload one below.</p>
+    <?php endif; ?>
+    <p>Or upload a JSON backup:</p>
     <div class="drop-zone" id="dropZone">
-      <p id="dropZoneText">Drag and drop your <strong>default_db.json</strong> file here or click to browse</p>
+      <p id="dropZoneText">Drag and drop a JSON backup here or click to browse</p>
       <input type="file" id="fileInput" name="db_file" accept=".json" style="display: none;">
     </div>
 
-    <textarea id="uploadStatus" style="width: 100%;"></textarea>
+    <p>Restoring overwrites the selected tables. Empty tables in the backup will clear their corresponding tables.</p>
+    <textarea id="uploadStatus" style="width: 100%;" readonly aria-label="Restore status"></textarea>
 
     <button type="submit" class="btn-submit" id="submitBtn" style="margin-top: 20px;" disabled>Execute Structural Restore</button>
   </form>
@@ -121,11 +141,13 @@ logger('here4');
 <script>
   const dropZone = document.getElementById('dropZone');
   const fileInput = document.getElementById('fileInput');
+  const backupFile = document.getElementById('backupFile');
   const dropZoneText = document.getElementById('dropZoneText');
   const form = document.getElementById('restoreDbForm');
   const submitBtn = document.getElementById('submitBtn');
   const uploadStatus = document.getElementById('uploadStatus');
   let selectedFile = null;
+  const defaultDropText = 'Drag and drop a JSON backup here or click to browse';
 
   function toggleAllCheckboxes(status) {
     document.querySelectorAll('input[name="target_tables[]"]').forEach(cb => cb.checked = status);
@@ -136,6 +158,16 @@ logger('here4');
 
   fileInput.addEventListener('change', (e) => {
     if (e.target.files.length) handleFileSelection(e.target.files[0]);
+  });
+
+  backupFile.addEventListener('change', () => {
+    if (backupFile.value) {
+      selectedFile = null;
+      fileInput.value = '';
+      dropZoneText.textContent = defaultDropText;
+      showStatus('Server backup selected.', 'success');
+    }
+    submitBtn.disabled = !backupFile.value && !selectedFile;
   });
 
   dropZone.addEventListener('dragover', (e) => {
@@ -154,17 +186,19 @@ logger('here4');
   });
 
   function handleFileSelection(file) {
-    if (!file.name.endsWith('.json')) {
+    if (!file.name.toLowerCase().endsWith('.json')) {
       showStatus('Invalid file. Please attach a structural JSON database payload.', 'error');
       selectedFile = null;
-      submitBtn.disabled = true;
-      dropZoneText.innerHTML = `Drag and drop your <strong>default_db.json</strong> file here or click to browse`;
+      fileInput.value = '';
+      submitBtn.disabled = !backupFile.value;
+      dropZoneText.textContent = defaultDropText;
       return;
     }
+    backupFile.value = '';
     selectedFile = file;
     submitBtn.disabled = false;
-    dropZoneText.innerHTML = `📄 Selected File: <strong>${file.name}</strong> (${(file.size / 1024).toFixed(2)} KB)`;
-    showStatus('File verified and staged successfully.', 'success');
+    dropZoneText.textContent = `Selected file: ${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
+    showStatus('File selected. Its contents will be checked when restoring.', 'success');
   }
 
   function showStatus(msg, type) {
@@ -172,7 +206,7 @@ logger('here4');
     uploadStatus.style.backgroundColor = type === 'success' ? '#e6f4ea' : '#fce8e6';
     uploadStatus.style.color = type === 'success' ? '#137333' : '#c5221f';
     uploadStatus.style.border = `1px solid ${type === 'success' ? '#137333' : '#c5221f'}`;
-    uploadStatus.innerHTML = msg;
+    uploadStatus.value = msg;
   }
 
   form.addEventListener('submit', function(e) {
@@ -185,16 +219,23 @@ logger('here4');
       return;
     }
 
-    if (!selectedFile) {
+    if (!selectedFile && !backupFile.value) {
       showStatus('Error: No data snapshot source staged for restore loop.', 'error');
       return;
     }
 
-    //submitBtn.disabled = true;
+    const tableNames = Array.from(checkedTables, cb => cb.value);
+    if (!confirm(`Overwrite the selected tables from ${selectedFile ? selectedFile.name : backupFile.value}?\n\n${tableNames.join('\n')}\n\nTables with no rows in the backup will be cleared.`)) return;
+
+    submitBtn.disabled = true;
     showStatus('Executing serial stream injection, do not close or navigate away...', 'success');
 
     const formData = new FormData();
-    formData.append('db_file', selectedFile);
+    if (selectedFile) {
+      formData.append('db_file', selectedFile);
+    } else {
+      formData.append('backup_file', backupFile.value);
+    }
 
     // Map individual target checked values
     checkedTables.forEach(cb => {
@@ -215,12 +256,15 @@ logger('here4');
         uploadStatus.style.color = '#333';
         uploadStatus.style.border = '1px solid #ccc';
         uploadStatus.style.height = '250px';
-        uploadStatus.innerHTML = `${notice}`;
+        uploadStatus.value = notice;
       },
       error: function(xhr, status, error) {
         submitBtn.disabled = false;
         let errMsg = xhr.responseText || 'Critical network exception encountered during stream injection execution.';
         showStatus(`Error: ${errMsg}`, 'error');
+      },
+      complete: function() {
+        submitBtn.disabled = !selectedFile && !backupFile.value;
       }
     });
   });

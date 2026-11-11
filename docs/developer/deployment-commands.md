@@ -4,6 +4,7 @@ This document contains useful commands for deploying and managing the MediaBrain
 
 ## Google Cloud Run Deployment
 
+
 ### Update Cloud Run Service with Service Account
 Updates the MediaBrain app service to use the specified service account for authentication:
 

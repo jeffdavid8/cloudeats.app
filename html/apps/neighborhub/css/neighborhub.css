@@ -293,6 +293,10 @@ body.kds-fullscreen-mode .nh-card.kds-focused {
 body {
   padding-top: 66px;
 }
+header.header nav ul li .header-merchant-brand a {
+  width: 35px;
+  height: 35px;
+}
 @media only screen and (min-width: 992px) {
   .header nav ul li a,
   .header nav ul li a i,
@@ -308,9 +312,6 @@ body {
 body {
   padding-top: 59px;
 }
-header.header nav {
-  /* height: 60px; */
-}
 header.header nav ul li a {
   margin-top: 6px;
   display: block;
@@ -324,7 +325,28 @@ header.header nav ul.right ul li a {
 .dayMode header.header nav button {
   box-shadow: none;
 }
+  body {
+    padding-top: 59px;
+  }
+  header.header nav {
+    height: 59px;
+  }
+@media (max-width: 768px) {
+  .scrolled header nav .nav-wrapper,
+  header nav .nav-wrapper,
+  header.header nav {
+    height: 67px;
+  }
+}
 @media (min-width: 768px) {
+  body {
+    padding-top: 70px;
+  }
+  .scrolled header nav .nav-wrapper,
+  header nav .nav-wrapper,
+  header.header nav {
+    height: 63px;
+  }
   header.header nav ul li a {
     margin: 0;
   }

@@ -167,6 +167,103 @@ class User
         return $stmt->execute([time(), $this->id]);
     }
 
+    public function isAdmin(): bool
+    {
+        return $this->is_admin || strtolower(trim((string)$this->role)) === 'admin';
+    }
+
+    public function isMerchantUser($merchantId = null): bool
+    {
+        logger($merchantId);
+        if (!$this->id || ($merchantId !== null && (int)$merchantId < 1)) {
+            return false;
+        }
+
+        try {
+            $db = App::getInstance()->db;
+            $query = "
+                SELECT 1
+                FROM neighborhub_merchants m
+                LEFT JOIN neighborhub_merchant_users mu
+                    ON mu.merchant_id = m.id
+                    AND mu.user_id = ?
+                    AND mu.status = 'active'
+                WHERE (m.user_id = ? OR mu.id IS NOT NULL)
+            ";
+            $params = [$this->id, $this->id];
+
+            if ($merchantId !== null) {
+                $query .= " AND m.id = ?";
+                $params[] = (int)$merchantId;
+            }
+
+            $query .= " LIMIT 1";
+            $stmt = $db->prepare($query);
+            $stmt->execute($params);
+
+            return (bool)$stmt->fetchColumn();
+        } catch (PDOException $e) {
+            error_log("User::isMerchantUser Error: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function isMerchantAdmin($merchantId = null): bool
+    {
+        if (!$this->id || ($merchantId !== null && (int)$merchantId < 1)) {
+            return false;
+        }
+
+        try {
+            $db = App::getInstance()->db;
+            $query = "
+                SELECT 1
+                FROM neighborhub_merchants m
+                LEFT JOIN neighborhub_merchant_users mu
+                    ON mu.merchant_id = m.id
+                    AND mu.user_id = ?
+                    AND mu.staff_role = 'owner'
+                    AND mu.status = 'active'
+                WHERE (m.user_id = ? OR mu.id IS NOT NULL)
+            ";
+            $params = [$this->id, $this->id];
+
+            if ($merchantId !== null) {
+                $query .= " AND m.id = ?";
+                $params[] = (int)$merchantId;
+            }
+
+            $query .= " LIMIT 1";
+            $stmt = $db->prepare($query);
+            $stmt->execute($params);
+
+            return (bool)$stmt->fetchColumn();
+        } catch (PDOException $e) {
+            error_log("User::isMerchantAdmin Error: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function isCustomer(): bool
+    {
+        if (!$this->id) {
+            return false;
+        }
+
+        try {
+            $db = App::getInstance()->db;
+            $stmt = $db->prepare(
+                "SELECT 1 FROM neighborhub_customers WHERE user_id = ? LIMIT 1"
+            );
+            $stmt->execute([$this->id]);
+
+            return (bool)$stmt->fetchColumn();
+        } catch (PDOException $e) {
+            error_log("User::isCustomer Error: " . $e->getMessage());
+            return false;
+        }
+    }
+
 
     /* ... require_admin and is_admin methods ... */
 
