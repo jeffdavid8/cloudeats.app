@@ -559,6 +559,12 @@ body.scrolled header.header.has-merchant-search nav {
 }
 
 /* Buttons */
+.nightMode button:focus {
+  background-color: #343a36; /* Dark background for night mode focus */
+}
+.dayMode button:focus {
+  background-color: #f0f0f0; /* Light background for day mode focus */
+}
 .cloudeats-btn {
   font-family: "Poppins", sans-serif;
   font-weight: 600;
