@@ -31,8 +31,8 @@ git checkout main
 # 2. Optional: Pull the latest changes from the remote server to ensure main is up to date
 git pull origin main
 
-# 3. Merge the major-merchant-update branch into main
-git merge major-merchant-update
+# 3. Merge the <branch-name> branch into main
+git merge <branch-name>
 
 
 
