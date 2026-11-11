@@ -22,4 +22,18 @@ DEPLOYMENT STEPS
 
 
 
+------------------------------------------------------------------
+Git Merge Commands 
+
+# 1. Switch to the main branch
+git checkout main
+
+# 2. Optional: Pull the latest changes from the remote server to ensure main is up to date
+git pull origin main
+
+# 3. Merge the major-merchant-update branch into main
+git merge major-merchant-update
+
+
+
 **************************************************************************
