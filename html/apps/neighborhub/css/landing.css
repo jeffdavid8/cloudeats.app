@@ -517,6 +517,17 @@ body.places-located .ce-results {
   font: 700 34px Georgia, "Times New Roman", serif;
 }
 
+.ce-card-image-status-dot {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  width: 14px;
+  height: 14px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: var(--ce-open);
+}
+
 .ce-card-body {
   padding: 17px 18px 16px;
 }
@@ -558,23 +569,25 @@ body.places-located .ce-results {
   margin: 12px 0 0;
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 7px;
   color: var(--ce-muted);
   font-size: 12px;
 }
 
-.ce-card-status > span {
+.ce-card-status .ce-card-status-separator {
+  flex: 0 0 7px;
   width: 7px;
   height: 7px;
   border-radius: 50%;
   background: var(--ce-neutral-dot);
 }
 
-.ce-card-status.is-open > span {
+.ce-card-status.is-open .ce-card-status-separator {
   background: var(--ce-open);
 }
 
-.ce-card-status.is-closed > span {
+.ce-card-status.is-closed .ce-card-status-separator {
   background: var(--ce-coral);
 }
 

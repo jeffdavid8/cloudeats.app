@@ -126,112 +126,23 @@ $(document).ready(function () {
     grid.appendChild(empty);
   }
 
-  function dayIndex(name) {
-    const days = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
-    return days.indexOf(name.toLowerCase().slice(0, 3));
-  }
-
-  function scheduleForToday(hours) {
-    if (!hours) return null;
-    let text = String(hours);
-    try {
-      const parsed = JSON.parse(text);
-      if (parsed && typeof parsed === "object") {
-        const keys = [
-          "sunday",
-          "monday",
-          "tuesday",
-          "wednesday",
-          "thursday",
-          "friday",
-          "saturday",
-        ];
-        const today = keys[new Date().getDay()];
-        text = parsed[today] || parsed[today.slice(0, 3)] || "";
-        if (typeof text === "object" && text !== null) {
-          if (text.closed) return { closed: true };
-          text = [text.open, text.close].filter(Boolean).join(" - ");
-        }
-      }
-    } catch (error) {
-      // Store hours are commonly entered as plain text.
-    }
-
-    const lines = String(text)
-      .split(/[\n,;]+/)
-      .map((line) => line.trim())
-      .filter(Boolean);
-    const dayPattern =
-      /\b(Mon(?:day)?|Tue(?:sday)?|Wed(?:nesday)?|Thu(?:rsday)?|Fri(?:day)?|Sat(?:urday)?|Sun(?:day)?)\b/gi;
-    const today = new Date().getDay();
-    let matchingLine = null;
-    let hasDayLabels = false;
-
-    for (const line of lines) {
-      const matches = Array.from(line.matchAll(dayPattern));
-      if (!matches.length) continue;
-      hasDayLabels = true;
-      const indexes = matches
-        .map((match) => dayIndex(match[1]))
-        .filter((index) => index >= 0);
-      const rangeMatch = line.match(
-        /\b(Mon(?:day)?|Tue(?:sday)?|Wed(?:nesday)?|Thu(?:rsday)?|Fri(?:day)?|Sat(?:urday)?|Sun(?:day)?)\s*[-\u2013]\s*(Mon(?:day)?|Tue(?:sday)?|Wed(?:nesday)?|Thu(?:rsday)?|Fri(?:day)?|Sat(?:urday)?|Sun(?:day)?)\b/i,
-      );
-      if (indexes.includes(today)) matchingLine = line;
-      if (rangeMatch) {
-        const start = dayIndex(rangeMatch[1]);
-        const end = dayIndex(rangeMatch[2]);
-        let cursor = start;
-        while (cursor !== end) {
-          if (cursor === today) matchingLine = line;
-          cursor = (cursor + 1) % 7;
-        }
-        if (end === today) matchingLine = line;
-      }
-    }
-
-    if (hasDayLabels && !matchingLine) return { closed: true };
-    const schedule = matchingLine || lines.join(" ");
-    if (/\bclosed\b|\boff\b/i.test(schedule)) return { closed: true };
-    const times = Array.from(
-      schedule.matchAll(/(\d{1,2})(?::(\d{2}))?\s*(a\.?m\.?|p\.?m\.?)/gi),
-    );
-    if (times.length < 2) return null;
-
-    function minutes(match) {
-      let hour = Number(match[1]) % 12;
-      if (match[3].toLowerCase().startsWith("p")) hour += 12;
-      return hour * 60 + Number(match[2] || 0);
-    }
-    const open = minutes(times[0]);
-    const close = minutes(times[1]);
-    const now = new Date();
-    const current = now.getHours() * 60 + now.getMinutes();
-    return {
-      closed: !(close < open
-        ? current >= open || current < close
-        : current >= open && current < close),
-    };
-  }
-
   function operatingStatus(merchant) {
-    if (
-      ["offline", "paused", "suspended", "disabled"].includes(
-        String(merchant.status).toLowerCase(),
-      )
-    ) {
-      return { label: "Closed", open: false };
+    const status = merchant.operational_status;
+    if (!status || !["open", "closed"].includes(status.status)
+        || typeof status.label !== "string" || typeof status.message !== "string") {
+      console.error("Invalid merchant operational status", merchant.id);
+      return { label: "Status unavailable", message: "", open: null };
     }
-    const schedule = scheduleForToday(merchant.store_hours);
-    if (!schedule) return { label: "Hours not listed", open: null };
     return {
-      label: schedule.closed ? "Closed" : "Open now",
-      open: !schedule.closed,
+      label: status.message === "Hours not listed" ? status.message : status.label,
+      message: status.message === "Hours not listed" ? "" : status.message,
+      open: status.status === "open",
     };
   }
 
   function merchantCard(merchant) {
     const card = document.createElement("a");
+    const status = operatingStatus(merchant);
     card.className = "ce-merchant-card";
     // set onclick
 
@@ -248,7 +159,8 @@ $(document).ready(function () {
       encodeURIComponent(merchant.id);
     card.setAttribute(
       "aria-label",
-      "Browse " + (merchant.business_name || "local store"),
+      "Browse " + (merchant.business_name || "local store") + ". " +
+        status.label + (status.message ? ". " + status.message : ""),
     );
 
     const imageWrap = document.createElement("div");
@@ -263,7 +175,7 @@ $(document).ready(function () {
         function () {
           image.remove();
           imageWrap.classList.add("is-placeholder");
-          imageWrap.textContent = "CE";
+          imageWrap.prepend(document.createTextNode("CE"));
         },
         { once: true },
       );
@@ -271,6 +183,12 @@ $(document).ready(function () {
     } else {
       imageWrap.classList.add("is-placeholder");
       imageWrap.textContent = "CE";
+    }
+    if (status.open === true) {
+      const imageStatus = document.createElement("span");
+      imageStatus.className = "ce-card-image-status-dot";
+      imageStatus.setAttribute("aria-hidden", "true");
+      imageWrap.appendChild(imageStatus);
     }
 
     const body = document.createElement("div");
@@ -289,7 +207,6 @@ $(document).ready(function () {
       "$" + Number(merchant.delivery_fee || 0).toFixed(2) + " delivery";
     details.append(distance, fee);
 
-    const status = operatingStatus(merchant);
     const statusLine = document.createElement("p");
     statusLine.className =
       "ce-card-status" +
@@ -298,9 +215,13 @@ $(document).ready(function () {
         : status.open === false
           ? " is-closed"
           : "");
-    const statusDot = document.createElement("span");
-    statusDot.setAttribute("aria-hidden", "true");
-    statusLine.append(statusDot, document.createTextNode(status.label));
+    statusLine.append(document.createTextNode(status.label));
+    if (status.message) {
+      const statusDot = document.createElement("span");
+      statusDot.className = "ce-card-status-separator";
+      statusDot.setAttribute("aria-hidden", "true");
+      statusLine.append(statusDot, document.createTextNode(status.message));
+    }
 
     const browse = document.createElement("span");
     browse.className = "ce-card-browse";

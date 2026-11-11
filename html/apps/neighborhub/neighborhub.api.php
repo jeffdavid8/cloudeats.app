@@ -2142,6 +2142,7 @@ function handle_search_merchants($request)
   App::getInstance('neighborhub')->includeModel('order');
 
   foreach ($merchants as &$merchant) {
+    $merchant['operational_status'] = Merchant::getOperationalStatus($merchant);
     $fee = Order::calculateDeliveryFee(
       $merchant['latitude'],
       $merchant['longitude'],

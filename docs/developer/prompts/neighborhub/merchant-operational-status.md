@@ -25,6 +25,12 @@ treated as closed. Schedule evaluation uses the application's server timezone
 (`America/Indiana/Indianapolis` in the web entry point); individual merchant
 timezones are not currently stored.
 
+Landing-page merchant search returns the same server-calculated operational
+status for each card, including its opening or closing message. A green dot
+appears on the card image only when the merchant is open. Cards show the
+status at the time of the search and update on the next search; they do not
+poll continuously.
+
 The banner emits `nh:merchant-status` with the merchant ID, status, open flag,
 and stale flag. Consumers can use that event without duplicating schedule
 calculations. Server-side checkout validation is authoritative; the banner
