@@ -73,6 +73,20 @@ final class VendorHoursCheckerTest extends TestCase
         self::assertSame('Opens at 9:00 AM', $status['message']);
     }
 
+    public function testOpeningMessagesUseCorrectSameAndFutureDayWording(): void
+    {
+        $hours = ['weekly' => ['wednesday' => [['open' => '09:00', 'close' => '17:00']]]];
+        foreach ([
+            ['2026-11-11 08:00:00', 'Opens at 9:00 AM', '9:00 AM'],
+            ['2026-11-10 23:24:00', 'Opens Wednesday at 9:00 AM', 'Wednesday at 9:00 AM'],
+        ] as [$time, $message, $nextOpen]) {
+            $now = new DateTimeImmutable($time);
+            self::assertSame($message, VendorHoursChecker::getMessage($hours, $now));
+            self::assertSame($message, VendorHoursChecker::getOperationalDetails($hours, $now)['message']);
+            self::assertSame($nextOpen, VendorHoursChecker::getNextOpenTime($hours, $now));
+        }
+    }
+
     public function testOvernightDetailsAndHolidayOverride(): void
     {
         $hours = ['weekly' => ['monday' => [['open' => '22:00', 'close' => '02:00']]], 'holidays' => ['2026-11-09' => []]];

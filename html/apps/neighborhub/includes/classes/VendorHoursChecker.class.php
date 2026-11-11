@@ -47,7 +47,7 @@ class VendorHoursChecker
         }
 
         $nextOpen = self::getNextOpenDateTime($hours, $now);
-        return $nextOpen ? 'Opens at ' . self::formatDateTime($nextOpen, $now) : 'Closed - Hours not listed';
+        return $nextOpen ? self::formatOpeningMessage($nextOpen, $now) : 'Closed - Hours not listed';
     }
 
     public static function getNextOpenTime($hours, ?DateTimeImmutable $now = null): string
@@ -86,7 +86,7 @@ class VendorHoursChecker
             'urgency' => $minutes <= 30 ? 'opening-soon' : '',
             'message' => $minutes <= 30
                 ? 'Opens in ' . $minutes . ' minute' . ($minutes === 1 ? '' : 's')
-                : 'Opens at ' . self::formatDateTime($next, $now),
+                : self::formatOpeningMessage($next, $now),
         ];
     }
 
@@ -197,6 +197,12 @@ class VendorHoursChecker
             return null;
         }
         return $hours;
+    }
+
+    private static function formatOpeningMessage(DateTimeImmutable $dateTime, DateTimeImmutable $now): string
+    {
+        $prefix = $dateTime->format('Y-m-d') === $now->format('Y-m-d') ? 'Opens at ' : 'Opens ';
+        return $prefix . self::formatDateTime($dateTime, $now);
     }
 
     private static function formatDateTime(DateTimeImmutable $dateTime, DateTimeImmutable $now): string
