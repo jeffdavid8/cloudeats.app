@@ -33,7 +33,9 @@ storage/ancestry_data_backup/tmp_gedcom.json
 storage/research/*.json
 storage/research/tasks/*.json
 storage/messages
-/storage/backups/*
+storage/research
+storage/*.json
+storage/*.log
 /html/db
 
 logs/
