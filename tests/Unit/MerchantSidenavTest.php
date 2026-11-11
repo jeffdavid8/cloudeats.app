@@ -42,4 +42,14 @@ final class MerchantSidenavTest extends TestCase
         }
         self::assertStringContainsString('scroll-to-top-link', $this->renderHeader('guest'));
     }
+
+    public function testStatusDotReflectsOperationalHoursOnInitialRender(): void
+    {
+        foreach (['guest', 'merchant-view'] as $mode) {
+            self::assertStringContainsString('data-merchant-id="8" aria-label="Open now"></span>', $this->renderHeader($mode));
+        }
+        foreach (['closed', 'merchant-closed'] as $mode) {
+            self::assertStringContainsString('data-merchant-id="8" aria-label="Open now" hidden></span>', $this->renderHeader($mode));
+        }
+    }
 }

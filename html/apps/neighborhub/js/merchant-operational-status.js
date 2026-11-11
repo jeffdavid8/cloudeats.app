@@ -12,6 +12,11 @@
     if (!stale && status.urgency) element.classList.add(`is-${status.urgency}`);
     element.querySelector("[data-status-label]").textContent = stale ? "Status unavailable" : status.label;
     element.querySelector("[data-status-message]").textContent = stale ? "Unable to update hours. Please try again." : status.message;
+    document.querySelectorAll(".header-merchant-status-dot[data-merchant-id]").forEach((dot) => {
+      if (dot.dataset.merchantId === element.dataset.merchantId) {
+        dot.hidden = stale || status.status !== "open";
+      }
+    });
     element.dispatchEvent(new CustomEvent("nh:merchant-status", {
       bubbles: true,
       detail: { merchantId: element.dataset.merchantId, status: status.status, open: !stale && status.status === "open", stale },

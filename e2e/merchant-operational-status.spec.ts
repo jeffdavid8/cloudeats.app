@@ -3,6 +3,8 @@ import path from 'path';
 
 test('refreshes on a timer and visibility changes, synchronizes controls, and fails closed', async ({ page }) => {
   await page.setContent(`
+    <span class="header-merchant-status-dot" data-merchant-id="10" aria-label="Open now" hidden></span>
+    <span class="header-merchant-status-dot" data-merchant-id="11" aria-label="Open now" hidden></span>
     <div id="nh-merchant-operational-status" class="nh-merchant-operational-status is-closed"
          data-merchant-id="10" data-status="closed" role="status">
       <span class="nh-merchant-operational-dot"></span>
@@ -11,6 +13,7 @@ test('refreshes on a timer and visibility changes, synchronizes controls, and fa
     <button class="nh-add-standard-btn">Add</button>
     <button class="nh-customize-trigger" disabled>Already disabled</button>
   `);
+  await page.addStyleTag({ path: path.resolve('html/css/style.css') });
   await page.evaluate(() => {
     const w = window as any;
     w.requests = [];
@@ -41,7 +44,10 @@ test('refreshes on a timer and visibility changes, synchronizes controls, and fa
     storefront.initOperationalStatus();
   });
   const banner = page.locator('#nh-merchant-operational-status');
+  const dot = page.locator('.header-merchant-status-dot[data-merchant-id="10"]');
+  const otherDot = page.locator('.header-merchant-status-dot[data-merchant-id="11"]');
   const add = page.locator('.nh-add-standard-btn');
+  await expect(dot).toBeHidden();
   await expect(add).toBeDisabled();
   expect(await page.evaluate(() => (window as any).intervals[0].delay)).toBe(60000);
 
@@ -52,6 +58,8 @@ test('refreshes on a timer and visibility changes, synchronizes controls, and fa
     request.complete();
   });
   await expect(banner.locator('strong')).toHaveText('Open now');
+  await expect(dot).toBeVisible();
+  await expect(otherDot).toBeHidden();
   await expect(add).toBeEnabled();
   await expect(page.locator('.nh-customize-trigger')).toBeDisabled();
 
@@ -68,6 +76,7 @@ test('refreshes on a timer and visibility changes, synchronizes controls, and fa
     request.complete();
   });
   await expect(add).toBeDisabled();
+  await expect(dot).toBeHidden();
   await expect(banner.locator('strong')).toHaveText('Closed');
   await expect(banner).toBeHidden();
 
@@ -79,6 +88,7 @@ test('refreshes on a timer and visibility changes, synchronizes controls, and fa
     request.complete();
   });
   await expect(banner.locator('strong')).toHaveText('Status unavailable');
+  await expect(dot).toBeHidden();
   await expect(add).toBeDisabled();
 
   expect(await page.evaluate(() => (window as any).retries.get(1).delay)).toBe(5000);
@@ -104,6 +114,7 @@ test('refreshes on a timer and visibility changes, synchronizes controls, and fa
     request.complete();
   });
   await expect(add).toBeEnabled();
+  await expect(dot).toBeVisible();
   await page.evaluate(() => {
     const w = window as any;
     w.intervals[0].callback();
@@ -111,6 +122,7 @@ test('refreshes on a timer and visibility changes, synchronizes controls, and fa
     request.error({ status: 500 }, 'error');
     request.complete();
   });
+  await expect(dot).toBeHidden();
   expect(await page.evaluate(() => (window as any).retries.get(3).delay)).toBe(5000);
   await page.evaluate(() => document.dispatchEvent(new Event('visibilitychange')));
   expect(await page.evaluate(() => (window as any).retries.size)).toBe(0);

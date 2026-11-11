@@ -23,9 +23,15 @@ class FixtureUser
 
 class Merchant
 {
+    public static function getAllMerchants(): array
+    {
+        return [];
+    }
+
     public static function getOperationalStatus($merchant): array
     {
-        return ['status' => 'open', 'urgency' => '', 'label' => 'Open', 'message' => 'Open'];
+        $status = in_array($GLOBALS['mode'], ['closed', 'merchant-closed'], true) ? 'closed' : 'open';
+        return ['status' => $status, 'urgency' => '', 'label' => ucfirst($status), 'message' => ucfirst($status)];
     }
 }
 
@@ -40,7 +46,7 @@ class FixtureApp
         return match ($key) {
             'merchant' => $this->merchant,
             'customer' => (object)['terms_accepted_at' => 'yes'],
-            'view' => $GLOBALS['mode'] === 'merchant-view' ? 'merchant' : 'customer',
+            'view' => in_array($GLOBALS['mode'], ['merchant-view', 'merchant-closed'], true) ? 'merchant' : 'customer',
             default => $default,
         };
     }

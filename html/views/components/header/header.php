@@ -9,8 +9,7 @@ $canOpenMerchantMenu = $this->appName === 'neighborhub'
    && ($this->user->is_admin || $this->user->isMerchantUser((int)$merchant->id));
 $operationalStatus = null;
 if (
-   $this->get('view') === 'customer'
-   && $merchant
+   $merchant
    && !empty($merchant->id)
    && class_exists('Merchant')
 ) {
@@ -32,13 +31,13 @@ if ($this->get('view') === 'customer' && !$customer->terms_accepted_at):
    <nav>
       <div class="nav-wrapper ">
 
-         <? render('components/header/header_left.php', array('search_string' => $search_string, 'canOpenMerchantMenu' => $canOpenMerchantMenu)); ?>
+         <? render('components/header/header_left.php', array('search_string' => $search_string, 'canOpenMerchantMenu' => $canOpenMerchantMenu, 'operationalStatus' => $operationalStatus)); ?>
 
          <? render('components/header/header_right.php', array('search_string' => $search_string)); ?>
 
 
       </div>
-<?php if ($operationalStatus): ?>
+<?php if ($operationalStatus && $this->get('view') === 'customer'): ?>
 <div
    id="nh-merchant-operational-status"
    role="status"

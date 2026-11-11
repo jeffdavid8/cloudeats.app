@@ -9,6 +9,9 @@ until a successful refresh. Failed refreshes retry after five seconds, with
 exponential backoff up to one minute; normal minute polling and visibility
 refreshes still apply. Published storefront visibility and draft preview
 can hide the banner without changing ordering eligibility.
+The merchant logo's green dot appears only while the calculated operational
+status is open. It follows status refreshes even if the banner is hidden,
+and disappears if a refresh fails.
 Time until closing is shown in hours and minutes, omitting zero units; the
 closing-soon threshold remains 30 minutes.
 Status refresh GET requests are not counted as page views. After CSRF

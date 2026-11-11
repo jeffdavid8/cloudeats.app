@@ -26,8 +26,8 @@ $merchant = $this->get('merchant');
                <?php else: ?>
                   <img class="scroll-to-top-link" src="<?= htmlspecialchars($merchant->image_url) ?>" alt="<?= htmlspecialchars($merchant->business_name ?? 'Merchant') ?>">
                <?php endif; ?>
-               <?php if (in_array(strtolower((string)($merchant->status ?? '')), ['online', 'active'], true)): ?>
-                  <span class="header-merchant-status-dot" aria-label="Online"></span>
+               <?php if (!empty($operationalStatus)): ?>
+                  <span class="header-merchant-status-dot" data-merchant-id="<?= (int)$merchant->id ?>" aria-label="Open now"<?= $operationalStatus['status'] === 'open' ? '' : ' hidden' ?>></span>
                <?php endif; ?>
             </span>
          <?php endif; ?>
