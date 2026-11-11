@@ -83,7 +83,9 @@ $(document).ready(function() {
   $resultCountSpan.text(`${totalProducts} items available`);
 
   // Bind input events for live filtering
-  $searchInput.on('input', filterProducts);
+  if (!$('#header-merchant-search-input').length) {
+    $searchInput.on('input', filterProducts);
+  }
 
   // Bind filter chips click events
   $('.iv-filter-chip').on('click', function() {

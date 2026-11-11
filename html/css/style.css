@@ -344,6 +344,29 @@ header nav .nav-wrapper > ul.header-left {
 header nav .nav-wrapper > ul.header-right {
   flex: 0 0 auto;
 }
+header.header nav .nav-wrapper > ul.header-right > li > a.nh-header-cart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+header.header nav .nav-wrapper > ul.header-right > li > a.nh-header-cart.has-items {
+  width: auto;
+  min-width: 50px;
+  padding: 0 12px;
+  gap: 6px;
+  border-radius: 25px;
+}
+.nh-cart-subtotal-preview {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.nh-cart-subtotal-preview[hidden] {
+  display: none;
+}
 .header-merchant-brand {
   position: relative;
   display: inline-flex;
@@ -407,73 +430,100 @@ header nav .nav-wrapper > ul.header-right {
   line-height: 1;
   font-size: 1.4rem;
 }
-.header-merchant-search-overlay {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  z-index: 20;
-  width: calc(100% - 16px);
-  display: none;
-  align-items: center;
-  gap: 6px;
-  min-height: 38px;
-  padding: 0 10px;
-  color: inherit;
-  border: 1px solid rgba(128, 128, 128, 0.55);
-  border-radius: 20px;
-  background: var(--panel-dark, #202020);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
-  line-height: 1;
+header.header.has-merchant-search nav,
+body.scrolled header.header.has-merchant-search nav {
+  height: auto;
 }
-.header-merchant-search-overlay.is-expanded {
+.header-merchant-search-panel {
+  padding: 10px 12px;
+  background: #fdfdfd;
+  color: #242424;
+  line-height: 1.4;
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
+}
+.nightMode .header-merchant-search-panel {
+  background: #242424;
+  color: #f4f4f4;
+}
+.header-merchant-search-panel[hidden],
+.header-merchant-search-panel [hidden] {
+  display: none !important;
+}
+.header-merchant-search-row,
+.header-merchant-search-no-results {
+  max-width: 640px;
+  margin: 0 auto;
+}
+.header-merchant-search-row,
+.header-merchant-search-field {
   display: flex;
+  align-items: center;
+  gap: 8px;
 }
-.header-merchant-search-overlay::before {
-  content: "\f002";
-  flex: 0 0 auto;
-  font-family: "Font Awesome 5 Free";
-  font-size: 0.8rem;
-  font-weight: 900;
-  opacity: 0.75;
-}
-.header-merchant-search-overlay textarea {
-  flex: 1 1 auto;
+.header-merchant-search-field {
+  flex: 1;
   min-width: 0;
-  min-height: 30px;
-  height: 30px;
+  padding: 0 10px;
+  border: 1px solid #aeb8b2;
+  border-radius: 24px;
+  background: #f3f5f3;
+}
+.header-merchant-search-field i {
+  height: auto;
+  line-height: 1;
+  font-size: 14px;
+}
+.nightMode .header-merchant-search-field {
+  border-color: #727d77;
+  background: #343a36;
+}
+.header-merchant-search-field:focus-within {
+  outline: 2px solid #28846a;
+  outline-offset: 2px;
+}
+.header-merchant-search-field input[type="search"] {
+  flex: 1;
+  min-width: 0;
+  height: 42px;
   margin: 0;
-  padding: 6px 0;
+  padding: 0;
   border: 0 !important;
-  box-shadow: none !important;
   outline: 0;
-  overflow: hidden;
-  resize: none;
+  box-shadow: none !important;
   background: transparent !important;
   color: inherit !important;
-  font: inherit;
-  font-size: 0.9rem;
-  line-height: 18px;
+  font: 400 16px/1.3 system-ui, sans-serif;
 }
-.header-merchant-search-overlay textarea:focus {
-  border: 0 !important;
-  box-shadow: none !important;
+.header-merchant-search-field input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
 }
-.header-merchant-search-overlay textarea::placeholder {
-  color: currentColor;
-  opacity: 0.65;
+.header-merchant-search-field input::placeholder {
+  color: inherit;
+  opacity: 0.7;
 }
-.header-merchant-search-overlay.is-expanded {
-  border-color: rgba(128, 128, 128, 0.55);
+.header-merchant-search-clear,
+.header-merchant-search-cancel {
+  min-height: 44px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: 600 14px/1.3 system-ui, sans-serif;
 }
-@media only screen and (max-width: 600px) {
-  .header-merchant-search-overlay textarea {
-    font-size: 0.7rem;
-  }
+.header-merchant-search-clear {
+  min-width: 44px;
 }
-@media only screen and (max-width: 700px) {
-  .header-merchant-search-overlay textarea::placeholder {
-    font-size: 0;
-  }
+.header-merchant-search-clear:focus-visible,
+.header-merchant-search-cancel:focus-visible,
+.header-merchant-search-trigger:focus-visible {
+  outline: 2px solid #28846a;
+  outline-offset: 2px;
+}
+.header-merchant-search-no-results {
+  padding: 8px 4px 2px;
+  font: 400 14px/1.4 system-ui, sans-serif;
 }
 .login-header h3 {
   font-size: 2em;

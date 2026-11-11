@@ -50,6 +50,19 @@ if ($this->get('view') === 'customer' && !$customer->terms_accepted_at):
    <span data-status-message><?= htmlspecialchars($operationalStatus['message'], ENT_QUOTES, 'UTF-8') ?></span>
 </div>
 <?php endif; ?>
+<?php if ($merchant && !empty($merchant->id) && $this->get('view') === 'customer'): ?>
+      <div id="header-merchant-search-panel" class="header-merchant-search-panel" role="search" hidden>
+         <div class="header-merchant-search-row">
+            <div class="header-merchant-search-field">
+               <i class="fas fa-search" aria-hidden="true"></i>
+               <input type="search" id="header-merchant-search-input" placeholder="Search this menu" aria-label="Search <?= htmlspecialchars($merchant->business_name ?? 'merchant', ENT_QUOTES, 'UTF-8') ?> menu" autocomplete="off">
+               <button type="button" class="header-merchant-search-clear" aria-label="Clear search" hidden><i class="fas fa-times" aria-hidden="true"></i></button>
+            </div>
+            <button type="button" class="header-merchant-search-cancel">Cancel</button>
+         </div>
+         <p id="header-merchant-search-no-results" class="header-merchant-search-no-results" role="status" hidden>No items found. Try a different search.</p>
+      </div>
+<?php endif; ?>
       <div class="progress"><div class="indeterminate"></div></div>
    </nav>
 

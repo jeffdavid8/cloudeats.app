@@ -33,17 +33,9 @@ $merchant = $this->get('merchant');
          <?php endif; ?>
          <?php if ($merchant && !empty($merchant->id) && $this->get('view') === 'customer'): ?>
 
-            <button type="button" class="header-merchant-search-trigger" aria-label="Search <?= htmlspecialchars($merchant->business_name ?? 'merchant') ?> menu" aria-controls="header-merchant-search-input" aria-expanded="false">
+            <button type="button" class="header-merchant-search-trigger" aria-label="Search <?= htmlspecialchars($merchant->business_name ?? 'merchant', ENT_QUOTES, 'UTF-8') ?> menu" aria-controls="header-merchant-search-panel" aria-expanded="false">
                <i class="fas fa-search" aria-hidden="true"></i>
             </button>
-            <label class="header-merchant-search-overlay" for="header-merchant-search-input">
-               <textarea
-                  id="header-merchant-search-input"
-                  rows="1"
-                  placeholder="Search <?= htmlspecialchars($merchant->business_name ?? 'menu') ?>"
-                  aria-label="Search <?= htmlspecialchars($merchant->business_name ?? 'merchant') ?> menu"
-                  autocomplete="off"></textarea>
-            </label>
          <?php endif; ?>
       </div>
    </li>
@@ -64,19 +56,17 @@ $merchant = $this->get('merchant');
 $(function() {
   const $search = $('#header-merchant-search-input');
   const $trigger = $('.header-merchant-search-trigger');
-  const $overlay = $('.header-merchant-search-overlay');
-  if (!$search.length) return;
-
-  function resizeMerchantSearch() {
-    $search.css('height', 'auto');
-    $search.css('height', `${$search[0].scrollHeight}px`);
-  }
+  const $panel = $('#header-merchant-search-panel');
+  const $clear = $('.header-merchant-search-clear');
+  const $noResults = $('#header-merchant-search-no-results');
+  const $otherSearch = $('#iv-product-search-input');
+  if (!$search.length || !$panel.length) return;
 
   function setSearchExpanded(expanded) {
-    $overlay.toggleClass('is-expanded', expanded);
+    $panel.prop('hidden', !expanded);
+    $('header.header').toggleClass('has-merchant-search', expanded);
     $trigger.attr('aria-expanded', expanded ? 'true' : 'false');
     if (expanded) {
-      resizeMerchantSearch();
       $search.trigger('focus');
     }
   }
@@ -84,11 +74,15 @@ $(function() {
   function filterMerchantProducts() {
     const query = String($search.val() || '').toLowerCase().trim();
     const $cards = $('.product-item-card');
+    let matches = 0;
+    $otherSearch.val($search.val());
+    $clear.prop('hidden', !$search.val());
 
     $cards.each(function() {
       const $card = $(this);
-      const matches = !query || $card.text().toLowerCase().includes(query);
-      $card.closest('.col').toggle(matches);
+      const matched = !query || $card.text().toLowerCase().includes(query);
+      if (matched) matches++;
+      $card.closest('.col').toggle(matched);
     });
 
     $('.custom-section-title').each(function() {
@@ -101,22 +95,56 @@ $(function() {
       $title.toggle(hasMatches);
       $categoryRow.toggle(hasMatches);
     });
+
+    $('.iv-product-category').each(function() {
+      const $category = $(this);
+      const $categoryCards = $category.find('.product-item-card');
+      if (!$categoryCards.length) return;
+      $category.toggle(!query || $categoryCards.filter(function() {
+        return $(this).text().toLowerCase().includes(query);
+      }).length > 0);
+    });
+
+    $noResults.prop('hidden', !query || !$cards.length || matches > 0);
+    $('#iv-result-count').text(query
+      ? `Showing ${matches} of ${$cards.length} items`
+      : `${$cards.length} items available`);
   }
 
-  $search.on('input', function() {
-    resizeMerchantSearch();
+  function clearSearch() {
+    $search.val('');
+    filterMerchantProducts();
+  }
+
+  function cancelSearch() {
+    clearSearch();
+    setSearchExpanded(false);
+    $trigger.trigger('focus');
+  }
+
+  $search.on('input', filterMerchantProducts);
+  $otherSearch.on('input', function() {
+    $search.val($(this).val());
     filterMerchantProducts();
   });
-  $search.on('focus', function() {
-    setSearchExpanded(true);
+  $clear.on('click', function() {
+    clearSearch();
+    $search.trigger('focus');
   });
-  $search.on('blur', function() {
-    setSearchExpanded(false);
+  $('.header-merchant-search-cancel').on('click', cancelSearch);
+  $panel.on('keydown', function(event) {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      cancelSearch();
+    }
   });
   $trigger.on('click', function() {
-    setSearchExpanded(true);
+    if ($panel.prop('hidden')) {
+      setSearchExpanded(true);
+    } else {
+      cancelSearch();
+    }
   });
-  resizeMerchantSearch();
 });
 </script>
 <?php endif; ?>

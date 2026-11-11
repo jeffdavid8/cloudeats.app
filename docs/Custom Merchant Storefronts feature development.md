@@ -265,6 +265,16 @@ Add coverage for:
 - Mobile/desktop layouts
 - Existing cart and checkout behavior
 
+The header basket shows the active merchant's item subtotal while it contains
+items. It uses the same cart calculation as the checkout drawer; taxes, tips,
+delivery, and processing fees are not included. The amount updates with cart
+changes and is hidden when the active merchant's basket is empty.
+
+The merchant header search opens below the header and filters menu items as
+the customer types. The search stays open when focus moves elsewhere; Clear
+restores all items, while Cancel or Escape also closes the search. Where a
+storefront has an additional menu search field, both fields share the filter.
+
 ## Important security boundary
 
 Because custom CSS is administrator-only, merchant users should configure appearance through validated fields and predefined options. Custom CSS must be sanitized, scoped to the storefront, and never allowed to affect the broader application.

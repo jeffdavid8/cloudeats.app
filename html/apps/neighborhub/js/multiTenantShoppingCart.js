@@ -337,6 +337,14 @@ class ShoppingCart {
     let totals = this.getTotals();
     let basePrice = totals.subtotal;
     $(".nh-cart-count-badge").text(totals.count);
+    $(".nh-cart-subtotal-preview")
+      .text("$" + totals.subtotal)
+      .prop("hidden", totals.count === 0);
+    $(".nh-header-cart")
+      .toggleClass("has-items", totals.count > 0)
+      .attr("aria-label", totals.count > 0
+        ? `Open basket, ${totals.count} ${totals.count === 1 ? "item" : "items"}, subtotal $${totals.subtotal}`
+        : "Open basket, empty");
 
     if (totals.count > 0) {
       $(".nh-cart-count-badge").show();
