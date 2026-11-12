@@ -298,7 +298,7 @@
   }
 
   body.scrolled .top-right-dropdown-wrapper {
-    top: 6.5rem;
+    top: 7rem;
   }
 
   .dropdown-content {

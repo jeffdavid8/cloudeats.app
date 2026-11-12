@@ -193,7 +193,7 @@ if ($spotlightProductId) {
   }
 
   body.scrolled .top-right-dropdown-wrapper {
-    top: 5rem;
+    top: 7rem;
   }
 
   .dropdown-content {

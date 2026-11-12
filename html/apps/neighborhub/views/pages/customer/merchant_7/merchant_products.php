@@ -264,7 +264,7 @@ if ($spotlightProductId) {
   }
 
   body.scrolled .top-right-dropdown-wrapper {
-    top: 5rem;
+    top: 7rem;
   }
 
   /* Pizzeria Box footer info design */
