@@ -10,46 +10,42 @@ $merchant = $this->get('merchant');
         <div class="card-content">
           <h4 style="margin:0 0 10px 0; font-weight:700;"><?php echo htmlspecialchars($merchant->business_name); ?></h4>
           <p style="display: flex; align-items: flex-start; margin-bottom: 0.75rem;">
-            <span class="grey-text text-darken-2" style="margin-right: 1rem; min-width: 1.25rem; text-align: center;">
-              <i class="fas fa-map-marker-alt text-teal"></i>
-            </span>
-            <?php
-            $address = $merchant->address . ', ' . $merchant->city . ', ' . $merchant->state . ' ' . $merchant->zip_code;
-            $mapLink = 'https://www.google.com/maps/search/?api=1&query=' . urlencode($address);
-            ?>
-            <span class="pk-text-main" style="word-break: break-word; font-weight: 600;">
-              <?php echo htmlspecialchars($address); ?>
-              <a href="<?php echo htmlspecialchars($mapLink); ?>" target="_blank" rel="noopener noreferrer" class="btn btn-small btn-outline waves-effect waves-light" style="margin-left: 10px;">
-                <i class="fas fa-map-marked-alt"></i>
-              </a>
-            </span>
-          </p>
-          <p style="display: flex; align-items: flex-start; margin-bottom: 0.75rem;">
-            <span class="grey-text text-darken-2" style="margin-right: 1rem; min-width: 1.25rem; text-align: center;">
-              <i class="fas fa-phone text-teal"></i>
-            </span>
-            <span><?php echo htmlspecialchars($merchant->phone); ?></span>
-          </p>
-          <?php if (!empty($merchant->facebook)): ?>
-            <p style="display: flex; align-items: flex-start; margin-bottom: 0.75rem;">
-              <span class="grey-text text-darken-2" style="margin-right: 1rem; min-width: 1.25rem; text-align: center;">
-                <i class="fab fa-facebook text-teal"></i>
-              </span>
-              <a href="<?php echo htmlspecialchars($merchant->facebook); ?>" target="_blank" rel="noopener noreferrer" style="word-break: break-all;">
-                <?php echo htmlspecialchars($merchant->facebook); ?>
+            <!-- Address -->
+            <p style="text-align: left; margin-bottom: 1rem;">
+              <?
+              $map_link = "https://www.google.com/maps/search/?api=1&query=" . urlencode($merchant->address . ', ' . $merchant->city . ', ' . $merchant->state . ' ' . $merchant->zip_code);
+              ?>
+              <a href="<?php echo $map_link; ?>" target="_blank" class="btn btn-small btn-flat waves-effect waves-light" style="display: inline-flex; align-items: flex-start; height: auto; line-height: 1.4;">
+                <span class="sweets-icon" style="margin-right: 1rem; min-width: 1.25rem; text-align: center; font-size: 16px;">
+                  <i class="fas fa-map-marker-alt"></i>
+                </span>
+                <span class="pk-text-main" style="word-break: break-word; font-weight: 600; text-align: left; text-transform: uppercase;">
+                  <?php echo htmlspecialchars($merchant->address . ', ' . $merchant->city . ', ' . $merchant->state . ' ' . $merchant->zip_code); ?>
+                </span>
               </a>
             </p>
-          <?php endif; ?>
-          <?php if (!empty($merchant->website)): ?>
-            <p style="display: flex; align-items: flex-start; margin-bottom: 0.75rem;">
-              <span class="grey-text text-darken-2" style="margin-right: 1rem; min-width: 1.25rem; text-align: center;">
-                <i class="fas fa-globe text-teal"></i>
-              </span>
-              <a href="<?php echo htmlspecialchars($merchant->website); ?>" target="_blank" rel="noopener noreferrer">
-                <?php echo htmlspecialchars($merchant->website); ?>
-              </a>
+
+            <!-- Phone -->
+            <p style="text-align: left; margin-bottom: 1rem;">
+              <a href="tel: <?= $merchant->phone ?>" class="btn btn-small btn-flat waves-effect waves-light" style="">
+                <span class="sweets-icon" style="margin-right: 1rem; min-width: 1.25rem; text-align: center; font-size: 16px;">
+                  <i class="fas fa-phone"></i>
+                </span>
+                <span class="sweets-text-brown" style="font-weight: 600;"><?php echo htmlspecialchars($merchant->phone); ?></span></a>
             </p>
-          <?php endif; ?>
+
+            <!-- Website -->
+            <?php if (!empty($merchant->website)): ?>
+              <p style="display: flex; align-items: flex-start; margin-bottom: 1rem;">
+                <a href="<?php echo htmlspecialchars($merchant->website); ?>" target="_blank" rel="noopener noreferrer" style="font-weight: 700;" class="btn btn-small btn-flat waves-effect waves-light">
+                  <span class="sweets-icon" style="margin-right: 1rem; min-width: 1.25rem; text-align: center; font-size: 16px;">
+                    <i class="fas fa-globe"></i>
+                  </span>
+
+                  Visit Website
+                </a>
+              </p>
+            <?php endif; ?>
         </div>
       </div>
     </div>

@@ -119,11 +119,24 @@ header.header img.scroll-to-top-link {
   background-color: #dcdcdc;
 }
 
-.dayMode button.btn.nh-customize-trigger {
+.dayMode button.btn.nh-customize-trigger,
+.nightMode button.btn.nh-customize-trigger {
+  background: linear-gradient(45deg, #0a4575 0%, #0a4575 100%);
   background-color: #0a4575;
   color: #ececec;
 }
-.dayMode button.btn.nh-add-standard-btn {
+.dayMode button.btn.nh-add-standard-btn,
+.nightMode button.btn.nh-add-standard-btn {
+  background: linear-gradient(45deg, #236925 0%, #236925 100%);
   background-color: #236925;
   color: #ececec;
+}
+
+.dayMode button.btn.nh-add-standard-btn:hover,
+.nightMode button.btn.nh-add-standard-btn:hover {
+  background-color: #2e8b57;
+}
+.dayMode button.btn.nh-customize-trigger:hover,
+.nightMode button.btn.nh-customize-trigger:hover {
+  background-color: #0a4575;
 }
