@@ -12,11 +12,13 @@ if (!defined('MB_RUNNING')) exit;
 
 <main class="ce-landing" id="ce-landing">
 
-  <section class="ce-hero relative overflow-hidden" aria-labelledby="ce-heading">
+  <section class="ce-hero relative" aria-labelledby="ce-heading">
 
     <!-- Parallax Background Layer & Mode Overlay -->
-    <div class="hero-bg-parallax" id="heroBgParallax" aria-hidden="true">
-      <div class="hero-overlay"></div>
+    <div class="ce-hero-background" aria-hidden="true">
+      <div class="hero-bg-parallax" id="heroBgParallax">
+        <div class="hero-overlay"></div>
+      </div>
     </div>
 
     <!-- Hero Content Container -->
@@ -37,12 +39,16 @@ if (!defined('MB_RUNNING')) exit;
 
       <form class="ce-search" id="ce-search-form" autocomplete="off">
         <label class="ce-location-icon" for="ce-address"><i class="fas fa-map-marker-alt" aria-hidden="true"></i></label>
-        <input id="ce-address" name="address" type="search" placeholder="Enter your delivery address" aria-label="Delivery address" aria-controls="ce-suggestions" aria-autocomplete="list">
+        <input id="ce-address" name="address" type="search" placeholder="Search a store or delivery address" aria-label="Search a store or delivery address" aria-controls="ce-suggestions" aria-autocomplete="list">
         <button class="ce-locate" id="ce-locate" type="button" title="Use my current location" aria-label="Use my current location"><i class="fas fa-crosshairs" aria-hidden="true"></i></button>
         <button class="ce-search-submit" type="submit"><span>Find places</span><i class="fas fa-arrow-right" aria-hidden="true"></i></button>
         <ul class="ce-suggestions" id="ce-suggestions" role="listbox" hidden></ul>
       </form>
-      <p class="ce-search-note" id="ce-location-note" aria-live="polite">Choose an address to see what delivers nearby.</p>
+      <p class="ce-search-note" id="ce-location-note" aria-live="polite">Choose a store or an address to find nearby places.</p>
+      <div class="ce-nearby-summary" id="ce-nearby-summary" aria-live="polite" hidden>
+        <span id="ce-nearby-count"></span>
+        <a href="#merchant-grid-section">View places <span aria-hidden="true">↓</span></a>
+      </div>
 
       <nav class="ce-categories" aria-label="Filter by category">
         <button type="button" class="is-active" data-category="">All nearby</button>

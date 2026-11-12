@@ -31,6 +31,14 @@ appears on the card image only when the merchant is open. Cards show the
 status at the time of the search and update on the next search; they do not
 poll continuously.
 
+The landing-page search also suggests up to five public (`active` or `online`)
+merchants whose name or address matches the input, ahead of address
+suggestions. Selecting a merchant opens its storefront without changing the
+saved delivery location; selecting an address continues to search nearby.
+The merchant and address lookups are independent and report lookup failures.
+After a nearby search completes, the landing page shows the current result
+count beside a link to the merchant list; it reflects the selected category.
+
 The banner emits `nh:merchant-status` with the merchant ID, status, open flag,
 and stale flag. Consumers can use that event without duplicating schedule
 calculations. Server-side checkout validation is authoritative; the banner

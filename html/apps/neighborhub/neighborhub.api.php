@@ -47,6 +47,7 @@ if (!$action) {
 // Verify authentication for secure requests
 if (!in_array($action, array(
   'search_merchants',
+  'merchant_suggestions',
   'track_usage_event',
   'geocode_proxy',
   'reverse_geocode_proxy',
@@ -89,6 +90,9 @@ try {
       break;
     case 'search_merchants':
       handle_search_merchants($request);
+      break;
+    case 'merchant_suggestions':
+      handle_merchant_suggestions($request);
       break;
     case 'track_usage_event':
       handle_track_usage_event($request);
@@ -2168,6 +2172,19 @@ function handle_search_merchants($request)
     'count'     => count($merchants),
     'merchants' => $merchants
   ]));
+}
+
+function handle_merchant_suggestions($request)
+{
+  $query = $request['q'] ?? '';
+  if (!is_string($query) || mb_strlen(trim($query)) < 3 || mb_strlen(trim($query)) > 160
+      || !preg_match('/[^\s,]/u', $query)) {
+    http_response_code(400);
+    exit(json_encode(['success' => false, 'error' => 'Enter a search between 3 and 160 characters.']));
+  }
+  App::getInstance('neighborhub')->includeModel('merchant');
+  echo json_encode(['success' => true, 'merchants' => Merchant::searchPublicSuggestions(trim($query))]);
+  exit;
 }
 
 function handle_geocode_proxy($request)

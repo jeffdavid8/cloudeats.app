@@ -777,9 +777,36 @@ class Merchant
         return is_array($decoded) ? $decoded : [];
     }
 
+    public static function searchPublicSuggestions(string $query): array
+    {
+        $fields = ['business_name', 'address', 'city', 'state', 'zip_code'];
+        $terms = preg_split('/[\s,]+/u', trim($query), -1, PREG_SPLIT_NO_EMPTY);
+        $conditions = [];
+        $params = [];
+        foreach ($terms as $index => $term) {
+            $pattern = '%' . str_replace(['!', '%', '_'], ['!!', '!%', '!_'], $term) . '%';
+            $matches = [];
+            foreach ($fields as $field) {
+                $key = "term_{$index}_{$field}";
+                $matches[] = "m.$field LIKE :$key ESCAPE '!'";
+                $params[$key] = $pattern;
+            }
+            $conditions[] = '(' . implode(' OR ', $matches) . ')';
+        }
+
+        $db = App::getInstance('neighborhub')->db;
+        $sql = "SELECT m.id, m.business_name, m.address, m.city, m.state, m.zip_code
+                FROM neighborhub_merchants m
+                WHERE m.status IN ('active', 'online') AND " . implode(' AND ', $conditions) . "
+                ORDER BY m.business_name ASC, m.id ASC LIMIT 5";
+        $stmt = $db->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     /**
      * Search active merchants within their allowed delivery radius using spatial indexing/Haversine formula
-     * 
+     *
      * @param float $lat User Latitude
      * @param float $lng User Longitude
      * @param string $query Optional search keyword for business or product names

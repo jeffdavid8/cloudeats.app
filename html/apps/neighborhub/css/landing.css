@@ -148,8 +148,15 @@ header nav .header-login-link i,
 /* Ensure hero is positioned for absolute background layering */
 .ce-hero {
   position: relative;
-  overflow: hidden;
+  z-index: 1;
   background-color: var(--ce-bg-fallback, #f8fafc);
+}
+
+.ce-hero-background {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
 }
 
 /* Make sure inner content sits above background layer */
@@ -354,6 +361,27 @@ header nav .header-login-link i,
   color: var(--ce-coral-dark);
 }
 
+.ce-nearby-summary {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  margin: -10px auto 16px;
+  color: var(--ce-ink);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.ce-nearby-summary[hidden] {
+  display: none;
+}
+
+.ce-nearby-summary a {
+  color: var(--ce-leaf);
+  text-decoration: underline;
+}
+
 .ce-suggestions {
   position: absolute;
   top: calc(100% + 6px);
@@ -377,6 +405,25 @@ header nav .header-login-link i,
 
 .ce-suggestions li {
   margin: 0;
+}
+
+.ce-suggestion-heading {
+  padding: 8px 13px 3px;
+  color: var(--ce-muted);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.ce-suggestion-title,
+.ce-suggestion-detail {
+  display: block;
+}
+
+.ce-suggestion-detail {
+  margin-top: 2px;
+  color: var(--ce-muted);
+  font-size: 12px;
 }
 
 .ce-suggestions button {
@@ -430,6 +477,7 @@ header nav .header-login-link i,
   max-width: 1320px;
   margin: 0 auto;
   padding: 14px 40px 74px;
+  scroll-margin-top: 70px;
   border-top: 1px solid var(--ce-coral);
   transition: all 0.3 ease-in-out;
 }

@@ -7,6 +7,8 @@ $(document).ready(function () {
   const grid = document.getElementById("ce-merchant-grid");
   const note = document.getElementById("ce-location-note");
   const count = document.getElementById("ce-result-count");
+  const nearbySummary = document.getElementById("ce-nearby-summary");
+  const nearbyCount = document.getElementById("ce-nearby-count");
   const locateButton = document.getElementById("ce-locate");
   const categoryButtons = Array.from(
     document.querySelectorAll(".ce-categories button"),
@@ -25,6 +27,8 @@ $(document).ready(function () {
   }
 
   function hideSuggestions() {
+    window.clearTimeout(suggestionTimer);
+    ++suggestionRequest;
     suggestions.hidden = true;
     suggestions.replaceChildren();
   }
@@ -51,39 +55,138 @@ $(document).ready(function () {
 
   function requestSuggestions(query) {
     const requestId = ++suggestionRequest;
+    let merchants = [];
+    let addresses = [];
+    let merchantPending = true;
+    let merchantFailed = false;
+    let addressFailed = false;
+
+    function showSuggestionError() {
+      if (merchantFailed && addressFailed) {
+        setNote("Store and address suggestions are unavailable. Please try again.", true);
+      } else if (merchantFailed) {
+        setNote("Store suggestions are unavailable. You can still search by address.", true);
+      } else if (addressFailed) {
+        setNote("Address suggestions are unavailable. You can still search for a store.", true);
+      }
+    }
+
+    function renderSuggestions() {
+      if (requestId !== suggestionRequest) return;
+      suggestions.replaceChildren();
+      function heading(text) {
+        const item = document.createElement("li");
+        item.className = "ce-suggestion-heading";
+        item.setAttribute("role", "presentation");
+        item.textContent = text;
+        suggestions.appendChild(item);
+      }
+      function option(title, detail, select) {
+        const item = document.createElement("li");
+        item.setAttribute("role", "presentation");
+        const button = document.createElement("button");
+        button.type = "button";
+        button.setAttribute("role", "option");
+        button.setAttribute("aria-selected", "false");
+        const name = document.createElement("span");
+        name.className = "ce-suggestion-title";
+        name.textContent = title;
+        button.appendChild(name);
+        if (detail) {
+          const description = document.createElement("span");
+          description.className = "ce-suggestion-detail";
+          description.textContent = detail;
+          button.appendChild(description);
+        }
+        button.addEventListener("click", select);
+        item.appendChild(button);
+        suggestions.appendChild(item);
+      }
+      if (merchants.length) {
+        heading("Stores");
+        merchants.forEach(function (merchant) {
+          const address = [merchant.address, merchant.city, merchant.state, merchant.zip_code]
+            .filter(Boolean).join(", ");
+          option(merchant.business_name, address, function () {
+            hideSuggestions();
+            loading(5);
+            window.location.href = "/?app=neighborhub&view=customer&p=merchant_products&merchant_id=" +
+              encodeURIComponent(merchant.id);
+          });
+        });
+      }
+      if (!merchantPending && addresses.length) {
+        heading("Addresses");
+        addresses.forEach(function (result) {
+          option(result.display_name, "", function () {
+            saveLocation(result.display_name, result.lat, result.lon);
+          });
+        });
+      }
+      const first = suggestions.querySelector("button");
+      if (first) first.dataset.first = "true";
+      suggestions.hidden = !first;
+    }
+
     loading(4);
+
+    mb.ajax({
+      url: "?api=neighborhub&action=merchant_suggestions",
+      method: "GET",
+      dataType: "json",
+      data: { q: query },
+      success: function (response) {
+        if (requestId !== suggestionRequest) return;
+        if (!response || !response.success || !Array.isArray(response.merchants)) {
+          console.error("Invalid merchant suggestions response");
+          merchantPending = false;
+          merchantFailed = true;
+          showSuggestionError();
+          renderSuggestions();
+          return;
+        }
+        merchantPending = false;
+        merchants = response.merchants.filter(function (merchant) {
+          return merchant && Number.isInteger(Number(merchant.id)) && Number(merchant.id) > 0 &&
+            typeof merchant.business_name === "string" && merchant.business_name.trim();
+        });
+        renderSuggestions();
+      },
+      error: function () {
+        if (requestId === suggestionRequest) {
+          merchantPending = false;
+          merchantFailed = true;
+          showSuggestionError();
+          renderSuggestions();
+        }
+      },
+      complete: function () {
+        loading(0);
+      }
+    });
     mb.ajax({
       url: "?api=neighborhub&action=geocode_proxy",
       method: "GET",
       dataType: "json",
       data: { q: query },
       success: function (results) {
-        if (requestId !== suggestionRequest || !Array.isArray(results)) return;
-        suggestions.replaceChildren();
-
-        results.forEach(function (result, index) {
-          if (!result.display_name || !result.lat || !result.lon) return;
-          const item = document.createElement("li");
-          const button = document.createElement("button");
-          button.type = "button";
-          button.role = "option";
-          button.setAttribute("aria-selected", "false");
-          button.textContent = result.display_name;
-          button.addEventListener("click", function () {
-            saveLocation(result.display_name, result.lat, result.lon);
-          });
-          item.appendChild(button);
-          suggestions.appendChild(item);
-          if (index === 0) button.dataset.first = "true";
+        if (requestId !== suggestionRequest) return;
+        if (!Array.isArray(results)) {
+          console.error("Invalid address suggestions response");
+          addressFailed = true;
+          showSuggestionError();
+          return;
+        }
+        addresses = results.filter(function (result) {
+          return result && result.display_name && result.lat != null && result.lon != null;
         });
-
-        suggestions.hidden = suggestions.childElementCount === 0;
+        renderSuggestions();
       },
       error: function () {
-        if (requestId === suggestionRequest) hideSuggestions();
-      },
-      complete: function () {
-        loading(0);
+        if (requestId === suggestionRequest) {
+          addressFailed = true;
+          showSuggestionError();
+        }
       },
     });
   }
@@ -236,6 +339,12 @@ $(document).ready(function () {
     count.textContent = merchants.length
       ? merchants.length + (merchants.length === 1 ? " place" : " places")
       : "";
+    if (nearbySummary && nearbyCount) {
+      nearbyCount.textContent = merchants.length +
+        (merchants.length === 1 ? " place" : " places") +
+        (category ? " matching " + category : "") + " found nearby";
+      nearbySummary.hidden = false;
+    }
     if (!merchants.length) {
       $('body').removeClass('places-located');
       showMessage(
@@ -257,6 +366,7 @@ $(document).ready(function () {
     )
       return;
     const requestId = ++searchRequest;
+    if (nearbySummary) nearbySummary.hidden = true;
     showLoading();
     loading(4);
     mb.ajax({
@@ -322,11 +432,15 @@ $(document).ready(function () {
 
   input.addEventListener("input", function () {
     const query = input.value.trim();
-    if (location && query !== location.address) location = null;
-    window.clearTimeout(suggestionTimer);
+    if (location && query !== location.address) {
+      location = null;
+      ++searchRequest;
+      if (nearbySummary) nearbySummary.hidden = true;
+      setNote("Choose a store or an address to find nearby places.", false);
+    }
+    hideSuggestions();
+    if (note.classList.contains("is-error")) setNote("Choose a store or an address to find nearby places.", false);
     if (query.length < 3) {
-      ++suggestionRequest;
-      hideSuggestions();
       return;
     }
     suggestionTimer = window.setTimeout(function () {
@@ -364,7 +478,7 @@ $(document).ready(function () {
 
       return searchMerchants();
     }
-    setNote("Choose an address from the suggestions to search nearby.", true);
+    setNote("Choose a store or address from the suggestions.", true);
     input.focus();
   });
 
