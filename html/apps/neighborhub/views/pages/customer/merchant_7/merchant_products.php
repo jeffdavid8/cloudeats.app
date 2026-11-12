@@ -702,7 +702,7 @@ if ($spotlightProductId) {
     <div class="right">
       <div class="top-right-dropdown-wrapper">
         <a class="dropdown-trigger hover-grow btn-floating btn-large waves-effect waves-light" href="#" data-target="top-right-menu">
-          <i class="fas fa-ellipsis-v"></i>
+          <i class="fas fa-utensils"></i>
         </a>
 
         <!-- Dropdown Menu Structure -->

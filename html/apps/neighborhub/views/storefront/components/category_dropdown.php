@@ -9,7 +9,7 @@ $activeMenuId = $activeMenuId ?? get_var('menu_id', !empty($menus) ? array_keys(
     <div class="right">
       <div class="top-right-dropdown-wrapper">
         <a class="dropdown-trigger hover-grow btn-floating btn-large waves-effect waves-light" href="#" data-target="top-right-menu">
-          <i class="fas fa-ellipsis-v"></i>
+          <i class="fas fa-utensils"></i>
         </a>
         <ul id="top-right-menu" class="dropdown-content">
           <li class="category-menu-item-back-to-top"><a class="category-menu-item" data-category-anchor="top" href="#!">Back to Top</a></li>
