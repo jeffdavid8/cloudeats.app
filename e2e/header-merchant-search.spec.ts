@@ -53,12 +53,14 @@ for (const width of [375, 1024]) {
     const search = page.locator('#header-merchant-search-input');
     const clear = page.getByRole('button', { name: 'Clear search' });
     const noResults = page.locator('#header-merchant-search-no-results');
+    const resultCount = page.locator('#header-merchant-search-result-count');
     await expect(panel).toBeHidden();
     await trigger.click();
     await expect(panel).toBeVisible();
     await expect(search).toBeFocused();
     await expect(trigger).toHaveAttribute('aria-expanded', 'true');
     await expect(clear).toBeHidden();
+    await expect(resultCount).toBeHidden();
     await page.evaluate(() => document.body.classList.add('scrolled'));
     const bounds = await page.evaluate(() => ({
       nav: document.querySelector('.nav-wrapper')!.getBoundingClientRect().bottom,
@@ -80,15 +82,22 @@ for (const width of [375, 1024]) {
     await expect(page.locator('#ice-cream')).toBeHidden();
     await expect(page.locator('#iv-product-search-input')).toHaveValue('pepperoni');
     await expect(page.locator('#iv-result-count')).toHaveText('Showing 1 of 4 items');
+    await expect(resultCount).toBeVisible();
+    await expect(resultCount).toHaveText('Showing 1 of 4 items');
+    await search.fill('pizza');
+    await expect(resultCount).toHaveText('Showing 2 of 4 items');
+    await search.fill('pepperoni');
     await search.press('Tab');
     await expect(clear).toBeFocused();
     await expect(panel).toBeVisible();
     await expect(search).toHaveValue('pepperoni');
     await search.fill('no matching product');
     await expect(noResults).toBeVisible();
+    await expect(resultCount).toHaveText('Showing 0 of 4 items');
     await clear.click();
     await expect(search).toBeFocused();
     await expect(noResults).toBeHidden();
+    await expect(resultCount).toBeHidden();
     await expect(page.locator('#sundae')).toHaveCSS('display', 'flex');
     await expect(page.locator('#dessert-title')).toBeVisible();
     await search.fill('BROWNIE');
@@ -104,6 +113,7 @@ for (const width of [375, 1024]) {
     await expect(page.locator('#ice-cream')).toBeVisible();
     await trigger.click();
     await expect(search).toHaveValue('sundae');
+    await expect(resultCount).toHaveText('Showing 1 of 4 items');
     await search.press('Escape');
     await expect(panel).toBeHidden();
     await expect(page.locator('#pizza-title')).toBeVisible();
@@ -115,3 +125,25 @@ for (const width of [375, 1024]) {
     await expect(page.locator('#brownie')).toBeVisible();
   });
 }
+
+test('empty menu reports zero items without showing a count on unrelated pages', async ({ page }) => {
+  await page.setContent(`
+    <header class="header"><nav>
+      <button class="header-merchant-search-trigger" aria-expanded="false">Search</button>
+      ${searchPanel}
+    </nav></header>
+  `);
+  await page.addStyleTag({ path: path.resolve('html/css/style.css') });
+  await page.addScriptTag({ path: path.resolve('html/js/jquery-2.1.1.min.js') });
+  await page.addScriptTag({ content: searchScript });
+  await expect.poll(() => page.evaluate(() => (window as Window & { jQuery?: { isReady: boolean } }).jQuery?.isReady)).toBe(true);
+  await page.locator('.header-merchant-search-trigger').click();
+  const search = page.locator('#header-merchant-search-input');
+  const count = page.locator('#header-merchant-search-result-count');
+  await search.fill('pizza');
+  await expect(count).toBeHidden();
+  await page.evaluate(() => document.body.classList.add('merchant_products-page'));
+  await search.fill('pasta');
+  await expect(count).toHaveText('Showing 0 of 0 items');
+  await expect(count).toBeVisible();
+});

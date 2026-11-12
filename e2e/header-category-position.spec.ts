@@ -59,11 +59,12 @@ test('floating categories clear the changing header only while search is open', 
   await search.fill('no matching product');
   await expect(page.locator('#header-merchant-search-no-results')).toBeVisible();
   await assertClearance();
-  expect((await getPositions()).categories).toBeGreaterThan(openedTop);
+  const resultsTop = (await getPositions()).categories;
+  expect(resultsTop).toBeGreaterThan(openedTop);
 
   await page.locator('.nh-merchant-operational-status').evaluate(el => { (el as HTMLElement).style.display = 'none'; });
   await assertClearance();
-  await expect.poll(async () => (await getPositions()).categories).toBeLessThan(openedTop);
+  await expect.poll(async () => (await getPositions()).categories).toBeLessThan(resultsTop);
   await page.locator('.nh-merchant-operational-status').evaluate(el => { (el as HTMLElement).style.display = ''; });
   await assertClearance();
 

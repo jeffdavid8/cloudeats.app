@@ -174,7 +174,6 @@ class User
 
     public function isMerchantUser($merchantId = null): bool
     {
-        logger($merchantId);
         if (!$this->id || ($merchantId !== null && (int)$merchantId < 1)) {
             return false;
         }

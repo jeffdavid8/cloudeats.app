@@ -6,9 +6,12 @@ $merchant = $this->get('merchant');
 ?>
 <ul id="slide-out" class="sidenav show-on-large">
   <li style="display: block;padding: 0; margin: 0; background-color: var(--icon-bg-color);">
-    <a class="page_link waves-effect waves-light left" href="<?= $this->config['base_url'] . $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ?>"><i class="material-icons">share</i></a>
-    
-    <a href="#" data-target="slide-out" class="sidenav-trigger main-menu-btn right"><i class="fas fa-times fa-lg"></i></a>
+
+    <div class="sidenav-header" style="display: flex; align-items: flex-start; gap: 2px;">
+      <a href="/"><i class="material-icons">store</i></a>
+      <a class="page_link waves-effect waves-light" href="<?= $this->config['base_url'] . $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ?>"><i class="material-icons">share</i></a>
+      <a href="#" data-target="slide-out" class="sidenav-trigger main-menu-btn" style="margin-left: auto;"><i class="fas fa-times fa-lg"></i></a>
+    </div>
 
   </li>
   <li>

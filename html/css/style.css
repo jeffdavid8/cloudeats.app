@@ -326,6 +326,18 @@ header.header nav .header-merchant-brand > a.merchant-sidenav-trigger {
   align-items: center;
   justify-content: center;
 }
+header.header nav .header-right .header-merchant-brand {
+  margin-left: 0;
+}
+header.header nav ul.header-right li .header-merchant-brand > a.merchant-sidenav-trigger {
+  width: 50px;
+  height: 50px;
+  padding: 0;
+}
+header.header nav .header-right .header-merchant-status-dot {
+  right: 7px;
+  bottom: 7px;
+}
 header.header nav .header-left > li > div > a.header-sidenav-trigger {
   display: flex;
   align-items: center;
@@ -450,7 +462,7 @@ body.scrolled header.header.has-merchant-search nav {
   display: none !important;
 }
 .header-merchant-search-row,
-.header-merchant-search-no-results {
+.header-merchant-search-feedback {
   max-width: 640px;
   margin: 0 auto;
 }
@@ -521,9 +533,12 @@ body.scrolled header.header.has-merchant-search nav {
   outline: 2px solid #28846a;
   outline-offset: 2px;
 }
-.header-merchant-search-no-results {
+.header-merchant-search-feedback p {
   padding: 8px 4px 2px;
   font: 400 14px/1.4 system-ui, sans-serif;
+}
+.header-merchant-search-feedback p + p {
+  padding-top: 0;
 }
 .nh-search-positioned-category {
   transform: translateY(var(--nh-search-category-offset, 0px)) !important;
