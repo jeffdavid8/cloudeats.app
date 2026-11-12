@@ -34,10 +34,9 @@ for (const template of templates) {
         <ul class="header-left"><li><div style="display:flex;align-items:center;gap:8px;margin-left:5px">
           <a class="header-sidenav-trigger" href="#"><img width="40" height="40"></a>
           <a class="header-ce-logo-home-link hide-on-small-only" href="/">CloudEats</a>
-          <span class="header-merchant-brand"><img></span>
           <button class="header-merchant-search-trigger">S</button>
         </div></li></ul>
-        <ul class="header-right"><li>${markup}</li><li><a href="#" class="user-badge"><i class="material-icons">account_circle</i></a></li></ul>
+        <ul class="header-right"><li><span class="header-merchant-brand"><a href="#" class="merchant-sidenav-trigger"><img></a></span></li><li>${markup}</li><li><a href="#" class="user-badge"><i class="material-icons">account_circle</i></a></li></ul>
       </div></nav></header>
       <div id="nh-shopping-cart-sidenav"></div>
       <input id="nh-cart-address-string"><input id="nh-cart-lat"><input id="nh-cart-lon">
@@ -73,9 +72,11 @@ for (const template of templates) {
         const left = wrapper.querySelector('.header-left > li > div')!.getBoundingClientRect();
         const right = wrapper.querySelector('.header-right')!.getBoundingClientRect();
         const button = wrapper.querySelector('.nh-header-cart')!.getBoundingClientRect();
-        return { left: left.right, right: right.left, buttonRight: button.right, viewport: window.innerWidth };
+        const merchant = wrapper.querySelector('.merchant-sidenav-trigger')!.getBoundingClientRect();
+        return { left: left.right, right: right.left, merchantRight: merchant.right, buttonLeft: button.left, buttonRight: button.right, viewport: window.innerWidth };
       });
       expect(positions.left).toBeLessThanOrEqual(positions.right);
+      expect(positions.merchantRight).toBeLessThanOrEqual(positions.buttonLeft);
       expect(positions.buttonRight).toBeLessThanOrEqual(positions.viewport);
       const badge = await cart.locator('.nh-cart-count-badge').boundingBox();
       const amount = await subtotal.boundingBox();

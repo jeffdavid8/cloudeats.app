@@ -5,6 +5,7 @@
     if (!menu || !trigger) return;
 
     const instance = M.Sidenav.init(menu, {
+      edge: "right",
       outDuration: 200,
       draggable: false,
       onOpenStart: function () { trigger.setAttribute("aria-expanded", "true"); },

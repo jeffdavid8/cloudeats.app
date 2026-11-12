@@ -33,7 +33,7 @@ if ($this->get('view') === 'customer' && !$customer->terms_accepted_at):
 
          <? render('components/header/header_left.php', array('search_string' => $search_string, 'canOpenMerchantMenu' => $canOpenMerchantMenu, 'operationalStatus' => $operationalStatus)); ?>
 
-         <? render('components/header/header_right.php', array('search_string' => $search_string)); ?>
+         <? render('components/header/header_right.php', array('search_string' => $search_string, 'canOpenMerchantMenu' => $canOpenMerchantMenu, 'headerMerchant' => $merchant, 'operationalStatus' => $operationalStatus)); ?>
 
 
       </div>
@@ -60,7 +60,10 @@ if ($this->get('view') === 'customer' && !$customer->terms_accepted_at):
             </div>
             <button type="button" class="header-merchant-search-cancel">Cancel</button>
          </div>
-         <p id="header-merchant-search-no-results" class="header-merchant-search-no-results" role="status" hidden>No items found. Try a different search.</p>
+         <div class="header-merchant-search-feedback" role="status" aria-live="polite" aria-atomic="true">
+            <p id="header-merchant-search-result-count" hidden></p>
+            <p id="header-merchant-search-no-results" hidden>No items found. Try a different search.</p>
+         </div>
       </div>
 <?php endif; ?>
       <div class="progress"><div class="indeterminate"></div></div>
@@ -70,7 +73,7 @@ if ($this->get('view') === 'customer' && !$customer->terms_accepted_at):
 
 <? render('components/sidenav/main_left.php'); ?>
 <?php if ($canOpenMerchantMenu): ?>
-<ul id="merchant-slide-out" class="sidenav" aria-label="Merchant navigation">
+<ul id="merchant-slide-out" class="sidenav right-aligned" aria-label="Merchant navigation">
    <li class="merchant-sidenav-header">
       <a href="#!" class="merchant-sidenav-close" aria-label="Close merchant navigation"><i class="fas fa-times fa-lg" aria-hidden="true"></i></a>
    </li>

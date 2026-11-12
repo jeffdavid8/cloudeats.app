@@ -7,7 +7,7 @@ test('merchant sidenav opens and closes independently of the main sidenav', asyn
       <a class="merchant-sidenav-trigger" href="#merchant-slide-out" aria-controls="merchant-slide-out" aria-expanded="false">Merchant</a>
     </header>
     <ul id="slide-out" class="sidenav"><li>Main navigation</li></ul>
-    <ul id="merchant-slide-out" class="sidenav" aria-label="Merchant navigation">
+    <ul id="merchant-slide-out" class="sidenav right-aligned" aria-label="Merchant navigation">
       <li><a href="#!" class="merchant-sidenav-close">Close</a></li><li><a href="/products">Products</a></li>
     </ul>
   `);
@@ -16,14 +16,18 @@ test('merchant sidenav opens and closes independently of the main sidenav', asyn
   await page.evaluate(() => (window as any).M.Sidenav.init(document.getElementById('slide-out')));
   await page.addScriptTag({ path: path.resolve('html/apps/neighborhub/js/merchant-sidenav.js') });
   const trigger = page.locator('.merchant-sidenav-trigger');
+  const menu = page.locator('#merchant-slide-out');
+  expect(await menu.evaluate(element => element.getBoundingClientRect().left)).toBeGreaterThanOrEqual(1279);
   await trigger.click();
   await expect(trigger).toHaveAttribute('aria-expanded', 'true');
+  await expect.poll(async () => menu.evaluate(element => Math.round(element.getBoundingClientRect().right))).toBe(1280);
+  expect(await menu.evaluate(element => Math.round(element.getBoundingClientRect().left))).toBe(980);
   expect(await page.evaluate(() => (window as any).M.Sidenav.getInstance(document.getElementById('slide-out')).isOpen)).toBe(false);
   await page.locator('.merchant-sidenav-close').click();
   await expect(trigger).toHaveAttribute('aria-expanded', 'false');
   await expect(trigger).toBeFocused();
   await trigger.click();
   await expect(trigger).toHaveAttribute('aria-expanded', 'true');
-  await page.locator('.sidenav-overlay:visible').click({ position: { x: 350, y: 30 } });
+  await page.locator('.sidenav-overlay:visible').click({ position: { x: 20, y: 30 } });
   await expect(trigger).toHaveAttribute('aria-expanded', 'false');
 });

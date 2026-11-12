@@ -79,8 +79,9 @@ image also changes the fallback used by storefronts without a selected image.
 
 When a merchant image is present, verified staff for that merchant and
 platform admins can open the shared merchant management menu by clicking the
-merchant image in the header, including in customer storefront view. Other
-visitors retain the storefront image's existing behavior. Management pages
+merchant image on the right side of the header, immediately before the basket
+when shown, including in customer storefront view. The merchant menu opens from
+the right. Other visitors retain the storefront image's existing behavior. Management pages
 and APIs continue to enforce their own access checks.
 
 ### Phase 2: Storefront data model
@@ -279,6 +280,8 @@ The merchant header search opens below the header and filters menu items as
 the customer types. The search stays open when focus moves elsewhere; Clear
 restores all items, while Cancel or Escape also closes the search. Where a
 storefront has an additional menu search field, both fields share the filter.
+For an active search, the header shows the number of matching items out of the
+menu total, including zero matches.
 While search is open, the floating category button moves below the header if
 needed and returns to its normal position when search closes.
 

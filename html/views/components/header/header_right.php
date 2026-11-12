@@ -64,6 +64,10 @@ if ($isUserLoggedIn) {
 
 <ul class="header-right" data-component="header-right">
 
+    <?php if (!empty($canOpenMerchantMenu)): ?>
+        <? render('components/header/merchant_trigger.php', array('merchant' => $headerMerchant, 'operationalStatus' => $operationalStatus)); ?>
+    <?php endif; ?>
+
     <? if (($nh->get('view') == 'customer') && ($merchant) && ($merchant->status == 'online')) { ?>
         <li><a href="#" data-target="nh-shopping-cart-sidenav" aria-label="Open basket" class="nh-header-cart waves-effect waves-light shopping-cart-sidenav-trigger accent-4 shadow-lift round-header-action">
                 <i class="fas fa-shopping-basket" aria-hidden="true"></i>

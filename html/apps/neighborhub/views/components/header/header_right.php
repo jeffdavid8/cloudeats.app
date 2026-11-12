@@ -61,6 +61,10 @@ if ($isUserLoggedIn) {
 
 <ul class="header-right" data-component="header-right">
 
+    <?php if (!empty($canOpenMerchantMenu)): ?>
+        <? render('components/header/merchant_trigger.php', array('merchant' => $headerMerchant, 'operationalStatus' => $operationalStatus)); ?>
+    <?php endif; ?>
+
     <? if (($this->get('show_header_shopping_basket')) && ($this->get('merchant')->status == 'online')) { ?>
         <li><a href="#" data-target="nh-shopping-cart-sidenav" aria-label="Open basket" class="nh-header-cart <?= $this->get('header_shopping_basket_class_list', 'waves-effect waves-light shopping-cart-sidenav-trigger accent-4 shadow-lift round-header-action') ?>">
                 <i class="fas fa-shopping-basket" aria-hidden="true"></i>

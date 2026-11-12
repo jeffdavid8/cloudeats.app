@@ -13,13 +13,9 @@ $merchant = $this->get('merchant');
 
          </a>
          <a class="header-ce-logo-home-link hover-grow hide-on-small-only" style="width: auto; margin-left: 0; padding: 0 5px; font-size: 1.3rem;border-radius: 10px;" href="/"><span class="brand-cloud">Cloud</span><span class="brand-eats">Eats</span><span class="brand-extension">.app</span></a>
-         <?php if ($merchant && !empty($merchant->id) && !empty($merchant->image_url)): ?>
+         <?php if ($merchant && !empty($merchant->id) && !empty($merchant->image_url) && empty($canOpenMerchantMenu)): ?>
             <span class="header-merchant-brand" title="<?= htmlspecialchars($merchant->business_name ?? 'Merchant storefront') ?>">
-               <?php if (!empty($canOpenMerchantMenu)): ?>
-                  <a href="#merchant-slide-out" class="merchant-sidenav-trigger" aria-controls="merchant-slide-out" aria-expanded="false" aria-label="Open merchant navigation for <?= htmlspecialchars($merchant->business_name ?? 'Merchant', ENT_QUOTES, 'UTF-8') ?>">
-                     <img src="<?= htmlspecialchars($merchant->image_url, ENT_QUOTES, 'UTF-8') ?>" alt="">
-                  </a>
-               <?php elseif ($this->get('view') === 'merchant'): ?>
+               <?php if ($this->get('view') === 'merchant'): ?>
                   <a href="?app=neighborhub&view=merchant&p=dashboard&merchant_id=<?= (int)$merchant->id ?>" title="Merchant Dashboard for <?= htmlspecialchars($merchant->business_name ?? 'Merchant') ?>">
                      <img src="<?= htmlspecialchars($merchant->image_url) ?>" alt="<?= htmlspecialchars($merchant->business_name ?? 'Merchant') ?>">
                   </a>
@@ -58,6 +54,7 @@ $(function() {
   const $trigger = $('.header-merchant-search-trigger');
   const $panel = $('#header-merchant-search-panel');
   const $clear = $('.header-merchant-search-clear');
+  const $resultCount = $('#header-merchant-search-result-count');
   const $noResults = $('#header-merchant-search-no-results');
   const $otherSearch = $('#iv-product-search-input');
   if (!$search.length || !$panel.length) return;
@@ -133,6 +130,8 @@ $(function() {
       }).length > 0);
     });
 
+    const showCount = Boolean(query) && ($cards.length > 0 || document.body.classList.contains('merchant_products-page'));
+    $resultCount.text(showCount ? `Showing ${matches} of ${$cards.length} ${$cards.length === 1 ? 'item' : 'items'}` : '').prop('hidden', !showCount);
     $noResults.prop('hidden', !query || !$cards.length || matches > 0);
     positionCategoryMenu();
     $('#iv-result-count').text(query
