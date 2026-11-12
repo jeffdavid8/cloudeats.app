@@ -204,9 +204,6 @@ function neighborhub_init(&$app)
       $styles = array(
         'apps/neighborhub/css/customer.css',
       );
-      if (file_exists($app->app_dir.'/css/merchant_'.$merchantId.'/merchant-'.$merchantId.'-customer.css')) {
-        $styles[] = 'apps/neighborhub/css/merchant_'.$merchantId.'/merchant-'.$merchantId.'-customer.css';
-      }
       $scripts = array(
         'apps/neighborhub/js/multiTenantShoppingCart.js',
         'apps/neighborhub/js/merchantStorefront.js',
@@ -228,6 +225,9 @@ function neighborhub_init(&$app)
         }
       }
       neighborhub_init_customer_context($app);
+
+      $styles = array_merge($styles, $app->get('customer_styles', array()));
+
       break;
   }
 
@@ -629,6 +629,9 @@ function neighborhub_init_admin_context(&$app)
  */
 function neighborhub_init_customer_context(&$app)
 {
+  $customer_styles = $app->get('customer_styles', array());
+  $page = $app->get('page', 'dashboard');
+  $merchantId = $app->get('merchant_id');
   try {
     $user_id = $app->user->id;
     $app->includeModel('merchant');
@@ -639,8 +642,6 @@ function neighborhub_init_customer_context(&$app)
 
     $app->set('show_header_shopping_basket', true);
     $app->set('shopping_basket_class_list', 'sidenav right-aligned');
-
-    $page = $app->get('page', 'dashboard');
 
     $action = get_var('action', false);
 
@@ -693,7 +694,6 @@ function neighborhub_init_customer_context(&$app)
 
     $app->includeModel('product');
     $app->includeModel('merchantstorefront');
-    $merchantId = $app->get('merchant_id');
     //$merchant = Merchant::getMerchantById($merchantId);
     //$app->set('merchant', $merchant);
 
@@ -807,7 +807,6 @@ function neighborhub_init_customer_context(&$app)
         'image_type' => $image_info['mime'],
       );
     }
-
   }
   if ($page == 'public.splash') {
     $image = 'images/neighborhub-app-index-logo-lg.png';
@@ -825,6 +824,29 @@ function neighborhub_init_customer_context(&$app)
   }
 
   $app->set('meta', $meta);
+
+  $storefrontConfig = $app->get('storefront_config', []);
+  $selectedTheme = is_array($storefrontConfig)
+    ? (string)($storefrontConfig['theme'] ?? 'default')
+    : 'default';
+
+  $app->set('customer_styles', array_merge(
+    $customer_styles,
+    neighborhub_customer_override_styles($app->app_dir, $page, (int)$merchantId, $selectedTheme)
+  ));
+}
+
+function neighborhub_customer_override_styles(string $appDir, string $page, int $merchantId, string $theme): array
+{
+  if ($page !== 'merchant_products' || $merchantId < 1 || $theme !== 'default') {
+    return [];
+  }
+  $view = $appDir . '/views/pages/customer/merchant_' . $merchantId . '/merchant_products.php';
+  $css = '/css/merchant_' . $merchantId . '/merchant-' . $merchantId . '-customer.css';
+  if (!is_file($view) || !is_file($appDir . $css)) {
+    return [];
+  }
+  return ['apps/neighborhub' . $css];
 }
 
 function neighborhub_can_preview_storefront(&$app, int $merchantId): bool

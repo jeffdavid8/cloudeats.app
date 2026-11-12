@@ -26,6 +26,7 @@ $themeTemplate = $themeTemplates[$theme] ?? $themeTemplates['default'];
 ?>
 <script>
   document.body.dataset.storefrontPreview = <?= !empty($this->get('storefront_preview')) ? '"true"' : '"false"' ?>;
+  document.body.dataset.storefrontTheme = <?= json_encode($theme, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
 </script>
 <?php
 require $themeTemplate;

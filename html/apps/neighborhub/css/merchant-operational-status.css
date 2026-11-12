@@ -5,4 +5,5 @@
 .nh-merchant-operational-status.is-opening-soon { background: #eff6ff; color: #1e40af; }
 .nh-merchant-operational-dot { width: 9px; height: 9px; border-radius: 50%; background: currentColor; }
 .nh-merchant-closed-action { opacity: .5 !important; cursor: not-allowed !important; }
-body[data-storefront-theme] { background: var(--merchant-background); }
+body[data-storefront-theme] { background: var(--merchant-background); color: var(--brand-text-main, inherit); }
+.nightMode body[data-storefront-theme] { background: var(--brand-bg, var(--merchant-background)); }

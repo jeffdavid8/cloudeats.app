@@ -45,6 +45,11 @@ configuration.
 The `pizza-king`, `bakery`, and `diner` themes are now selectable shared-theme
 wrappers around the default components, allowing merchants to use distinct
 visual presets without duplicating catalog behavior.
+Shared themes define separate day and night palettes. The configured
+storefront background is used in day mode; night mode uses the selected
+theme's dark background, including in the draft preview. Legacy
+merchant-specific CSS loads only when its matching customer storefront
+override is selected.
 When a merchant has a legacy `merchant_*` storefront override, the `default`
 theme continues to render that override for compatibility. Selecting a named
 shared theme such as `bakery`, `diner`, or `pizza-king` routes the storefront

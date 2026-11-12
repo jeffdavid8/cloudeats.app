@@ -104,6 +104,9 @@ class MerchantStorefront {
     if (colors.primary) root.style.setProperty("--merchant-primary", colors.primary);
     if (colors.background) root.style.setProperty("--merchant-background", colors.background);
     if (colors.text) root.style.setProperty("--merchant-text", colors.text);
+    if (colors.primary) document.body.style.setProperty("--merchant-primary", colors.primary);
+    if (colors.background) document.body.style.setProperty("--merchant-background", colors.background);
+    if (colors.text) document.body.style.setProperty("--merchant-text", colors.text);
     document.body.dataset.storefrontTheme = configuration.theme || "default";
     document.body.dataset.storefrontLayout = configuration.layout || "hero-centered";
     const hero = document.querySelector(".merchant-storefront-hero");

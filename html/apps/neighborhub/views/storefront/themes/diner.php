@@ -8,6 +8,7 @@ $heroId = (int)($configuration['assets']['hero_id'] ?? 0);
 $merchantImage = htmlspecialchars((string)($assetUrls[$heroId] ?? ($merchant->image_url ?? '')), ENT_QUOTES, 'UTF-8');
 ?>
 <style>
+  .dayMode body,
   body {
     --brand-bg: #f5f7fa;
     --brand-card-bg: #ffffff;
@@ -22,6 +23,22 @@ $merchantImage = htmlspecialchars((string)($assetUrls[$heroId] ?? ($merchant->im
     --brand-btn-add: #1d4058;
     --brand-btn-add-hover: #153247;
     --brand-pill-bg: #edf3f7;
+  }
+
+  .nightMode body {
+    --brand-bg: #142628;
+    --brand-card-bg: #1c3335;
+    --brand-text-main: #f9f0dc;
+    --brand-text-muted: #c2d2cc;
+    --brand-border: rgba(231, 185, 78, .24);
+    --brand-nav-bg: #0b1d1f;
+    --brand-nav-border: #e45b55;
+    --brand-primary: #f06a60;
+    --brand-secondary: #7bc8c0;
+    --brand-gold: #e7b94e;
+    --brand-btn-add: #a9212a;
+    --brand-btn-add-hover: #c93237;
+    --brand-pill-bg: #294344;
   }
 
   .merchant-storefront-hero {

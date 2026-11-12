@@ -1289,6 +1289,10 @@ body.scrolled .merchant-header-image .online-status-dot {
 }
 
 .custom-section-title {
+  color: #000000;
+}
+
+.darkMode .custom-section-title {
   color: #e0e0e0;
 }
 
