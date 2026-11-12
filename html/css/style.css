@@ -1405,6 +1405,9 @@ ul.sidenav li a {
   -moz-user-select: none; /* Firefox */
   -ms-user-select: none; /* Internet Explorer/Edge */
 }
+ul.sidenav li a i.material-icons {
+  vertical-align: middle;
+}
 .sidenav li > a > i,
 .sidenav li > a > [class^="mdi-"],
 .sidenav li > a li > a > [class*="mdi-"],

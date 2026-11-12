@@ -226,7 +226,7 @@ if ($spotlightProductId) {
     transition: all .5s ease-in-out;
     display: block;
     margin: 0 auto;
-    width: 60%;
+    width: 90%;
     max-width: 500px;
   }
 
