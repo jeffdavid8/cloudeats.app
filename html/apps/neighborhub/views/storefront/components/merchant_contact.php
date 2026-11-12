@@ -4,7 +4,7 @@ if (!defined('MB_RUNNING')) exit;
 $merchant = $this->get('merchant');
 ?>
 <div class="row">
-  <div class="col s6">
+  <div class="col s12 m6">
     <div class="card horizontal border-radius-smooth" style="border-radius: 30px; box-shadow: none; margin-top: 2rem; border: none;">
       <div class="card-stacked">
         <div class="card-content">
@@ -54,7 +54,7 @@ $merchant = $this->get('merchant');
       </div>
     </div>
   </div>
-  <div class="col s6">
+  <div class="col s12 m6">
     <div class="card horizontal border-radius-smooth" style="border-radius: 30px; box-shadow: none; margin-top: 2rem; border: none;">
       <div class="card-stacked">
         <div class="card-content">
