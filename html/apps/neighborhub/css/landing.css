@@ -62,6 +62,14 @@ body.darkMode {
   --ce-filter-surface: rgba(29, 39, 35, 0.76);
 }
 
+
+
+.nightMode .my-cloudeats-link .btn {
+  background: linear-gradient( 45deg, #121010 0%, #1d3258 100% );
+  color: var(--space-black);
+  box-shadow: var(--glow-intensity) var(--lcars-orange);
+}
+
 body.header-announcement {
   & .app-container {
     margin-top: 3rem;
@@ -80,7 +88,9 @@ body.header-announcement {
   min-height: 100vh;
   color: var(--ce-ink);
   background-color: var(--ce-paper);
-  background-image: linear-gradient(90deg, var(--ce-grid-line) 1px, transparent 1px), linear-gradient(var(--ce-grid-line) 1px, transparent 1px);
+  background-image:
+    linear-gradient(90deg, var(--ce-grid-line) 1px, transparent 1px),
+    linear-gradient(var(--ce-grid-line) 1px, transparent 1px);
   background-size: 34px 34px;
   font-family: "Trebuchet MS", "Segoe UI", sans-serif;
 }
@@ -119,7 +129,9 @@ body.header-announcement {
   border-radius: 50%;
   background: var(--ce-ink);
   color: var(--ce-yellow);
-  font: 700 11px/1 "Trebuchet MS", sans-serif;
+  font:
+    700 11px/1 "Trebuchet MS",
+    sans-serif;
   letter-spacing: 0;
 }
 
@@ -142,7 +154,11 @@ header nav .header-login-link i,
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: linear-gradient(180deg, var(--ce-hero-start), var(--ce-hero-end) 74%);
+  background: linear-gradient(
+    180deg,
+    var(--ce-hero-start),
+    var(--ce-hero-end) 74%
+  );
   text-align: center;
 }
 /* Ensure hero is positioned for absolute background layering */
@@ -183,10 +199,10 @@ header nav .header-login-link i,
 
 /* Background image assignments */
 .dayMode body .hero-bg-parallax {
-  background-image: url('/images/hero-bg-day.jpg');
+  background-image: url("/images/hero-bg-day.jpg");
 }
 .nightMode body .hero-bg-parallax {
-  background-image: url('/images/hero-bg-night.jpg');
+  background-image: url("/images/hero-bg-night.jpg");
 }
 
 /* Radial Overlays for Text Legibility */
@@ -194,9 +210,9 @@ header nav .header-login-link i,
   position: absolute;
   inset: 0;
   background: radial-gradient(
-    circle at center, 
-    rgba(248, 250, 252, 0.88) 0%, 
-    rgba(248, 250, 252, 0.72) 60%, 
+    circle at center,
+    rgba(248, 250, 252, 0.88) 0%,
+    rgba(248, 250, 252, 0.72) 60%,
     rgba(248, 250, 252, 0.4) 100%
   );
   backdrop-filter: blur(3px);
@@ -207,9 +223,9 @@ header nav .header-login-link i,
   position: absolute;
   inset: 0;
   background: radial-gradient(
-    circle at center, 
-    rgba(15, 23, 42, 0.92) 0%, 
-    rgba(15, 23, 42, 0.80) 60%, 
+    circle at center,
+    rgba(15, 23, 42, 0.92) 0%,
+    rgba(15, 23, 42, 0.8) 60%,
     rgba(15, 23, 42, 0.55) 100%
   );
   backdrop-filter: blur(3px);
@@ -240,7 +256,10 @@ header nav .header-login-link i,
 .ce-hero h1 {
   margin: 0;
   color: var(--ce-ink);
-  font: 700 68px/0.99 Georgia, "Times New Roman", serif;
+  font:
+    700 68px/0.99 Georgia,
+    "Times New Roman",
+    serif;
 }
 
 .ce-hero h1 em {
@@ -287,7 +306,10 @@ header nav .header-login-link i,
   border: 0 !important;
   box-shadow: none !important;
   color: var(--ce-ink);
-  font: 15px "Trebuchet MS", "Segoe UI", sans-serif;
+  font:
+    15px "Trebuchet MS",
+    "Segoe UI",
+    sans-serif;
 }
 
 .ce-search input[type="search"]::placeholder {
@@ -342,7 +364,9 @@ header nav .header-login-link i,
   color: var(--ce-white);
   font-size: 14px;
   font-weight: 700;
-  transition: background 160ms ease, transform 160ms ease;
+  transition:
+    background 160ms ease,
+    transform 160ms ease;
 }
 
 .ce-search-submit:hover {
@@ -435,7 +459,10 @@ header nav .header-login-link i,
   background: transparent;
   color: var(--ce-ink);
   cursor: pointer;
-  font: 13px/1.4 "Trebuchet MS", "Segoe UI", sans-serif;
+  font:
+    13px/1.4 "Trebuchet MS",
+    "Segoe UI",
+    sans-serif;
   text-align: left;
 }
 
@@ -462,8 +489,14 @@ header nav .header-login-link i,
   background: var(--ce-filter-surface);
   color: var(--ce-ink);
   cursor: pointer;
-  font: 700 12px "Trebuchet MS", "Segoe UI", sans-serif;
-  transition: background 150ms ease, border-color 150ms ease, color 150ms ease;
+  font:
+    700 12px "Trebuchet MS",
+    "Segoe UI",
+    sans-serif;
+  transition:
+    background 150ms ease,
+    border-color 150ms ease,
+    color 150ms ease;
 }
 
 .ce-categories button:hover,
@@ -505,7 +538,10 @@ body.places-located .ce-results {
 .ce-results-heading h2 {
   margin: 0;
   color: var(--ce-ink);
-  font: 700 34px/1.12 Georgia, "Times New Roman", serif;
+  font:
+    700 34px/1.12 Georgia,
+    "Times New Roman",
+    serif;
 }
 
 .ce-result-count {
@@ -528,7 +564,10 @@ body.places-located .ce-results {
   background: var(--ce-white);
   color: var(--ce-ink);
   text-decoration: none;
-  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    border-color 180ms ease;
 }
 
 .ce-merchant-card:hover,
@@ -560,9 +599,16 @@ body.places-located .ce-results {
 .ce-card-image.is-placeholder {
   display: grid;
   place-items: center;
-  background: linear-gradient(135deg, var(--ce-image-start), var(--ce-image-end));
+  background: linear-gradient(
+    135deg,
+    var(--ce-image-start),
+    var(--ce-image-end)
+  );
   color: var(--ce-leaf);
-  font: 700 34px Georgia, "Times New Roman", serif;
+  font:
+    700 34px Georgia,
+    "Times New Roman",
+    serif;
 }
 
 .ce-card-image-status-dot {
@@ -584,7 +630,10 @@ body.places-located .ce-results {
   margin: 0 0 5px;
   overflow: hidden;
   color: var(--ce-ink);
-  font: 700 20px/1.2 Georgia, "Times New Roman", serif;
+  font:
+    700 20px/1.2 Georgia,
+    "Times New Roman",
+    serif;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -677,7 +726,10 @@ body.places-located .ce-results {
 .ce-empty-state h3 {
   margin: 0 0 8px;
   color: var(--ce-ink);
-  font: 700 23px/1.2 Georgia, "Times New Roman", serif;
+  font:
+    700 23px/1.2 Georgia,
+    "Times New Roman",
+    serif;
 }
 
 .ce-empty-state p {
@@ -712,7 +764,12 @@ body.places-located .ce-results {
 .ce-skeleton > span {
   height: 185px;
   display: block;
-  background: linear-gradient(90deg, var(--ce-skeleton) 20%, var(--ce-skeleton-highlight) 45%, var(--ce-skeleton) 70%);
+  background: linear-gradient(
+    90deg,
+    var(--ce-skeleton) 20%,
+    var(--ce-skeleton-highlight) 45%,
+    var(--ce-skeleton) 70%
+  );
   background-size: 220% 100%;
   animation: ce-shimmer 1.4s linear infinite;
 }
@@ -765,16 +822,26 @@ body.places-located .ce-results {
 }
 
 @keyframes ce-rise-in {
-  from { opacity: 0; transform: translateY(13px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(13px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes ce-shimmer {
-  to { background-position: -220% 0; }
+  to {
+    background-position: -220% 0;
+  }
 }
 
 @keyframes ce-spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media (max-width: 900px) {

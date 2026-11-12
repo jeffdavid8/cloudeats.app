@@ -95,6 +95,22 @@ if ($spotlightProductId) {
     transition: background-color 0.3s ease, color 0.3s ease;
   }
 
+  .dayMode .btn,
+  .dayMode .btn-flat,
+  .dayMode .btn-large {
+    background: linear-gradient(45deg, #ff6600 0%, #ff0000 100%);
+    color: var(--space-black);
+    box-shadow: var(--glow-intensity) var(--lcars-orange);
+  }
+
+  .nightMode .btn,
+  .nightMode .btn-flat,
+  .nightMode .btn-large {
+    background: linear-gradient(45deg, #ff6600 0%, #ff0000 100%);
+    color: var(--space-black);
+    box-shadow: var(--glow-intensity) var(--lcars-orange);
+  }
+
   /* Navigation Customization */
   header.header {
     z-index: revert-rule;
@@ -343,7 +359,7 @@ if ($spotlightProductId) {
   }
 
   .sweets-icon {
-    color: var(--brand-caramel) !important;
+    color: var(--brand-text-main) !important;
   }
 
   /* Adaptive Chuckwagon Buttons */
@@ -490,7 +506,7 @@ if ($spotlightProductId) {
             <!-- Website -->
             <?php if (!empty($merchant->website)): ?>
               <p style="display: flex; align-items: flex-start; margin-bottom: 1rem;">
-                <a href="<?php echo htmlspecialchars($merchant->website); ?>" target="_blank" rel="noopener noreferrer" style="color: var(--brand-caramel); font-weight: 700;" class="btn btn-small btn-flat waves-effect waves-light">
+                <a href="<?php echo htmlspecialchars($merchant->website); ?>" target="_blank" rel="noopener noreferrer" style="font-weight: 700;" class="btn btn-small btn-flat waves-effect waves-light">
                   <span class="sweets-icon" style="margin-right: 1rem; min-width: 1.25rem; text-align: center; font-size: 16px;">
                     <i class="fas fa-globe"></i>
                   </span>

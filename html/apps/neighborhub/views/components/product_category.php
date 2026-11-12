@@ -86,7 +86,7 @@
 
                 <?php if ($isCustomizable): ?>
                   <button class="btn waves-effect waves-light full-width nh-customize-trigger"
-                    style="width: 100%; background-color:#174a7d !important; color: #efefef; margin-bottom: 1rem;"
+                    style="width: 100%; margin-bottom: 1rem;"
                     data-id="<?php echo $prod['id']; ?>"
                     data-name="<?php echo htmlspecialchars($prod['name']); ?>"
                     data-type="<?php echo htmlspecialchars($productType); ?>"
@@ -102,7 +102,7 @@
                   </button>
                 <?php endif; ?>
                 <button class="btn waves-effect waves-light full-width nh-add-standard-btn"
-                  style="width: 100%; background-color:#3d7329 !important; color: #efefef;"
+                  style="width: 100%; "
                   data-id="<?php echo $prod['id']; ?>"
                   data-merchant-id="<?php echo $merchant->id; ?>"
                   data-name="<?php echo htmlspecialchars($prod['name']); ?>"

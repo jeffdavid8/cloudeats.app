@@ -75,6 +75,7 @@ if ($spotlightProductId && isset($menus[$activeMenuId]['categories'])) {
     --brand-btn-add-hover: #3E262A;
     --brand-pill-bg: #FDF8F3;
     --brand-no-bg-text: #dfdddd;
+
   }
 
   /* Night / Warm Evening Diner Mode */
@@ -145,6 +146,22 @@ if ($spotlightProductId && isset($menus[$activeMenuId]['categories'])) {
 
   body.scrolled {
     padding-top: 6rem;
+  }
+
+  .nightMode .btn,
+  .nightMode .btn-flat,
+  .nightMode .btn-large {
+    background: linear-gradient(45deg,#ff6600 0%, #ff9900 100%);
+    color: var(--space-black);
+    box-shadow: var(--glow-intensity) var(--lcars-orange);
+  }
+
+  .dayMode .btn,
+  .dayMode .btn-flat,
+  .dayMode .btn-large {
+    background: linear-gradient(45deg, #ff6600 0%, #ff9900 100%);
+    color: var(--space-black);
+    box-shadow: var(--glow-intensity) var(--lcars-orange);
   }
 
   .container::after {
@@ -336,6 +353,7 @@ if ($spotlightProductId && isset($menus[$activeMenuId]['categories'])) {
       top: 14rem;
     }
   }
+
   @media only screen and (min-width: 768px) {
     body.header-announcement {
       & .app-container {
@@ -573,7 +591,7 @@ if ($spotlightProductId && isset($menus[$activeMenuId]['categories'])) {
         ★ Home-Cooked Goodness & Fresh Coffee ★
       </div>
       <div class="iv-starline" aria-hidden="true">★ ★ ★ ★ ★</div>
-      
+
       <? render('components/merchant_menu_product_search_filter.php') ?>
 
     </div>

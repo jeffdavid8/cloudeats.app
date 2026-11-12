@@ -1,29 +1,33 @@
-
 :root {
-    --primary-color: #2196F3;
-    --secondary-color: #FF9800;
-    --accent-color: #4CAF50;
-    --background-color: #ffffff;
-    --surface-color: #f5f5f5;
-    --text-color: #212121;
-    --border-color: rgba(128, 128, 128, 0.3);
-    --card-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    --border-radius: 8px;
-    --transition-speed: 0.3s;
+  --primary-color: #2196f3;
+  --secondary-color: #ff9800;
+  --accent-color: #4caf50;
+  --background-color: #ffffff;
+  --surface-color: #f5f5f5;
+  --text-color: #212121;
+  --border-color: rgba(128, 128, 128, 0.3);
+  --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --border-radius: 8px;
+  --transition-speed: 0.3s;
+
+  --lcars-red: #ff0000;
+  --lcars-orange: #ff6600;
+  --lcars-gold: #ff9900;
+  --glow-intensity: 0.4;
 }
 
+
 .header-announcement {
-    background-color: var(--primary-color);
-    color: var(--background-color);
-    text-align: center;
-    font-size: 1rem;
-    font-weight: bold;
+  background-color: var(--primary-color);
+  color: var(--background-color);
+  text-align: center;
+  font-size: 1rem;
+  font-weight: bold;
 }
 
 .menu-container {
-    padding-top: 0;
+  padding-top: 0;
 }
-
 
 body.header-announcement {
   .app-container {
@@ -113,4 +117,13 @@ header.header img.scroll-to-top-link {
 }
 .dayMode .btn:hover {
   background-color: #dcdcdc;
+}
+
+.dayMode button.btn.nh-customize-trigger {
+  background-color: #0a4575;
+  color: #ececec;
+}
+.dayMode button.btn.nh-add-standard-btn {
+  background-color: #236925;
+  color: #ececec;
 }

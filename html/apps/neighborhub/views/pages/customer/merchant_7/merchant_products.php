@@ -42,6 +42,18 @@ if ($spotlightProductId) {
     --tyd-red-secondary: #7A1212;
     --tyd-green-primary: #2E5A27;
     --tyd-green-secondary: #1E3D19;
+    --lcars-red: #FF0000;
+    --lcars-orange: #FFA500;
+    --glow-intensity: 0.4;
+    --brand-primary: #0a4575;
+    --brand-secondary: #236925;
+    --brand-gold: #ff9900;
+  }
+
+  .nightMode {
+    --brand-primary: #0a4575;
+    --brand-secondary: #236925;
+    --brand-gold: #ff9900;
   }
 
   body {
@@ -265,6 +277,18 @@ if ($spotlightProductId) {
 
   body.scrolled .top-right-dropdown-wrapper {
     top: 7rem;
+  }
+
+  .dayMode .btn,
+  .dayMode .btn-large,
+  .dayMode .btn-small {
+    background-color: #300b13;
+    color: #e9e5e5;
+  }
+  .dayMode .btn:hover,
+  .dayMode .btn-large:hover,
+  .dayMode .btn-small:hover {
+    background-color: #d13860;
   }
 
   /* Pizzeria Box footer info design */
@@ -629,14 +653,14 @@ if ($spotlightProductId) {
 
       <div class="col s12 m8 l9">
         <!-- Product Catalog Categories -->
-      <?php foreach ($menuProductsByCategory as $categoryId => $catProducts) : ?>
-        <?php
-        render('components/product_category.php', array(
-          'merchant' => $merchant,
-          'products' => $catProducts,
-          'spotlightProductId' => $spotlightProductId,
-        )); ?>
-      <?php endforeach; ?>
+        <?php foreach ($menuProductsByCategory as $categoryId => $catProducts) : ?>
+          <?php
+          render('components/product_category.php', array(
+            'merchant' => $merchant,
+            'products' => $catProducts,
+            'spotlightProductId' => $spotlightProductId,
+          )); ?>
+        <?php endforeach; ?>
       </div>
     </div>
   </div>
@@ -661,6 +685,9 @@ if ($spotlightProductId) {
         <button class="btn-flat nh-card-qty-plus qty-btn" style="padding: 0 8px; height: 28px; line-height: 28px;"><i class="fas fa-plus fa-xs"></i></button>
       </div>
     </div>
+    <div style="display: flex; justify-content: flex-end; width: 100px; text-align: right;">
+      <button class="modal-close close" onclick=""><i class="material-icons">close</i></button>
+    </div>
   </div>
 
   <div class="modal-content" style="padding: 10px 24px 24px 24px; max-width: 700px;">
@@ -682,12 +709,12 @@ if ($spotlightProductId) {
     </div>
   </div>
 
-  <div class="modal-footer" style="padding: 15px 24px; background: #fafafa; border-top: 1px solid #eee;">
+  <div class="modal-footer" style="padding: 15px 24px; ">
     <div style="display: flex; align-items: center; justify-content: space-between;">
       <h5 style="margin:0; font-size: 14px; color:#555; font-weight:600; text-transform: uppercase; letter-spacing: 0.5px;">Total Item Cost:</h5>
       <span class="live-builder-total red-text text-darken-2" style="font-weight: 800; font-size: 24px;">$0.00</span>
     </div>
-    <div style="display: flex; align-items: center;">
+    <div style="display: flex; justify-content: flex-end; align-items: center;">
       <a href="#!" class="modal-close waves-effect waves-red btn-flat" style="margin-right: 12px; font-weight: 600;">Cancel</a>
       <button id="nh-modal-submit-add-to-cart" class="btn waves-effect waves-light nh-btn" style="background-color: #2E5A27 !important; height: 45px; line-height: 45px; padding: 0 24px;">
         Add To Basket <i class="fas fa-plus right"></i>
