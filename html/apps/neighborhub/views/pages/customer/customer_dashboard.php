@@ -54,7 +54,6 @@ if ($notification) {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   }
-
   .filter-bar {
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.08);
@@ -230,7 +229,7 @@ if ($notification) {
 
       newHtml += `
     <div class="col s12 m6 l4">
-      <div class="card hoverable nh-order-card ${isPending ? 'active-order' : ''}">
+      <div class="card nh-order-card ${isPending ? 'active-order' : ''}">
         <div class="card-content">
           <!-- Stacked Card Header -->
           <div class="order-header" style="display: flex; flex-direction: column; align-items: flex-start; gap: 6px; margin-bottom: 10px;">
@@ -265,14 +264,14 @@ if ($notification) {
           <!-- 50/50 Split Action Buttons -->
           <div style="display: flex; gap: 8px; width: 100%;">
             <button type="button" 
-                    class="btn-flat waves-effect waves-light green-text text-accent-3" 
+                    class="btn btn-flat waves-effect waves-light" 
                     style="flex: 1; text-align: center; padding: 0 4px; border: 1px solid rgba(129, 199, 132, 0.3); border-radius: 4px;" 
                     title="Reorder these items" 
                     onclick="reorderItems(${order.id})">
               <i class="fas fa-redo"></i> Reorder
             </button>
             <button type="button" 
-                    class="btn-flat waves-effect waves-teal red-text text-lighten-2" 
+                    class="btn btn-flat waves-effect waves-light" 
                     style="flex: 1; text-align: center; padding: 0 4px; border: 1px solid rgba(239, 83, 80, 0.3); border-radius: 4px;" 
                     onclick="viewOrderDetail(${order.id})">
               Details <i class="fas fa-chevron-right"></i>

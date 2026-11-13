@@ -876,6 +876,8 @@ nav .progress {
 }
 body.loading-progress nav .progress {
   display: block;
+  height: 5px;
+  border-radius: 0;
 }
 .nightMode nav .progress {
   /* background-color: #ffb300; */

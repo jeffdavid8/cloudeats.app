@@ -449,7 +449,7 @@ input.valid:not([type]), input.valid:not([type]):focus, input.valid[type="text"]
 
 /* Progress and Loading */
 .progress {
-    background: var(--panel-dark);
+    background: linear-gradient(90deg, #ffcd44 0%, #ff9900 100%);
     border: 1px solid var(--lcars-orange);
     border-radius: 10px;
     overflow: hidden;
@@ -462,8 +462,8 @@ input.valid:not([type]), input.valid:not([type]):focus, input.valid[type="text"]
 }
 
 .progress .indeterminate {
-    background: linear-gradient(90deg, var(--lcars-blue) 0%, var(--lcars-purple) 100%);
-    box-shadow: var(--glow-intensity) var(--lcars-blue);
+    background: linear-gradient(90deg, #ffcd44 0%, #ff9900 100%);
+    box-shadow: var(--glow-intensity) var(--lcars-gold);
 }
 
 /* Enhanced Chips */
