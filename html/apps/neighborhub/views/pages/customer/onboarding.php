@@ -3,11 +3,12 @@ if (!defined('MB_RUNNING')) exit;
 ?>
 <style>
   .mb-modal-fixed .modal-content {
-  flex: 0 1 auto;
-}
-.nightMode .modal .modal-footer {
-  background-color: initial;
-}
+    flex: 0 1 auto;
+  }
+
+  .nightMode .modal .modal-footer {
+    background-color: initial;
+  }
 </style>
 
 <main class="ce-landing" id="ce-landing">
@@ -25,6 +26,13 @@ if (!defined('MB_RUNNING')) exit;
 
     <!-- Hero Content Container -->
     <div class="ce-hero-container relative z-10">
+      <div class="my-cloudeats-link" style="">
+        <?
+        $dashboard_url = '/?app=neighborhub&view=customer&p=dashboard';
+        ?>
+        <a href="<?= ($this->user) ? $dashboard_url : '/?p=login&return=' . rawurlencode($dashboard_url) ?>" class="btn waves-effect waves-light">My <span class="brand-cloud">Cloud</span><span class="brand-eats">Eats</span><span class="brand-extension">.app</span></a>
+      </div>
+
       <div class="ce-hero-copy">
         <p class="ce-eyebrow"><span></span> GOOD THINGS, CLOSE BY</p>
         <h1 id="ce-heading" style="">
@@ -60,12 +68,6 @@ if (!defined('MB_RUNNING')) exit;
         <button type="button" data-category="Bakery">Bakery</button>
         <button type="button" data-category="Late Night">Late night</button>
       </nav>
-      <div class="my-cloudeats-link" style="">
-        <?
-        $dashboard_url = '/?app=neighborhub&view=customer&p=dashboard';
-        ?>
-        <a href="<?= ($this->user) ? $dashboard_url : '/?p=login&return=' . rawurlencode($dashboard_url) ?>" class="btn waves-effect waves-light">My <span class="brand-cloud">Cloud</span><span class="brand-eats">Eats</span><span class="brand-extension">.app</span></a>
-      </div>
     </div>
 
 
