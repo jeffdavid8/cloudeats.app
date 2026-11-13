@@ -62,7 +62,7 @@ if (!empty($_SESSION['login_error'])) {
         body.header-announcement {
             & .app-container {
                 margin-top: 4rem;
-                padding: 5rem 0 4rem 0;
+                padding: 1rem 0 4rem 0;
             }
         }
     }

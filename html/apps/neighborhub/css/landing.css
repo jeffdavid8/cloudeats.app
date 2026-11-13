@@ -72,7 +72,7 @@ body.darkMode {
 
 body.header-announcement {
   & .app-container {
-    margin-top: 3rem;
+    margin-top: 4rem;
     padding: 0 0 4rem 0;
   }
 }

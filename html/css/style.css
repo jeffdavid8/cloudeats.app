@@ -40,7 +40,13 @@ body {
   font-family: "Poppins", sans-serif;
   color: var(--cloudeats-text);
 }
+body {
+  overflow-y: auto;
+}
 
+body.loading-preloader {
+  overflow: hidden;
+}
 /* Headings */
 h1,
 h2,

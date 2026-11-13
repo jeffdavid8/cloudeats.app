@@ -226,8 +226,10 @@
     position: relative;
     overflow: hidden;
 }
-.nightMode .btn, .nightMode .btn-flat, .nightMode .btn-large {
-    background: linear-gradient(45deg, var(--lcars-orange) 0%, var(--lcars-red) 100%);
+.nightMode .btn, 
+.nightMode .btn-flat, 
+.nightMode .btn-large {
+    /* background: linear-gradient(45deg, var(--lcars-orange) 0%, var(--lcars-red) 100%); */
     color: var(--space-black);
     box-shadow: var(--glow-intensity) var(--lcars-orange);
 }
@@ -600,7 +602,7 @@ input.valid:not([type]), input.valid:not([type]):focus, input.valid[type="text"]
 
 .lcars-console {
   max-width: 480px;
-  margin: 40px auto;
+  margin: 20px auto;
   background: #cccaca;
   border: 4px solid #e0dcd6;
   border-radius: 16px;
