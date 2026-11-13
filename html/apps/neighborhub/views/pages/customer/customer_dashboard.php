@@ -37,11 +37,6 @@ if (isset($_SESSION[get_var('session_key')]) && get_var('action', false) == 'che
   endif;
 }
 
-// Display session notifications
-$notification = isset($_SESSION['notification']) ? $_SESSION['notification'] : null;
-if ($notification) {
-  unset($_SESSION['notification']);
-}
 ?>
 
 <style>
@@ -75,17 +70,7 @@ if ($notification) {
   <main class="nh-main">
     <div class="nh-container">
 
-      <!-- Display Session Notifications -->
-      <?php if ($notification): ?>
-        <div class="nh-alert nh-alert-<?php echo htmlspecialchars($notification['type']); ?>" style="margin-bottom: 2rem;">
-          <div class="nh-alert-icon">
-            <?= $notification['type'] === 'success' ? '✓' : ($notification['type'] === 'error' ? '✕' : 'ℹ') ?>
-          </div>
-          <div class="nh-alert-content">
-            <p class="nh-alert-message"><?php echo htmlspecialchars($notification['message']); ?></p>
-          </div>
-        </div>
-      <?php endif; ?>
+      <?php render('components/session_notifications.php'); ?>
 
       <section class="nh-tracking-ledger">
         <div class="valign-wrapper" style="justify-content: space-between; margin-bottom: 1.5rem;">

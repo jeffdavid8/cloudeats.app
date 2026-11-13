@@ -12,6 +12,8 @@ if (!defined('MB_RUNNING')) exit;
 
 <main class="ce-landing" id="ce-landing">
 
+  <?php render('components/session_notifications.php'); ?>
+
   <section class="ce-hero relative" aria-labelledby="ce-heading">
 
     <!-- Parallax Background Layer & Mode Overlay -->

@@ -334,7 +334,6 @@ mb.ajax = function (options, callback) {
     options.url.indexOf(window.location.hostname) === -1;
   var defaults = {
     headers: {
-      "User-Agent": "mediabrain.app",
       Authorization: "Bearer " + this.csrf_token,
       "X-CSRF-TOKEN": this.csrf_token,
       "X-Requested-With": "XMLHttpRequest",

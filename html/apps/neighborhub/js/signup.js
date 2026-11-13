@@ -18,14 +18,6 @@
       modal.open();
     });
 
-    window.grecaptcha.ready(function () {
-      recaptchaWidgetId = grecaptcha.render("recaptcha-inline-container", {
-        sitekey: "6LcrhuAtAAAAALYP1aVODI5goyyfDn6Q6_K6eGwk",
-        badge: "inline",
-        size: "invisible",
-      });
-    });
-
     form.addEventListener("submit", function (event) {
       event.preventDefault();
       message.textContent = "";
@@ -41,12 +33,12 @@
         form.elements.password_confirmation.focus();
         return;
       }
-      if (!siteKey || !window.grecaptcha) {
+      if (!siteKey || !window.grecaptcha || typeof window.grecaptcha.ready !== "function" || typeof window.grecaptcha.execute !== "function") {
         message.textContent =
           "Signup verification is temporarily unavailable. Please try again later.";
         return;
       }
-      loading(2)
+      loading(2);
       submitButton.disabled = true;
       submitButton.textContent = "Sending verification email...";
       window.grecaptcha.ready(function () {
@@ -97,8 +89,8 @@
               "We could not complete signup. Please try again.";
             submitButton.disabled = false;
             submitButton.textContent = "Create account";
-          })
-          .then(null, function (xhr) {});
+            loading(0);
+          });
       });
     });
   }

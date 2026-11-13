@@ -13,6 +13,8 @@ Set these environment variables for each deployment:
 - `MAIL_FROM_EMAIL`: optional verified sender address; defaults to `MAIL_USER`.
 
 The reCAPTCHA v3 script is loaded in the shared document head whenever a site key is configured. PHPMailer is a Composer dependency. The registration API creates its verification-token and signup-attempt tables if they do not already exist.
+The floating reCAPTCHA badge is hidden; the signup and merchant onboarding forms
+instead show visible reCAPTCHA attribution with links to Google's policies.
 
 ## Flow
 

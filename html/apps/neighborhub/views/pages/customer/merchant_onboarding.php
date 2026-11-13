@@ -163,6 +163,7 @@ if (!defined('MB_RUNNING')) exit;
             <p class="text-xs text-slate-500 mt-2" id="stripe-status-text"><?= $this->user->stripe_connect_id ? 'Stripe account connected.' : 'Stripe account not yet connected.' ?></p>
           </div>
 
+          <?php render('components/recaptcha_notice.php'); ?>
           <div class="row mt-4">
             <div class="col s6">
               <button type="button" class="btn waves-effect waves-light prev-step" data-target="3">
@@ -170,10 +171,6 @@ if (!defined('MB_RUNNING')) exit;
               </button>
             </div>
             <div class="col s6 right-align">
-              <!-- reCAPTCHA Widget Container -->
-              <div class="row center-align mb-3">
-                <div id="merchant-recaptcha-container" style="display: inline-block;"></div>
-              </div>
               <button type="submit" id="btn-submit-merchant" class="btn waves-effect waves-light green darken-2">
                 Complete Registration <i class="material-icons right">check</i>
               </button>
@@ -183,10 +180,6 @@ if (!defined('MB_RUNNING')) exit;
 
       </form>
     </div>
-    <div class="row center-align">
-      <div id="recaptcha-inline-container" class="" style="display: inline-block;margin: 23px 0 0 0;"></div>
-    </div>
-
   </div>
 </div>
 
@@ -309,13 +302,6 @@ if (!defined('MB_RUNNING')) exit;
         });
       });
     }
-    window.grecaptcha.ready(function() {
-      recaptchaWidgetId = grecaptcha.render("recaptcha-inline-container", {
-        sitekey: "<?= htmlspecialchars($this->config['recaptcha_site_key'] ?? '', ENT_QUOTES, 'UTF-8') ?>",
-        badge: "inline",
-        size: "invisible",
-      });
-    });
     // Final Form Submission using mb.ajax()
     const form = document.getElementById('merchant-onboarding-form');
     if (form) {
@@ -323,14 +309,24 @@ if (!defined('MB_RUNNING')) exit;
         e.preventDefault();
 
         const submitBtn = document.getElementById('btn-submit-merchant');
+        const siteKey = <?= json_encode($this->config['recaptcha_site_key'] ?? '', JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
+        if (!siteKey || !window.grecaptcha || typeof window.grecaptcha.ready !== 'function' || typeof window.grecaptcha.execute !== 'function') {
+          M.toast({
+            html: 'Security verification is unavailable. Please try again later.',
+            classes: 'red'
+          });
+          return;
+        }
         submitBtn.disabled = true;
         submitBtn.textContent = 'Verifying Security...';
 
-        // Use reCAPTCHA v3 invisible execution
-        grecaptcha.ready(function() {
-          grecaptcha.execute('<?= htmlspecialchars($this->config['recaptcha_site_key'] ?? '', ENT_QUOTES, 'UTF-8') ?>', {
-            action: 'neighborhub_signup'
-          }).then(function(token) {
+        new Promise(function(resolve, reject) {
+          window.grecaptcha.ready(function() {
+            Promise.resolve().then(function() {
+              return window.grecaptcha.execute(siteKey, { action: 'neighborhub_signup' });
+            }).then(resolve, reject);
+          });
+        }).then(function(token) {
 
             const formData = {
               business_name: document.getElementById('business_name').value,
@@ -366,7 +362,7 @@ if (!defined('MB_RUNNING')) exit;
                   submitBtn.disabled = false;
                   submitBtn.innerHTML = 'Complete Registration <i class="material-icons right">check</i>';
                   M.toast({
-                    html: response.error || 'Submission failed.',
+                    html: (response && response.error) || 'Submission failed.',
                     classes: 'red'
                   });
                 }
@@ -383,6 +379,13 @@ if (!defined('MB_RUNNING')) exit;
                 loading(0);
               }
             });
+        }, function(error) {
+          console.error('Merchant application verification failed:', error);
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = 'Complete Registration <i class="material-icons right">check</i>';
+          M.toast({
+            html: 'Security verification failed. Please try again.',
+            classes: 'red'
           });
         });
       });

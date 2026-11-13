@@ -3444,6 +3444,11 @@ function handle_submit_merchant_application(array $request)
     send_json_response(['success' => false, 'error' => 'Business name and address are required.'], 400);
   }
 
+  if (session_status() !== PHP_SESSION_ACTIVE || (isset($_SESSION['notifications']) && !is_array($_SESSION['notifications']))) {
+    error_log('Merchant application cannot be submitted because the session notification queue is unavailable.');
+    send_json_response(['success' => false, 'error' => 'Your session is unavailable. Please refresh the page and try again.'], 503);
+  }
+
   try {
     // 3. Send Email via PHPMailer (matching your existing mail configuration pattern)[cite: 4]
     $mailer = new \PHPMailer\PHPMailer\PHPMailer(true);
@@ -3489,6 +3494,7 @@ function handle_submit_merchant_application(array $request)
 
     $mailer->send();
 
+    session_notify('Your merchant application was submitted. Our team will review it and reach out to you.', 'success');
     send_json_response([
       'success' => true,
       'message' => 'Application submitted successfully! Our team will review your details and set up your account.'

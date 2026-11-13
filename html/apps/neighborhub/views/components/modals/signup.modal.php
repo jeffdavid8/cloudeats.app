@@ -32,11 +32,9 @@ if (!isset($_SESSION['user'])): ?>
                     <label for="neighborhub-signup-password-confirm">Confirm password</label>
                 </div>
                 <p id="neighborhub-signup-message" role="status" aria-live="polite"></p>
+                <?php render('components/recaptcha_notice.php'); ?>
                 <button id="neighborhub-signup-submit" class="btn waves-effect waves-light" type="submit">Create account</button>
             </form>
-            <div class="row center-align">
-                <div id="recaptcha-inline-container" class="" style="display: inline-block;margin: 23px 0 0 0;"></div>
-            </div>
         </div>
         <div class="modal-footer">
             <button type="button" class="modal-close btn-flat">Close</button>

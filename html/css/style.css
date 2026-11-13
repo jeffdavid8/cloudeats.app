@@ -290,6 +290,49 @@ body {
 body {
   font-family: var(--rhino-font);
 }
+.session-notifications {
+  width: min(100% - 32px, 960px);
+  margin: 20px auto;
+  display: grid;
+  gap: 12px;
+  text-align: left;
+}
+.session-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid;
+  border-radius: 10px;
+  font: 500 15px/1.5 system-ui, sans-serif;
+}
+.session-notice-success { background: #e9f8ef; border-color: #9acfb0; color: #155c35; }
+.session-notice-info { background: #edf5ff; border-color: #a7c7eb; color: #164b78; }
+.session-notice-warning { background: #fff6df; border-color: #dfc27b; color: #6b4904; }
+.session-notice-error { background: #fff0ef; border-color: #e6aaa6; color: #842e29; }
+.session-notice-icon { font-weight: 700; flex: 0 0 auto; }
+.session-notice p { margin: 0; flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.session-notice-dismiss {
+  flex: 0 0 40px;
+  min-height: 40px;
+  margin: -8px -8px -8px 0;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  font: 24px/1 system-ui, sans-serif;
+  cursor: pointer;
+}
+.session-notice-dismiss:hover,
+.session-notice-dismiss:focus { background: rgba(0, 0, 0, 0.1); }
+.session-notice-dismiss:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+.nightMode .session-notice-success { background: #153c2b; border-color: #438360; color: #d3f7df; }
+.nightMode .session-notice-info { background: #17364f; border-color: #4b7fa8; color: #dfedff; }
+.nightMode .session-notice-warning { background: #493811; border-color: #a68237; color: #ffedc1; }
+.nightMode .session-notice-error { background: #542522; border-color: #ac6863; color: #ffe2df; }
+.nightMode .session-notice-dismiss:hover,
+.nightMode .session-notice-dismiss:focus { background: rgba(255, 255, 255, 0.15); }
 header nav .merchant-header-image {
   display: flex;
   align-items: center;
@@ -2667,6 +2710,27 @@ header.header nav .header-ce-logo-home-link:hover {
 
 .grecaptcha-badge {
   visibility: hidden !important;
+}
+
+.recaptcha-notice {
+  margin: 12px 0;
+  padding: 2rem 0;
+  color: #374151;
+  font: 400 14px/1.5 system-ui, sans-serif;
+}
+.recaptcha-notice a {
+  color: #174e90;
+  text-decoration: underline;
+}
+.nightMode .recaptcha-notice {
+  color: #e2e8f0;
+}
+.nightMode .recaptcha-notice a {
+  color: #a9d2ff;
+}
+.recaptcha-notice a:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
 }
 
 /* 1. Hide the fixed/floating layout box that attaches to the screen body */

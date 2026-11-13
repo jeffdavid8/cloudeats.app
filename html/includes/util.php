@@ -16,6 +16,20 @@ function render($filename, $vars = array(), $return = false, $cascading = true)
   }
 }
 
+function session_notify(string $message, string $type = 'info'): void
+{
+  if (session_status() !== PHP_SESSION_ACTIVE) {
+    throw new LogicException('An active session is required to queue a notification.');
+  }
+  if (trim($message) === '' || !in_array($type, ['success', 'info', 'warning', 'error'], true)) {
+    throw new InvalidArgumentException('A notification requires a message and a valid type.');
+  }
+  if (isset($_SESSION['notifications']) && !is_array($_SESSION['notifications'])) {
+    throw new UnexpectedValueException('The session notification queue is invalid.');
+  }
+  $_SESSION['notifications'][] = ['type' => $type, 'message' => $message];
+}
+
 
 function setJsonHeader()
 {

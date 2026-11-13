@@ -18,8 +18,8 @@
 
 
 body.header-announcement .nh-terms-banner-content { 
-  background-color: var(--primary-color);
-  color: var(--background-color);
+  /* background-color: var(--primary-color);
+  color: var(--background-color); */
   text-align: center;
   font-size: 1rem;
   font-weight: bold;
