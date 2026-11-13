@@ -64,8 +64,8 @@ if ($isUserLoggedIn) {
 
 <ul class="header-right" data-component="header-right">
 
-    <?php if (!empty($canOpenMerchantMenu)): ?>
-        <? render('components/header/merchant_trigger.php', array('merchant' => $headerMerchant, 'operationalStatus' => $operationalStatus)); ?>
+    <?php if (!empty($headerMerchant->id)): ?>
+        <? render('components/header/merchant_trigger.php', array('merchant' => $headerMerchant, 'operationalStatus' => $operationalStatus, 'canOpenMerchantMenu' => $canOpenMerchantMenu)); ?>
     <?php endif; ?>
 
     <? if (($nh->get('view') == 'customer') && ($merchant) && ($merchant->status == 'online')) { ?>

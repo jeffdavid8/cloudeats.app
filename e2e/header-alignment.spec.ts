@@ -5,7 +5,7 @@ import path from 'path';
 const headerLeft = readFileSync(path.resolve('html/views/components/header/header_left.php'), 'utf8');
 const sidenavClasses = headerLeft.match(/class="(header-sidenav-trigger[^"]*)"/)![1];
 
-for (const width of [375, 768, 1024]) {
+for (const width of [320, 375, 768, 1024]) {
   for (const merchantLink of [false, true]) {
     test(`centers header controls at ${width}px with merchant ${merchantLink ? 'link' : 'image'}`, async ({ page }) => {
       await page.setViewportSize({ width, height: 800 });
@@ -15,12 +15,11 @@ for (const width of [375, 768, 1024]) {
             <div style="margin-left:5px;display:flex;align-items:center;gap:8px">
               <a class="${sidenavClasses}" href="#"><img height="40" width="40"></a>
               <a class="header-ce-logo-home-link hide-on-small-only" href="/">CloudEats</a>
-              ${merchantLink ? '' : '<span class="header-merchant-brand"><img></span>'}
               <button class="header-merchant-search-trigger"><i class="fas">S</i></button>
             </div>
           </li></ul>
           <ul class="header-right">
-            ${merchantLink ? '<li><span class="header-merchant-brand"><a class="merchant-sidenav-trigger" href="#"><img></a><span class="header-merchant-status-dot"></span></span></li>' : ''}
+            <li><span class="header-merchant-brand"><a class="header-merchant-action ${merchantLink ? 'merchant-sidenav-trigger' : 'scroll-to-top-link'}" href="#"><img></a><span class="header-merchant-status-dot"></span></span></li>
             <li><a class="round-header-action" href="#"><i class="fas">B</i></a></li>
             <li><a class="user-badge" href="#"><i class="material-icons">account_circle</i></a>
               <ul class="dropdown-content"><li><a href="#">Menu</a></li></ul>
@@ -53,11 +52,11 @@ for (const width of [375, 768, 1024]) {
         for (const control of centers.controls) {
           expect(Math.abs(control.center - centers.wrapper), control.selector).toBeLessThan(1);
         }
-        if (merchantLink) {
+        {
           const positions = await page.locator('.header-right').evaluate(right => {
             const rect = (selector: string) => right.querySelector(selector)!.getBoundingClientRect();
-            const trigger = rect('.merchant-sidenav-trigger');
-            const image = rect('.merchant-sidenav-trigger img');
+            const trigger = rect('.header-merchant-action');
+            const image = rect('.header-merchant-action img');
             const dot = rect('.header-merchant-status-dot');
             const basket = rect('.round-header-action');
             const account = rect('.user-badge');

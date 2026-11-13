@@ -28,6 +28,11 @@ class Merchant
         return [];
     }
 
+    public static function getMerchantById($id): object
+    {
+        return (object)['id' => $id, 'status' => 'online'];
+    }
+
     public static function getOperationalStatus($merchant): array
     {
         $status = in_array($GLOBALS['mode'], ['closed', 'merchant-closed', 'staff-closed'], true) ? 'closed' : 'open';
@@ -49,7 +54,7 @@ class FixtureApp
             'merchant' => $this->merchant,
             'customer' => (object)['terms_accepted_at' => 'yes'],
             'view' => in_array($GLOBALS['mode'], ['merchant-view', 'merchant-closed'], true) ? 'merchant' : 'customer',
-            'show_header_shopping_basket' => !in_array($GLOBALS['mode'], ['merchant-view', 'merchant-closed'], true),
+            'show_header_shopping_basket' => !in_array($GLOBALS['mode'], ['merchant-view', 'merchant-closed', 'no-merchant'], true),
             default => $default,
         };
     }
@@ -95,7 +100,7 @@ $headerRight = ($argv[2] ?? 'neighborhub') === 'global'
 $app = new FixtureApp();
 $staffModes = ['staff', 'staff-closed', 'no-image', 'other-app', 'merchant-view'];
 $app->user = new FixtureUser($mode === 'guest' ? 0 : 1, $mode === 'admin', in_array($mode, $staffModes, true) ? 8 : 9);
-$app->merchant = (object)['id' => 8, 'business_name' => 'Example', 'image_url' => $mode === 'no-image' ? '' : 'image.png', 'status' => 'online'];
+$app->merchant = $mode === 'no-merchant' ? null : (object)['id' => 8, 'business_name' => 'Example', 'image_url' => $mode === 'no-image' ? '' : 'image.png', 'status' => 'online'];
 if ($mode === 'other-app') $app->appName = 'other';
 $_SERVER['REQUEST_URI'] = '/?view=customer&merchant_id=8';
 $_SERVER['PHP_SELF'] = '/index.php';

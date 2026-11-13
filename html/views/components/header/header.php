@@ -4,7 +4,7 @@ if (!defined('MB_RUNNING')) exit;
 $customer = $this->get('customer');
 $merchant = $this->get('merchant', null);
 $canOpenMerchantMenu = $this->appName === 'neighborhub'
-   && $merchant && !empty($merchant->id) && !empty($merchant->image_url)
+   && $merchant && !empty($merchant->id)
    && $this->user && !empty($this->user->id)
    && ($this->user->is_admin || $this->user->isMerchantUser((int)$merchant->id));
 $operationalStatus = null;

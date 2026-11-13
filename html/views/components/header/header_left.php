@@ -13,20 +13,6 @@ $merchant = $this->get('merchant');
 
          </a>
          <a class="header-ce-logo-home-link hover-grow hide-on-small-only" style="width: auto; margin-left: 0; padding: 0 5px; font-size: 1.3rem;border-radius: 10px;" href="/"><span class="brand-cloud">Cloud</span><span class="brand-eats">Eats</span><span class="brand-extension">.app</span></a>
-         <?php if ($merchant && !empty($merchant->id) && !empty($merchant->image_url) && empty($canOpenMerchantMenu)): ?>
-            <span class="header-merchant-brand" title="<?= htmlspecialchars($merchant->business_name ?? 'Merchant storefront') ?>">
-               <?php if ($this->get('view') === 'merchant'): ?>
-                  <a href="?app=neighborhub&view=merchant&p=dashboard&merchant_id=<?= (int)$merchant->id ?>" title="Merchant Dashboard for <?= htmlspecialchars($merchant->business_name ?? 'Merchant') ?>">
-                     <img src="<?= htmlspecialchars($merchant->image_url) ?>" alt="<?= htmlspecialchars($merchant->business_name ?? 'Merchant') ?>">
-                  </a>
-               <?php else: ?>
-                  <img class="scroll-to-top-link" src="<?= htmlspecialchars($merchant->image_url) ?>" alt="<?= htmlspecialchars($merchant->business_name ?? 'Merchant') ?>">
-               <?php endif; ?>
-               <?php if (!empty($operationalStatus)): ?>
-                  <span class="header-merchant-status-dot" data-merchant-id="<?= (int)$merchant->id ?>" aria-label="Open now"<?= $operationalStatus['status'] === 'open' ? '' : ' hidden' ?>></span>
-               <?php endif; ?>
-            </span>
-         <?php endif; ?>
          <?php if ($merchant && !empty($merchant->id) && $this->get('view') === 'customer'): ?>
 
             <button type="button" class="header-merchant-search-trigger" aria-label="Search <?= htmlspecialchars($merchant->business_name ?? 'merchant', ENT_QUOTES, 'UTF-8') ?> menu" aria-controls="header-merchant-search-panel" aria-expanded="false">

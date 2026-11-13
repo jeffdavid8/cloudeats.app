@@ -77,12 +77,11 @@ image to the merchant gallery immediately; choosing it for a storefront or
 profile takes effect only after saving the relevant form. Changing the profile
 image also changes the fallback used by storefronts without a selected image.
 
-When a merchant image is present, verified staff for that merchant and
-platform admins can open the shared merchant management menu by clicking the
-merchant image on the right side of the header, immediately before the basket
-when shown, including in customer storefront view. The merchant menu opens from
-the right. Other visitors retain the storefront image's existing behavior. Management pages
-and APIs continue to enforce their own access checks.
+The current merchant appears on the right side of the header, immediately before
+the basket when shown, with a store icon if no image is available. Verified staff
+for that merchant and platform admins can open its management menu from the
+right. Other visitors can use the icon to return to the top of the page.
+Management pages and APIs continue to enforce their own access checks.
 
 ### Phase 2: Storefront data model
 

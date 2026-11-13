@@ -370,7 +370,7 @@ header.header nav .header-left > li > div > a,
 header.header nav .header-merchant-brand > a {
   margin-top: 0;
 }
-header.header nav .header-merchant-brand > a.merchant-sidenav-trigger {
+header.header nav .header-merchant-brand > a.header-merchant-action {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -378,10 +378,18 @@ header.header nav .header-merchant-brand > a.merchant-sidenav-trigger {
 header.header nav .header-right .header-merchant-brand {
   margin-left: 0;
 }
-header.header nav ul.header-right li .header-merchant-brand > a.merchant-sidenav-trigger {
+header.header nav ul.header-right li .header-merchant-brand > a.header-merchant-action {
   width: 50px;
   height: 50px;
   padding: 0;
+}
+header.header nav .header-merchant-action .header-merchant-fallback {
+  font-size: 19px;
+  line-height: 34px;
+  width: 34px;
+  height: 34px;
+  border: 2px solid rgba(246, 240, 225, 0.7);
+  border-radius: 50%;
 }
 header.header nav .header-right .header-merchant-status-dot {
   right: 7px;
