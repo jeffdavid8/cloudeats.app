@@ -340,7 +340,7 @@ header.header nav ul.right ul li a {
 }
 @media (min-width: 768px) {
   body {
-    padding-top: 70px;
+    padding-top: 65px;
   }
   .scrolled header nav .nav-wrapper,
   header nav .nav-wrapper,
