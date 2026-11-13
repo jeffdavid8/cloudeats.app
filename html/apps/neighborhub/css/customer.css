@@ -17,7 +17,7 @@
 }
 
 
-.header-announcement {
+body.header-announcement .nh-terms-banner-content { 
   background-color: var(--primary-color);
   color: var(--background-color);
   text-align: center;
