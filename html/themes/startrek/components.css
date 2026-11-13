@@ -359,9 +359,9 @@ input.valid:not([type]), input.valid:not([type]):focus, input.valid[type="text"]
 /* Enhanced Modal Styling */
 .modal {
     background: var(--panel-medium);
-    border: 2px solid var(--lcars-orange);
+    border: 2px solid var(--border-primary);
     border-radius: var(--border-radius-lcars);
-    box-shadow: var(--glow-intensity) var(--lcars-orange);
+    box-shadow: var(--glow-intensity) var(--border-primary);
 }
 
 .modal .modal-content {
@@ -373,22 +373,22 @@ input.valid:not([type]), input.valid:not([type]):focus, input.valid[type="text"]
 .modal .modal-content h4 {
     color: var(--gray-400);
     /* font-family: 'Orbitron', monospace; */
-    text-shadow: var(--glow-intensity) var(--lcars-orange);
+    text-shadow: var(--glow-intensity) var(--border-primary);
 }
 
 .modal .modal-footer {
     padding: 20px 30px;
     background: rgba(123, 99, 64, 0.05);
-    border-top: 1px solid var(--lcars-orange);
+    border-top: 1px solid var(--border-primary);
 }
 
 /* Enhanced Table Styling */
 .responsive-table {
     background: var(--panel-medium);
-    border: 2px solid var(--lcars-orange);
+    border: 2px solid var(--border-primary);
     border-radius: var(--border-radius-lcars);
     overflow: hidden;
-    box-shadow: var(--glow-intensity) var(--lcars-orange);
+    box-shadow: var(--glow-intensity) var(--border-primary);
 }
 
 .responsive-table th {
