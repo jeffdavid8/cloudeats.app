@@ -36,7 +36,7 @@ for (const template of templates) {
           <a class="header-ce-logo-home-link hide-on-small-only" href="/">CloudEats</a>
           <button class="header-merchant-search-trigger">S</button>
         </div></li></ul>
-        <ul class="header-right"><li><span class="header-merchant-brand"><a href="#" class="merchant-sidenav-trigger"><img></a></span></li><li>${markup}</li><li><a href="#" class="user-badge"><i class="material-icons">account_circle</i></a></li></ul>
+        <ul class="header-right"><li><span class="header-merchant-brand"><a href="#" class="header-merchant-action merchant-sidenav-trigger"><img></a></span></li><li>${markup}</li><li><a href="#" class="user-badge"><i class="material-icons">account_circle</i></a></li></ul>
       </div></nav></header>
       <div id="nh-shopping-cart-sidenav"></div>
       <input id="nh-cart-address-string"><input id="nh-cart-lat"><input id="nh-cart-lon">
