@@ -43,11 +43,6 @@ if (isset($_SESSION[get_var('session_key')]) && get_var('action', false) == 'che
 <?
 }
 
-// Display any session notifications
-$notification = isset($_SESSION['notification']) ? $_SESSION['notification'] : null;
-if ($notification) {
-  unset($_SESSION['notification']);
-}
 ?>
 
 <style>

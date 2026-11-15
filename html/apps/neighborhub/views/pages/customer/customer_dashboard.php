@@ -9,7 +9,7 @@ $customer = $this->get('customer');
 $customerId = $customer->id ?? 0;
 $userName = isset($_SESSION['user']['username']) ? htmlspecialchars($_SESSION['user']['username']) : 'Customer';
 $customerOrders = $this->get('customer_orders', array());
-$checkoutOrderSaved = isset($_SESSION['notification']['type']) && $_SESSION['notification']['type'] === 'success';
+$checkoutOrderSaved = $this->get('checkout_order_saved', false);
 
 if (isset($_SESSION[get_var('session_key')]) && get_var('action', false) == 'checkout_success') {
   $pendingOrder = $_SESSION[get_var('session_key')];
@@ -69,8 +69,6 @@ if (isset($_SESSION[get_var('session_key')]) && get_var('action', false) == 'che
 <div class="nh-wrapper">
   <main class="nh-main">
     <div class="nh-container">
-
-      <?php render('components/session_notifications.php'); ?>
 
       <section class="nh-tracking-ledger">
         <div class="valign-wrapper" style="justify-content: space-between; margin-bottom: 1.5rem;">

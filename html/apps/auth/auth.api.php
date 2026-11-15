@@ -67,8 +67,6 @@ function handleLogin($data)
     $auth = $app->getAuthManager();
     if ($auth->checkCredentials($username, $password)) {
         $authenticatedUsername = $_SESSION['user']['username'] ?? $username;
-        $isAdmin = $auth->userIsAdmin($authenticatedUsername);
-
         // Clear rate limiting on success
         RateLimiter::clearAttempts('login');
         
@@ -77,7 +75,10 @@ function handleLogin($data)
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
         $_SESSION['mb_user'] = $authenticatedUsername;
         $_SESSION['user'] = $user;
-        
+        $app->user = new User($user);
+        $isAdmin = $app->user->is_admin;
+        $isMerchant = $app->user->isMerchantAdmin();
+        $merchantRecord = $isMerchant ? User::getUserMerchants($app->user->id)[0] ?? null : null;
 
         session_write_close(); // Ensure session is saved
 
@@ -89,10 +90,12 @@ function handleLogin($data)
             ]);
         }
 
+        $redirect_url = (!empty($data['return'])) ? $data['return'] : ($isAdmin ? '?app=neighborhub&view=admin&p=dashboard' : ($isMerchant ? '?app=neighborhub&view=merchant&merchant_id='.$merchantRecord['id'].'&p=dashboard' : '?app=neighborhub&p=dashboard'));
+
         return [
             'success' => true,
             'message' => 'Login successful',
-            'redirect' => $data['return'] ?? '?app=neighborhub&p=dashboard',
+            'redirect' => $redirect_url,
             'is_admin' => $isAdmin
         ];
     } else {

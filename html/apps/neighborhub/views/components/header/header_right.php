@@ -200,7 +200,8 @@ if ($isUserLoggedIn) {
             <div class="large-links <?= (get_var('p') !== 'merchant_products') ? 'hide-on-small-only' : 'hide' ?>" style="display: flex; align-items: center; justify-content: flex-end; gap: 1.1rem; margin-right: 1rem;">
                 <button
                     type="button"
-                    onclick="loading(4); window.location.href='/?p=login&return=<?= urlencode($_SERVER['REQUEST_URI']) ?>';"
+                    <? /* onclick="loading(4); window.location.href='/?p=login&return=<?= urlencode($_SERVER['REQUEST_URI']) ?>';" */ ?>
+                    onclick="loading(4); window.location.href='/?p=login';"
                     id="btn-header-signin"
                     class="btn btn-text text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-200 dark:hover:text-white px-3 py-2 rounded-lg transition-colors"
                     data-action="open-signin-modal">

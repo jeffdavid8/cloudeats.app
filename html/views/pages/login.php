@@ -4,7 +4,7 @@
 
 $app = App::getInstance();
 $error = [];
-$redirectUrl = get_var('return', '/');
+$redirectUrl = get_var('return', null);
 $oauthHandler = new OAuthHandler();
 $fbAppId = $oauthHandler->getConfig('facebook')['client_id'] ?? '';
 // Handle app-specific access requests
@@ -50,7 +50,7 @@ if (!empty($_SESSION['login_error'])) {
 
     body.header-announcement {
         & .app-container {
-            margin-top: 4rem;
+            margin-top: 0;
             padding: 0 0 4rem 0;
         }
     }
@@ -61,7 +61,7 @@ if (!empty($_SESSION['login_error'])) {
         /* Styles for tablets/small laptops */
         body.header-announcement {
             & .app-container {
-                margin-top: 4rem;
+                margin-top: 0;
                 padding: 1rem 0 4rem 0;
             }
         }
@@ -73,8 +73,8 @@ if (!empty($_SESSION['login_error'])) {
         /* Styles for tablets/small laptops */
         body.header-announcement {
             & .app-container {
-                margin-top: 4rem;
-                padding: 10rem 0 4rem 0;
+                margin-top: 0;
+                padding: 2rem 0 4rem 0;
             }
         }
     }

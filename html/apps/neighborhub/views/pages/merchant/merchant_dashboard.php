@@ -19,11 +19,6 @@ $confirmedOrders = $this->get('confirmed_orders', null);
 $readyForPickupOrders = $this->get('ready_orders', null);
 $staffTeam = $this->get('staff_team', array());
 
-$notification = isset($_SESSION['notification']) ? $_SESSION['notification'] : null;
-if ($notification) {
-  unset($_SESSION['notification']);
-}
-
 $pendingOrderCount = is_array($pendingOrders) ? count($pendingOrders) : 0;
 $confirmedOrderCount = is_array($confirmedOrders) ? count($confirmedOrders) : 0;
 $readyOrderCount = is_array($readyForPickupOrders) ? count($readyForPickupOrders) : 0;

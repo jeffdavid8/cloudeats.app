@@ -85,22 +85,7 @@ function neighborhub_init(&$app)
   $app->includeModel('menucategory'); // Include class if using custom loader
   $app->includeModel('menuitem'); // Include class if using custom loader
   $app->includeModel('product');
-  $customer = 0;
-  if ($app->user->id) {
-    $customer = Customer::getCustomerByUserId($app->user->id);
-    if (!$customer) {
-      $new_customer = array(
-        'user_id' => $app->user->id,
-        'display_name' => '',
-        'phone' => '',
-        'status' => 'active',
-        'delivery_locations' => null,
-      );
-      $newCustomerId = Customer::create($new_customer);
-      $customer = Customer::getCustomerById($newCustomerId);
-    }
-  }
-  $app->set('customer', $customer);
+
   //$landing_page = ((get_var('view', 'customer') === 'customer') && !$customer) ? 'onboarding' : 'dashboard';
   $landing_page = 'onboarding';
   $page = isset($_GET['p']) ? sanitize_text_field($_GET['p']) : $landing_page;
@@ -126,7 +111,9 @@ function neighborhub_init(&$app)
   if ($merchantId) {
     $merchant = Merchant::getMerchantWithGallery($merchantId, 'object');
     $app->set('merchant', $merchant);
-    neighborhub_init_merchant($app);
+    if ($view !== 'customer') {
+      neighborhub_init_merchant($app);
+    }
   }
   $default_site_name = isset($app->config['site_name']) ? $app->config['site_name'] : 'CloudEats.app';
   $merchant_title = ($merchant && isset($merchant->business_name)) ? $merchant->business_name . ' | ' . $merchant->address() : $default_site_name;
@@ -201,6 +188,28 @@ function neighborhub_init(&$app)
 
     case 'customer':
     default:
+      $customer = 0;
+      if (!empty($app->user->id)) {
+        $customer = Customer::getCustomerByUserId($app->user->id);
+        if (!$customer) {
+          $new_customer = array(
+            'user_id' => $app->user->id,
+            'display_name' => '',
+            'phone' => '',
+            'status' => 'active',
+            'delivery_locations' => null,
+          );
+          $newCustomerId = Customer::create($new_customer);
+          $customer = Customer::getCustomerById($newCustomerId);
+        }
+      } elseif ($page === 'dashboard') {
+        session_notify('Access Denied: You must be logged in to access your dashboard.', 'error');
+        header('Location: ?p=login&return=' . rawurlencode('?view=customer&p=dashboard'), true, 302);
+        exit;
+      }
+
+      $app->set('customer', $customer);
+
       $styles = array(
         'apps/neighborhub/css/customer.css',
       );
@@ -633,7 +642,7 @@ function neighborhub_init_customer_context(&$app)
   $page = $app->get('page', 'dashboard');
   $merchantId = $app->get('merchant_id');
   try {
-    $user_id = $app->user->id;
+    $user_id = $app->user->id ?? null;
     $app->includeModel('merchant');
     $app->includeModel('order');
     $customer = $app->get('customer');
@@ -881,10 +890,17 @@ function neighborhub_can_preview_storefront(&$app, int $merchantId): bool
  */
 function neighborhub_init_merchant_context(&$app, $merchantId = null)
 {
-  AuthManager::requireLogin();
+  $db = $app->db;
+  $user_id = $app->user->id ?? null;
+
+  if (!$user_id) {
+    session_notify('Access Denied: You must be logged in to access this merchant storefront.', 'error');
+    header('Location: ?p=login&return=' . rawurlencode('?view=customer&p=dashboard'), true, 302);
+    exit;
+  }
+
   try {
-    $db = $app->db;
-    $user_id = $app->user->id;
+
     $app->includeModel('merchant');
     $app->includeModel('prouduct');
     $app->includeModel('order');
@@ -896,16 +912,18 @@ function neighborhub_init_merchant_context(&$app, $merchantId = null)
 
     // If no merchant_id available, query for first active merchant relationship
     if (!$merchant_id) {
-      $merchantListStmt = $db->prepare(
-        "SELECT nm.id FROM neighborhub_merchants nm
-                JOIN neighborhub_merchant_users nmu ON nm.id = nmu.merchant_id
-                WHERE nmu.user_id = ? AND nmu.status = 'active' AND nm.status = 'active'
-                LIMIT 1"
-      );
-      $merchantListStmt->execute([$user_id]);
-      $merchantRecord = $merchantListStmt->fetch(PDO::FETCH_ASSOC);
-      $merchant = Merchant::getMerchantById($merchantRecord['id'], 'object');
-      $merchant_id = $merchantRecord['id'] ?? null;
+      $userMerchants = User::getUserMerchants($user_id);
+      logger($userMerchants);
+      $merchant = $userMerchants[0] ?? null;
+      $merchant_id = $merchant['id'] ?? null;
+      // If still no merchant_id available, fall back to customer view
+      if (!$merchant_id) {
+        session_notify('Access Denied: You do not have any active merchant relationships.', 'error');
+        header('Location: ?view=customer&p=dashboard', true, 302);
+        exit;
+      }
+
+      $app->set('merchant', $merchant);
     } else {
       $merchant = Merchant::getMerchantById($merchant_id, 'object');
     }
@@ -935,16 +953,6 @@ function neighborhub_init_merchant_context(&$app, $merchantId = null)
       $app->set('header_shopping_basket_class_list', 'waves-effect waves-light shopping-cart-sidenav-trigger accent-4 shadow-lift round-header-action hide-on-large-only');
     }
 
-    // If still no merchant_id available, fall back to customer view
-    if (!$merchant_id) {
-      $_SESSION['notification'] = array(
-        'type' => 'warning',
-        'message' => 'Access Denied: You must select a merchant location to access the merchant dashboard.'
-      );
-      $app->set('current_view', 'customer');
-      neighborhub_init_customer_context($app);
-      return;
-    }
 
     // Query staff relationship from neighborhub_merchant_users
     $staffStmt = $db->prepare(
@@ -969,14 +977,10 @@ function neighborhub_init_merchant_context(&$app, $merchantId = null)
         unset($_SESSION['user']['merchant_staff_role']);
       }
 
-      $_SESSION['notification'] = array(
-        'type' => 'error',
-        'message' => 'Access Denied: You do not hold active staff clearance for this merchant storefront. Returning to customer view.'
-      );
 
-      header('Location: ?view=customer&p=dashboard', true, 302);
-
-      return;
+      session_notify('Access Denied: You do not hold active staff clearance for this merchant storefront. Returning to customer view.', 'error');
+      header('Location: /?view=customer&p=dashboard', true, 302);
+      exit;
     }
 
     // Cache verified staff context in session
@@ -1014,12 +1018,9 @@ function neighborhub_init_merchant_context(&$app, $merchantId = null)
     $app->set('user_role_badge', $_SESSION['user']['merchant_staff_role']);
   } catch (Exception $e) {
     error_log("Merchant context initialization failed: " . $e->getMessage());
-    $_SESSION['notification'] = array(
-      'type' => 'error',
-      'message' => 'An error occurred while loading the merchant dashboard.'
-    );
-    $app->set('current_view', 'customer');
-    neighborhub_init_customer_context($app);
+    session_notify('An error occurred while loading the merchant dashboard.', 'error');
+
+    return;
   }
 }
 
@@ -1074,13 +1075,10 @@ function neighborhub_init_merchant(&$app)
       unset($_SESSION['user']['merchant_staff_role']);
     }
 
-    $_SESSION['notification'] = array(
-      'type' => 'error',
-      'message' => 'Access Denied: You do not hold active staff clearance for this merchant storefront. Returning to customer view.'
-    );
-    $app->set('current_view', 'customer');
-    neighborhub_init_customer_context($app);
-    return;
+    session_notify('Access Denied: You do not hold active staff clearance for this merchant storefront. Returning to customer view.', 'error');
+
+    header('Location: ?view=customer&p=dashboard', true, 302);
+    exit;
   }
 
   // Cache verified staff context in session
@@ -1117,10 +1115,7 @@ function neighborhub_init_courier_context(&$app)
 
     // Verify courier profile exists
     if (!$courierProfile) {
-      $_SESSION['notification'] = array(
-        'type' => 'error',
-        'message' => 'Access Denied: You are not registered as a delivery driver. Contact support to activate courier access.'
-      );
+      session_notify('Access Denied: You are not registered as a delivery driver. Contact support to activate courier access.', 'error');
       $app->set('current_view', 'customer');
       neighborhub_init_customer_context($app);
       return;
@@ -1183,10 +1178,7 @@ function neighborhub_init_courier_context(&$app)
     $app->set('user_role_badge', 'courier');
   } catch (Exception $e) {
     error_log("Courier context initialization failed: " . $e->getMessage());
-    $_SESSION['notification'] = array(
-      'type' => 'error',
-      'message' => 'An error occurred while loading the courier dashboard.'
-    );
+    session_notify('An error occurred while loading the courier dashboard.', 'error');
     $app->set('current_view', 'customer');
     neighborhub_init_customer_context($app);
   }
@@ -1202,10 +1194,7 @@ function neighborhub_init_wonder_city_context(&$app)
 {
   // Verify admin access
   if (!isset($_SESSION['user']['is_admin']) || !$_SESSION['user']['is_admin']) {
-    $_SESSION['notification'] = array(
-      'type' => 'error',
-      'message' => 'Access Denied: Wonder City Dispatch is admin-only.'
-    );
+    session_notify('Access Denied: Wonder City Dispatch is admin-only.', 'error');
     $app->set('current_view', 'customer');
     neighborhub_init_customer_context($app);
     return;

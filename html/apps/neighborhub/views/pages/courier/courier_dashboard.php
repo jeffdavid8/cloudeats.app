@@ -31,12 +31,6 @@ $availableJobs = $app->get('available_jobs', array());
 $activeDeliveries = $app->get('active_deliveries', array());
 $deliveryHistory = $app->get('delivery_history', array());
 
-// Display any session notifications
-$notification = isset($_SESSION['notification']) ? $_SESSION['notification'] : null;
-if ($notification) {
-    unset($_SESSION['notification']);
-}
-
 // Determine if courier has active delivery
 $hasActiveDelivery = !empty($activeDeliveries);
 $activeDelivery = $hasActiveDelivery ? $activeDeliveries[0] : null;
@@ -70,26 +64,6 @@ $activeDelivery = $hasActiveDelivery ? $activeDeliveries[0] : null;
     <!-- Main Content Area -->
     <main class="nh-main">
         <div class="nh-container">
-
-            <!-- Display Session Notifications -->
-            <?php if ($notification): ?>
-                <div class="nh-alert nh-alert-<?php echo htmlspecialchars($notification['type']); ?>" style="margin-bottom: 2rem;">
-                    <div class="nh-alert-icon">
-                        <?php if ($notification['type'] === 'success'): ?>
-                            ✓
-                        <?php elseif ($notification['type'] === 'error'): ?>
-                            ✕
-                        <?php elseif ($notification['type'] === 'warning'): ?>
-                            ⚠
-                        <?php else: ?>
-                            ℹ
-                        <?php endif; ?>
-                    </div>
-                    <div class="nh-alert-content">
-                        <p class="nh-alert-message"><?php echo htmlspecialchars($notification['message']); ?></p>
-                    </div>
-                </div>
-            <?php endif; ?>
 
             <!-- Courier Profile Stats Block -->
             <section class="nh-courier-stats" style="margin-bottom: 3rem;">

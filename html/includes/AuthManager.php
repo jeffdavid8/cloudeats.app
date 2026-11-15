@@ -146,6 +146,8 @@ class AuthManager
         // 4. Construct the final safe URL (Handles all encoding safely)
         $url = '/?' . http_build_query($query_params, '', '&', PHP_QUERY_RFC3986);
 
+        session_notify('You must be logged in to access this page.', 'error');
+
         // 5. Execute Redirect
         if (!headers_sent()) {
             header('Location: ' . $url);

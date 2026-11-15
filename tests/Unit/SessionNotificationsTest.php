@@ -104,7 +104,16 @@ final class SessionNotificationsTest extends TestCase
 
     public function testHomeAndDashboardConsumeNoticesAndPreserveCheckoutBehavior(): void
     {
-        foreach (['home', 'checkout-success', 'checkout-error'] as $mode) {
+        $checkoutMessages = [
+            'checkout-success' => ['success', 'Thank you for your order! Your order is now pending confirmation.'],
+            'sandbox-success' => ['success', 'Sandbox order placed. No payment was collected; the displayed processing fee is simulated. Your order is pending confirmation.'],
+            'checkout-error' => ['error', 'The checkout could not be saved as an order. Please contact support before placing the order again.'],
+            'sandbox-error' => ['error', 'The sandbox checkout could not be saved. No payment was collected; contact support before placing the order again.'],
+            'checkout-exception' => ['error', 'Fatal database integrity failure processing split merchant orders: Database error'],
+            'pending-missing' => ['error', 'We could not verify this checkout. Please contact the merchant before placing the order again.'],
+            'merchant-missing' => ['error', 'We could not verify the merchant for this checkout. Please contact support before trying again.'],
+        ];
+        foreach (array_merge(['home'], array_keys($checkoutMessages)) as $mode) {
             $process = proc_open(
                 [PHP_BINARY, '-d', 'short_open_tag=1', __DIR__ . '/../fixtures/session-notification-page-worker.php', $mode],
                 [1 => ['pipe', 'w'], 2 => ['pipe', 'w']],
@@ -120,7 +129,10 @@ final class SessionNotificationsTest extends TestCase
             self::assertTrue($result['queuedFirst']);
             self::assertFalse($result['queuedSecond']);
             self::assertSame($mode !== 'home', $result['checkoutNotice']);
-            self::assertSame($mode === 'checkout-success', $result['clearCart']);
+            if ($mode !== 'home') {
+                self::assertSame(['type' => $checkoutMessages[$mode][0], 'message' => $checkoutMessages[$mode][1]], $result['notifications'][1]);
+            }
+            self::assertSame(in_array($mode, ['checkout-success', 'sandbox-success'], true), $result['clearCart']);
             self::assertTrue($result['pendingRemoved']);
         }
     }

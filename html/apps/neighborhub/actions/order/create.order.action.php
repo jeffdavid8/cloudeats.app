@@ -41,13 +41,11 @@ $sessionKey = get_var('session_key');
 $pendingOrder = $sessionKey && isset($_SESSION[$sessionKey]) && is_array($_SESSION[$sessionKey])
   ? $_SESSION[$sessionKey]
   : null;
+$this->set('checkout_order_saved', false);
 
 if (empty($pendingOrder) || empty($pendingOrder['merchant_id'])) {
   error_log('Neighborhub checkout success did not include a valid pending order.');
-  $_SESSION['notification'] = array(
-    'type' => 'error',
-    'message' => 'We could not verify this checkout. Please contact the merchant before placing the order again.',
-  );
+  session_notify('We could not verify this checkout. Please contact the merchant before placing the order again.', 'error');
   return;
 }
 
@@ -55,10 +53,7 @@ $merchantId = $pendingOrder['merchant_id'];
 $merchant = Merchant::getMerchantById($merchantId);
 if (!$merchant) {
   error_log('Neighborhub checkout success referenced an unavailable merchant.');
-  $_SESSION['notification'] = array(
-    'type' => 'error',
-    'message' => 'We could not verify the merchant for this checkout. Please contact support before trying again.',
-  );
+  session_notify('We could not verify the merchant for this checkout. Please contact support before trying again.', 'error');
   return;
 }
 //$pendingOrder['merchant_package'] = decompressOrderMetadata($pendingOrder['merchant_package']);
@@ -146,26 +141,24 @@ if (!empty($pendingOrder)) {
 
 
     if ($newOrderId) {
-      $_SESSION['notification'] = array(
-        'type' => 'success',
-        'message' => !empty($pendingOrder['sandbox_mode'])
+      $app->set('checkout_order_saved', true);
+      session_notify(
+        !empty($pendingOrder['sandbox_mode'])
           ? 'Sandbox order placed. No payment was collected; the displayed processing fee is simulated. Your order is pending confirmation.'
           : 'Thank you for your order! Your order is now pending confirmation.',
+        'success'
       );
     } else {
       error_log('Neighborhub checkout could not persist its order record.');
-      $_SESSION['notification'] = array(
-        'type' => 'error',
-        'message' => !empty($pendingOrder['sandbox_mode'])
+      session_notify(
+        !empty($pendingOrder['sandbox_mode'])
           ? 'The sandbox checkout could not be saved. No payment was collected; contact support before placing the order again.'
           : 'The checkout could not be saved as an order. Please contact support before placing the order again.',
+        'error'
       );
     }
   } catch (Exception $e) {
 
-    $_SESSION['notification'] = array(
-      'type' => 'error',
-      'message' => "Fatal database integrity failure processing split merchant orders: " . $e->getMessage(),
-    );
+    session_notify("Fatal database integrity failure processing split merchant orders: " . $e->getMessage(), 'error');
   }
 }

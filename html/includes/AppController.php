@@ -230,6 +230,9 @@ class AppController
         if ((!$this->app->app_config['no_header'])) {
             $this->app->render('components/header/header.php');
         }
+
+        render('components/session_notifications.php');
+        
         // Render the app content
         app_invoke($this->appName, 'render_body', $this->app);
 

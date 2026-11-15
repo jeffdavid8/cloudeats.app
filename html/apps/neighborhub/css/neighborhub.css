@@ -19,6 +19,7 @@ html {
 body {
   font-family: var(--font-family-base);
   font-size: var(--font-size-base);
+  padding-top: 57px;
   line-height: 1.5;
   color: var(--gray-900);
   background-color: white;
@@ -84,39 +85,19 @@ header.header nav {
   /* margin-top: 1rem; */
 }
 
+
 /**********************************************
 *  Terms Notice Top of window css
 **/
+
 body.header-announcement {
-  .app-container {
-    margin-top: 4rem;
-  }
-  padding-top: 0;
+  padding-top: 114px;
 }
-
-body.header-announcement header.header {
-  z-index: 997;
-  top: 3rem;
-  border-bottom: none;
-  /* transition: top 0.3s ease-in-out; */
-}
-
-#nh-terms-banner {
-  padding: 0;
-}
-
-body.scrolled.header-announcement header.header {
+header.header {
+  position: fixed;
   top: 0;
-}
-
-/**********************************************
-*  Terms Notice Top of window css
-**/
-body.header-announcement {
-  .app-container {
-    margin-top: 4rem;
-  }
-  padding-top: 0;
+  width: 100%;
+  z-index: 900;
 }
 
 body.header-announcement header.header {
@@ -125,8 +106,19 @@ body.header-announcement header.header {
   border-bottom: none;
   /* transition: top 0.3s ease-in-out; */
 }
+body header.header nav {
+  top: 0;
+  /* border-bottom: 2px solid #63424b;
+  border-bottom: 2px solid #dd3731;
+  border-bottom: 2px solid #dd3731; */
+  height: 4rem;
+}
 
 #nh-terms-banner {
+  position: absolute;
+  top: 0;
+  height: 57px;
+  width: 100%;
   padding: 1rem;
 }
 
@@ -1833,15 +1825,15 @@ header.header #user-dropdown {
 }
 
 /* Core button styling */
+.my-cloudeats-link {
+  position: relative;
+}
 body.scrolled .my-cloudeats-link {
   display: none;
 }
-.header-announcement .my-cloudeats-link a.btn {
-  top: 10rem;
-}
 .my-cloudeats-link a.btn {
-  position: fixed;
-  top: 5rem;
+  position: absolute;
+  top: -3rem;
   right: 1rem;
   display: inline-block;
   height: auto;

@@ -209,7 +209,7 @@ class User
 
     public function isMerchantAdmin($merchantId = null): bool
     {
-        if (!$this->id || ($merchantId !== null && (int)$merchantId < 1)) {
+        if (!$this->id) {
             return false;
         }
 
@@ -345,6 +345,19 @@ class User
         } catch (Exception $e) {
             error_log("User::deleteUserData Error: " . $e->getMessage());
             return false;
+        }
+    }
+
+    public static function getUserMerchants($userId)
+    {
+        $app = App::getInstance();
+        try {
+            $stmt = $app->db->prepare("SELECT * FROM neighborhub_merchants WHERE user_id = ?");
+            $stmt->execute([$userId]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            error_log("User::getUserMerchants Error: " . $e->getMessage());
+            return [];
         }
     }
 }
