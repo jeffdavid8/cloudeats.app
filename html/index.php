@@ -18,6 +18,18 @@ if ($requestPath === '/healthz' && in_array($_SERVER['REQUEST_METHOD'] ?? 'GET',
     exit;
 }
 
+if (getenv('HOLODECK_INSTANCE') === '1') {
+    require_once __DIR__ . '/includes/classes/HolodeckRequestPolicy.class.php';
+    if (!HolodeckRequestPolicy::allows($_SERVER['REQUEST_METHOD'] ?? '', $_GET)) {
+        error_log('Holodeck rejected a request outside the permitted walk-in workflow.');
+        http_response_code(403);
+        header('Content-Type: application/json; charset=utf-8');
+        header('Cache-Control: no-store');
+        echo json_encode(['success' => false, 'error' => 'This request is not available in Holodeck.']);
+        exit;
+    }
+}
+
 // Set the absolute path to your log file
 require_once __DIR__ . '/includes/mb.bootstrap.php';
 

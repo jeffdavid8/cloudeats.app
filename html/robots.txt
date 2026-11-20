@@ -1,2 +1,30 @@
-User-agent: facebookexternalhit
-Allow: /
+User-agent: Amazonbot
+Disallow: /?app=bibleBot
+Disallow: /index.php?app=bibleBot
+Disallow: /apps/bibleBot/
+
+User-agent: Reflectionbot
+Disallow: /?app=bibleBot
+Disallow: /index.php?app=bibleBot
+Disallow: /apps/bibleBot/
+
+User-agent: Baiduspider
+User-agent: Baiduspider-render
+Disallow: /?app=bibleBot
+Disallow: /index.php?app=bibleBot
+Disallow: /apps/bibleBot/
+
+User-agent: Applebot
+Disallow: /?app=bibleBot
+Disallow: /index.php?app=bibleBot
+Disallow: /apps/bibleBot/
+
+User-agent: PetalBot
+Disallow: /?app=bibleBot
+Disallow: /index.php?app=bibleBot
+Disallow: /apps/bibleBot/
+
+User-agent: *
+Disallow: /?app=bibleBot
+Disallow: /index.php?app=bibleBot
+Disallow: /apps/bibleBot/
