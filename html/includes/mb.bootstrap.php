@@ -1,7 +1,50 @@
 <?php
 if (!defined('MB_RUNNING')) exit;
 
-if (!defined('STORAGE_PATH')) {
+// ====================================================================
+// SCRAPER EMERGENCY SHIELD - Stop bibleBot crawling costs immediately
+// ====================================================================
+$userAgent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+$queryString = $_SERVER['QUERY_STRING'] ?? '';
+// 1. Instantly block known search bots
+$badBots = ['Amazonbot', 'Reflectionbot', 'Baiduspider', 'Applebot', 'PetalBot'];
+foreach ($badBots as $bot) {
+    if (stripos($userAgent, $bot) !== false) {
+        header('HTTP/1.1 403 Forbidden');
+        exit('Access Denied.');
+    }
+}
+// 2. Stop the bleeding: block ALL requests targeting the bibleBot query string 
+// (or redirect/block unauthenticated users trying to scrape it)
+if (stripos($queryString, 'app=bibleBot') !== false) {
+    // Drop the connection immediately with a 403 to prevent loading PHP/JS/CSS files
+    header('HTTP/1.1 403 Forbidden');
+    exit('Feature temporarily disabled due to high automated scraping activity.');
+}
+// ====================================================================
+
+
+
+
+$holodeckMode = getenv('HOLODECK_INSTANCE');
+if ($holodeckMode !== false && $holodeckMode !== '1') {
+    throw new RuntimeException('Invalid Holodeck instance configuration.');
+}
+if ($holodeckMode === '1') {
+    require_once __DIR__ . '/classes/HolodeckStorage.class.php';
+    $holodeckStorage = HolodeckStorage::root();
+    $installTrigger = $holodeckStorage . '/_install_db.trigger';
+    clearstatcache(true, $installTrigger);
+    if (file_exists($installTrigger) || is_link($installTrigger)) {
+        throw new RuntimeException('Holodeck cannot run the application install or restore trigger.');
+    }
+    if (defined('STORAGE_PATH') && STORAGE_PATH !== $holodeckStorage) {
+        throw new RuntimeException('Holodeck cannot use a different storage directory.');
+    }
+    if (!defined('STORAGE_PATH')) {
+        define('STORAGE_PATH', $holodeckStorage);
+    }
+} elseif (!defined('STORAGE_PATH')) {
     define('STORAGE_PATH', realpath(__DIR__ . '/../../storage') ?: '/var/www/storage');
 }
 
